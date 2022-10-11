@@ -5,11 +5,9 @@ Tests the system initialization and attributes of the main Abode system.
 """
 import os
 import json
-import unittest
 
 import pytest
 import requests
-import requests_mock
 
 import abodepy
 import abodepy.helpers.constants as CONST
@@ -32,20 +30,20 @@ def cache_path(tmp_path, request):
     request.instance.cache_path = tmp_path / 'cache.pickle'
 
 
-class TestAbode(unittest.TestCase):
+@pytest.fixture(autouse=True)
+def abode_objects(request):
+    self = request.instance
+    self.abode_no_cred = abodepy.Abode(disable_cache=True)
+    self.abode = abodepy.Abode(username=USERNAME, password=PASSWORD, disable_cache=True)
+
+
+@pytest.fixture
+def m(requests_mock):
+    return requests_mock
+
+
+class TestAbode:
     """Test the Abode class in abodepy."""
-
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode_no_cred = abodepy.Abode(disable_cache=True)
-        self.abode = abodepy.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-        self.abode_no_cred = None
 
     def tests_initialization(self):
         """Verify we can initialize abode."""
@@ -64,7 +62,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login()
 
-    @requests_mock.mock()
     def tests_manual_login(self, m):
         """Check that we can manually use the login() function."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -77,7 +74,6 @@ class TestAbode(unittest.TestCase):
         # pylint: disable=protected-access
         assert self.abode_no_cred._cache[CONST.PASSWORD] == PASSWORD
 
-    @requests_mock.mock()
     def tests_manual_login_with_mfa(self, m):
         """Check that we can login with MFA code."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -90,7 +86,6 @@ class TestAbode(unittest.TestCase):
         # pylint: disable=protected-access
         assert self.abode_no_cred._cache[CONST.PASSWORD] == PASSWORD
 
-    @requests_mock.mock()
     def tests_auto_login(self, m):
         """Test that automatic login works."""
         auth_token = MOCK.AUTH_TOKEN
@@ -124,7 +119,6 @@ class TestAbode(unittest.TestCase):
 
         abode = None
 
-    @requests_mock.mock()
     def tests_auto_fetch(self, m):
         """Test that automatic device and automation retrieval works."""
         auth_token = MOCK.AUTH_TOKEN
@@ -165,7 +159,6 @@ class TestAbode(unittest.TestCase):
 
         abode = None
 
-    @requests_mock.mock()
     def tests_login_failure(self, m):
         """Test login failed."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_bad_request(), status_code=400)
@@ -175,7 +168,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    @requests_mock.mock()
     def tests_login_mfa_required(self, m):
         """Tests login with MFA code required but not supplied."""
         m.post(
@@ -189,7 +181,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    @requests_mock.mock()
     def tests_login_bad_mfa_code(self, m):
         """Tests login with bad MFA code."""
         m.post(
@@ -202,7 +193,6 @@ class TestAbode(unittest.TestCase):
                 username=USERNAME, password=PASSWORD, mfa_code=123456
             )
 
-    @requests_mock.mock()
     def tests_login_unknown_mfa_type(self, m):
         """Tests login with unknown MFA type."""
         m.post(
@@ -215,7 +205,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    @requests_mock.mock()
     def tests_logout_failure(self, m):
         """Test logout failed."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -232,7 +221,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.logout()
 
-    @requests_mock.mock()
     def tests_logout_exception(self, m):
         """Test logout exception."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -246,7 +234,6 @@ class TestAbode(unittest.TestCase):
         # Check that we eat the exception gracefully
         assert not self.abode.logout()
 
-    @requests_mock.mock()
     def tests_full_setup(self, m):
         """Check that Abode is set up properly."""
         auth_token = MOCK.AUTH_TOKEN
@@ -287,7 +274,6 @@ class TestAbode(unittest.TestCase):
         assert self.abode._session is not None
         assert self.abode._get_session() != original_session
 
-    @requests_mock.mock()
     def tests_reauthorize(self, m):
         """Check that Abode can reauthorize after token timeout."""
         new_token = "FOOBAR"
@@ -318,7 +304,6 @@ class TestAbode(unittest.TestCase):
         # pylint: disable=W0212
         assert self.abode._token == new_token
 
-    @requests_mock.mock()
     def tests_send_request_exception(self, m):
         """Check that send_request recovers from an exception."""
         new_token = "DEADBEEF"
@@ -349,7 +334,6 @@ class TestAbode(unittest.TestCase):
         # pylint: disable=W0212
         assert self.abode._token == new_token
 
-    @requests_mock.mock()
     def tests_continuous_bad_auth(self, m):
         """Check that Abode won't get stuck with repeated failed retries."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -370,7 +354,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeException):
             self.abode.set_default_mode('foobar')
 
-    @requests_mock.mock()
     def test_all_device_refresh(self, m):
         """Check that device refresh works and reuses the same objects."""
         dc1_devid = 'RF:01'
@@ -420,7 +403,6 @@ class TestAbode(unittest.TestCase):
         assert json.loads(dc2b)['id'] == dc2b_dev.device_id
         assert dc2a_dev is dc2b_dev
 
-    @requests_mock.mock()
     def tests_settings_validation(self, m):
         """Check that device panel general settings are working."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -432,7 +414,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting("fliptrix", "foobar")
 
-    @requests_mock.mock()
     def tests_general_settings(self, m):
         """Check that device panel general settings are working."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -461,7 +442,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
 
-    @requests_mock.mock()
     def tests_area_settings(self, m):
         """Check that device panel areas settings are working."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -491,7 +471,6 @@ class TestAbode(unittest.TestCase):
                 CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
             )
 
-    @requests_mock.mock()
     def tests_sound_settings(self, m):
         """Check that device panel sound settings are working."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -523,7 +502,6 @@ class TestAbode(unittest.TestCase):
         with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
 
-    @requests_mock.mock()
     def tests_siren_settings(self, m):
         """Check that device panel siren settings are working."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -558,7 +536,6 @@ class TestAbode(unittest.TestCase):
             self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('cache_path')
-    @requests_mock.mock()
     def tests_cookies(self, m):
         """Check that cookies are saved and loaded successfully."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -611,7 +588,6 @@ class TestAbode(unittest.TestCase):
         assert abode._cache['uuid'] == first_cookies_data['uuid']
 
     @pytest.mark.usefixtures('cache_path')
-    @requests_mock.mock()
     def test_empty_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
@@ -640,7 +616,6 @@ class TestAbode(unittest.TestCase):
         assert empty_abode._cache['uuid'] is not None
 
     @pytest.mark.usefixtures('cache_path')
-    @requests_mock.mock()
     def test_invalid_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
