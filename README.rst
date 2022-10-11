@@ -14,8 +14,8 @@
    :target: https://github.com/psf/black
    :alt: Code style: Black
 
-.. .. image:: https://readthedocs.org/projects/jaracoabode/badge/?version=latest
-..    :target: https://jaracoabode.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/jaracoabode/badge/?version=latest
+   :target: https://jaracoabode.readthedocs.io/en/latest/?badge=latest
 
 .. image:: https://img.shields.io/badge/skeleton-2022-informational
    :target: https://blog.jaraco.com/skeleton
