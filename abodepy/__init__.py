@@ -46,12 +46,19 @@ import abodepy.utils as UTILS
 _LOGGER = logging.getLogger(__name__)
 
 
-class Abode():
+class Abode:
     """Main Abode class."""
 
-    def __init__(self, username=None, password=None,
-                 auto_login=False, get_devices=False, get_automations=False,
-                 cache_path=CONST.CACHE_PATH, disable_cache=False):
+    def __init__(
+        self,
+        username=None,
+        password=None,
+        auto_login=False,
+        get_devices=False,
+        get_automations=False,
+        cache_path=CONST.CACHE_PATH,
+        disable_cache=False,
+    ):
         """Init Abode object."""
         self._session = None
         self._token = None
@@ -60,8 +67,7 @@ class Abode():
         self._cache_path = cache_path
         self._disable_cache = disable_cache
 
-        self._event_controller = AbodeEventController(self,
-                                                      url=CONST.SOCKETIO_URL)
+        self._event_controller = AbodeEventController(self, url=CONST.SOCKETIO_URL)
 
         self._default_alarm_mode = CONST.MODE_AWAY
 
@@ -77,7 +83,7 @@ class Abode():
             CONST.ID: None,
             CONST.PASSWORD: None,
             CONST.UUID: UTILS.gen_uuid(),
-            CONST.COOKIES: None
+            CONST.COOKIES: None,
         }
 
         # Load and merge an existing cache
@@ -96,13 +102,14 @@ class Abode():
 
         # Load persisted cookies (which contains the UUID and the session ID)
         # if available
-        if (CONST.COOKIES in self._cache and
-                self._cache[CONST.COOKIES] is not None):
+        if CONST.COOKIES in self._cache and self._cache[CONST.COOKIES] is not None:
             self._session.cookies = self._cache[CONST.COOKIES]
 
-        if (self._cache[CONST.ID] is not None and
-                self._cache[CONST.PASSWORD] is not None and
-                auto_login):
+        if (
+            self._cache[CONST.ID] is not None
+            and self._cache[CONST.PASSWORD] is not None
+            and auto_login
+        ):
             self.login()
 
         if get_devices:
@@ -118,12 +125,12 @@ class Abode():
         if password is not None:
             self._cache[CONST.PASSWORD] = password
 
-        if (self._cache[CONST.ID] is None or
-                not isinstance(self._cache[CONST.ID], str)):
+        if self._cache[CONST.ID] is None or not isinstance(self._cache[CONST.ID], str):
             raise AbodeAuthenticationException(ERROR.USERNAME)
 
-        if (self._cache[CONST.PASSWORD] is None or
-                not isinstance(self._cache[CONST.PASSWORD], str)):
+        if self._cache[CONST.PASSWORD] is None or not isinstance(
+            self._cache[CONST.PASSWORD], str
+        ):
             raise AbodeAuthenticationException(ERROR.PASSWORD)
 
         self._save_cache()
@@ -133,7 +140,7 @@ class Abode():
         login_data = {
             CONST.ID: self._cache[CONST.ID],
             CONST.PASSWORD: self._cache[CONST.PASSWORD],
-            CONST.UUID: self._cache[CONST.UUID]
+            CONST.UUID: self._cache[CONST.UUID],
         }
 
         if mfa_code is not None:
@@ -143,8 +150,7 @@ class Abode():
         response = self._session.post(CONST.LOGIN_URL, json=login_data)
 
         if response.status_code != 200:
-            raise AbodeAuthenticationException((response.status_code,
-                                                response.text))
+            raise AbodeAuthenticationException((response.status_code, response.text))
 
         response_object = json.loads(response.text)
 
@@ -163,8 +169,9 @@ class Abode():
         oauth_response = self._session.get(CONST.OAUTH_TOKEN_URL)
 
         if oauth_response.status_code != 200:
-            raise AbodeAuthenticationException((oauth_response.status_code,
-                                                oauth_response.text))
+            raise AbodeAuthenticationException(
+                (oauth_response.status_code, oauth_response.text)
+            )
 
         oauth_response_object = json.loads(oauth_response.text)
 
@@ -182,9 +189,7 @@ class Abode():
     def logout(self):
         """Explicit Abode logout."""
         if self._token:
-            header_data = {
-                'ABODE-API-KEY': self._token
-            }
+            header_data = {'ABODE-API-KEY': self._token}
 
             self._session = requests.session()
             self._token = None
@@ -194,8 +199,7 @@ class Abode():
             self._automations = None
 
             try:
-                response = self._session.post(
-                    CONST.LOGOUT_URL, headers=header_data)
+                response = self._session.post(CONST.LOGOUT_URL, headers=header_data)
                 response_object = json.loads(response.text)
             except OSError as exc:
                 _LOGGER.warning("Caught exception during logout: %s", str(exc))
@@ -203,7 +207,8 @@ class Abode():
 
             if response.status_code != 200:
                 raise AbodeAuthenticationException(
-                    (response.status_code, response_object['message']))
+                    (response.status_code, response_object['message'])
+                )
 
             _LOGGER.debug("Logout Response: %s", response.text)
 
@@ -226,8 +231,7 @@ class Abode():
             response = self.send_request("get", CONST.DEVICES_URL)
             response_object = json.loads(response.text)
 
-            if (response_object and
-                    not isinstance(response_object, (tuple, list))):
+            if response_object and not isinstance(response_object, (tuple, list)):
                 response_object = [response_object]
 
             _LOGGER.debug("Get Devices Response: %s", response.text)
@@ -243,9 +247,7 @@ class Abode():
                     device = new_device(device_json, self)
 
                     if not device:
-                        _LOGGER.debug(
-                            "Skipping unknown device: %s",
-                            device_json)
+                        _LOGGER.debug("Skipping unknown device: %s", device_json)
 
                         continue
 
@@ -270,8 +272,10 @@ class Abode():
         if generic_type:
             devices = []
             for device in self._devices.values():
-                if (device.generic_type is not None and
-                        device.generic_type in generic_type):
+                if (
+                    device.generic_type is not None
+                    and device.generic_type in generic_type
+                ):
                     devices.append(device)
             return devices
 
@@ -301,8 +305,7 @@ class Abode():
             response = self.send_request("get", CONST.AUTOMATION_URL)
             response_object = json.loads(response.text)
 
-            if (response_object and
-                    not isinstance(response_object, (tuple, list))):
+            if response_object and not isinstance(response_object, (tuple, list)):
                 response_object = [response_object]
 
             _LOGGER.debug("Get Automations Response: %s", response.text)
@@ -374,17 +377,21 @@ class Abode():
     def _panel_settings(setting, value, validate_value):
         """Will validate panel settings and values, returns data packet."""
         if validate_value:
-            if (setting == CONST.SETTING_CAMERA_RESOLUTION
-                    and value not in CONST.SETTING_ALL_CAMERA_RES):
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.SETTING_ALL_CAMERA_RES)
-            if (setting in
-                    [CONST.SETTING_CAMERA_GRAYSCALE,
-                     CONST.SETTING_SILENCE_SOUNDS]
-                    and value not in
-                    CONST.SETTING_DISABLE_ENABLE):
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.SETTING_DISABLE_ENABLE)
+            if (
+                setting == CONST.SETTING_CAMERA_RESOLUTION
+                and value not in CONST.SETTING_ALL_CAMERA_RES
+            ):
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.SETTING_ALL_CAMERA_RES
+                )
+            if (
+                setting
+                in [CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_SILENCE_SOUNDS]
+                and value not in CONST.SETTING_DISABLE_ENABLE
+            ):
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
+                )
 
         return {setting: value}
 
@@ -393,13 +400,17 @@ class Abode():
         """Will validate area settings and values, returns data packet."""
         if validate_value:
             # Exit delay has some specific limitations apparently
-            if (setting == CONST.SETTING_EXIT_DELAY_AWAY
-                    and value not in CONST.VALID_SETTING_EXIT_AWAY):
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.VALID_SETTING_EXIT_AWAY)
+            if (
+                setting == CONST.SETTING_EXIT_DELAY_AWAY
+                and value not in CONST.VALID_SETTING_EXIT_AWAY
+            ):
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.VALID_SETTING_EXIT_AWAY
+                )
             if value not in CONST.ALL_SETTING_ENTRY_EXIT_DELAY:
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.ALL_SETTING_ENTRY_EXIT_DELAY)
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ENTRY_EXIT_DELAY
+                )
 
         return {'area': area, setting: value}
 
@@ -407,18 +418,27 @@ class Abode():
     def _sound_settings(area, setting, value, validate_value):
         """Will validate sound settings and values, returns data packet."""
         if validate_value:
-            if (setting in CONST.VALID_SOUND_SETTINGS
-                    and value not in CONST.ALL_SETTING_SOUND):
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.ALL_SETTING_SOUND)
-            if (setting == CONST.SETTING_ALARM_LENGTH
-                    and value not in CONST.ALL_SETTING_ALARM_LENGTH):
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.ALL_SETTING_ALARM_LENGTH)
-            if (setting == CONST.SETTING_FINAL_BEEPS
-                    and value not in CONST.ALL_SETTING_FINAL_BEEPS):
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.ALL_SETTING_FINAL_BEEPS)
+            if (
+                setting in CONST.VALID_SOUND_SETTINGS
+                and value not in CONST.ALL_SETTING_SOUND
+            ):
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_SOUND
+                )
+            if (
+                setting == CONST.SETTING_ALARM_LENGTH
+                and value not in CONST.ALL_SETTING_ALARM_LENGTH
+            ):
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ALARM_LENGTH
+                )
+            if (
+                setting == CONST.SETTING_FINAL_BEEPS
+                and value not in CONST.ALL_SETTING_FINAL_BEEPS
+            ):
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_FINAL_BEEPS
+                )
 
         return {'area': area, setting: value}
 
@@ -427,13 +447,13 @@ class Abode():
         """Will validate siren settings and values, returns data packet."""
         if validate_value:
             if value not in CONST.SETTING_DISABLE_ENABLE:
-                raise AbodeException(ERROR.INVALID_SETTING_VALUE,
-                                     CONST.SETTING_DISABLE_ENABLE)
+                raise AbodeException(
+                    ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
+                )
 
         return {'action': setting, 'option': value}
 
-    def send_request(self, method, url, headers=None,
-                     data=None, is_retry=False):
+    def send_request(self, method, url, headers=None, data=None, is_retry=False):
         """Send requests to Abode."""
         if not self._token:
             self.login()
@@ -445,8 +465,7 @@ class Abode():
         headers['ABODE-API-KEY'] = self._token
 
         try:
-            response = getattr(self._session, method)(
-                url, headers=headers, json=data)
+            response = getattr(self._session, method)(url, headers=headers, json=data)
 
             if response and response.status_code < 400:
                 return response
@@ -492,8 +511,7 @@ class Abode():
             if loaded_cache:
                 UTILS.update(self._cache, loaded_cache)
             else:
-                _LOGGER.debug("Removing invalid cache file: %s",
-                              self._cache_path)
+                _LOGGER.debug("Removing invalid cache file: %s", self._cache_path)
                 os.remove(self._cache_path)
 
         self._save_cache()
@@ -533,9 +551,11 @@ def new_device(device_json, abode):
     generic_type = CONST.get_generic_type(type_tag.lower())
     device_json['generic_type'] = generic_type
 
-    if (generic_type in
-            [CONST.TYPE_CONNECTIVITY, CONST.TYPE_MOISTURE,
-             CONST.TYPE_OPENING]):
+    if generic_type in [
+        CONST.TYPE_CONNECTIVITY,
+        CONST.TYPE_MOISTURE,
+        CONST.TYPE_OPENING,
+    ]:
         return AbodeBinarySensor(device_json, abode)
 
     if generic_type == CONST.TYPE_CAMERA:

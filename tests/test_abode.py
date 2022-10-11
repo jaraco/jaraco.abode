@@ -32,9 +32,9 @@ class TestAbode(unittest.TestCase):
     def setUp(self):
         """Set up Abode module."""
         self.abode_no_cred = abodepy.Abode(disable_cache=True)
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -77,9 +77,7 @@ class TestAbode(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
-        self.abode_no_cred.login(username=USERNAME,
-                                 password=PASSWORD,
-                                 mfa_code=654321)
+        self.abode_no_cred.login(username=USERNAME, password=PASSWORD, mfa_code=654321)
 
         # pylint: disable=protected-access
         self.assertEqual(self.abode_no_cred._cache[CONST.ID], USERNAME)
@@ -99,11 +97,13 @@ class TestAbode(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=panel_json)
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
 
-        abode = abodepy.Abode(username='fizz',
-                              password='buzz',
-                              auto_login=True,
-                              get_devices=False,
-                              disable_cache=True)
+        abode = abodepy.Abode(
+            username='fizz',
+            password='buzz',
+            auto_login=True,
+            get_devices=False,
+            disable_cache=True,
+        )
 
         # pylint: disable=W0212
         self.assertEqual(abode._cache[CONST.ID], 'fizz')
@@ -133,12 +133,14 @@ class TestAbode(unittest.TestCase):
         m.get(CONST.AUTOMATION_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
 
-        abode = abodepy.Abode(username='fizz',
-                              password='buzz',
-                              auto_login=False,
-                              get_devices=True,
-                              get_automations=True,
-                              disable_cache=True)
+        abode = abodepy.Abode(
+            username='fizz',
+            password='buzz',
+            auto_login=False,
+            get_devices=True,
+            get_automations=True,
+            disable_cache=True,
+        )
 
         # pylint: disable=W0212
         self.assertEqual(abode._cache[CONST.ID], 'fizz')
@@ -160,8 +162,7 @@ class TestAbode(unittest.TestCase):
     @requests_mock.mock()
     def tests_login_failure(self, m):
         """Test login failed."""
-        m.post(CONST.LOGIN_URL,
-               text=LOGIN.post_response_bad_request(), status_code=400)
+        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_bad_request(), status_code=400)
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
         # Check that we raise an Exception with a failed login request.
@@ -171,8 +172,11 @@ class TestAbode(unittest.TestCase):
     @requests_mock.mock()
     def tests_login_mfa_required(self, m):
         """Tests login with MFA code required but not supplied."""
-        m.post(CONST.LOGIN_URL,
-               text=LOGIN.post_response_mfa_code_required(), status_code=200)
+        m.post(
+            CONST.LOGIN_URL,
+            text=LOGIN.post_response_mfa_code_required(),
+            status_code=200,
+        )
 
         # Check that we raise an Exception when the MFA code is required
         # but not supplied
@@ -182,25 +186,28 @@ class TestAbode(unittest.TestCase):
     @requests_mock.mock()
     def tests_login_bad_mfa_code(self, m):
         """Tests login with bad MFA code."""
-        m.post(CONST.LOGIN_URL,
-               text=LOGIN.post_response_bad_mfa_code(), status_code=400)
+        m.post(
+            CONST.LOGIN_URL, text=LOGIN.post_response_bad_mfa_code(), status_code=400
+        )
 
         # Check that we raise an Exception with a bad MFA code
         with self.assertRaises(abodepy.AbodeAuthenticationException):
-            self.abode_no_cred.login(username=USERNAME,
-                                     password=PASSWORD,
-                                     mfa_code=123456)
+            self.abode_no_cred.login(
+                username=USERNAME, password=PASSWORD, mfa_code=123456
+            )
 
     @requests_mock.mock()
     def tests_login_unknown_mfa_type(self, m):
         """Tests login with unknown MFA type."""
-        m.post(CONST.LOGIN_URL,
-               text=LOGIN.post_response_unknown_mfa_type(), status_code=200)
+        m.post(
+            CONST.LOGIN_URL,
+            text=LOGIN.post_response_unknown_mfa_type(),
+            status_code=200,
+        )
 
         # Check that we raise an Exception with an unknown MFA type
         with self.assertRaises(abodepy.AbodeAuthenticationException):
-            self.abode_no_cred.login(username=USERNAME,
-                                     password=PASSWORD)
+            self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     @requests_mock.mock()
     def tests_logout_failure(self, m):
@@ -209,8 +216,9 @@ class TestAbode(unittest.TestCase):
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.get(CONST.DEVICES_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
-        m.post(CONST.LOGOUT_URL,
-               text=LOGOUT.post_response_bad_request(), status_code=400)
+        m.post(
+            CONST.LOGOUT_URL, text=LOGOUT.post_response_bad_request(), status_code=400
+        )
 
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
@@ -277,17 +285,25 @@ class TestAbode(unittest.TestCase):
     def tests_reauthorize(self, m):
         """Check that Abode can reauthorize after token timeout."""
         new_token = "FOOBAR"
-        m.post(CONST.LOGIN_URL, [
-            {'text': LOGIN.post_response_ok(
-                auth_token=new_token), 'status_code': 200}
-        ])
+        m.post(
+            CONST.LOGIN_URL,
+            [
+                {
+                    'text': LOGIN.post_response_ok(auth_token=new_token),
+                    'status_code': 200,
+                }
+            ],
+        )
 
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
-        m.get(CONST.DEVICES_URL, [
-            {'text': MOCK.response_forbidden(), 'status_code': 403},
-            {'text': DEVICES.EMPTY_DEVICE_RESPONSE, 'status_code': 200}
-        ])
+        m.get(
+            CONST.DEVICES_URL,
+            [
+                {'text': MOCK.response_forbidden(), 'status_code': 403},
+                {'text': DEVICES.EMPTY_DEVICE_RESPONSE, 'status_code': 200},
+            ],
+        )
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Forces a device update
@@ -300,17 +316,25 @@ class TestAbode(unittest.TestCase):
     def tests_send_request_exception(self, m):
         """Check that send_request recovers from an exception."""
         new_token = "DEADBEEF"
-        m.post(CONST.LOGIN_URL, [
-            {'text': LOGIN.post_response_ok(
-                auth_token=new_token), 'status_code': 200}
-        ])
+        m.post(
+            CONST.LOGIN_URL,
+            [
+                {
+                    'text': LOGIN.post_response_ok(auth_token=new_token),
+                    'status_code': 200,
+                }
+            ],
+        )
 
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
-        m.get(CONST.DEVICES_URL, [
-            {'exc': requests.exceptions.ConnectTimeout},
-            {'text': DEVICES.EMPTY_DEVICE_RESPONSE, 'status_code': 200}
-        ])
+        m.get(
+            CONST.DEVICES_URL,
+            [
+                {'exc': requests.exceptions.ConnectTimeout},
+                {'text': DEVICES.EMPTY_DEVICE_RESPONSE, 'status_code': 200},
+            ],
+        )
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Forces a device update
@@ -324,8 +348,7 @@ class TestAbode(unittest.TestCase):
         """Check that Abode won't get stuck with repeated failed retries."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.get(CONST.DEVICES_URL,
-              text=MOCK.response_forbidden(), status_code=403)
+        m.get(CONST.DEVICES_URL, text=MOCK.response_forbidden(), status_code=403)
 
         with self.assertRaises(abodepy.AbodeException):
             self.abode.get_devices()
@@ -345,12 +368,10 @@ class TestAbode(unittest.TestCase):
     def test_all_device_refresh(self, m):
         """Check that device refresh works and reuses the same objects."""
         dc1_devid = 'RF:01'
-        dc1a = DOOR_CONTACT.device(
-            devid=dc1_devid, status=CONST.STATUS_ON)
+        dc1a = DOOR_CONTACT.device(devid=dc1_devid, status=CONST.STATUS_ON)
 
         dc2_devid = 'RF:02'
-        dc2a = DOOR_CONTACT.device(
-            devid=dc2_devid, status=CONST.STATUS_OFF)
+        dc2a = DOOR_CONTACT.device(devid=dc2_devid, status=CONST.STATUS_OFF)
 
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
@@ -373,11 +394,9 @@ class TestAbode(unittest.TestCase):
         self.assertEqual(json.loads(dc2a)['id'], dc2a_dev.device_id)
 
         # Change device states
-        dc1b = DOOR_CONTACT.device(
-            devid=dc1_devid, status=CONST.STATUS_OFF)
+        dc1b = DOOR_CONTACT.device(devid=dc1_devid, status=CONST.STATUS_OFF)
 
-        dc2b = DOOR_CONTACT.device(
-            devid=dc2_devid, status=CONST.STATUS_ON)
+        dc2b = DOOR_CONTACT.device(devid=dc2_devid, status=CONST.STATUS_ON)
 
         m.get(CONST.DEVICES_URL, text='[' + dc1b + ',' + dc2b + ']')
 
@@ -417,28 +436,24 @@ class TestAbode(unittest.TestCase):
         m.put(CONST.SETTINGS_URL, text=MOCK.generic_response_ok())
 
         try:
-            self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION,
-                                   CONST.SETTING_CAMERA_RES_640_480)
+            self.abode.set_setting(
+                CONST.SETTING_CAMERA_RESOLUTION, CONST.SETTING_CAMERA_RES_640_480
+            )
 
-            self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE,
-                                   CONST.SETTING_ENABLE)
+            self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
 
-            self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS,
-                                   CONST.SETTING_ENABLE)
+            self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
 
     @requests_mock.mock()
     def tests_area_settings(self, m):
@@ -450,23 +465,25 @@ class TestAbode(unittest.TestCase):
         m.put(CONST.AREAS_URL, text=MOCK.generic_response_ok())
 
         try:
-            self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY,
-                                   CONST.SETTING_ENTRY_EXIT_DELAY_10SEC)
+            self.abode.set_setting(
+                CONST.SETTING_ENTRY_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
+            )
 
-            self.abode.set_setting(CONST.SETTING_EXIT_DELAY_AWAY,
-                                   CONST.SETTING_ENTRY_EXIT_DELAY_30SEC)
+            self.abode.set_setting(
+                CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
+            )
 
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
 
         # 10 seconds is invalid here
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_EXIT_DELAY_AWAY,
-                                   CONST.SETTING_ENTRY_EXIT_DELAY_10SEC)
+            self.abode.set_setting(
+                CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
+            )
 
     @requests_mock.mock()
     def tests_sound_settings(self, m):
@@ -478,29 +495,27 @@ class TestAbode(unittest.TestCase):
         m.put(CONST.SOUNDS_URL, text=MOCK.generic_response_ok())
 
         try:
-            self.abode.set_setting(CONST.SETTING_DOOR_CHIME,
-                                   CONST.SETTING_SOUND_LOW)
+            self.abode.set_setting(CONST.SETTING_DOOR_CHIME, CONST.SETTING_SOUND_LOW)
 
-            self.abode.set_setting(CONST.SETTING_ALARM_LENGTH,
-                                   CONST.SETTING_ALARM_LENGTH_2MIN)
+            self.abode.set_setting(
+                CONST.SETTING_ALARM_LENGTH, CONST.SETTING_ALARM_LENGTH_2MIN
+            )
 
-            self.abode.set_setting(CONST.SETTING_FINAL_BEEPS,
-                                   CONST.SETTING_FINAL_BEEPS_3SEC)
+            self.abode.set_setting(
+                CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
+            )
 
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_DOOR_CHIME,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_ALARM_LENGTH,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_FINAL_BEEPS,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
 
     @requests_mock.mock()
     def tests_siren_settings(self, m):
@@ -512,29 +527,29 @@ class TestAbode(unittest.TestCase):
         m.put(CONST.SIREN_URL, text=MOCK.generic_response_ok())
 
         try:
-            self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS,
-                                   CONST.SETTING_ENABLE)
+            self.abode.set_setting(
+                CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, CONST.SETTING_ENABLE
+            )
 
-            self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS,
-                                   CONST.SETTING_ENABLE)
+            self.abode.set_setting(
+                CONST.SETTING_SIREN_CONFIRM_SOUNDS, CONST.SETTING_ENABLE
+            )
 
-            self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS,
-                                   CONST.SETTING_ENABLE)
+            self.abode.set_setting(
+                CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE
+            )
 
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
 
         with self.assertRaises(abodepy.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS,
-                                   "foobar")
+            self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
 
     @requests_mock.mock()
     def tests_cookies(self, m):
@@ -555,16 +570,17 @@ class TestAbode(unittest.TestCase):
         self.assertFalse(os.path.exists(cache_path))
 
         # Create abode
-        abode = abodepy.Abode(username='fizz',
-                              password='buzz',
-                              auto_login=False,
-                              get_devices=False,
-                              disable_cache=False,
-                              cache_path=cache_path)
+        abode = abodepy.Abode(
+            username='fizz',
+            password='buzz',
+            auto_login=False,
+            get_devices=False,
+            disable_cache=False,
+            cache_path=cache_path,
+        )
 
         # Mock cookie created by Abode after login
-        cookie = requests.cookies.create_cookie(name='SESSION',
-                                                value='COOKIE')
+        cookie = requests.cookies.create_cookie(name='SESSION', value='COOKIE')
         # pylint: disable=protected-access
         abode._session.cookies.set_cookie(cookie)
 
@@ -584,16 +600,17 @@ class TestAbode(unittest.TestCase):
         first_cookies_data = abode._cache
 
         # New abode instance reads in old data
-        abode = abodepy.Abode(username='fizz',
-                              password='buzz',
-                              auto_login=False,
-                              get_devices=False,
-                              disable_cache=False,
-                              cache_path=cache_path)
+        abode = abodepy.Abode(
+            username='fizz',
+            password='buzz',
+            auto_login=False,
+            get_devices=False,
+            disable_cache=False,
+            cache_path=cache_path,
+        )
 
         # Test that the cookie data is the same
-        self.assertEqual(abode._cache['uuid'],
-                         first_cookies_data['uuid'])
+        self.assertEqual(abode._cache['uuid'], first_cookies_data['uuid'])
 
         # Cleanup cookies
         os.remove(cache_path)
@@ -622,12 +639,14 @@ class TestAbode(unittest.TestCase):
         self.assertTrue(os.path.exists(empty_cache_path))
 
         # Cookies are created
-        empty_abode = abodepy.Abode(username='fizz',
-                                    password='buzz',
-                                    auto_login=True,
-                                    get_devices=False,
-                                    disable_cache=False,
-                                    cache_path=empty_cache_path)
+        empty_abode = abodepy.Abode(
+            username='fizz',
+            password='buzz',
+            auto_login=True,
+            get_devices=False,
+            disable_cache=False,
+            cache_path=empty_cache_path,
+        )
 
         # Test that some cache exists
         # pylint: disable=W0212
@@ -659,12 +678,14 @@ class TestAbode(unittest.TestCase):
         self.assertTrue(os.path.exists(invalid_cache_path))
 
         # Cookies are created
-        empty_abode = abodepy.Abode(username='fizz',
-                                    password='buzz',
-                                    auto_login=True,
-                                    get_devices=False,
-                                    disable_cache=False,
-                                    cache_path=invalid_cache_path)
+        empty_abode = abodepy.Abode(
+            username='fizz',
+            password='buzz',
+            auto_login=True,
+            get_devices=False,
+            disable_cache=False,
+            cache_path=invalid_cache_path,
+        )
 
         # Test that some cache exists
         # pylint: disable=W0212

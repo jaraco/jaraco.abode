@@ -5,12 +5,19 @@ DEVICE_ID = 'ZW:0000006'
 CONTROL_URL = 'api/v1/control/lock/' + DEVICE_ID
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_LOCKCLOSED,
-           low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID,
+    status=CONST.STATUS_LOCKCLOSED,
+    low_battery=False,
+    no_response=False,
+):
     """Door lock mock device."""
-    return '''
+    return (
+        '''
         {
-          "id":"''' + devid + '''",
+          "id":"'''
+        + devid
+        + '''",
           "type_tag":"device_type.door_lock",
           "type":"Door Lock",
           "name":"Back Door Deadbolt",
@@ -34,17 +41,25 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_LOCKCLOSED,
           "sresp_exit_3":"0",
           "version":"",
           "origin":"abode",
-          "control_url":"''' + CONTROL_URL + '''",
+          "control_url":"'''
+        + CONTROL_URL
+        + '''",
           "deep_link":null,
           "status_color":"#5cb85c",
           "faults":{
-             "low_battery":''' + str(int(low_battery)) + ''',
+             "low_battery":'''
+        + str(int(low_battery))
+        + ''',
              "tempered":0,
              "supervision":0,
              "out_of_order":0,
-             "no_response":''' + str(int(no_response)) + '''
+             "no_response":'''
+        + str(int(no_response))
+        + '''
           },
-          "status":"''' + status + '''",
+          "status":"'''
+        + status
+        + '''",
           "statuses":{
              "hvac_mode":null
           },
@@ -66,3 +81,4 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_LOCKCLOSED,
           "automation_settings":null,
           "icon":"assets/icons/automation-lock.svg"
        }'''
+    )

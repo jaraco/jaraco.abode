@@ -47,8 +47,7 @@ class AbodeCamera(AbodeDevice):
 
     def refresh_image(self):
         """Get the most recent camera image."""
-        url = str.replace(CONST.TIMELINE_IMAGES_ID_URL,
-                          '$DEVID$', self.device_id)
+        url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, '$DEVID$', self.device_id)
         response = self._abode.send_request("get", url)
 
         _LOGGER.debug("Get image response: %s", response.text)
@@ -82,8 +81,11 @@ class AbodeCamera(AbodeDevice):
         response = self._abode.send_request("head", url)
 
         if response.status_code != 302:
-            _LOGGER.warning("Unexected response code %s with body: %s",
-                            str(response.status_code), response.text)
+            _LOGGER.warning(
+                "Unexected response code %s with body: %s",
+                str(response.status_code),
+                response.text,
+            )
             raise AbodeException((ERROR.CAM_IMAGE_UNEXPECTED_RESPONSE))
 
         # The response should have a location header that is the actual
@@ -107,7 +109,9 @@ class AbodeCamera(AbodeDevice):
         if response.status_code != 200:
             _LOGGER.warning(
                 "Unexpected response code %s when requesting image: %s",
-                str(response.status_code), response.text)
+                str(response.status_code),
+                response.text,
+            )
             raise AbodeException((ERROR.CAM_IMAGE_REQUEST_INVALID))
 
         with open(path, 'wb') as imgfile:
@@ -126,11 +130,10 @@ class AbodeCamera(AbodeDevice):
                 'mac': self._json_state['camera_mac'],
                 'privacy': privacy,
                 'action': 'setParam',
-                'id': self.device_id
+                'id': self.device_id,
             }
 
-            response = self._abode.send_request(
-                method="put", url=url, data=camera_data)
+            response = self._abode.send_request(method="put", url=url, data=camera_data)
             response_object = json.loads(response.text)
 
             _LOGGER.debug("Camera Privacy Mode Response: %s", response.text)
@@ -141,8 +144,7 @@ class AbodeCamera(AbodeDevice):
             if response_object['privacy'] != str(privacy):
                 raise AbodeException((ERROR.SET_PRIVACY_MODE))
 
-            _LOGGER.info("Set camera %s privacy mode to: %s",
-                         self.device_id, privacy)
+            _LOGGER.info("Set camera %s privacy mode to: %s", self.device_id, privacy)
 
             return True
 

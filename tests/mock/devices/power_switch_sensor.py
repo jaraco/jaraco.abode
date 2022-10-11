@@ -5,12 +5,16 @@ DEVICE_ID = 'ZW:00000007'
 CONTROL_URL = 'api/v1/control/power_switch/' + DEVICE_ID
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_OFF,
-           low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID, status=CONST.STATUS_OFF, low_battery=False, no_response=False
+):
     """Power switch mock device."""
-    return '''
+    return (
+        '''
         {
-           "id":"''' + devid + '''",
+           "id":"'''
+        + devid
+        + '''",
            "type_tag":"device_type.power_switch_sensor",
            "type":"Power Switch Sensor",
            "name":"Back Porch Light",
@@ -34,17 +38,25 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OFF,
            "sresp_exit_3":"0",
            "capture_mode":null,
            "origin":"abode",
-           "control_url":"''' + CONTROL_URL + '''",
+           "control_url":"'''
+        + CONTROL_URL
+        + '''",
            "deep_link":null,
            "status_color":"#5cb85c",
            "faults":{
-              "low_battery":''' + str(int(low_battery)) + ''',
+              "low_battery":'''
+        + str(int(low_battery))
+        + ''',
               "tempered":0,
               "supervision":0,
               "out_of_order":0,
-              "no_response":''' + str(int(no_response)) + '''
+              "no_response":'''
+        + str(int(no_response))
+        + '''
            },
-           "status":"''' + status + '''",
+           "status":"'''
+        + status
+        + '''",
            "statuses":{
               "hvac_mode":null
            },
@@ -111,3 +123,4 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OFF,
            ],
            "icon":"assets/icons/plug.svg"
         }'''
+    )

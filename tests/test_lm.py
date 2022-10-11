@@ -22,9 +22,9 @@ class TestLM(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -37,16 +37,19 @@ class TestLM(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=LM.device(devid=LM.DEVICE_ID,
-                             status='72 °F',
-                             temp='72 °F',
-                             lux='14 lx',
-                             humidity='34 %',
-                             low_battery=False,
-                             no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=LM.device(
+                devid=LM.DEVICE_ID,
+                status='72 °F',
+                temp='72 °F',
+                lux='14 lx',
+                humidity='34 %',
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -70,18 +73,21 @@ class TestLM(unittest.TestCase):
         self.assertEqual(device.lux_unit, 'lux')
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL,
-                                 '$DEVID$', LM.DEVICE_ID)
+        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', LM.DEVICE_ID)
 
         # Change device properties
-        m.get(device_url,
-              text=LM.device(devid=LM.DEVICE_ID,
-                             status='12 °C',
-                             temp='12 °C',
-                             lux='100 lx',
-                             humidity='100 %',
-                             low_battery=True,
-                             no_response=True))
+        m.get(
+            device_url,
+            text=LM.device(
+                devid=LM.DEVICE_ID,
+                status='12 °C',
+                temp='12 °C',
+                lux='100 lx',
+                humidity='100 %',
+                low_battery=True,
+                no_response=True,
+            ),
+        )
 
         # Refesh device and test changes
         device.refresh()
@@ -106,16 +112,19 @@ class TestLM(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=LM.device(devid=LM.DEVICE_ID,
-                             status='72.23 °F',
-                             temp='72.23 °F',
-                             lux='14.11 lx',
-                             humidity='34.38 %',
-                             low_battery=False,
-                             no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=LM.device(
+                devid=LM.DEVICE_ID,
+                status='72.23 °F',
+                temp='72.23 °F',
+                lux='14.11 lx',
+                humidity='34.38 %',
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -145,14 +154,13 @@ class TestLM(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=LM.device(devid=LM.DEVICE_ID,
-                             status='72 °F',
-                             temp='72 °F',
-                             lux='',
-                             humidity=''))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=LM.device(
+                devid=LM.DEVICE_ID, status='72 °F', temp='72 °F', lux='', humidity=''
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()

@@ -11,7 +11,7 @@ import abodepy.helpers.errors as ERROR
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeDevice():
+class AbodeDevice:
     """Class to represent each Abode device."""
 
     def __init__(self, json_obj, abode):
@@ -32,12 +32,9 @@ class AbodeDevice():
         if self._json_state['control_url']:
             url = CONST.BASE_URL + self._json_state['control_url']
 
-            status_data = {
-                'status': str(status)
-            }
+            status_data = {'status': str(status)}
 
-            response = self._abode.send_request(
-                method="put", url=url, data=status_data)
+            response = self._abode.send_request(method="put", url=url, data=status_data)
             response_object = json.loads(response.text)
 
             _LOGGER.debug("Set Status Response: %s", response.text)
@@ -63,12 +60,9 @@ class AbodeDevice():
         if self._json_state['control_url']:
             url = CONST.BASE_URL + self._json_state['control_url']
 
-            level_data = {
-                'level': str(level)
-            }
+            level_data = {'level': str(level)}
 
-            response = self._abode.send_request(
-                "put", url, data=level_data)
+            response = self._abode.send_request("put", url, data=level_data)
             response_object = json.loads(response.text)
 
             _LOGGER.debug("Set Level Response: %s", response.text)
@@ -122,7 +116,8 @@ class AbodeDevice():
         Only updates if it already exists in the device.
         """
         self._json_state.update(
-            {k: json_state[k] for k in json_state if self._json_state.get(k)})
+            {k: json_state[k] for k in json_state if self._json_state.get(k)}
+        )
         self._update_name()
 
     def _update_name(self):
@@ -192,5 +187,5 @@ class AbodeDevice():
         """Get a short description of the device."""
         # Garage Entry Door (ZW:00000003) - Door Lock - Closed
         return '{0} (ID: {1}, UUID: {2}) - {3} - {4}'.format(
-            self.name, self.device_id, self.device_uuid,
-            self.type, self.status)
+            self.name, self.device_id, self.device_uuid, self.type, self.status
+        )

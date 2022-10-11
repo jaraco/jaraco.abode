@@ -9,13 +9,22 @@ LUX = '0 lx'
 HUMIDITY = '42 %'
 
 
-def device(devid=DEVICE_ID, status=TEMP_F,
-           temp=TEMP_F, lux=LUX, humidity=HUMIDITY,
-           low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID,
+    status=TEMP_F,
+    temp=TEMP_F,
+    lux=LUX,
+    humidity=HUMIDITY,
+    low_battery=False,
+    no_response=False,
+):
     """PIR mock device."""
-    return '''
+    return (
+        '''
         {
-          "id":"''' + devid + '''",
+          "id":"'''
+        + devid
+        + '''",
           "type_tag":"device_type.lm",
           "type":"LM",
           "name":"Bedroom Temp",
@@ -42,19 +51,31 @@ def device(devid=DEVICE_ID, status=TEMP_F,
           "deep_link":null,
           "status_color":"#5cb85c",
           "faults":{
-             "low_battery":''' + str(int(low_battery)) + ''',
+             "low_battery":'''
+        + str(int(low_battery))
+        + ''',
              "tempered":0,
              "supervision":0,
              "out_of_order":0,
-             "no_response":''' + str(int(no_response)) + '''
+             "no_response":'''
+        + str(int(no_response))
+        + '''
           },
-          "status":"''' + status + '''",
+          "status":"'''
+        + status
+        + '''",
           "statusEx": "0",
           "statuses":{
              "hvac_mode":null,
-             "temperature": "''' + temp + '''",
-             "lux": "''' + lux + '''",
-             "humidity": "''' + humidity + '''"
+             "temperature": "'''
+        + temp
+        + '''",
+             "lux": "'''
+        + lux
+        + '''",
+             "humidity": "'''
+        + humidity
+        + '''"
           },
           "status_ex":"",
           "actions":[],
@@ -62,3 +83,4 @@ def device(devid=DEVICE_ID, status=TEMP_F,
           ],
           "icon":"assets/icons/unknown.svg"
        }'''
+    )

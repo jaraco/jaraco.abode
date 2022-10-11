@@ -23,9 +23,9 @@ class TestValve(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -38,13 +38,16 @@ class TestValve(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=VALVE.device(devid=VALVE.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=VALVE.device(
+                devid=VALVE.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -61,15 +64,18 @@ class TestValve(unittest.TestCase):
         self.assertFalse(device.is_dimmable)
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL,
-                                 '$DEVID$', VALVE.DEVICE_ID)
+        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', VALVE.DEVICE_ID)
 
         # Change device properties
-        m.get(device_url,
-              text=VALVE.device(devid=VALVE.DEVICE_ID,
-                                status=CONST.STATUS_OPEN,
-                                low_battery=True,
-                                no_response=True))
+        m.get(
+            device_url,
+            text=VALVE.device(
+                devid=VALVE.DEVICE_ID,
+                status=CONST.STATUS_OPEN,
+                low_battery=True,
+                no_response=True,
+            ),
+        )
 
         # Refesh device and test changes
         device.refresh()
@@ -86,13 +92,16 @@ class TestValve(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=VALVE.device(devid=VALVE.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=VALVE.device(
+                devid=VALVE.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -107,10 +116,12 @@ class TestValve(unittest.TestCase):
 
         # Set up control url response
         control_url = CONST.BASE_URL + VALVE.CONTROL_URL
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=VALVE.DEVICE_ID,
-                  status=CONST.STATUS_OPEN_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=VALVE.DEVICE_ID, status=CONST.STATUS_OPEN_INT
+            ),
+        )
 
         # Change the mode to "on"
         self.assertTrue(device.switch_on())
@@ -118,10 +129,12 @@ class TestValve(unittest.TestCase):
         self.assertTrue(device.is_on)
 
         # Change response
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=VALVE.DEVICE_ID,
-                  status=CONST.STATUS_CLOSED_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=VALVE.DEVICE_ID, status=CONST.STATUS_CLOSED_INT
+            ),
+        )
 
         # Change the mode to "off"
         self.assertTrue(device.switch_off())
@@ -129,10 +142,12 @@ class TestValve(unittest.TestCase):
         self.assertFalse(device.is_on)
 
         # Test that an invalid status response throws exception
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=VALVE.DEVICE_ID,
-                  status=CONST.STATUS_CLOSED_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=VALVE.DEVICE_ID, status=CONST.STATUS_CLOSED_INT
+            ),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.switch_on()

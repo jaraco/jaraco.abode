@@ -3,10 +3,12 @@
 import abodepy.helpers.constants as CONST
 
 
-def get_response_ok(mode=CONST.MODE_STANDBY, battery=False, is_cellular=False,
-                    mac='00:11:22:33:44:55'):
+def get_response_ok(
+    mode=CONST.MODE_STANDBY, battery=False, is_cellular=False, mac='00:11:22:33:44:55'
+):
     """Return panel response json."""
-    return '''{
+    return (
+        '''{
        "version":"ABGW 0.0.2.17F ABGW-L1-XA36J 3.1.2.6.1 Z-Wave 3.95",
        "report_account":"5555",
        "online":"1",
@@ -17,7 +19,9 @@ def get_response_ok(mode=CONST.MODE_STANDBY, battery=False, is_cellular=False,
        "z_wave_version":"Z-Wave 3.95",
        "timezone":"America/New_York",
        "ac_fail":"0",
-       "battery":"''' + str(int(battery)) + '''",
+       "battery":"'''
+        + str(int(battery))
+        + '''",
        "ip":"192.168.1.1",
        "jam":"0",
        "rssi":"2",
@@ -35,14 +39,18 @@ def get_response_ok(mode=CONST.MODE_STANDBY, battery=False, is_cellular=False,
        "setup_contacts":"1",
        "setup_billing":"1",
        "setup_users":"1",
-       "is_cellular":"''' + str(int(is_cellular)) + '''",
+       "is_cellular":"'''
+        + str(int(is_cellular))
+        + '''",
        "plan_set_id":"1",
        "dealer_id":"0",
        "tz_diff":"-04:00",
        "is_demo":"0",
        "rf51_version":"ABGW-L1-XA36J",
        "model":"L1",
-       "mac":"''' + mac + '''",
+       "mac":"'''
+        + mac
+        + '''",
        "xml_version":"3",
        "dealer_name":"abode",
        "id":"0",
@@ -53,10 +61,13 @@ def get_response_ok(mode=CONST.MODE_STANDBY, battery=False, is_cellular=False,
        "app_launch_url":"https://goabode.app.link/abode",
        "has_wifi":"0",
        "mode":{
-          "area_1":"''' + mode + '''",
+          "area_1":"'''
+        + mode
+        + '''",
           "area_2":"standby"
        }
     }'''
+    )
 
 
 def put_response_ok(area='1', mode=CONST.MODE_STANDBY):

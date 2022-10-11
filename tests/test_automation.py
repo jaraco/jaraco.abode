@@ -13,6 +13,7 @@ import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.automation as AUTOMATION
+
 # from abodepy.exceptions import AbodeException
 
 
@@ -29,9 +30,9 @@ class TestDevice(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -47,10 +48,8 @@ class TestDevice(unittest.TestCase):
 
         # Set up automation
         automation_text = AUTOMATION.get_response_ok(
-            name='Auto Away',
-            enabled=True,
-            aid=AID_1
-            )
+            name='Auto Away', enabled=True, aid=AID_1
+        )
 
         automation_json = json.loads(automation_text)
 
@@ -66,8 +65,7 @@ class TestDevice(unittest.TestCase):
         self.assertIsNotNone(automation)
         # pylint: disable=W0212
         self.assertEqual(automation._automation, automation_json)
-        self.assertEqual(automation.automation_id,
-                         str(automation_json['id']))
+        self.assertEqual(automation.automation_id, str(automation_json['id']))
         self.assertEqual(automation.name, automation_json['name'])
         self.assertEqual(automation.is_enabled, automation_json['enabled'])
         self.assertIsNotNone(automation.desc)
@@ -81,28 +79,32 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up automation
-        automation_text = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation',
-                enabled=True,
-                aid=AID_1) + ']'
+        automation_text = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation', enabled=True, aid=AID_1
+            )
+            + ']'
+        )
 
         automation_json = json.loads(automation_text)
 
         m.get(CONST.AUTOMATION_URL, text=automation_text)
 
         # Set up refreshed automation
-        automation_text_changed = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Changed',
-                enabled=False,
-                aid=AID_1) + ']'
+        automation_text_changed = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Changed', enabled=False, aid=AID_1
+            )
+            + ']'
+        )
 
         automation_json_changed = json.loads(automation_text_changed)
 
-        automation_id_url = str.replace(CONST.AUTOMATION_ID_URL,
-                                        '$AUTOMATIONID$',
-                                        str(automation_json[0]['id']))
+        automation_id_url = str.replace(
+            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', str(automation_json[0]['id'])
+        )
 
         m.get(automation_id_url, text=automation_text_changed)
 
@@ -122,11 +124,13 @@ class TestDevice(unittest.TestCase):
         self.assertEqual(automation._automation, automation_json_changed[0])
 
         # Refresh with get_automation() and test
-        automation_text_changed = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Changed Again',
-                enabled=True,
-                aid=AID_1) + ']'
+        automation_text_changed = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Changed Again', enabled=True, aid=AID_1
+            )
+            + ']'
+        )
 
         automation_json_changed = json.loads(automation_text_changed)
         m.get(automation_id_url, text=automation_text_changed)
@@ -138,11 +142,15 @@ class TestDevice(unittest.TestCase):
 
         # Test refresh returning an incorrect ID throws exception
         # Set up refreshed automation
-        automation_text_changed = '[' + \
-            AUTOMATION.get_response_ok(
+        automation_text_changed = (
+            '['
+            + AUTOMATION.get_response_ok(
                 name='Test Automation Changed',
                 enabled=False,
-                aid='47fae27488f74f55b964a81a066c3a11') + ']'
+                aid='47fae27488f74f55b964a81a066c3a11',
+            )
+            + ']'
+        )
 
         m.get(automation_id_url, text=automation_text_changed)
 
@@ -158,19 +166,21 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up automations
-        automation_text = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation One',
-                enabled=True,
-                aid=AID_1) + ',' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Two',
-                enabled=True,
-                aid=AID_2) + ',' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Three',
-                enabled=True,
-                aid=AID_3) + ']'
+        automation_text = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_1
+            )
+            + ','
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Two', enabled=True, aid=AID_2
+            )
+            + ','
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Three', enabled=True, aid=AID_3
+            )
+            + ']'
+        )
 
         automation_json = json.loads(automation_text)
 
@@ -206,15 +216,17 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up automations
-        automation_text = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation One',
-                enabled=True,
-                aid=AID_1) + ',' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Two',
-                enabled=True,
-                aid=AID_2) + ']'
+        automation_text = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_1
+            )
+            + ','
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Two', enabled=True, aid=AID_2
+            )
+            + ']'
+        )
 
         automation_json = json.loads(automation_text)
 
@@ -238,19 +250,21 @@ class TestDevice(unittest.TestCase):
         self.assertEqual(automation_2._automation, automation_json[1])
 
         # Update the automations
-        automation_text = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation One Changed',
-                enabled=False,
-                aid=AID_1) + ',' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Two Changed',
-                enabled=False,
-                aid=AID_2) + ',' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation Three New',
-                enabled=True,
-                aid=AID_3) + ']'
+        automation_text = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One Changed', enabled=False, aid=AID_1
+            )
+            + ','
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Two Changed', enabled=False, aid=AID_2
+            )
+            + ','
+            + AUTOMATION.get_response_ok(
+                name='Test Automation Three New', enabled=True, aid=AID_3
+            )
+            + ']'
+        )
 
         automation_json_changed = json.loads(automation_text)
 
@@ -264,14 +278,12 @@ class TestDevice(unittest.TestCase):
         # and are using the same class
         automation_1_changed = self.abode.get_automation(AID_1)
         self.assertIsNotNone(automation_1_changed)
-        self.assertEqual(automation_1_changed._automation,
-                         automation_json_changed[0])
+        self.assertEqual(automation_1_changed._automation, automation_json_changed[0])
         self.assertIs(automation_1, automation_1_changed)
 
         automation_2_changed = self.abode.get_automation(AID_2)
         self.assertIsNotNone(automation_2_changed)
-        self.assertEqual(automation_2_changed._automation,
-                         automation_json_changed[1])
+        self.assertEqual(automation_2_changed._automation, automation_json_changed[1])
         self.assertIs(automation_2, automation_2_changed)
 
         # Check that the third new automation is correct
@@ -288,11 +300,13 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up automation
-        automation_text = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation One',
-                enabled=True,
-                aid=AID_1) + ']'
+        automation_text = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_1
+            )
+            + ']'
+        )
 
         automation_json = json.loads(automation_text)
 
@@ -309,47 +323,57 @@ class TestDevice(unittest.TestCase):
         self.assertTrue(automation.is_enabled)
 
         # Set up our active state change and URL
-        set_active_url = str.replace(CONST.AUTOMATION_ID_URL,
-                                     '$AUTOMATIONID$',
-                                     str(automation_json[0]['id']))
+        set_active_url = str.replace(
+            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', str(automation_json[0]['id'])
+        )
 
-        m.patch(set_active_url,
-                text=AUTOMATION.get_response_ok(
-                    name='Test Automation One',
-                    enabled=False,
-                    aid=AID_1))
+        m.patch(
+            set_active_url,
+            text=AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=False, aid=AID_1
+            ),
+        )
 
         # Test the changed state
         automation.enable(False)
         self.assertFalse(automation.is_enabled)
 
         # Change the state back, this time with an array response
-        m.patch(set_active_url,
-                text='[' + AUTOMATION.get_response_ok(
-                    name='Test Automation One',
-                    enabled=True,
-                    aid=AID_1) + ']')
+        m.patch(
+            set_active_url,
+            text='['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_1
+            )
+            + ']',
+        )
 
         # Test the changed state
         automation.enable(True)
         self.assertTrue(automation.is_enabled)
 
         # Test that the response returns the wrong state
-        m.patch(set_active_url,
-                text='[' + AUTOMATION.get_response_ok(
-                    name='Test Automation One',
-                    enabled=True,
-                    aid=AID_1) + ']')
+        m.patch(
+            set_active_url,
+            text='['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_1
+            )
+            + ']',
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             automation.enable(False)
 
         # Test that the response returns the wrong id
-        m.patch(set_active_url,
-                text='[' + AUTOMATION.get_response_ok(
-                    name='Test Automation One',
-                    enabled=True,
-                    aid=AID_2) + ']')
+        m.patch(
+            set_active_url,
+            text='['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_2
+            )
+            + ']',
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             automation.enable(True)
@@ -363,11 +387,13 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up automation
-        automation_text = '[' + \
-            AUTOMATION.get_response_ok(
-                name='Test Automation One',
-                enabled=True,
-                aid=AID_1) + ']'
+        automation_text = (
+            '['
+            + AUTOMATION.get_response_ok(
+                name='Test Automation One', enabled=True, aid=AID_1
+            )
+            + ']'
+        )
 
         m.get(CONST.AUTOMATION_URL, text=automation_text)
 
@@ -380,9 +406,9 @@ class TestDevice(unittest.TestCase):
         self.assertIsNotNone(automation)
 
         # Set up our automation trigger reply
-        set_active_url = str.replace(CONST.AUTOMATION_APPLY_URL,
-                                     '$AUTOMATIONID$',
-                                     automation.automation_id)
+        set_active_url = str.replace(
+            CONST.AUTOMATION_APPLY_URL, '$AUTOMATIONID$', automation.automation_id
+        )
         m.post(set_active_url, text=MOCK.generic_response_ok())
 
         # Test triggering

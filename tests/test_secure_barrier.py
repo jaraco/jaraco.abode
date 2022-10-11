@@ -23,9 +23,9 @@ class TestSecureBarrier(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -38,13 +38,16 @@ class TestSecureBarrier(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -61,15 +64,18 @@ class TestSecureBarrier(unittest.TestCase):
         self.assertFalse(device.is_open)
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL,
-                                 '$DEVID$', COVER.DEVICE_ID)
+        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
 
         # Change device properties
-        m.get(device_url,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_OPEN,
-                                low_battery=True,
-                                no_response=True))
+        m.get(
+            device_url,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_OPEN,
+                low_battery=True,
+                no_response=True,
+            ),
+        )
 
         # Refesh device and test changes
         device.refresh()
@@ -87,13 +93,16 @@ class TestSecureBarrier(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -108,10 +117,12 @@ class TestSecureBarrier(unittest.TestCase):
 
         # Set up control url response
         control_url = CONST.BASE_URL + COVER.CONTROL_URL
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=COVER.DEVICE_ID,
-                  status=CONST.STATUS_OPEN_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN_INT
+            ),
+        )
 
         # Change the cover to open
         self.assertTrue(device.open_cover())
@@ -119,10 +130,12 @@ class TestSecureBarrier(unittest.TestCase):
         self.assertTrue(device.is_open)
 
         # Change response
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=COVER.DEVICE_ID,
-                  status=CONST.STATUS_CLOSED_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=COVER.DEVICE_ID, status=CONST.STATUS_CLOSED_INT
+            ),
+        )
 
         # Change the mode to "off"
         self.assertTrue(device.close_cover())

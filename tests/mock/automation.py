@@ -3,11 +3,18 @@
 
 def get_response_ok(name, enabled, aid):
     """Return automation json."""
-    return '''{
-        "name": "''' + name + '''",
-        "enabled": "''' + str(enabled) + '''",
+    return (
+        '''{
+        "name": "'''
+        + name
+        + '''",
+        "enabled": "'''
+        + str(enabled)
+        + '''",
         "version": 2,
-        "id": "''' + aid + '''",
+        "id": "'''
+        + aid
+        + '''",
         "subType": "",
         "actions": [{
             "directive": {
@@ -34,3 +41,4 @@ def get_response_ok(name, enabled, aid):
             }]
         }
     }'''
+    )

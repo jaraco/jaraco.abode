@@ -12,7 +12,7 @@ import abodepy.socketio as sio
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeEventController():
+class AbodeEventController:
     """Class for subscribing to abode events."""
 
     def __init__(self, abode, url=CONST.SOCKETIO_URL):
@@ -29,8 +29,7 @@ class AbodeEventController():
         self._timeline_callbacks = collections.defaultdict(list)
 
         # Setup SocketIO
-        self._socketio = sio.SocketIO(url=url,
-                                      origin=CONST.BASE_URL)
+        self._socketio = sio.SocketIO(url=url, origin=CONST.BASE_URL)
 
         # Setup SocketIO Callbacks
         self._socketio.on(sio.STARTED, self._on_socket_started)
@@ -54,8 +53,7 @@ class AbodeEventController():
         if not unique_id:
             return False
 
-        _LOGGER.debug(
-            "Subscribing to Abode connection updates for: %s", unique_id)
+        _LOGGER.debug("Subscribing to Abode connection updates for: %s", unique_id)
 
         self._connection_status_callbacks[unique_id].append((callback))
 
@@ -66,8 +64,7 @@ class AbodeEventController():
         if not unique_id:
             return False
 
-        _LOGGER.debug(
-            "Unsubscribing from Abode connection updates for : %s", unique_id)
+        _LOGGER.debug("Unsubscribing from Abode connection updates for : %s", unique_id)
 
         self._connection_status_callbacks[unique_id].clear()
 
@@ -93,8 +90,7 @@ class AbodeEventController():
             if not self._abode.get_device(device_id):
                 raise AbodeException((ERROR.EVENT_DEVICE_INVALID))
 
-            _LOGGER.debug(
-                "Subscribing to updates for device_id: %s", device_id)
+            _LOGGER.debug("Subscribing to updates for device_id: %s", device_id)
 
             self._device_callbacks[device_id].append((callback))
 
@@ -120,8 +116,7 @@ class AbodeEventController():
             if device_id not in self._device_callbacks:
                 return False
 
-            _LOGGER.debug(
-                "Unsubscribing from all updates for device_id: %s", device_id)
+            _LOGGER.debug("Unsubscribing from all updates for device_id: %s", device_id)
 
             self._device_callbacks[device_id].clear()
 
@@ -137,8 +132,9 @@ class AbodeEventController():
 
         for event_group in event_groups:
             if event_group not in TIMELINE.ALL_EVENT_GROUPS:
-                raise AbodeException(ERROR.EVENT_GROUP_INVALID,
-                                     TIMELINE.ALL_EVENT_GROUPS)
+                raise AbodeException(
+                    ERROR.EVENT_GROUP_INVALID, TIMELINE.ALL_EVENT_GROUPS
+                )
 
             _LOGGER.debug("Subscribing to event group: %s", event_group)
 
@@ -183,8 +179,7 @@ class AbodeEventController():
         """Socket IO startup callback."""
         # pylint: disable=W0212
         cookies = self._abode._get_session().cookies.get_dict()
-        cookie_string = "; ".join(
-            [str(x) + "=" + str(y) for x, y in cookies.items()])
+        cookie_string = "; ".join([str(x) + "=" + str(y) for x, y in cookies.items()])
 
         self._socketio.set_cookie(cookie_string)
 
@@ -276,8 +271,12 @@ class AbodeEventController():
             _LOGGER.warning("Invalid timeline update event: %s", event)
             return
 
-        _LOGGER.debug("Timeline event received: %s - %s (%s)",
-                      event.get('event_name'), event_type, event_code)
+        _LOGGER.debug(
+            "Timeline event received: %s - %s (%s)",
+            event.get('event_name'),
+            event_type,
+            event_code,
+        )
 
         # Compress our callbacks into those that match this event_code
         # or ones registered to get callbacks for all events

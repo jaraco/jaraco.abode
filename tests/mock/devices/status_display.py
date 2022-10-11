@@ -4,13 +4,16 @@ import abodepy.helpers.constants as CONST
 DEVICE_ID = 'ZB:00000004'
 
 
-def device(devid=DEVICE_ID,
-           status=CONST.STATUS_ONLINE,
-           low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
+):
     """Status display mock device."""
-    return '''
+    return (
+        '''
         {
-          "id":"''' + devid + '''",
+          "id":"'''
+        + devid
+        + '''",
           "type_tag":"device_type.bx",
           "type":"Status Display",
           "name":"Status Indicator",
@@ -38,13 +41,19 @@ def device(devid=DEVICE_ID,
           "deep_link":null,
           "status_color":"#5cb85c",
           "faults":{
-             "low_battery":''' + str(int(low_battery)) + ''',
+             "low_battery":'''
+        + str(int(low_battery))
+        + ''',
              "tempered":0,
              "supervision":0,
              "out_of_order":0,
-             "no_response":''' + str(int(no_response)) + '''
+             "no_response":'''
+        + str(int(no_response))
+        + '''
           },
-          "status":"''' + status + '''",
+          "status":"'''
+        + status
+        + '''",
           "statuses":{
              "hvac_mode":null
           },
@@ -56,3 +65,4 @@ def device(devid=DEVICE_ID,
           "siren_default":null,
           "icon":"assets/icons/unknown.svg"
        }'''
+    )

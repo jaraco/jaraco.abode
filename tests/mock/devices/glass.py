@@ -4,14 +4,22 @@ import abodepy.helpers.constants as CONST
 DEVICE_ID = 'RF:00000001'
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
-           low_battery=False, no_response=False,
-           out_of_order=False, tampered=False,
-           uuid='91568b0d4c9d58c10d75fdeea887d4f4'):
+def device(
+    devid=DEVICE_ID,
+    status=CONST.STATUS_ONLINE,
+    low_battery=False,
+    no_response=False,
+    out_of_order=False,
+    tampered=False,
+    uuid='91568b0d4c9d58c10d75fdeea887d4f4',
+):
     """Glass break sensor mock device."""
-    return '''
+    return (
+        '''
         {
-          "id":"''' + devid + '''",
+          "id":"'''
+        + devid
+        + '''",
           "type_tag":"device_type.glass",
           "type":"GLASS",
           "name":"Glass Break Sensor",
@@ -39,13 +47,23 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           "deep_link":null,
           "status_color":"#5cb85c",
           "faults":{
-             "low_battery":''' + str(int(low_battery)) + ''',
-             "tempered":''' + str(int(tampered)) + ''',
+             "low_battery":'''
+        + str(int(low_battery))
+        + ''',
+             "tempered":'''
+        + str(int(tampered))
+        + ''',
              "supervision":0,
-             "out_of_order":''' + str(int(out_of_order)) + ''',
-             "no_response":''' + str(int(no_response)) + '''
+             "out_of_order":'''
+        + str(int(out_of_order))
+        + ''',
+             "no_response":'''
+        + str(int(no_response))
+        + '''
           },
-          "status":"''' + status + '''",
+          "status":"'''
+        + status
+        + '''",
           "statuses":{
              "hvac_mode":null
           },
@@ -55,5 +73,8 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           "status_icons":[
           ],
           "icon":"assets/icons/unknown.svg",
-          "uuid":"''' + uuid + '''"
+          "uuid":"'''
+        + uuid
+        + '''"
        }'''
+    )

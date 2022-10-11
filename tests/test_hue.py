@@ -23,9 +23,9 @@ class TestHue(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -38,18 +38,21 @@ class TestHue(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=HUE.device(devid=HUE.DEVICE_ID,
-                              status=CONST.STATUS_OFF,
-                              level=0,
-                              saturation=57,
-                              hue=60,
-                              color_temp=6536,
-                              color_mode=CONST.COLOR_MODE_ON,
-                              low_battery=False,
-                              no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=HUE.device(
+                devid=HUE.DEVICE_ID,
+                status=CONST.STATUS_OFF,
+                level=0,
+                saturation=57,
+                hue=60,
+                color_temp=6536,
+                color_mode=CONST.COLOR_MODE_ON,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -72,20 +75,23 @@ class TestHue(unittest.TestCase):
         self.assertFalse(device.is_on)
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL,
-                                 '$DEVID$', HUE.DEVICE_ID)
+        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', HUE.DEVICE_ID)
 
         # Change device properties
-        m.get(device_url,
-              text=HUE.device(devid=HUE.DEVICE_ID,
-                              status=CONST.STATUS_ON,
-                              level=45,
-                              saturation=22,
-                              hue=104,
-                              color_temp=4000,
-                              color_mode=CONST.COLOR_MODE_OFF,
-                              low_battery=True,
-                              no_response=True))
+        m.get(
+            device_url,
+            text=HUE.device(
+                devid=HUE.DEVICE_ID,
+                status=CONST.STATUS_ON,
+                level=45,
+                saturation=22,
+                hue=104,
+                color_temp=4000,
+                color_mode=CONST.COLOR_MODE_OFF,
+                low_battery=True,
+                no_response=True,
+            ),
+        )
 
         # Refesh device and test changes
         device.refresh()
@@ -108,18 +114,21 @@ class TestHue(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=HUE.device(devid=HUE.DEVICE_ID,
-                              status=CONST.STATUS_OFF,
-                              level=0,
-                              saturation=57,
-                              hue=60,
-                              color_temp=6536,
-                              color_mode=CONST.COLOR_MODE_ON,
-                              low_battery=False,
-                              no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=HUE.device(
+                devid=HUE.DEVICE_ID,
+                status=CONST.STATUS_OFF,
+                level=0,
+                saturation=57,
+                hue=60,
+                color_temp=6536,
+                color_mode=CONST.COLOR_MODE_ON,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -134,10 +143,12 @@ class TestHue(unittest.TestCase):
 
         # Set up control url response
         control_url = CONST.BASE_URL + HUE.CONTROL_URL
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=HUE.DEVICE_ID,
-                  status=CONST.STATUS_ON_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=HUE.DEVICE_ID, status=CONST.STATUS_ON_INT
+            ),
+        )
 
         # Change the mode to "on"
         self.assertTrue(device.switch_on())
@@ -145,10 +156,12 @@ class TestHue(unittest.TestCase):
         self.assertTrue(device.is_on)
 
         # Change response
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=HUE.DEVICE_ID,
-                  status=CONST.STATUS_OFF_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
+            ),
+        )
 
         # Change the mode to "off"
         self.assertTrue(device.switch_off())
@@ -156,10 +169,12 @@ class TestHue(unittest.TestCase):
         self.assertFalse(device.is_on)
 
         # Test that an invalid status response throws exception
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=HUE.DEVICE_ID,
-                  status=CONST.STATUS_OFF_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
+            ),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.switch_on()
@@ -171,18 +186,21 @@ class TestHue(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=HUE.device(devid=HUE.DEVICE_ID,
-                              status=CONST.STATUS_OFF,
-                              level=0,
-                              saturation=57,
-                              hue=60,
-                              color_temp=6536,
-                              color_mode=CONST.COLOR_MODE_ON,
-                              low_battery=False,
-                              no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=HUE.device(
+                devid=HUE.DEVICE_ID,
+                status=CONST.STATUS_OFF,
+                level=0,
+                saturation=57,
+                hue=60,
+                color_temp=6536,
+                color_mode=CONST.COLOR_MODE_ON,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -197,20 +215,20 @@ class TestHue(unittest.TestCase):
         self.assertEqual(device.color_temp, 6536)
 
         # Set up integrations url response
-        m.post(HUE.INTEGRATIONS_URL,
-               text=HUE.color_temp_post_response_ok(
-                   devid=HUE.DEVICE_ID,
-                   color_temp=5554))
+        m.post(
+            HUE.INTEGRATIONS_URL,
+            text=HUE.color_temp_post_response_ok(devid=HUE.DEVICE_ID, color_temp=5554),
+        )
 
         # Change the color temp
         self.assertTrue(device.set_color_temp(5554))
         self.assertEqual(device.color_temp, 5554)
 
         # Change response
-        m.post(HUE.INTEGRATIONS_URL,
-               text=HUE.color_temp_post_response_ok(
-                   devid=HUE.DEVICE_ID,
-                   color_temp=4434))
+        m.post(
+            HUE.INTEGRATIONS_URL,
+            text=HUE.color_temp_post_response_ok(devid=HUE.DEVICE_ID, color_temp=4434),
+        )
 
         # Change the color to something that mismatches
         self.assertTrue(device.set_color_temp(4436))
@@ -219,10 +237,12 @@ class TestHue(unittest.TestCase):
         self.assertEqual(device.color_temp, 4434)
 
         # Test that an invalid ID in response throws exception
-        m.post(HUE.INTEGRATIONS_URL,
-               text=HUE.color_temp_post_response_ok(
-                   devid=(HUE.DEVICE_ID + "23"),
-                   color_temp=4434))
+        m.post(
+            HUE.INTEGRATIONS_URL,
+            text=HUE.color_temp_post_response_ok(
+                devid=(HUE.DEVICE_ID + "23"), color_temp=4434
+            ),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.set_color_temp(4434)
@@ -234,18 +254,21 @@ class TestHue(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=HUE.device(devid=HUE.DEVICE_ID,
-                              status=CONST.STATUS_OFF,
-                              level=0,
-                              saturation=57,
-                              hue=60,
-                              color_temp=6536,
-                              color_mode=CONST.COLOR_MODE_ON,
-                              low_battery=False,
-                              no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=HUE.device(
+                devid=HUE.DEVICE_ID,
+                status=CONST.STATUS_OFF,
+                level=0,
+                saturation=57,
+                hue=60,
+                color_temp=6536,
+                color_mode=CONST.COLOR_MODE_ON,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -260,22 +283,20 @@ class TestHue(unittest.TestCase):
         self.assertEqual(device.color, (60, 57))  # (hue, saturation)
 
         # Set up integrations url response
-        m.post(HUE.INTEGRATIONS_URL,
-               text=HUE.color_post_response_ok(
-                   devid=HUE.DEVICE_ID,
-                   hue=70,
-                   saturation=80))
+        m.post(
+            HUE.INTEGRATIONS_URL,
+            text=HUE.color_post_response_ok(devid=HUE.DEVICE_ID, hue=70, saturation=80),
+        )
 
         # Change the color temp
         self.assertTrue(device.set_color((70, 80)))
         self.assertEqual(device.color, (70, 80))  # (hue, saturation)
 
         # Change response
-        m.post(HUE.INTEGRATIONS_URL,
-               text=HUE.color_post_response_ok(
-                   devid=HUE.DEVICE_ID,
-                   hue=55,
-                   saturation=85))
+        m.post(
+            HUE.INTEGRATIONS_URL,
+            text=HUE.color_post_response_ok(devid=HUE.DEVICE_ID, hue=55, saturation=85),
+        )
 
         # Change the color to something that mismatches
         self.assertTrue(device.set_color((44, 44)))
@@ -284,11 +305,12 @@ class TestHue(unittest.TestCase):
         self.assertEqual(device.color, (55, 85))  # (hue, saturation)
 
         # Test that an invalid ID in response throws exception
-        m.post(HUE.INTEGRATIONS_URL,
-               text=HUE.color_post_response_ok(
-                   devid=(HUE.DEVICE_ID + "23"),
-                   hue=55,
-                   saturation=85))
+        m.post(
+            HUE.INTEGRATIONS_URL,
+            text=HUE.color_post_response_ok(
+                devid=(HUE.DEVICE_ID + "23"), hue=55, saturation=85
+            ),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.set_color((44, 44))

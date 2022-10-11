@@ -5,12 +5,16 @@ DEVICE_ID = 'ZB:00000005'
 CONTROL_URL = 'api/v1/cams/' + DEVICE_ID + '/capture'
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
-           low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
+):
     """IR camera mock device."""
-    return '''
+    return (
+        '''
         {
-          "id":"''' + devid + '''",
+          "id":"'''
+        + devid
+        + '''",
           "type_tag":"device_type.ir_camera",
           "type":"Motion Camera",
           "name":"Downstairs Motion Camera",
@@ -34,17 +38,25 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           "sresp_exit_3":"0",
           "version":"852_00.00.03.05TC",
           "origin":"abode",
-          "control_url":"''' + CONTROL_URL + '''",
+          "control_url":"'''
+        + CONTROL_URL
+        + '''",
           "deep_link":null,
           "status_color":"#5cb85c",
           "faults":{
-             "low_battery":''' + str(int(low_battery)) + ''',
+             "low_battery":'''
+        + str(int(low_battery))
+        + ''',
              "tempered":0,
              "supervision":0,
              "out_of_order":0,
-             "no_response":''' + str(int(no_response)) + '''
+             "no_response":'''
+        + str(int(no_response))
+        + '''
           },
-          "status":"''' + status + '''",
+          "status":"'''
+        + status
+        + '''",
           "statuses":{
              "hvac_mode":null
           },
@@ -65,6 +77,7 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           "wide_angle":"0",
           "icon":"assets/icons/motioncamera-b.svg"
        }'''
+    )
 
 
 def get_capture_timeout():
@@ -81,13 +94,16 @@ def get_capture_timeout():
 FILE_PATH_ID = 'ZB00000005'
 FILE_PATH = 'api/storage/' + FILE_PATH_ID + '/2017-08-23/195505UTC/001.jpg'
 
-LOCATION_HEADER = 'https://www.google.com/images/branding/googlelogo/' + \
-    '1x/googlelogo_color_272x92dp.png'
+LOCATION_HEADER = (
+    'https://www.google.com/images/branding/googlelogo/'
+    + '1x/googlelogo_color_272x92dp.png'
+)
 
 
 def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
     """Camera Timeline Event Mockup."""
-    return '''
+    return (
+        '''
     {
         "id": "71739948",
         "event_utc": "1503518105",
@@ -99,12 +115,18 @@ def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
         "time": "12:55 PM",
         "is_alarm": "0",
         "event_cid": "",
-        "event_code": "''' + event_code + '''",
-        "device_id": "''' + devid + '''",
+        "event_code": "'''
+        + event_code
+        + '''",
+        "device_id": "'''
+        + devid
+        + '''",
         "device_type_id": "27",
         "device_type": "Motion Camera",
         "device_name": "Downstairs Motion Camera",
-        "file_path":"''' + file_path + '''",
+        "file_path":"'''
+        + file_path
+        + '''",
         "deep_link": null,
         "app_deep_link": null,
         "file_size": "30852",
@@ -125,3 +147,4 @@ def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
         "event_name": "Downstairs Motion Camera Image Capture",
         "event_by": ""
     }'''
+    )

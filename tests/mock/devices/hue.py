@@ -9,31 +9,56 @@ INTEGRATIONS_URL = CONST.INTEGRATIONS_URL + DEVICE_UUID
 
 def color_temp_post_response_ok(devid, color_temp):
     """Return color temp change response json."""
-    return '''
+    return (
+        '''
       {
-         "idForPanel": "''' + devid + '''",
-         "colorTemperature": ''' + str(int(color_temp)) + '''
+         "idForPanel": "'''
+        + devid
+        + '''",
+         "colorTemperature": '''
+        + str(int(color_temp))
+        + '''
       }'''
+    )
 
 
 def color_post_response_ok(devid, hue, saturation):
     """Return color change response json."""
-    return '''
+    return (
+        '''
       {
-         "idForPanel": "''' + devid + '''",
-         "hue": ''' + str(int(hue)) + ''',
-         "saturation": ''' + str(int(saturation)) + '''
+         "idForPanel": "'''
+        + devid
+        + '''",
+         "hue": '''
+        + str(int(hue))
+        + ''',
+         "saturation": '''
+        + str(int(saturation))
+        + '''
       }'''
+    )
 
 
-def device(devid=DEVICE_ID, uuid=DEVICE_UUID, status=CONST.STATUS_OFF,
-           level=0, saturation=57, hue=60, color_temp=6536,
-           color_mode=CONST.COLOR_MODE_OFF, low_battery=False,
-           no_response=False):
+def device(
+    devid=DEVICE_ID,
+    uuid=DEVICE_UUID,
+    status=CONST.STATUS_OFF,
+    level=0,
+    saturation=57,
+    hue=60,
+    color_temp=6536,
+    color_mode=CONST.COLOR_MODE_OFF,
+    low_battery=False,
+    no_response=False,
+):
     """Hue  mock device."""
-    return '''
+    return (
+        '''
       {
-         "id":"''' + devid + '''",
+         "id":"'''
+        + devid
+        + '''",
          "type_tag":"device_type.hue",
          "type":"RGB Dimmer",
          "name":"Overhead Light",
@@ -58,7 +83,9 @@ def device(devid=DEVICE_ID, uuid=DEVICE_UUID, status=CONST.STATUS_OFF,
          "sresp_entry_2":"0",
          "sresp_exit_2":"0",
          "sresp_mode_3":"0",
-         "uuid":"''' + DEVICE_UUID + '''",
+         "uuid":"'''
+        + DEVICE_UUID
+        + '''",
          "sresp_entry_3":"0",
          "sresp_exit_3":"0",
          "sresp_mode_4":"0",
@@ -67,26 +94,44 @@ def device(devid=DEVICE_ID, uuid=DEVICE_UUID, status=CONST.STATUS_OFF,
          "version":"LST002",
          "origin":"abode",
          "has_subscription":null,
-         "control_url":"''' + CONTROL_URL + '''",
+         "control_url":"'''
+        + CONTROL_URL
+        + '''",
          "deep_link":null,
          "status_color":"#5cb85c",
          "faults":{
-            "low_battery":''' + str(int(low_battery)) + ''',
+            "low_battery":'''
+        + str(int(low_battery))
+        + ''',
             "tempered":0,
             "supervision":0,
             "out_of_order":0,
-            "no_response":''' + str(int(no_response)) + ''',
+            "no_response":'''
+        + str(int(no_response))
+        + ''',
             "jammed":0,
             "zwave_fault":0
          },
-         "status":"''' + status + '''",
+         "status":"'''
+        + status
+        + '''",
          "statuses":{
-            "saturation":''' + str(int(saturation)) + ''',
-            "hue":''' + str(int(hue)) + ''',
-            "level":"''' + str(int(level)) + '''",
+            "saturation":'''
+        + str(int(saturation))
+        + ''',
+            "hue":'''
+        + str(int(hue))
+        + ''',
+            "level":"'''
+        + str(int(level))
+        + '''",
             "switch":"1",
-            "color_temp":''' + str(int(color_temp)) + ''',
-            "color_mode":"''' + str(int(color_mode)) + '''"
+            "color_temp":'''
+        + str(int(color_temp))
+        + ''',
+            "color_mode":"'''
+        + str(int(color_mode))
+        + '''"
          },
          "status_ex":"",
          "actions":[
@@ -152,3 +197,4 @@ def device(devid=DEVICE_ID, uuid=DEVICE_UUID, status=CONST.STATUS_OFF,
          "statusEx":"37",
          "icon":"assets/icons/bulb-1.svg"
       }'''
+    )

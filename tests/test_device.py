@@ -44,9 +44,9 @@ class TestDevice(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -57,8 +57,11 @@ class TestDevice(unittest.TestCase):
         # Set up device
         device_text = GLASS.device(
             status=CONST.STATUS_ONLINE,
-            low_battery=True, no_response=True,
-            tampered=True, out_of_order=True)
+            low_battery=True,
+            no_response=True,
+            tampered=True,
+            out_of_order=True,
+        )
 
         device_json = json.loads(device_text)
 
@@ -79,8 +82,11 @@ class TestDevice(unittest.TestCase):
         # Set up device
         device_text = GLASS.device(
             status=CONST.STATUS_ONLINE,
-            low_battery=True, no_response=True,
-            tampered=True, out_of_order=True)
+            low_battery=True,
+            no_response=True,
+            tampered=True,
+            out_of_order=True,
+        )
 
         device_json = json.loads(device_text)
 
@@ -109,11 +115,18 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up device
-        device_text = '[' + GLASS.device(
-            status=CONST.STATUS_ONLINE,
-            low_battery=True, no_response=True,
-            tampered=True, out_of_order=True,
-            uuid='testuuid00000001') + ']'
+        device_text = (
+            '['
+            + GLASS.device(
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+                tampered=True,
+                out_of_order=True,
+                uuid='testuuid00000001',
+            )
+            + ']'
+        )
         device_json = json.loads(device_text)
 
         m.get(CONST.DEVICES_URL, text=device_text)
@@ -149,15 +162,12 @@ class TestDevice(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Set up online device
-        device_text_online = '[' + \
-            GLASS.device(status=CONST.STATUS_ONLINE) + ']'
+        device_text_online = '[' + GLASS.device(status=CONST.STATUS_ONLINE) + ']'
         m.get(CONST.DEVICES_URL, text=device_text_online)
 
         # Set up offline device
-        device_text_offline = '[' + \
-            GLASS.device(status=CONST.STATUS_OFFLINE) + ']'
-        device_url = str.replace(CONST.DEVICE_URL,
-                                 '$DEVID$', GLASS.DEVICE_ID)
+        device_text_offline = '[' + GLASS.device(status=CONST.STATUS_OFFLINE) + ']'
+        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', GLASS.DEVICE_ID)
         m.get(device_url, text=device_text_offline)
 
         # Logout to reset everything
@@ -168,8 +178,7 @@ class TestDevice(unittest.TestCase):
         self.assertEqual(device.status, CONST.STATUS_ONLINE)
 
         # Refresh the device and test
-        device = self.abode.get_device(
-            GLASS.DEVICE_ID, refresh=True)
+        device = self.abode.get_device(GLASS.DEVICE_ID, refresh=True)
         self.assertEqual(device.status, CONST.STATUS_OFFLINE)
 
     @requests_mock.mock()
@@ -179,14 +188,18 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up a list of devices
-        dev_list = '[' + \
-            POWERSENSOR.device() + "," + \
-            DOOR_CONTACT.device() + "," + \
-            GLASS.device() + ']'
+        dev_list = (
+            '['
+            + POWERSENSOR.device()
+            + ","
+            + DOOR_CONTACT.device()
+            + ","
+            + GLASS.device()
+            + ']'
+        )
 
         m.get(CONST.DEVICES_URL, text=dev_list)
 
@@ -219,8 +232,7 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up a list of devices
         dev_list = '[' + UNKNOWN.device() + ']'
@@ -244,23 +256,33 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up a list of devices
-        dev_list = '[' + \
-            POWERSENSOR.device(devid='ps1',
-                               status=CONST.STATUS_OFF,
-                               low_battery=False,
-                               no_response=False) + "," + \
-            POWERSENSOR.device(devid='ps2',
-                               status=CONST.STATUS_OFF,
-                               low_battery=False,
-                               no_response=False) + "," + \
-            GLASS.device(devid='gb1',
-                         status=CONST.STATUS_OFF,
-                         low_battery=False,
-                         no_response=False) + ']'
+        dev_list = (
+            '['
+            + POWERSENSOR.device(
+                devid='ps1',
+                status=CONST.STATUS_OFF,
+                low_battery=False,
+                no_response=False,
+            )
+            + ","
+            + POWERSENSOR.device(
+                devid='ps2',
+                status=CONST.STATUS_OFF,
+                low_battery=False,
+                no_response=False,
+            )
+            + ","
+            + GLASS.device(
+                devid='gb1',
+                status=CONST.STATUS_OFF,
+                low_battery=False,
+                no_response=False,
+            )
+            + ']'
+        )
 
         m.get(CONST.DEVICES_URL, text=dev_list)
 
@@ -268,15 +290,13 @@ class TestDevice(unittest.TestCase):
         self.abode.logout()
 
         # Get our glass devices
-        devices = self.abode.get_devices(
-            generic_type=(CONST.TYPE_CONNECTIVITY))
+        devices = self.abode.get_devices(generic_type=(CONST.TYPE_CONNECTIVITY))
 
         self.assertIsNotNone(devices)
         self.assertEqual(len(devices), 1)
 
         # Get our power switch devices
-        devices = self.abode.get_devices(
-            generic_type=(CONST.TYPE_SWITCH))
+        devices = self.abode.get_devices(generic_type=(CONST.TYPE_SWITCH))
 
         self.assertIsNotNone(devices)
         self.assertEqual(len(devices), 2)
@@ -290,8 +310,7 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
-        m.get(CONST.DEVICES_URL,
-              text=GLASS.device(status=CONST.STATUS_ONLINE))
+        m.get(CONST.DEVICES_URL, text=GLASS.device(status=CONST.STATUS_ONLINE))
 
         # Logout to reset everything
         self.abode.logout()
@@ -310,13 +329,16 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=POWERSENSOR.device(devid=POWERSENSOR.DEVICE_ID,
-                                      status=CONST.STATUS_OFF,
-                                      low_battery=False,
-                                      no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=POWERSENSOR.device(
+                devid=POWERSENSOR.DEVICE_ID,
+                status=CONST.STATUS_OFF,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -331,10 +353,12 @@ class TestDevice(unittest.TestCase):
 
         # Set up control url response
         control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=POWERSENSOR.DEVICE_ID,
-                  status=CONST.STATUS_ON_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=POWERSENSOR.DEVICE_ID, status=CONST.STATUS_ON_INT
+            ),
+        )
 
         # Change the mode to "on"
         self.assertTrue(device.switch_on())
@@ -342,10 +366,12 @@ class TestDevice(unittest.TestCase):
         self.assertTrue(device.is_on)
 
         # Change response
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=POWERSENSOR.DEVICE_ID,
-                  status=CONST.STATUS_OFF_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=POWERSENSOR.DEVICE_ID, status=CONST.STATUS_OFF_INT
+            ),
+        )
 
         # Change the mode to "off"
         self.assertTrue(device.switch_off())
@@ -353,19 +379,23 @@ class TestDevice(unittest.TestCase):
         self.assertFalse(device.is_on)
 
         # Test that an invalid device ID in response throws exception
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid='ZW:deadbeef',
-                  status=CONST.STATUS_OFF_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid='ZW:deadbeef', status=CONST.STATUS_OFF_INT
+            ),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.switch_on()
 
         # Test that an invalid status in response throws exception
-        m.put(control_url,
-              text=DEVICES.status_put_response_ok(
-                  devid=POWERSENSOR.DEVICE_ID,
-                  status=CONST.STATUS_OFF_INT))
+        m.put(
+            control_url,
+            text=DEVICES.status_put_response_ok(
+                devid=POWERSENSOR.DEVICE_ID, status=CONST.STATUS_OFF_INT
+            ),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.switch_on()
@@ -377,15 +407,18 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # TODO: Test with a device that supports levels
-        m.get(CONST.DEVICES_URL,
-              text=POWERSENSOR.device(devid=POWERSENSOR.DEVICE_ID,
-                                      status=CONST.STATUS_OFF,
-                                      low_battery=False,
-                                      no_response=False))
+        m.get(
+            CONST.DEVICES_URL,
+            text=POWERSENSOR.device(
+                devid=POWERSENSOR.DEVICE_ID,
+                status=CONST.STATUS_OFF,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -400,10 +433,12 @@ class TestDevice(unittest.TestCase):
 
         # Set up control url response
         control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
-        m.put(control_url,
-              text=DEVICES.level_put_response_ok(
-                  devid=POWERSENSOR.DEVICE_ID,
-                  level='100'))
+        m.put(
+            control_url,
+            text=DEVICES.level_put_response_ok(
+                devid=POWERSENSOR.DEVICE_ID, level='100'
+            ),
+        )
 
         # Change the level to int 100
         self.assertTrue(device.set_level(100))
@@ -411,29 +446,29 @@ class TestDevice(unittest.TestCase):
 
         # Change response
         control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
-        m.put(control_url,
-              text=DEVICES.level_put_response_ok(
-                  devid=POWERSENSOR.DEVICE_ID,
-                  level='25'))
+        m.put(
+            control_url,
+            text=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='25'),
+        )
 
         # Change the level to str '25'
         self.assertTrue(device.set_level('25'))
         # self.assertEqual(device.level, '25')
 
         # Test that an invalid device ID in response throws exception
-        m.put(control_url,
-              text=DEVICES.level_put_response_ok(
-                  devid='ZW:deadbeef',
-                  level='25'))
+        m.put(
+            control_url,
+            text=DEVICES.level_put_response_ok(devid='ZW:deadbeef', level='25'),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.set_level(25)
 
         # Test that an invalid level in response throws exception
-        m.put(control_url,
-              text=DEVICES.level_put_response_ok(
-                  devid=POWERSENSOR.DEVICE_ID,
-                  level='98'))
+        m.put(
+            control_url,
+            text=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='98'),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             device.set_level('28')
@@ -445,24 +480,38 @@ class TestDevice(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Create all devices
-        all_devices = '[' + \
-            DOOR_CONTACT.device() + ',' + \
-            DOOR_LOCK.device() + ',' + \
-            GLASS.device() + ',' + \
-            IR_CAMERA.device() + ',' + \
-            KEYPAD.device() + ',' + \
-            PIR.device() + ',' + \
-            POWERMETER.device() + ',' + \
-            POWERSENSOR.device() + ',' + \
-            REMOTE_CONTROLLER.device() + ',' + \
-            SECUREBARRIER.device() + ',' + \
-            SIREN.device() + ',' + \
-            STATUS_DISPLAY.device() + ',' + \
-            WATER_SENSOR.device() + ']'
+        all_devices = (
+            '['
+            + DOOR_CONTACT.device()
+            + ','
+            + DOOR_LOCK.device()
+            + ','
+            + GLASS.device()
+            + ','
+            + IR_CAMERA.device()
+            + ','
+            + KEYPAD.device()
+            + ','
+            + PIR.device()
+            + ','
+            + POWERMETER.device()
+            + ','
+            + POWERSENSOR.device()
+            + ','
+            + REMOTE_CONTROLLER.device()
+            + ','
+            + SECUREBARRIER.device()
+            + ','
+            + SIREN.device()
+            + ','
+            + STATUS_DISPLAY.device()
+            + ','
+            + WATER_SENSOR.device()
+            + ']'
+        )
 
         m.get(CONST.DEVICES_URL, text=all_devices)
 
@@ -474,33 +523,30 @@ class TestDevice(unittest.TestCase):
             class_type = {
                 # Alarm
                 CONST.TYPE_ALARM: AbodeAlarm,
-
                 # Binary Sensors
                 CONST.TYPE_CONNECTIVITY: AbodeBinarySensor,
                 CONST.TYPE_MOISTURE: AbodeBinarySensor,
                 CONST.TYPE_OPENING: AbodeBinarySensor,
                 CONST.TYPE_MOTION: AbodeBinarySensor,
                 CONST.TYPE_OCCUPANCY: AbodeBinarySensor,
-
                 # Camera
                 CONST.TYPE_CAMERA: AbodeDevice,
-
                 # Cover
                 CONST.TYPE_COVER: AbodeCover,
-
                 # Dimmer
                 CONST.TYPE_LIGHT: AbodeLight,
-
                 # Lock
                 CONST.TYPE_LOCK: AbodeLock,
-
                 # Switch
-                CONST.TYPE_SWITCH: AbodeSwitch
+                CONST.TYPE_SWITCH: AbodeSwitch,
             }.get(device.generic_type)
 
             self.assertIsNotNone(class_type, device.type + ' is not mapped.')
             self.assertTrue(
                 isinstance(device, class_type),
-                device.type + ' is of class ' +
-                str(device.__class__.__name__) +
-                ' but mapped to ' + str(class_type.__name__))
+                device.type
+                + ' is of class '
+                + str(device.__class__.__name__)
+                + ' but mapped to '
+                + str(class_type.__name__),
+            )

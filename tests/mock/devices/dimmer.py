@@ -5,12 +5,20 @@ DEVICE_ID = 'ZW:00000105'
 CONTROL_URL = 'api/v1/control/light/' + DEVICE_ID
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_OFF,
-           level=0, low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID,
+    status=CONST.STATUS_OFF,
+    level=0,
+    low_battery=False,
+    no_response=False,
+):
     """Dimmer  mock device."""
-    return '''
+    return (
+        '''
       {
-         "id":"''' + devid + '''",
+         "id":"'''
+        + devid
+        + '''",
          "type_tag":"device_type.dimmer",
          "type":"Dimmer",
          "name":"Kitchen Lights",
@@ -50,24 +58,34 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OFF,
          "s2_propty":"",
          "s2_keys_valid":"",
          "zwave_secure_protocol":"",
-         "control_url":"''' + CONTROL_URL + '''",
+         "control_url":"'''
+        + CONTROL_URL
+        + '''",
          "deep_link":null,
          "status_color":"#5cb85c",
          "faults":{
-            "low_battery":''' + str(int(low_battery)) + ''',
+            "low_battery":'''
+        + str(int(low_battery))
+        + ''',
             "tempered":0,
             "supervision":0,
             "out_of_order":0,
-            "no_response":''' + str(int(no_response)) + ''',
+            "no_response":'''
+        + str(int(no_response))
+        + ''',
             "jammed":0,
             "zwave_fault":0
          },
-         "status":"''' + status + '''",
+         "status":"'''
+        + status
+        + '''",
          "status_display":"OFF",
          "statuses":{
             "saturation":"N/A",
             "hue":"N/A",
-            "level":"''' + str(int(level)) + '''",
+            "level":"'''
+        + str(int(level))
+        + '''",
             "switch":"0",
             "color_temp":"N/A",
             "color_mode":"N/A"
@@ -137,3 +155,4 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OFF,
          "statusEx":"0",
          "icon":"assets/icons/bulb-1.svg"
       }'''
+    )

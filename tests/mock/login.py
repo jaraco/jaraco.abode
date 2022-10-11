@@ -5,16 +5,22 @@ import tests.mock.panel as panel
 import tests.mock.user as user
 
 
-def post_response_ok(auth_token=AUTH_TOKEN,
-                     user_response=user.get_response_ok()):
+def post_response_ok(auth_token=AUTH_TOKEN, user_response=user.get_response_ok()):
     """Return the successful login response json."""
-    return '''
+    return (
+        '''
     {
-       "token":"''' + auth_token + '''",
+       "token":"'''
+        + auth_token
+        + '''",
        "expired_at":"2017-06-05 00:14:12",
        "initiate_screen":"timeline",
-       "user":''' + user_response + ''',
-       "panel":''' + panel.get_response_ok() + ''',
+       "user":'''
+        + user_response
+        + ''',
+       "panel":'''
+        + panel.get_response_ok()
+        + ''',
        "permissions":{
           "premium_streaming":"0",
           "guest_app":"0",
@@ -42,6 +48,7 @@ def post_response_ok(auth_token=AUTH_TOKEN,
           }
        }
     }'''
+    )
 
 
 def post_response_bad_request():

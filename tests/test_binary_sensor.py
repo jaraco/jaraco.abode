@@ -28,9 +28,9 @@ class TestBinarySensors(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -43,39 +43,61 @@ class TestBinarySensors(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up all Binary Sensor Devices in "off states"
-        all_devices = '[' + \
-            DOOR_CONTACT.device(devid=DOOR_CONTACT.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False) + ',' + \
-            GLASS.device(devid=GLASS.DEVICE_ID,
-                         status=CONST.STATUS_OFFLINE,
-                         low_battery=False,
-                         no_response=False) + ',' + \
-            KEYPAD.device(devid=KEYPAD.DEVICE_ID,
-                          status=CONST.STATUS_OFFLINE,
-                          low_battery=False,
-                          no_response=False) + ',' + \
-            REMOTE_CONTROLLER.device(devid=REMOTE_CONTROLLER.DEVICE_ID,
-                                     status=CONST.STATUS_OFFLINE,
-                                     low_battery=False,
-                                     no_response=False) + ',' + \
-            SIREN.device(devid=SIREN.DEVICE_ID,
-                         status=CONST.STATUS_OFFLINE,
-                         low_battery=False,
-                         no_response=False) + ',' + \
-            STATUS_DISPLAY.device(devid=STATUS_DISPLAY.DEVICE_ID,
-                                  status=CONST.STATUS_OFFLINE,
-                                  low_battery=False,
-                                  no_response=False) + ',' + \
-            WATER_SENSOR.device(devid=WATER_SENSOR.DEVICE_ID,
-                                status=CONST.STATUS_OFFLINE,
-                                low_battery=False,
-                                no_response=False) + ']'
+        all_devices = (
+            '['
+            + DOOR_CONTACT.device(
+                devid=DOOR_CONTACT.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            )
+            + ','
+            + GLASS.device(
+                devid=GLASS.DEVICE_ID,
+                status=CONST.STATUS_OFFLINE,
+                low_battery=False,
+                no_response=False,
+            )
+            + ','
+            + KEYPAD.device(
+                devid=KEYPAD.DEVICE_ID,
+                status=CONST.STATUS_OFFLINE,
+                low_battery=False,
+                no_response=False,
+            )
+            + ','
+            + REMOTE_CONTROLLER.device(
+                devid=REMOTE_CONTROLLER.DEVICE_ID,
+                status=CONST.STATUS_OFFLINE,
+                low_battery=False,
+                no_response=False,
+            )
+            + ','
+            + SIREN.device(
+                devid=SIREN.DEVICE_ID,
+                status=CONST.STATUS_OFFLINE,
+                low_battery=False,
+                no_response=False,
+            )
+            + ','
+            + STATUS_DISPLAY.device(
+                devid=STATUS_DISPLAY.DEVICE_ID,
+                status=CONST.STATUS_OFFLINE,
+                low_battery=False,
+                no_response=False,
+            )
+            + ','
+            + WATER_SENSOR.device(
+                devid=WATER_SENSOR.DEVICE_ID,
+                status=CONST.STATUS_OFFLINE,
+                low_battery=False,
+                no_response=False,
+            )
+            + ']'
+        )
 
         m.get(CONST.DEVICES_URL, text=all_devices)
 
@@ -88,43 +110,63 @@ class TestBinarySensors(unittest.TestCase):
             if device.type == CONST.DEVICE_ALARM:
                 continue
 
-            self.assertFalse(device.is_on,
-                             device.type + " is_on failed")
-            self.assertFalse(device.battery_low,
-                             device.type + " battery_low failed")
-            self.assertFalse(device.no_response,
-                             device.type + " no_response failed")
+            self.assertFalse(device.is_on, device.type + " is_on failed")
+            self.assertFalse(device.battery_low, device.type + " battery_low failed")
+            self.assertFalse(device.no_response, device.type + " no_response failed")
 
         # Set up all Binary Sensor Devices in "off states"
-        all_devices = '[' + \
-            DOOR_CONTACT.device(devid=DOOR_CONTACT.DEVICE_ID,
-                                status=CONST.STATUS_OPEN,
-                                low_battery=True,
-                                no_response=True) + ',' + \
-            GLASS.device(devid=GLASS.DEVICE_ID,
-                         status=CONST.STATUS_ONLINE,
-                         low_battery=True,
-                         no_response=True) + ',' + \
-            KEYPAD.device(devid=KEYPAD.DEVICE_ID,
-                          status=CONST.STATUS_ONLINE,
-                          low_battery=True,
-                          no_response=True) + ',' + \
-            REMOTE_CONTROLLER.device(devid=REMOTE_CONTROLLER.DEVICE_ID,
-                                     status=CONST.STATUS_ONLINE,
-                                     low_battery=True,
-                                     no_response=True) + ',' + \
-            SIREN.device(devid=SIREN.DEVICE_ID,
-                         status=CONST.STATUS_ONLINE,
-                         low_battery=True,
-                         no_response=True) + ',' + \
-            STATUS_DISPLAY.device(devid=STATUS_DISPLAY.DEVICE_ID,
-                                  status=CONST.STATUS_ONLINE,
-                                  low_battery=True,
-                                  no_response=True) + ',' + \
-            WATER_SENSOR.device(devid=WATER_SENSOR.DEVICE_ID,
-                                status=CONST.STATUS_ONLINE,
-                                low_battery=True,
-                                no_response=True) + ']'
+        all_devices = (
+            '['
+            + DOOR_CONTACT.device(
+                devid=DOOR_CONTACT.DEVICE_ID,
+                status=CONST.STATUS_OPEN,
+                low_battery=True,
+                no_response=True,
+            )
+            + ','
+            + GLASS.device(
+                devid=GLASS.DEVICE_ID,
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+            )
+            + ','
+            + KEYPAD.device(
+                devid=KEYPAD.DEVICE_ID,
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+            )
+            + ','
+            + REMOTE_CONTROLLER.device(
+                devid=REMOTE_CONTROLLER.DEVICE_ID,
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+            )
+            + ','
+            + SIREN.device(
+                devid=SIREN.DEVICE_ID,
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+            )
+            + ','
+            + STATUS_DISPLAY.device(
+                devid=STATUS_DISPLAY.DEVICE_ID,
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+            )
+            + ','
+            + WATER_SENSOR.device(
+                devid=WATER_SENSOR.DEVICE_ID,
+                status=CONST.STATUS_ONLINE,
+                low_battery=True,
+                no_response=True,
+            )
+            + ']'
+        )
 
         m.get(CONST.DEVICES_URL, text=all_devices)
 
@@ -134,9 +176,6 @@ class TestBinarySensors(unittest.TestCase):
             if device.type_tag == CONST.DEVICE_ALARM:
                 continue
 
-            self.assertTrue(device.is_on,
-                            device.type + " is_on failed")
-            self.assertTrue(device.battery_low,
-                            device.type + " battery_low failed")
-            self.assertTrue(device.no_response,
-                            device.type + " no_response failed")
+            self.assertTrue(device.is_on, device.type + " is_on failed")
+            self.assertTrue(device.battery_low, device.type + " battery_low failed")
+            self.assertTrue(device.no_response, device.type + " no_response failed")

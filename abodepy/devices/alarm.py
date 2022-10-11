@@ -42,7 +42,8 @@ class AbodeAlarm(AbodeSwitch):
         mode = mode.lower()
 
         response = self._abode.send_request(
-            "put", CONST.get_panel_mode_url(self._area, mode))
+            "put", CONST.get_panel_mode_url(self._area, mode)
+        )
 
         _LOGGER.debug("Set Alarm Home Response: %s", response.text)
 
@@ -56,8 +57,9 @@ class AbodeAlarm(AbodeSwitch):
 
         self._json_state['mode'][(self.device_id)] = response_object['mode']
 
-        _LOGGER.info("Set alarm %s mode to: %s",
-                     self._device_id, response_object['mode'])
+        _LOGGER.info(
+            "Set alarm %s mode to: %s", self._device_id, response_object['mode']
+        )
 
         return True
 

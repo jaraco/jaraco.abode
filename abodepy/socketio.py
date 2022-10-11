@@ -47,7 +47,7 @@ URL_PARAMS = "?EIO=3&transport=websocket"
 _LOGGER = logging.getLogger(__name__)
 
 
-class SocketIO():
+class SocketIO:
     """Class for using websockets to talk to a SocketIO server."""
 
     def __init__(self, url, cookie=None, origin=None):
@@ -112,8 +112,9 @@ class SocketIO():
         if not self._thread:
             _LOGGER.info("Starting SocketIO thread...")
 
-            self._thread = threading.Thread(target=self._run_socketio_thread,
-                                            name='SocketIOThread')
+            self._thread = threading.Thread(
+                target=self._run_socketio_thread, name='SocketIOThread'
+            )
             self._thread.deamon = True
             self._thread.start()
 
@@ -142,8 +143,7 @@ class SocketIO():
         random_wait = max_wait - min_wait
 
         while self._running is True:
-            _LOGGER.info(
-                "Attempting to connect to SocketIO server...")
+            _LOGGER.info("Attempting to connect to SocketIO server...")
 
             try:
                 retries += 1
@@ -159,8 +159,9 @@ class SocketIO():
                 if self._origin:
                     self._websocket.add_header(ORIGIN_HEADER, self._origin)
 
-                for event in persist(self._websocket, ping_rate=0,
-                                     poll=5.0, exit_event=self._exit_event):
+                for event in persist(
+                    self._websocket, ping_rate=0, poll=5.0, exit_event=self._exit_event
+                ):
                     if isinstance(event, events.Connected):
                         retries = 0
                         self._on_websocket_connected(event)
@@ -183,10 +184,9 @@ class SocketIO():
                 _LOGGER.warning("Websocket Error: %s", exc)
 
             if self._running:
-                wait_for = min_wait + random() * min(random_wait, 2 ** retries)
+                wait_for = min_wait + random() * min(random_wait, 2**retries)
 
-                _LOGGER.info("Waiting %f seconds before reconnecting...",
-                             wait_for)
+                _LOGGER.info("Waiting %f seconds before reconnecting...", wait_for)
 
                 if self._exit_event.wait(wait_for):
                     break
@@ -316,7 +316,7 @@ class SocketIO():
             _LOGGER.warning("Unable to find event [data]: %s", _message_data)
             return
 
-        json_str = _message_data[l_bracket:r_bracket + 1]
+        json_str = _message_data[l_bracket : r_bracket + 1]
         json_data = json.loads(json_str)
 
         self._handle_event(EVENT, _message_data)
@@ -332,5 +332,5 @@ class SocketIO():
             # pylint: disable=W0703
             except Exception as exc:
                 _LOGGER.exception(
-                    "Captured exception during SocketIO event callback: %s",
-                    exc)
+                    "Captured exception during SocketIO event callback: %s", exc
+                )

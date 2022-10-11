@@ -28,9 +28,9 @@ class TestEventController(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -43,13 +43,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -66,8 +69,7 @@ class TestEventController(unittest.TestCase):
         callback = Mock()
 
         # Register our device id
-        self.assertTrue(
-            events.add_device_callback(device.device_id, callback))
+        self.assertTrue(events.add_device_callback(device.device_id, callback))
 
     @requests_mock.mock()
     def tests_device_registration(self, m):
@@ -76,13 +78,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -108,13 +113,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -143,13 +151,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -169,8 +180,7 @@ class TestEventController(unittest.TestCase):
         self.assertFalse(events.add_device_callback(None, callback))
 
         # Create a fake device and attempt to register that
-        fake_device = AbodeBinarySensor(
-            json.loads(DOORCONTACT.device()), self.abode)
+        fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
 
         with self.assertRaises(abodepy.AbodeException):
             events.add_device_callback(fake_device, callback)
@@ -182,13 +192,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -205,8 +218,7 @@ class TestEventController(unittest.TestCase):
         self.assertFalse(events.remove_all_device_callbacks(None))
 
         # Create a fake device and attempt to unregister that
-        fake_device = AbodeBinarySensor(
-            json.loads(DOORCONTACT.device()), self.abode)
+        fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
 
         with self.assertRaises(abodepy.AbodeException):
             events.remove_all_device_callbacks(fake_device)
@@ -221,8 +233,7 @@ class TestEventController(unittest.TestCase):
         callback = Mock()
 
         # Test that a valid event registers
-        self.assertTrue(
-            events.add_event_callback(TIMELINE.ALARM_GROUP, callback))
+        self.assertTrue(events.add_event_callback(TIMELINE.ALARM_GROUP, callback))
 
         # Test that no event group returns false
         self.assertFalse(events.add_event_callback(None, callback))
@@ -241,9 +252,7 @@ class TestEventController(unittest.TestCase):
         callback = Mock()
 
         # Test that a valid timeline event registers
-        self.assertTrue(
-            events.add_timeline_callback(
-                TIMELINE.CAPTURE_IMAGE, callback))
+        self.assertTrue(events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, callback))
 
         # Test that no timeline event returns false
         self.assertFalse(events.add_timeline_callback(None, callback))
@@ -263,13 +272,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -285,16 +297,19 @@ class TestEventController(unittest.TestCase):
         callback = Mock()
 
         # Register our device id
-        self.assertTrue(
-            events.add_device_callback(device.device_id, callback))
+        self.assertTrue(events.add_device_callback(device.device_id, callback))
 
         # Set up device update URL
-        device_url = str.replace(CONST.DEVICE_URL,
-                                 '$DEVID$', COVER.DEVICE_ID)
-        m.get(device_url, text=COVER.device(devid=COVER.DEVICE_ID,
-                                            status=CONST.STATUS_OPEN,
-                                            low_battery=False,
-                                            no_response=False))
+        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
+        m.get(
+            device_url,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_OPEN,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Call our device callback method
         # pylint: disable=protected-access
@@ -322,11 +337,10 @@ class TestEventController(unittest.TestCase):
 
         # Register our events
         self.assertTrue(
-            events.add_event_callback(
-                TIMELINE.CAPTURE_GROUP, capture_callback))
+            events.add_event_callback(TIMELINE.CAPTURE_GROUP, capture_callback)
+        )
 
-        self.assertTrue(
-            events.add_event_callback(TIMELINE.ALARM_GROUP, alarm_callback))
+        self.assertTrue(events.add_event_callback(TIMELINE.ALARM_GROUP, alarm_callback))
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -352,17 +366,13 @@ class TestEventController(unittest.TestCase):
         opened_callback = Mock()
 
         # Register our events
-        self.assertTrue(
-            events.add_timeline_callback(
-                TIMELINE.ALL, all_callback))
+        self.assertTrue(events.add_timeline_callback(TIMELINE.ALL, all_callback))
 
         self.assertTrue(
-            events.add_timeline_callback(
-                TIMELINE.CAPTURE_IMAGE, image_callback))
+            events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, image_callback)
+        )
 
-        self.assertTrue(
-            events.add_timeline_callback(
-                TIMELINE.OPENED, opened_callback))
+        self.assertTrue(events.add_timeline_callback(TIMELINE.OPENED, opened_callback))
 
         # Call our events callback method and trigger an image capture event
         # pylint: disable=protected-access
@@ -384,13 +394,16 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text=COVER.device(devid=COVER.DEVICE_ID,
-                                status=CONST.STATUS_CLOSED,
-                                low_battery=False,
-                                no_response=False))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -406,8 +419,7 @@ class TestEventController(unittest.TestCase):
         callback = Mock()
 
         # Register our alarm for callback
-        self.assertTrue(
-            events.add_device_callback(alarm.device_id, callback))
+        self.assertTrue(events.add_device_callback(alarm.device_id, callback))
 
         # Call our mode changed callback method
         # pylint: disable=protected-access
@@ -434,8 +446,7 @@ class TestEventController(unittest.TestCase):
             raise Exception("CHAOS!!!")
 
         # Register events callback
-        self.assertTrue(
-            events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, _callback))
+        self.assertTrue(events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, _callback))
 
         # Call our events callback method and trigger an image capture event
         # pylint: disable=protected-access
@@ -449,16 +460,22 @@ class TestEventController(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL,
-              text='[' +
-              COVER.device(devid=COVER.DEVICE_ID,
-                           status=CONST.STATUS_CLOSED,
-                           low_battery=False,
-                           no_response=False) + ", " +
-              DOORCONTACT.device(devid=DOORCONTACT.DEVICE_ID,
-                                 status=CONST.STATUS_CLOSED) + ']')
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(
+            CONST.DEVICES_URL,
+            text='['
+            + COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_CLOSED,
+                low_battery=False,
+                no_response=False,
+            )
+            + ", "
+            + DOORCONTACT.device(
+                devid=DOORCONTACT.DEVICE_ID, status=CONST.STATUS_CLOSED
+            )
+            + ']',
+        )
 
         # Logout to reset everything
         self.abode.logout()
@@ -477,21 +494,25 @@ class TestEventController(unittest.TestCase):
         callback = Mock()
 
         # Register our devices
-        self.assertTrue(
-            events.add_device_callback([cover, doorcontact], callback))
+        self.assertTrue(events.add_device_callback([cover, doorcontact], callback))
 
         # Set up device update URL's
-        cover_url = str.replace(CONST.DEVICE_URL,
-                                '$DEVID$', COVER.DEVICE_ID)
-        m.get(cover_url, text=COVER.device(devid=COVER.DEVICE_ID,
-                                           status=CONST.STATUS_OPEN,
-                                           low_battery=False,
-                                           no_response=False))
+        cover_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
+        m.get(
+            cover_url,
+            text=COVER.device(
+                devid=COVER.DEVICE_ID,
+                status=CONST.STATUS_OPEN,
+                low_battery=False,
+                no_response=False,
+            ),
+        )
 
-        door_url = str.replace(CONST.DEVICE_URL,
-                               '$DEVID$', DOORCONTACT.DEVICE_ID)
-        m.get(door_url, text=DOORCONTACT.device(devid=COVER.DEVICE_ID,
-                                                status=CONST.STATUS_OPEN))
+        door_url = str.replace(CONST.DEVICE_URL, '$DEVID$', DOORCONTACT.DEVICE_ID)
+        m.get(
+            door_url,
+            text=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN),
+        )
 
         # Call our device callback method for our cover
         # pylint: disable=protected-access
@@ -523,8 +544,9 @@ class TestEventController(unittest.TestCase):
         # Register our events
         self.assertTrue(
             events.add_event_callback(
-                [TIMELINE.ALARM_GROUP, TIMELINE.CAPTURE_GROUP],
-                callback))
+                [TIMELINE.ALARM_GROUP, TIMELINE.CAPTURE_GROUP], callback
+            )
+        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -546,7 +568,9 @@ class TestEventController(unittest.TestCase):
         # Register our events
         self.assertTrue(
             events.add_timeline_callback(
-                [TIMELINE.CAPTURE_IMAGE, TIMELINE.OPENED], callback))
+                [TIMELINE.CAPTURE_IMAGE, TIMELINE.OPENED], callback
+            )
+        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -568,7 +592,9 @@ class TestEventController(unittest.TestCase):
         # Register our events
         self.assertTrue(
             events.add_event_callback(
-                TIMELINE.AUTOMATION_EDIT_GROUP, automation_callback))
+                TIMELINE.AUTOMATION_EDIT_GROUP, automation_callback
+            )
+        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access

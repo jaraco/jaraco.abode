@@ -23,7 +23,7 @@ class AbodeLight(AbodeSwitch):
 
             color_data = {
                 'action': 'setcolortemperature',
-                'colorTemperature': int(color_temp)
+                'colorTemperature': int(color_temp),
             }
 
             response = self._abode.send_request("post", url, data=color_data)
@@ -36,21 +36,20 @@ class AbodeLight(AbodeSwitch):
 
             if response_object['colorTemperature'] != int(color_temp):
                 _LOGGER.warning(
-                    ("Set color temp mismatch for device %s. "
-                     "Request val: %s, Response val: %s "),
-                    self.device_id, color_temp,
-                    response_object['colorTemperature'])
+                    (
+                        "Set color temp mismatch for device %s. "
+                        "Request val: %s, Response val: %s "
+                    ),
+                    self.device_id,
+                    color_temp,
+                    response_object['colorTemperature'],
+                )
 
                 color_temp = response_object['colorTemperature']
 
-            self.update({
-                'statuses': {
-                    'color_temp': color_temp
-                }
-            })
+            self.update({'statuses': {'color_temp': color_temp}})
 
-            _LOGGER.info("Set device %s color_temp to: %s",
-                         self.device_id, color_temp)
+            _LOGGER.info("Set device %s color_temp to: %s", self.device_id, color_temp)
             return True
 
         return False
@@ -64,7 +63,7 @@ class AbodeLight(AbodeSwitch):
             color_data = {
                 'action': 'setcolor',
                 'hue': int(hue),
-                'saturation': int(saturation)
+                'saturation': int(saturation),
             }
 
             response = self._abode.send_request("post", url, data=color_data)
@@ -76,28 +75,26 @@ class AbodeLight(AbodeSwitch):
                 raise AbodeException((ERROR.SET_STATUS_DEV_ID))
 
             # Abode will sometimes return hue value off by 1 (rounding error)
-            hue_comparison = math.isclose(response_object["hue"],
-                                          int(hue), abs_tol=1)
-            if not hue_comparison or (response_object["saturation"]
-                                      != int(saturation)):
+            hue_comparison = math.isclose(response_object["hue"], int(hue), abs_tol=1)
+            if not hue_comparison or (response_object["saturation"] != int(saturation)):
                 _LOGGER.warning(
-                    ("Set color mismatch for device %s. "
-                     "Request val: %s, Response val: %s "),
-                    self.device_id, (hue, saturation),
-                    (response_object['hue'], response_object['saturation']))
+                    (
+                        "Set color mismatch for device %s. "
+                        "Request val: %s, Response val: %s "
+                    ),
+                    self.device_id,
+                    (hue, saturation),
+                    (response_object['hue'], response_object['saturation']),
+                )
 
                 hue = response_object['hue']
                 saturation = response_object['saturation']
 
-            self.update({
-                'statuses': {
-                    'hue': hue,
-                    'saturation': saturation
-                }
-            })
+            self.update({'statuses': {'hue': hue, 'saturation': saturation}})
 
-            _LOGGER.info("Set device %s color to: %s",
-                         self.device_id, (hue, saturation))
+            _LOGGER.info(
+                "Set device %s color to: %s", self.device_id, (hue, saturation)
+            )
 
             return True
 
@@ -116,8 +113,10 @@ class AbodeLight(AbodeSwitch):
     @property
     def color(self):
         """Get light color."""
-        return (self.get_value(CONST.STATUSES_KEY).get('hue'),
-                self.get_value(CONST.STATUSES_KEY).get('saturation'))
+        return (
+            self.get_value(CONST.STATUSES_KEY).get('hue'),
+            self.get_value(CONST.STATUSES_KEY).get('saturation'),
+        )
 
     @property
     def has_brightness(self):
@@ -127,8 +126,9 @@ class AbodeLight(AbodeSwitch):
     @property
     def has_color(self):
         """Device is using color mode."""
-        if (self.get_value(CONST.STATUSES_KEY).get('color_mode')
-                == str(CONST.COLOR_MODE_ON)):
+        if self.get_value(CONST.STATUSES_KEY).get('color_mode') == str(
+            CONST.COLOR_MODE_ON
+        ):
             return True
         return False
 

@@ -72,8 +72,7 @@ class TestCamera(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Get our camera
@@ -92,8 +91,7 @@ class TestCamera(unittest.TestCase):
             self.assertFalse(device.no_response)
 
             # Set up our direct device get url
-            device_url = str.replace(CONST.DEVICE_URL,
-                                     "$DEVID$", device.device_id)
+            device_url = str.replace(CONST.DEVICE_URL, "$DEVID$", device.device_id)
 
             # Change device properties
             m.get(
@@ -119,8 +117,7 @@ class TestCamera(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Test our camera devices
@@ -166,8 +163,7 @@ class TestCamera(unittest.TestCase):
             # Test that AbodeException is raised with no control URLs
             with self.assertRaises(AbodeException) as exc:
                 device.capture()
-                self.assertEqual(str(exc.exception),
-                                 ERROR.MISSING_CONTROL_URL)
+                self.assertEqual(str(exc.exception), ERROR.MISSING_CONTROL_URL)
 
     def tests_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
@@ -175,8 +171,7 @@ class TestCamera(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Test our camera devices
@@ -193,11 +188,9 @@ class TestCamera(unittest.TestCase):
             self.assertEqual(device.status, CONST.STATUS_ONLINE)
 
             # Set up timeline response
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL,
-                              "$DEVID$", device.device_id)
+            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
 
-            m.get(url,
-                  text="[" + cam_type.timeline_event(device.device_id) + "]")
+            m.get(url, text="[" + cam_type.timeline_event(device.device_id) + "]")
             # Set up our file path response
             file_path = CONST.BASE_URL + cam_type.FILE_PATH
             m.head(
@@ -231,8 +224,7 @@ class TestCamera(unittest.TestCase):
                 device.refresh_image()
 
             # Test that an an empty timeline event throws exception
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL,
-                              "$DEVID$", device.device_id)
+            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
             m.get(
                 url,
                 text="["
@@ -244,8 +236,7 @@ class TestCamera(unittest.TestCase):
                 device.refresh_image()
 
             # Test that an unexpected timeline event throws exception
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL,
-                              "$DEVID$", device.device_id)
+            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
             m.get(
                 url,
                 text="["
@@ -262,8 +253,7 @@ class TestCamera(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Test our camera devices
@@ -277,8 +267,7 @@ class TestCamera(unittest.TestCase):
             self.assertEqual(device.status, CONST.STATUS_ONLINE)
 
             # Set up timeline response
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL,
-                              "$DEVID$", device.device_id)
+            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
             m.get(url, text="[]")
 
             # Refresh the image
@@ -291,8 +280,7 @@ class TestCamera(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Test our camera devices
@@ -309,10 +297,8 @@ class TestCamera(unittest.TestCase):
             self.assertEqual(device.status, CONST.STATUS_ONLINE)
 
             # Set up timeline response
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL,
-                              "$DEVID$", device.device_id)
-            m.get(url,
-                  text="[" + cam_type.timeline_event(device.device_id) + "]")
+            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
+            m.get(url, text="[" + cam_type.timeline_event(device.device_id) + "]")
 
             # Set up our file path response
             file_path = CONST.BASE_URL + cam_type.FILE_PATH
@@ -350,8 +336,7 @@ class TestCamera(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Get the IP camera and test we have it
@@ -360,15 +345,13 @@ class TestCamera(unittest.TestCase):
         self.assertEqual(device.status, CONST.STATUS_ONLINE)
 
         # Set up params URL response for privacy mode on
-        m.put(CONST.PARAMS_URL + device.device_id,
-              text=IPCAM.device(privacy=1))
+        m.put(CONST.PARAMS_URL + device.device_id, text=IPCAM.device(privacy=1))
 
         # Set privacy mode on
         self.assertTrue(device.privacy_mode(True))
 
         # Set up params URL response for privacy mode off
-        m.put(CONST.PARAMS_URL + device.device_id,
-              text=IPCAM.device(privacy=0))
+        m.put(CONST.PARAMS_URL + device.device_id, text=IPCAM.device(privacy=0))
 
         # Set privacy mode off
         self.assertTrue(device.privacy_mode(False))

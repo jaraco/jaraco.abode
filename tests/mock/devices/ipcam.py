@@ -6,12 +6,20 @@ CONTROL_URL = 'api/v1/cams/' + DEVICE_ID + '/record'
 CONTROL_URL_SNAPSHOT = 'api/v1/cams/' + DEVICE_ID + '/capture'
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
-           low_battery=False, no_response=False, privacy=1):
+def device(
+    devid=DEVICE_ID,
+    status=CONST.STATUS_ONLINE,
+    low_battery=False,
+    no_response=False,
+    privacy=1,
+):
     """IP camera mock device."""
-    return '''
+    return (
+        '''
         {
-          "id":"''' + devid + '''",
+          "id":"'''
+        + devid
+        + '''",
           "type_tag": "device_type.ipcam",
           "type": "IP Cam",
           "name": "Living Room Camera",
@@ -51,19 +59,27 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           "s2_propty": "",
           "s2_keys_valid": "",
           "zwave_secure_protocol": "",
-          "control_url":"''' + CONTROL_URL + '''",
+          "control_url":"'''
+        + CONTROL_URL
+        + '''",
           "deep_link": null,
           "status_color": "#5cb85c",
           "faults": {
-              "low_battery":''' + str(int(low_battery)) + ''',
+              "low_battery":'''
+        + str(int(low_battery))
+        + ''',
               "tempered": 0,
               "supervision": 0,
               "out_of_order": 0,
-              "no_response":''' + str(int(no_response)) + ''',
+              "no_response":'''
+        + str(int(no_response))
+        + ''',
               "jammed": 0,
               "zwave_fault": 0
           },
-          "status":"''' + status + '''",
+          "status":"'''
+        + status
+        + '''",
           "status_display": "Online",
           "statuses": [],
           "status_ex": "",
@@ -83,12 +99,16 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           ],
           "status_icons": [],
           "icon": "assets/icons/streaming-camaera-new.svg",
-          "control_url_snapshot":"''' + CONTROL_URL_SNAPSHOT + '''",
+          "control_url_snapshot":"'''
+        + CONTROL_URL_SNAPSHOT
+        + '''",
           "ptt_supported": true,
           "is_new_camera": 1,
           "stream_quality": 3,
           "camera_mac": "AB:CD:EF:GF:HI",
-          "privacy":"''' + str(privacy) + '''",
+          "privacy":"'''
+        + str(privacy)
+        + '''",
           "enable_audio": "1",
           "alarm_video": "25",
           "pre_alarm_video": "5",
@@ -123,6 +143,7 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_ONLINE,
           "video_flip": "0",
           "hframe": "1080P"
         }'''
+    )
 
 
 def get_capture_timeout():
@@ -139,13 +160,16 @@ def get_capture_timeout():
 FILE_PATH_ID = 'ZB00000305'
 FILE_PATH = 'api/storage/' + FILE_PATH_ID + '/2020-01-26/173238/0.jpg'
 
-LOCATION_HEADER = 'https://www.google.com/images/branding/googlelogo/' + \
-    '1x/googlelogo_color_272x92dp.png'
+LOCATION_HEADER = (
+    'https://www.google.com/images/branding/googlelogo/'
+    + '1x/googlelogo_color_272x92dp.png'
+)
 
 
 def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
     """Camera Timeline Event Mockup."""
-    return '''
+    return (
+        '''
     {
         "mac": "B0:C5:CZ:54:12:9A",
         "id": "1171272698",
@@ -154,8 +178,12 @@ def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
         "time": "05:32 PM",
         "event_utc": "1580088758",
         "event_cid": "",
-        "event_code": "''' + event_code + '''",
-        "device_id": "''' + devid + '''",
+        "event_code": "'''
+        + event_code
+        + '''",
+        "device_id": "'''
+        + devid
+        + '''",
         "device_type_id": "69",
         "device_type": "IP Cam",
         "timeline_ha_device": null,
@@ -168,7 +196,9 @@ def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
         "nest_has_person": null,
         "neaz": null,
         "hasFaults": "0",
-        "file_path":"''' + file_path + '''",
+        "file_path":"'''
+        + file_path
+        + '''",
         "deep_link": null,
         "file_name": "48755_b0c5ca37894b_2020-01-26_173238_0-M2+56431.jpg",
         "file_size": "197207",
@@ -205,3 +235,4 @@ def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
         "event_by": "by Shred using WebApp",
         "file_delete_by": ""
     }'''
+    )

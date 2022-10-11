@@ -32,8 +32,7 @@ _LOGGER = logging.getLogger('abodecl')
 def setup_logging(log_level=logging.INFO):
     """Set up the logging."""
     logging.basicConfig(level=log_level)
-    fmt = ("%(asctime)s %(levelname)s (%(threadName)s) "
-           "[%(name)s] %(message)s")
+    fmt = "%(asctime)s %(levelname)s (%(threadName)s) " "[%(name)s] %(message)s"
     colorfmt = "%(log_color)s{}%(reset)s".format(fmt)
     datefmt = '%Y-%m-%d %H:%M:%S'
 
@@ -44,18 +43,21 @@ def setup_logging(log_level=logging.INFO):
 
     try:
         from colorlog import ColoredFormatter
-        logging.getLogger().handlers[0].setFormatter(ColoredFormatter(
-            colorfmt,
-            datefmt=datefmt,
-            reset=True,
-            log_colors={
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'red',
-            }
-        ))
+
+        logging.getLogger().handlers[0].setFormatter(
+            ColoredFormatter(
+                colorfmt,
+                datefmt=datefmt,
+                reset=True,
+                log_colors={
+                    'DEBUG': 'cyan',
+                    'INFO': 'green',
+                    'WARNING': 'yellow',
+                    'ERROR': 'red',
+                    'CRITICAL': 'red',
+                },
+            )
+        )
     except ImportError:
         pass
 
@@ -67,135 +69,166 @@ def get_arguments():
     """Get parsed arguments."""
     parser = argparse.ArgumentParser("AbodePy: Command Line Utility")
 
-    parser.add_argument(
-        '-u', '--username',
-        help='Username',
-        required=False)
+    parser.add_argument('-u', '--username', help='Username', required=False)
 
-    parser.add_argument(
-        '-p', '--password',
-        help='Password',
-        required=False)
+    parser.add_argument('-p', '--password', help='Password', required=False)
 
-    parser.add_argument(
-        '--mfa',
-        help='Multifactor authentication code',
-        required=False)
+    parser.add_argument('--mfa', help='Multifactor authentication code', required=False)
 
     parser.add_argument(
         '--cache',
         metavar='pickle_file',
         help='Create/update/use a pickle cache for the username and password.',
-        required=False)
+        required=False,
+    )
 
     parser.add_argument(
         '--mode',
         help='Output current alarm mode',
-        required=False, default=False,
-        action="store_true")
+        required=False,
+        default=False,
+        action="store_true",
+    )
 
     parser.add_argument(
-        '--arm',
-        metavar='mode',
-        help='Arm alarm to mode',
-        required=False)
+        '--arm', metavar='mode', help='Arm alarm to mode', required=False
+    )
 
     parser.add_argument(
         '--set',
         metavar='setting=value',
         help='Set setting to a value',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--devices',
         help='Output all devices',
-        required=False, default=False, action="store_true")
+        required=False,
+        default=False,
+        action="store_true",
+    )
 
     parser.add_argument(
         '--device',
         metavar='device_id',
         help='Output one device for device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--json',
         metavar='device_id',
         help='Output the json for device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--on',
         metavar='device_id',
         help='Switch on a given device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--off',
         metavar='device_id',
         help='Switch off a given device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--lock',
         metavar='device_id',
         help='Lock a given device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--unlock',
         metavar='device_id',
         help='Unlock a given device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--automations',
         help='Output all automations',
-        required=False, default=False, action="store_true")
+        required=False,
+        default=False,
+        action="store_true",
+    )
 
     parser.add_argument(
         '--activate',
         metavar='automation_id',
         help='Activate (enable) an automation by automation_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--deactivate',
         metavar='automation_id',
         help='Deactivate (disable) an automation by automation_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--trigger',
         metavar='automation_id',
         help='Trigger (apply) a manual (quick) automation by automation_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--capture',
         metavar='device_id',
         help='Trigger a new image capture for the given device_id',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--image',
         metavar='device_id=location/image.jpg',
         help='Save an image from a camera (if available) to the given path',
-        required=False, action='append')
+        required=False,
+        action='append',
+    )
 
     parser.add_argument(
         '--listen',
         help='Block and listen for device_id',
-        required=False, default=False, action="store_true")
+        required=False,
+        default=False,
+        action="store_true",
+    )
 
     parser.add_argument(
         '--debug',
         help='Enable debug logging',
-        required=False, default=False, action="store_true")
+        required=False,
+        default=False,
+        action="store_true",
+    )
 
     parser.add_argument(
         '--quiet',
         help='Output only warnings and errors',
-        required=False, default=False, action="store_true")
+        required=False,
+        default=False,
+        action="store_true",
+    )
 
     return parser.parse_args()
 
@@ -223,17 +256,20 @@ def call():
     try:
         # Create abodepy instance.
         if args.cache and args.username and args.password:
-            abode = abodepy.Abode(username=args.username,
-                                  password=args.password,
-                                  get_devices=args.mfa is None,
-                                  cache_path=args.cache)
+            abode = abodepy.Abode(
+                username=args.username,
+                password=args.password,
+                get_devices=args.mfa is None,
+                cache_path=args.cache,
+            )
         elif args.cache and not (not args.username or not args.password):
-            abode = abodepy.Abode(get_devices=args.mfa is None,
-                                  cache_path=args.cache)
+            abode = abodepy.Abode(get_devices=args.mfa is None, cache_path=args.cache)
         else:
-            abode = abodepy.Abode(username=args.username,
-                                  password=args.password,
-                                  get_devices=args.mfa is None)
+            abode = abodepy.Abode(
+                username=args.username,
+                password=args.password,
+                get_devices=args.mfa is None,
+            )
 
         # Since the MFA code is very time sensitive, if the user has provided
         # one we should use it to log in as soon as possible
@@ -305,8 +341,14 @@ def call():
 
             if device:
                 # pylint: disable=protected-access
-                print(json.dumps(device._json_state, sort_keys=True,
-                                 indent=4, separators=(',', ': ')))
+                print(
+                    json.dumps(
+                        device._json_state,
+                        sort_keys=True,
+                        indent=4,
+                        separators=(',', ': '),
+                    )
+                )
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
@@ -325,11 +367,9 @@ def call():
 
             if automation:
                 if automation.enable(True):
-                    _LOGGER.info(
-                        "Activated automation with id: %s", automation_id)
+                    _LOGGER.info("Activated automation with id: %s", automation_id)
             else:
-                _LOGGER.warning(
-                    "Could not find automation with id: %s", automation_id)
+                _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
         # Disable automation
         for automation_id in args.deactivate or []:
@@ -337,11 +377,9 @@ def call():
 
             if automation:
                 if automation.enable(False):
-                    _LOGGER.info(
-                        "Deactivated automation with id: %s", automation_id)
+                    _LOGGER.info("Deactivated automation with id: %s", automation_id)
             else:
-                _LOGGER.warning(
-                    "Could not find automation with id: %s", automation_id)
+                _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
         # Trigger automation
         for automation_id in args.trigger or []:
@@ -349,11 +387,9 @@ def call():
 
             if automation:
                 if automation.trigger():
-                    _LOGGER.info(
-                        "Triggered automation with id: %s", automation_id)
+                    _LOGGER.info("Triggered automation with id: %s", automation_id)
             else:
-                _LOGGER.warning(
-                    "Could not find automation with id: %s", automation_id)
+                _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
         # Trigger image capture
         for device_id in args.capture or []:
@@ -361,12 +397,11 @@ def call():
 
             if device:
                 if device.capture():
-                    _LOGGER.info(
-                        "Image requested from device with id: %s", device_id)
+                    _LOGGER.info("Image requested from device with id: %s", device_id)
                 else:
                     _LOGGER.warning(
-                        "Failed to request image from device with id: %s",
-                        device_id)
+                        "Failed to request image from device with id: %s", device_id
+                    )
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
@@ -377,16 +412,14 @@ def call():
 
             if device:
                 try:
-                    if (device.refresh_image() and
-                            device.image_to_file(devloc[1])):
+                    if device.refresh_image() and device.image_to_file(devloc[1]):
                         _LOGGER.info(
-                            "Saved image to %s for device id: %s", devloc[1],
-                            devloc[0])
+                            "Saved image to %s for device id: %s", devloc[1], devloc[0]
+                        )
                 except AbodeException as exc:
                     _LOGGER.warning("Unable to save image: %s", exc)
             else:
-                _LOGGER.warning(
-                    "Could not find device with id: %s", devloc[0])
+                _LOGGER.warning("Could not find device with id: %s", devloc[0])
 
         # Print out all devices.
         if args.devices:
@@ -402,9 +435,13 @@ def call():
                 # Ignore device changes
                 return
 
-            _LOGGER.info("%s - %s at %s %s",
-                         tl_json['event_name'], tl_json['event_type'],
-                         tl_json['date'], tl_json['time'])
+            _LOGGER.info(
+                "%s - %s at %s %s",
+                tl_json['event_name'],
+                tl_json['event_type'],
+                tl_json['date'],
+                tl_json['time'],
+            )
 
         # Print out specific devices by device id.
         if args.device:
@@ -415,11 +452,9 @@ def call():
                     _device_print(device)
 
                     # Register the specific devices if we decide to listen.
-                    abode.events.add_device_callback(device_id,
-                                                     _device_callback)
+                    abode.events.add_device_callback(device_id, _device_callback)
                 else:
-                    _LOGGER.warning(
-                        "Could not find device with id: %s", device_id)
+                    _LOGGER.warning("Could not find device with id: %s", device_id)
 
         # Start device change listener.
         if args.listen:
@@ -428,11 +463,9 @@ def call():
                 _LOGGER.info("Adding all devices to listener...")
 
                 for device in abode.get_devices():
-                    abode.events.add_device_callback(device.device_id,
-                                                     _device_callback)
+                    abode.events.add_device_callback(device.device_id, _device_callback)
 
-            abode.events.add_timeline_callback(TIMELINE.ALL,
-                                               _timeline_callback)
+            abode.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
 
             _LOGGER.info("Listening for device and timeline updates...")
             abode.events.start()

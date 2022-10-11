@@ -23,9 +23,9 @@ class TestAlarm(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(username=USERNAME,
-                                   password=PASSWORD,
-                                   disable_cache=True)
+        self.abode = abodepy.Abode(
+            username=USERNAME, password=PASSWORD, disable_cache=True
+        )
 
     def tearDown(self):
         """Clean up after test."""
@@ -55,9 +55,15 @@ class TestAlarm(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(
-            mode=CONST.MODE_STANDBY, battery=True, is_cellular=True,
-            mac='01:AA:b3:C4:d5:66'))
+        m.get(
+            CONST.PANEL_URL,
+            text=PANEL.get_response_ok(
+                mode=CONST.MODE_STANDBY,
+                battery=True,
+                is_cellular=True,
+                mac='01:AA:b3:C4:d5:66',
+            ),
+        )
         m.get(CONST.DEVICES_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
@@ -75,8 +81,12 @@ class TestAlarm(unittest.TestCase):
         self.assertEqual(alarm.mac_address, '01:AA:b3:C4:d5:66')
 
         # Change alarm properties and state to away and test
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(
-            mode=CONST.MODE_AWAY, battery=False, is_cellular=False))
+        m.get(
+            CONST.PANEL_URL,
+            text=PANEL.get_response_ok(
+                mode=CONST.MODE_AWAY, battery=False, is_cellular=False
+            ),
+        )
 
         # Refresh alarm and test
         alarm.refresh()
@@ -88,8 +98,7 @@ class TestAlarm(unittest.TestCase):
         self.assertTrue(alarm.is_on)
 
         # Change alarm state to final on state and test
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_HOME))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_HOME))
 
         # Refresh alarm and test
         alarm.refresh()
@@ -104,8 +113,7 @@ class TestAlarm(unittest.TestCase):
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL,
-              text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(CONST.DEVICES_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
@@ -118,12 +126,18 @@ class TestAlarm(unittest.TestCase):
         self.assertEqual(alarm.status, CONST.MODE_STANDBY)
 
         # Set mode URLs
-        m.put(CONST.get_panel_mode_url('1', CONST.MODE_STANDBY),
-              text=PANEL.put_response_ok(mode=CONST.MODE_STANDBY))
-        m.put(CONST.get_panel_mode_url('1', CONST.MODE_AWAY),
-              text=PANEL.put_response_ok(mode=CONST.MODE_AWAY))
-        m.put(CONST.get_panel_mode_url('1', CONST.MODE_HOME),
-              text=PANEL.put_response_ok(mode=CONST.MODE_HOME))
+        m.put(
+            CONST.get_panel_mode_url('1', CONST.MODE_STANDBY),
+            text=PANEL.put_response_ok(mode=CONST.MODE_STANDBY),
+        )
+        m.put(
+            CONST.get_panel_mode_url('1', CONST.MODE_AWAY),
+            text=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
+        )
+        m.put(
+            CONST.get_panel_mode_url('1', CONST.MODE_HOME),
+            text=PANEL.put_response_ok(mode=CONST.MODE_HOME),
+        )
 
         # Set and test text based mode changes
         self.assertTrue(alarm.set_mode(CONST.MODE_HOME))
@@ -199,15 +213,19 @@ class TestAlarm(unittest.TestCase):
             alarm.set_mode('chestnuts')
 
         # Test that an invalid mode change response throws exception
-        m.put(CONST.get_panel_mode_url('1', CONST.MODE_HOME),
-              text=PANEL.put_response_ok(mode=CONST.MODE_AWAY))
+        m.put(
+            CONST.get_panel_mode_url('1', CONST.MODE_HOME),
+            text=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             alarm.set_mode(CONST.MODE_HOME)
 
         # Test that an invalid area in mode change response throws exception
-        m.put(CONST.get_panel_mode_url('1', CONST.MODE_HOME),
-              text=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME))
+        m.put(
+            CONST.get_panel_mode_url('1', CONST.MODE_HOME),
+            text=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
+        )
 
         with self.assertRaises(abodepy.AbodeException):
             alarm.set_mode(CONST.MODE_HOME)

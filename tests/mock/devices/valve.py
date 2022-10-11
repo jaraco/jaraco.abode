@@ -5,10 +5,12 @@ DEVICE_ID = 'ZW:00000113'
 CONTROL_URL = 'api/v1/control/power_switch/' + DEVICE_ID
 
 
-def device(devid=DEVICE_ID, status=CONST.STATUS_OPEN,
-           low_battery=False, no_response=False):
+def device(
+    devid=DEVICE_ID, status=CONST.STATUS_OPEN, low_battery=False, no_response=False
+):
     """Valve mock device."""
-    return '''
+    return (
+        '''
       {
          "actions":[
             {
@@ -22,22 +24,30 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OPEN,
          ],
          "area":"1",
          "bypass":"0",
-         "control_url":"''' + CONTROL_URL + '''",
+         "control_url":"'''
+        + CONTROL_URL
+        + '''",
          "deep_link":null,
          "default_group_id":"1",
          "faults":{
-            "low_battery":''' + str(int(low_battery)) + ''',
+            "low_battery":'''
+        + str(int(low_battery))
+        + ''',
             "tempered":0,
             "supervision":0,
             "out_of_order":0,
-            "no_response":''' + str(int(no_response)) + '''
+            "no_response":'''
+        + str(int(no_response))
+        + '''
          },
          "generic_type":"valve",
          "group_id":"xxxxx",
          "group_name":"Water leak",
          "has_subscription":null,
          "icon":"assets/icons/water-value-shutoff.svg",
-         "id":"''' + devid + '''",
+         "id":"'''
+        + devid
+        + '''",
          "is_window":"",
          "name":"Water shut-off valve",
          "onboard":"0",
@@ -65,7 +75,9 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OPEN,
          "sresp_mode_2":"0",
          "sresp_mode_3":"0",
          "sresp_mode_4":"0",
-         "status":"''' + status + '''",
+         "status":"'''
+        + status
+        + '''",
          "status_color":"#5cb85c",
          "status_display":"Open",
          "status_ex":"",
@@ -82,3 +94,4 @@ def device(devid=DEVICE_ID, status=CONST.STATUS_OPEN,
          "zone":"18",
          "zwave_secure_protocol":""
       }'''
+    )
