@@ -46,7 +46,8 @@ jobs:
         platform:
         - ubuntu-latest
         - macos-latest
-        - windows-latest
+        # Disabled due to #4
+        # - windows-latest
         include:
         - python: pypy3.9
           platform: ubuntu-latest
