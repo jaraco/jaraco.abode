@@ -1,3 +1,10 @@
+v0.2.0
+======
+
+Refreshed packaging. Enabled automated releases.
+
+Require Python 3.7 or later.
+
 v0.1.0
 ======
 
