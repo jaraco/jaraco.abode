@@ -654,6 +654,9 @@ class TestAbode(unittest.TestCase):
         self.assertIsNotNone(empty_abode._cache['password'])
         self.assertIsNotNone(empty_abode._cache['uuid'])
 
+        # Cleanup cookies
+        os.remove(empty_cache_path)
+
     @requests_mock.mock()
     def test_invalid_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
@@ -692,3 +695,6 @@ class TestAbode(unittest.TestCase):
         self.assertIsNotNone(empty_abode._cache['id'])
         self.assertIsNotNone(empty_abode._cache['password'])
         self.assertIsNotNone(empty_abode._cache['uuid'])
+
+        # Cleanup cookies
+        os.remove(invalid_cache_path)
