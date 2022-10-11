@@ -21,20 +21,16 @@
    :target: https://blog.jaraco.com/skeleton
 
 A thin Python library for the Abode alarm API.
-Only compatible with Python 3+
 
 Disclaimer:
 ~~~~~~~~~~~~~~~
-Published under the MIT license - See LICENSE file for more details.
 
-"Abode" is a trademark owned by Abode Systems Inc., see www.goabode.com for more information.
-I am in no way affiliated with Abode.
+"Abode" is a trademark owned by Abode Systems, Inc.; see www.goabode.com for
+more information.
 
-Thank you Abode for having a relatively simple API to reverse engineer. Hopefully in the future you'll
-open it up for official use.
+Thanks to Abode for having a relatively simple API to reverse engineer. Maybe in the future Abode will open it up for official use.
 
-API calls faster than 60 seconds is not recommended as it can overwhelm Abode's servers. Leverage the cloud push
-event notification functionality as much as possible. Please use this module responsibly.
+API calls faster than 60 seconds is not recommended as it can overwhelm Abode's servers. Leverage the cloud push event notification functionality as much as possible. Please use this module responsibly.
 
 Installation
 ============
