@@ -540,8 +540,8 @@ class TestEventController(unittest.TestCase):
 
         # Register our events
         assert events.add_event_callback(
-                [TIMELINE.ALARM_GROUP, TIMELINE.CAPTURE_GROUP], callback
-            )
+            [TIMELINE.ALARM_GROUP, TIMELINE.CAPTURE_GROUP], callback
+        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -562,8 +562,8 @@ class TestEventController(unittest.TestCase):
 
         # Register our events
         assert events.add_timeline_callback(
-                [TIMELINE.CAPTURE_IMAGE, TIMELINE.OPENED], callback
-            )
+            [TIMELINE.CAPTURE_IMAGE, TIMELINE.OPENED], callback
+        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -584,8 +584,8 @@ class TestEventController(unittest.TestCase):
 
         # Register our events
         assert events.add_event_callback(
-                TIMELINE.AUTOMATION_EDIT_GROUP, automation_callback
-            )
+            TIMELINE.AUTOMATION_EDIT_GROUP, automation_callback
+        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access

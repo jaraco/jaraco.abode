@@ -543,9 +543,10 @@ class TestDevice(unittest.TestCase):
             }.get(device.generic_type)
 
             assert class_type is not None, device.type + ' is not mapped.'
-            assert isinstance(device, class_type), \
-                device.type \
-                + ' is of class ' \
-                + str(device.__class__.__name__) \
-                + ' but mapped to ' \
+            assert isinstance(device, class_type), (
+                device.type
+                + ' is of class '
+                + str(device.__class__.__name__)
+                + ' but mapped to '
                 + str(class_type.__name__)
+            )
