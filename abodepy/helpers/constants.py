@@ -1,20 +1,20 @@
 """AbodePy constants."""
 import os
 
-MAJOR_VERSION = 1
-MINOR_VERSION = 2
-PATCH_VERSION = '2'
+MAJOR_VERSION = 0
+MINOR_VERSION = 1
+PATCH_VERSION = 0
 
 __version__ = '{}.{}.{}'.format(MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION)
 
 REQUIRED_PYTHON_VER = (3, 6, 0)
 
 PROJECT_NAME = 'abodepy'
-PROJECT_PACKAGE_NAME = 'abodepy'
+PROJECT_PACKAGE_NAME = 'jaraco.abode'
 PROJECT_LICENSE = 'MIT'
 PROJECT_AUTHOR = 'Wil Schrader'
 PROJECT_COPYRIGHT = ' 2017, {}'.format(PROJECT_AUTHOR)
-PROJECT_URL = 'https://github.com/MisterWil/abodepy'
+PROJECT_URL = 'https://github.com/jaraco/jaraco.abode'
 PROJECT_EMAIL = 'wilrader@gmail.com'
 PROJECT_DESCRIPTION = ('An Abode alarm Python library '
                        'running on Python 3.')
@@ -34,8 +34,8 @@ PROJECT_CLASSIFIERS = [
     'Topic :: Home Automation'
 ]
 
-PROJECT_GITHUB_USERNAME = 'MisterWil'
-PROJECT_GITHUB_REPOSITORY = 'abodepy'
+PROJECT_GITHUB_USERNAME = 'jaraco'
+PROJECT_GITHUB_REPOSITORY = 'jaraco.abode'
 
 PYPI_URL = 'https://pypi.python.org/pypi/{}'.format(PROJECT_PACKAGE_NAME)
 

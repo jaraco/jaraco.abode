@@ -1,5 +1,3 @@
-python-abode |Build Status| |Coverage Status|
-=================================================
 A thin Python library for the Abode alarm API.
 Only compatible with Python 3+
 
@@ -20,7 +18,7 @@ Installation
 ============
 From PyPi:
 
-    pip3 install abodepy
+    pip3 install jaraco.abode
   
 Command Line Usage
 ==================
@@ -217,7 +215,7 @@ Install the core dependencies::
 
 Checkout from github and then create a virtual environment::
 
-    $ git clone https://github.com/MisterWil/abodepy.git
+    $ git clone https://github.com/jaraco/jaraco.abode
     $ cd abodepy
     $ python3 -m venv venv
     
@@ -248,8 +246,3 @@ TODO
 Class Descriptions
 ==================
 TODO
-
-.. |Build Status| image:: https://travis-ci.org/MisterWil/abodepy.svg?branch=master
-    :target: https://travis-ci.org/MisterWil/abodepy
-.. |Coverage Status| image:: https://coveralls.io/repos/github/MisterWil/abodepy/badge.svg
-    :target: https://coveralls.io/github/MisterWil/abodepy
