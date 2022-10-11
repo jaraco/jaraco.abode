@@ -27,21 +27,21 @@ import os
 import requests
 from requests.exceptions import RequestException
 
-from abodepy.automation import AbodeAutomation
-from abodepy.devices.binary_sensor import AbodeBinarySensor
-from abodepy.devices.camera import AbodeCamera
-from abodepy.devices.cover import AbodeCover
-from abodepy.devices.light import AbodeLight
-from abodepy.devices.lock import AbodeLock
-from abodepy.devices.switch import AbodeSwitch
-from abodepy.devices.sensor import AbodeSensor
-from abodepy.devices.valve import AbodeValve
-from abodepy.event_controller import AbodeEventController
-from abodepy.exceptions import AbodeAuthenticationException, AbodeException
-import abodepy.devices.alarm as ALARM
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.errors as ERROR
-import abodepy.utils as UTILS
+from .automation import AbodeAutomation
+from .devices.binary_sensor import AbodeBinarySensor
+from .devices.camera import AbodeCamera
+from .devices.cover import AbodeCover
+from .devices.light import AbodeLight
+from .devices.lock import AbodeLock
+from .devices.switch import AbodeSwitch
+from .devices.sensor import AbodeSensor
+from .devices.valve import AbodeValve
+from .event_controller import AbodeEventController
+from .exceptions import AbodeAuthenticationException, AbodeException
+from .devices import alarm as ALARM
+from .helpers import constants as CONST
+from .helpers import errors as ERROR
+from . import utils as UTILS
 
 _LOGGER = logging.getLogger(__name__)
 

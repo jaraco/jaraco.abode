@@ -2,10 +2,10 @@
 import json
 import logging
 
-from abodepy.exceptions import AbodeException
+from ..exceptions import AbodeException
 
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.errors as ERROR
+from ..helpers import constants as CONST
+from ..helpers import errors as ERROR
 
 
 _LOGGER = logging.getLogger(__name__)

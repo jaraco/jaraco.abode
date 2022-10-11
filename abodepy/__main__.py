@@ -22,9 +22,9 @@ import time
 
 import argparse
 
-import abodepy
-import abodepy.helpers.timeline as TIMELINE
-from abodepy.exceptions import AbodeException
+from . import Abode
+from .helpers import timeline as TIMELINE
+from .exceptions import AbodeException
 
 _LOGGER = logging.getLogger('abodecl')
 
@@ -254,18 +254,18 @@ def call():
             raise Exception("Please supply a cache or username and password.")
 
     try:
-        # Create abodepy instance.
+        # Create Abode instance.
         if args.cache and args.username and args.password:
-            abode = abodepy.Abode(
+            abode = Abode(
                 username=args.username,
                 password=args.password,
                 get_devices=args.mfa is None,
                 cache_path=args.cache,
             )
         elif args.cache and not (not args.username or not args.password):
-            abode = abodepy.Abode(get_devices=args.mfa is None, cache_path=args.cache)
+            abode = Abode(get_devices=args.mfa is None, cache_path=args.cache)
         else:
-            abode = abodepy.Abode(
+            abode = Abode(
                 username=args.username,
                 password=args.password,
                 get_devices=args.mfa is None,
@@ -475,7 +475,7 @@ def call():
             except KeyboardInterrupt:
                 abode.events.stop()
                 _LOGGER.info("Device update listening stopped.")
-    except abodepy.AbodeException as exc:
+    except abode.AbodeException as exc:
         _LOGGER.error(exc)
     finally:
         if abode:

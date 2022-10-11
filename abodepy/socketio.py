@@ -12,8 +12,8 @@ from lomond import events
 from lomond.persist import persist
 from lomond.errors import WebSocketError
 
-from abodepy.exceptions import SocketIOException
-import abodepy.helpers.errors as ERRORS
+from .exceptions import SocketIOException
+from .helpers import errors as ERRORS
 
 STARTED = "started"
 STOPPED = "stopped"

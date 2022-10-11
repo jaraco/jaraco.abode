@@ -2,12 +2,12 @@
 import collections
 import logging
 
-from abodepy.devices import AbodeDevice
-from abodepy.exceptions import AbodeException
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.errors as ERROR
-import abodepy.helpers.timeline as TIMELINE
-import abodepy.socketio as sio
+from .devices import AbodeDevice
+from .exceptions import AbodeException
+from .helpers import constants as CONST
+from .helpers import errors as ERROR
+from .helpers import timeline as TIMELINE
+from . import socketio as sio
 
 _LOGGER = logging.getLogger(__name__)
 

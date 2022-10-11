@@ -1,7 +1,7 @@
 """Abode valve device."""
 
-from abodepy.devices.switch import AbodeSwitch
-import abodepy.helpers.constants as CONST
+from ..devices.switch import AbodeSwitch
+from ..helpers import constants as CONST
 
 
 class AbodeValve(AbodeSwitch):

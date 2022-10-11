@@ -4,11 +4,11 @@ import logging
 from shutil import copyfileobj
 import requests
 
-from abodepy.exceptions import AbodeException
-from abodepy.devices import AbodeDevice
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.errors as ERROR
-import abodepy.helpers.timeline as TIMELINE
+from ..exceptions import AbodeException
+from ..devices import AbodeDevice
+from ..helpers import constants as CONST
+from ..helpers import errors as ERROR
+from ..helpers import timeline as TIMELINE
 
 _LOGGER = logging.getLogger(__name__)
 

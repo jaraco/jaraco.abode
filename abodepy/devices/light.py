@@ -3,11 +3,11 @@ import json
 import logging
 import math
 
-from abodepy.exceptions import AbodeException
+from ..exceptions import AbodeException
 
-from abodepy.devices.switch import AbodeSwitch
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.errors as ERROR
+from ..devices.switch import AbodeSwitch
+from ..helpers import constants as CONST
+from ..helpers import errors as ERROR
 
 
 _LOGGER = logging.getLogger(__name__)
