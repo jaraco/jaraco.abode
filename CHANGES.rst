@@ -1,3 +1,12 @@
+v0.3.0
+======
+
+Package now uses relative imports throughout.
+
+Prefer pytest for assertions.
+
+General cleanup.
+
 v0.2.0
 ======
 
