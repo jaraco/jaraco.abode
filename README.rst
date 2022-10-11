@@ -31,12 +31,6 @@ more information.
 Thanks to Abode for having a relatively simple API to reverse engineer. Maybe in the future Abode will open it up for official use.
 
 API calls faster than 60 seconds is not recommended as it can overwhelm Abode's servers. Leverage the cloud push event notification functionality as much as possible. Please use this module responsibly.
-
-Installation
-============
-From PyPi:
-
-    pip3 install jaraco.abode
   
 Command Line Usage
 ==================
