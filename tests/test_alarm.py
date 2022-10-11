@@ -12,6 +12,7 @@ import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.devices as DEVICES
 import tests.mock.devices.alarm as ALARM
+import pytest
 
 
 USERNAME = 'foobar'
@@ -44,9 +45,9 @@ class TestAlarm(unittest.TestCase):
 
         alarm_device = self.abode.get_alarm()
 
-        self.assertIsNotNone(alarm_device)
+        assert alarm_device is not None
         # pylint: disable=W0212
-        self.assertEqual(alarm_device._json_state, alarm)
+        assert alarm_device._json_state == alarm
 
     @requests_mock.mock()
     def tests_alarm_device_properties(self, m):
@@ -71,14 +72,14 @@ class TestAlarm(unittest.TestCase):
 
         # Get alarm and test
         alarm = self.abode.get_alarm()
-        self.assertIsNotNone(alarm)
-        self.assertEqual(alarm.mode, CONST.MODE_STANDBY)
-        self.assertEqual(alarm.status, CONST.MODE_STANDBY)
-        self.assertTrue(alarm.battery)
-        self.assertTrue(alarm.is_cellular)
-        self.assertFalse(alarm.is_on)
-        self.assertEqual(alarm.device_uuid, '01aab3c4d566')
-        self.assertEqual(alarm.mac_address, '01:AA:b3:C4:d5:66')
+        assert alarm is not None
+        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.status == CONST.MODE_STANDBY
+        assert alarm.battery
+        assert alarm.is_cellular
+        assert not alarm.is_on
+        assert alarm.device_uuid == '01aab3c4d566'
+        assert alarm.mac_address == '01:AA:b3:C4:d5:66'
 
         # Change alarm properties and state to away and test
         m.get(
@@ -91,20 +92,20 @@ class TestAlarm(unittest.TestCase):
         # Refresh alarm and test
         alarm.refresh()
 
-        self.assertEqual(alarm.mode, CONST.MODE_AWAY)
-        self.assertEqual(alarm.status, CONST.MODE_AWAY)
-        self.assertFalse(alarm.battery)
-        self.assertFalse(alarm.is_cellular)
-        self.assertTrue(alarm.is_on)
+        assert alarm.mode == CONST.MODE_AWAY
+        assert alarm.status == CONST.MODE_AWAY
+        assert not alarm.battery
+        assert not alarm.is_cellular
+        assert alarm.is_on
 
         # Change alarm state to final on state and test
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_HOME))
 
         # Refresh alarm and test
         alarm.refresh()
-        self.assertEqual(alarm.mode, CONST.MODE_HOME)
-        self.assertEqual(alarm.status, CONST.MODE_HOME)
-        self.assertTrue(alarm.is_on)
+        assert alarm.mode == CONST.MODE_HOME
+        assert alarm.status == CONST.MODE_HOME
+        assert alarm.is_on
 
     @requests_mock.mock()
     def tests_alarm_device_mode_changes(self, m):
@@ -122,8 +123,8 @@ class TestAlarm(unittest.TestCase):
         # Assert that after login we have our alarm device with standby mode
         alarm = self.abode.get_alarm()
 
-        self.assertIsNotNone(alarm)
-        self.assertEqual(alarm.status, CONST.MODE_STANDBY)
+        assert alarm is not None
+        assert alarm.status == CONST.MODE_STANDBY
 
         # Set mode URLs
         m.put(
@@ -140,76 +141,76 @@ class TestAlarm(unittest.TestCase):
         )
 
         # Set and test text based mode changes
-        self.assertTrue(alarm.set_mode(CONST.MODE_HOME))
-        self.assertEqual(alarm.mode, CONST.MODE_HOME)
-        self.assertFalse(alarm.is_standby)
-        self.assertTrue(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.set_mode(CONST.MODE_HOME)
+        assert alarm.mode == CONST.MODE_HOME
+        assert not alarm.is_standby
+        assert alarm.is_home
+        assert not alarm.is_away
 
-        self.assertTrue(alarm.set_mode(CONST.MODE_AWAY))
-        self.assertEqual(alarm.mode, CONST.MODE_AWAY)
-        self.assertFalse(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertTrue(alarm.is_away)
+        assert alarm.set_mode(CONST.MODE_AWAY)
+        assert alarm.mode == CONST.MODE_AWAY
+        assert not alarm.is_standby
+        assert not alarm.is_home
+        assert alarm.is_away
 
-        self.assertTrue(alarm.set_mode(CONST.MODE_STANDBY))
-        self.assertEqual(alarm.mode, CONST.MODE_STANDBY)
-        self.assertTrue(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.set_mode(CONST.MODE_STANDBY)
+        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.is_standby
+        assert not alarm.is_home
+        assert not alarm.is_away
 
         # Set and test direct mode changes
-        self.assertTrue(alarm.set_home())
-        self.assertEqual(alarm.mode, CONST.MODE_HOME)
-        self.assertFalse(alarm.is_standby)
-        self.assertTrue(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.set_home()
+        assert alarm.mode == CONST.MODE_HOME
+        assert not alarm.is_standby
+        assert alarm.is_home
+        assert not alarm.is_away
 
-        self.assertTrue(alarm.set_away())
-        self.assertEqual(alarm.mode, CONST.MODE_AWAY)
-        self.assertFalse(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertTrue(alarm.is_away)
+        assert alarm.set_away()
+        assert alarm.mode == CONST.MODE_AWAY
+        assert not alarm.is_standby
+        assert not alarm.is_home
+        assert alarm.is_away
 
-        self.assertTrue(alarm.set_standby())
-        self.assertEqual(alarm.mode, CONST.MODE_STANDBY)
-        self.assertTrue(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.set_standby()
+        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.is_standby
+        assert not alarm.is_home
+        assert not alarm.is_away
 
         # Set and test default mode changes
-        self.assertTrue(alarm.switch_off())
-        self.assertEqual(alarm.mode, CONST.MODE_STANDBY)
-        self.assertTrue(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.switch_off()
+        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.is_standby
+        assert not alarm.is_home
+        assert not alarm.is_away
 
         self.abode.set_default_mode(CONST.MODE_HOME)
-        self.assertTrue(alarm.switch_on())
-        self.assertEqual(alarm.mode, CONST.MODE_HOME)
-        self.assertFalse(alarm.is_standby)
-        self.assertTrue(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.switch_on()
+        assert alarm.mode == CONST.MODE_HOME
+        assert not alarm.is_standby
+        assert alarm.is_home
+        assert not alarm.is_away
 
-        self.assertTrue(alarm.switch_off())
-        self.assertEqual(alarm.mode, CONST.MODE_STANDBY)
-        self.assertTrue(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertFalse(alarm.is_away)
+        assert alarm.switch_off()
+        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.is_standby
+        assert not alarm.is_home
+        assert not alarm.is_away
 
         self.abode.set_default_mode(CONST.MODE_AWAY)
-        self.assertTrue(alarm.switch_on())
-        self.assertEqual(alarm.mode, CONST.MODE_AWAY)
-        self.assertFalse(alarm.is_standby)
-        self.assertFalse(alarm.is_home)
-        self.assertTrue(alarm.is_away)
+        assert alarm.switch_on()
+        assert alarm.mode == CONST.MODE_AWAY
+        assert not alarm.is_standby
+        assert not alarm.is_home
+        assert alarm.is_away
 
         # Test that no mode throws exception
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             alarm.set_mode(mode=None)
 
         # Test that an invalid mode throws exception
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             alarm.set_mode('chestnuts')
 
         # Test that an invalid mode change response throws exception
@@ -218,7 +219,7 @@ class TestAlarm(unittest.TestCase):
             text=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             alarm.set_mode(CONST.MODE_HOME)
 
         # Test that an invalid area in mode change response throws exception
@@ -227,5 +228,5 @@ class TestAlarm(unittest.TestCase):
             text=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             alarm.set_mode(CONST.MODE_HOME)

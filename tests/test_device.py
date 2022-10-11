@@ -33,6 +33,7 @@ import tests.mock.login as LOGIN
 import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
+import pytest
 
 
 USERNAME = 'foobar'
@@ -65,15 +66,15 @@ class TestDevice(unittest.TestCase):
 
         device_json = json.loads(device_text)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device_json['type_tag'] = ""
             abodepy.new_device(device_json, self.abode)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device_json['type_tag'] = None
             abodepy.new_device(device_json, self.abode)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             del device_json['type_tag']
             abodepy.new_device(device_json, self.abode)
 
@@ -93,17 +94,17 @@ class TestDevice(unittest.TestCase):
         device_json['name'] = ""
         device = abodepy.new_device(device_json, self.abode)
         generated_name = device.type + ' ' + device.device_id
-        self.assertEqual(device.name, generated_name)
+        assert device.name == generated_name
 
         device_json['name'] = None
         device = abodepy.new_device(device_json, self.abode)
         generated_name = device.type + ' ' + device.device_id
-        self.assertEqual(device.name, generated_name)
+        assert device.name == generated_name
 
         del device_json['name']
         device = abodepy.new_device(device_json, self.abode)
         generated_name = device.type + ' ' + device.device_id
-        self.assertEqual(device.name, generated_name)
+        assert device.name == generated_name
 
     @requests_mock.mock()
     def tests_device_init(self, m):
@@ -138,19 +139,19 @@ class TestDevice(unittest.TestCase):
         device = self.abode.get_device(GLASS.DEVICE_ID)
 
         # Check device states match
-        self.assertIsNotNone(device)
+        assert device is not None
         # pylint: disable=W0212
-        self.assertEqual(device.name, device_json[0]['name'])
-        self.assertEqual(device.type, device_json[0]['type'])
-        self.assertEqual(device.type_tag, device_json[0]['type_tag'])
-        self.assertEqual(device.device_id, device_json[0]['id'])
-        self.assertEqual(device.device_uuid, device_json[0]['uuid'])
-        self.assertEqual(device.status, CONST.STATUS_ONLINE)
-        self.assertTrue(device.battery_low)
-        self.assertTrue(device.no_response)
-        self.assertTrue(device.tampered)
-        self.assertTrue(device.out_of_order)
-        self.assertIsNotNone(device.desc)
+        assert device.name == device_json[0]['name']
+        assert device.type == device_json[0]['type']
+        assert device.type_tag == device_json[0]['type_tag']
+        assert device.device_id == device_json[0]['id']
+        assert device.device_uuid == device_json[0]['uuid']
+        assert device.status == CONST.STATUS_ONLINE
+        assert device.battery_low
+        assert device.no_response
+        assert device.tampered
+        assert device.out_of_order
+        assert device.desc is not None
 
     @requests_mock.mock()
     def tests_generic_device_refresh(self, m):
@@ -175,11 +176,11 @@ class TestDevice(unittest.TestCase):
 
         # Get the first device and test
         device = self.abode.get_device(GLASS.DEVICE_ID)
-        self.assertEqual(device.status, CONST.STATUS_ONLINE)
+        assert device.status == CONST.STATUS_ONLINE
 
         # Refresh the device and test
         device = self.abode.get_device(GLASS.DEVICE_ID, refresh=True)
-        self.assertEqual(device.status, CONST.STATUS_OFFLINE)
+        assert device.status == CONST.STATUS_OFFLINE
 
     @requests_mock.mock()
     def tests_multiple_devices(self, m):
@@ -210,20 +211,20 @@ class TestDevice(unittest.TestCase):
         devices = self.abode.get_devices()
 
         # Assert four devices - three from above + 1 alarm
-        self.assertIsNotNone(devices)
-        self.assertEqual(len(devices), 4)
+        assert devices is not None
+        assert len(devices) == 4
 
         # Get each individual device by device ID
         psd = self.abode.get_device(POWERSENSOR.DEVICE_ID)
-        self.assertIsNotNone(psd)
+        assert psd is not None
 
         # Get each individual device by device ID
         psd = self.abode.get_device(DOOR_CONTACT.DEVICE_ID)
-        self.assertIsNotNone(psd)
+        assert psd is not None
 
         # Get each individual device by device ID
         psd = self.abode.get_device(GLASS.DEVICE_ID)
-        self.assertIsNotNone(psd)
+        assert psd is not None
 
     @requests_mock.mock()
     def tests_unknown_devices(self, m):
@@ -246,8 +247,8 @@ class TestDevice(unittest.TestCase):
         devices = self.abode.get_devices()
 
         # Assert 1 device - skipped device above + 1 alarm
-        self.assertIsNotNone(devices)
-        self.assertEqual(len(devices), 1)
+        assert devices is not None
+        assert len(devices) == 1
 
     @requests_mock.mock()
     def tests_device_category_filter(self, m):
@@ -292,14 +293,14 @@ class TestDevice(unittest.TestCase):
         # Get our glass devices
         devices = self.abode.get_devices(generic_type=(CONST.TYPE_CONNECTIVITY))
 
-        self.assertIsNotNone(devices)
-        self.assertEqual(len(devices), 1)
+        assert devices is not None
+        assert len(devices) == 1
 
         # Get our power switch devices
         devices = self.abode.get_devices(generic_type=(CONST.TYPE_SWITCH))
 
-        self.assertIsNotNone(devices)
-        self.assertEqual(len(devices), 2)
+        assert devices is not None
+        assert len(devices) == 2
 
     @requests_mock.mock()
     def tests_no_control_url(self, m):
@@ -318,9 +319,9 @@ class TestDevice(unittest.TestCase):
         # Get device
         device = self.abode.get_device(GLASS.DEVICE_ID)
 
-        self.assertIsNotNone(device)
-        self.assertFalse(device.set_status('1'))
-        self.assertFalse(device.set_level('99'))
+        assert device is not None
+        assert not device.set_status('1')
+        assert not device.set_level('99')
 
     @requests_mock.mock()
     def tests_device_status_changes(self, m):
@@ -347,9 +348,9 @@ class TestDevice(unittest.TestCase):
         device = self.abode.get_device(POWERSENSOR.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
+        assert device is not None
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
 
         # Set up control url response
         control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
@@ -361,9 +362,9 @@ class TestDevice(unittest.TestCase):
         )
 
         # Change the mode to "on"
-        self.assertTrue(device.switch_on())
-        self.assertEqual(device.status, CONST.STATUS_ON)
-        self.assertTrue(device.is_on)
+        assert device.switch_on()
+        assert device.status == CONST.STATUS_ON
+        assert device.is_on
 
         # Change response
         m.put(
@@ -374,9 +375,9 @@ class TestDevice(unittest.TestCase):
         )
 
         # Change the mode to "off"
-        self.assertTrue(device.switch_off())
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
+        assert device.switch_off()
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
 
         # Test that an invalid device ID in response throws exception
         m.put(
@@ -386,7 +387,7 @@ class TestDevice(unittest.TestCase):
             ),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.switch_on()
 
         # Test that an invalid status in response throws exception
@@ -397,7 +398,7 @@ class TestDevice(unittest.TestCase):
             ),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.switch_on()
 
     @requests_mock.mock()
@@ -427,9 +428,9 @@ class TestDevice(unittest.TestCase):
         device = self.abode.get_device(POWERSENSOR.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
+        assert device is not None
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
 
         # Set up control url response
         control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
@@ -441,7 +442,7 @@ class TestDevice(unittest.TestCase):
         )
 
         # Change the level to int 100
-        self.assertTrue(device.set_level(100))
+        assert device.set_level(100)
         # self.assertEqual(device.level, '100')
 
         # Change response
@@ -452,7 +453,7 @@ class TestDevice(unittest.TestCase):
         )
 
         # Change the level to str '25'
-        self.assertTrue(device.set_level('25'))
+        assert device.set_level('25')
         # self.assertEqual(device.level, '25')
 
         # Test that an invalid device ID in response throws exception
@@ -461,7 +462,7 @@ class TestDevice(unittest.TestCase):
             text=DEVICES.level_put_response_ok(devid='ZW:deadbeef', level='25'),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.set_level(25)
 
         # Test that an invalid level in response throws exception
@@ -470,7 +471,7 @@ class TestDevice(unittest.TestCase):
             text=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='98'),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.set_level('28')
 
     @requests_mock.mock()
@@ -541,12 +542,10 @@ class TestDevice(unittest.TestCase):
                 CONST.TYPE_SWITCH: AbodeSwitch,
             }.get(device.generic_type)
 
-            self.assertIsNotNone(class_type, device.type + ' is not mapped.')
-            self.assertTrue(
-                isinstance(device, class_type),
-                device.type
-                + ' is of class '
-                + str(device.__class__.__name__)
-                + ' but mapped to '
-                + str(class_type.__name__),
-            )
+            assert class_type is not None, device.type + ' is not mapped.'
+            assert isinstance(device, class_type), \
+                device.type \
+                + ' is of class ' \
+                + str(device.__class__.__name__) \
+                + ' but mapped to ' \
+                + str(class_type.__name__)

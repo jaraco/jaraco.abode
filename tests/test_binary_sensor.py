@@ -110,9 +110,9 @@ class TestBinarySensors(unittest.TestCase):
             if device.type == CONST.DEVICE_ALARM:
                 continue
 
-            self.assertFalse(device.is_on, device.type + " is_on failed")
-            self.assertFalse(device.battery_low, device.type + " battery_low failed")
-            self.assertFalse(device.no_response, device.type + " no_response failed")
+            assert not device.is_on, device.type + " is_on failed"
+            assert not device.battery_low, device.type + " battery_low failed"
+            assert not device.no_response, device.type + " no_response failed"
 
         # Set up all Binary Sensor Devices in "off states"
         all_devices = (
@@ -176,6 +176,6 @@ class TestBinarySensors(unittest.TestCase):
             if device.type_tag == CONST.DEVICE_ALARM:
                 continue
 
-            self.assertTrue(device.is_on, device.type + " is_on failed")
-            self.assertTrue(device.battery_low, device.type + " battery_low failed")
-            self.assertTrue(device.no_response, device.type + " no_response failed")
+            assert device.is_on, device.type + " is_on failed"
+            assert device.battery_low, device.type + " battery_low failed"
+            assert device.no_response, device.type + " no_response failed"

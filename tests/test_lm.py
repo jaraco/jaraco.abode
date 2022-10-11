@@ -58,19 +58,19 @@ class TestLM(unittest.TestCase):
         device = self.abode.get_device(LM.DEVICE_ID)
 
         # Test our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, '72 °F')
-        self.assertFalse(device.battery_low)
-        self.assertFalse(device.no_response)
-        self.assertTrue(device.has_temp)
-        self.assertTrue(device.has_humidity)
-        self.assertTrue(device.has_lux)
-        self.assertEqual(device.temp, 72)
-        self.assertEqual(device.temp_unit, '°F')
-        self.assertEqual(device.humidity, 34)
-        self.assertEqual(device.humidity_unit, '%')
-        self.assertEqual(device.lux, 14)
-        self.assertEqual(device.lux_unit, 'lux')
+        assert device is not None
+        assert device.status == '72 °F'
+        assert not device.battery_low
+        assert not device.no_response
+        assert device.has_temp
+        assert device.has_humidity
+        assert device.has_lux
+        assert device.temp == 72
+        assert device.temp_unit == '°F'
+        assert device.humidity == 34
+        assert device.humidity_unit == '%'
+        assert device.lux == 14
+        assert device.lux_unit == 'lux'
 
         # Set up our direct device get url
         device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', LM.DEVICE_ID)
@@ -92,18 +92,18 @@ class TestLM(unittest.TestCase):
         # Refesh device and test changes
         device.refresh()
 
-        self.assertEqual(device.status, '12 °C')
-        self.assertTrue(device.battery_low)
-        self.assertTrue(device.no_response)
-        self.assertTrue(device.has_temp)
-        self.assertTrue(device.has_humidity)
-        self.assertTrue(device.has_lux)
-        self.assertEqual(device.temp, 12)
-        self.assertEqual(device.temp_unit, '°C')
-        self.assertEqual(device.humidity, 100)
-        self.assertEqual(device.humidity_unit, '%')
-        self.assertEqual(device.lux, 100)
-        self.assertEqual(device.lux_unit, 'lux')
+        assert device.status == '12 °C'
+        assert device.battery_low
+        assert device.no_response
+        assert device.has_temp
+        assert device.has_humidity
+        assert device.has_lux
+        assert device.temp == 12
+        assert device.temp_unit == '°C'
+        assert device.humidity == 100
+        assert device.humidity_unit == '%'
+        assert device.lux == 100
+        assert device.lux_unit == 'lux'
 
     @requests_mock.mock()
     def tests_lm_float_units(self, m):
@@ -133,19 +133,19 @@ class TestLM(unittest.TestCase):
         device = self.abode.get_device(LM.DEVICE_ID)
 
         # Test our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, '72.23 °F')
-        self.assertFalse(device.battery_low)
-        self.assertFalse(device.no_response)
-        self.assertTrue(device.has_temp)
-        self.assertTrue(device.has_humidity)
-        self.assertTrue(device.has_lux)
-        self.assertEqual(device.temp, 72.23)
-        self.assertEqual(device.temp_unit, '°F')
-        self.assertEqual(device.humidity, 34.38)
-        self.assertEqual(device.humidity_unit, '%')
-        self.assertEqual(device.lux, 14.11)
-        self.assertEqual(device.lux_unit, 'lux')
+        assert device is not None
+        assert device.status == '72.23 °F'
+        assert not device.battery_low
+        assert not device.no_response
+        assert device.has_temp
+        assert device.has_humidity
+        assert device.has_lux
+        assert device.temp == 72.23
+        assert device.temp_unit == '°F'
+        assert device.humidity == 34.38
+        assert device.humidity_unit == '%'
+        assert device.lux == 14.11
+        assert device.lux_unit == 'lux'
 
     @requests_mock.mock()
     def tests_lm_temp_only(self, m):
@@ -169,14 +169,14 @@ class TestLM(unittest.TestCase):
         device = self.abode.get_device(LM.DEVICE_ID)
 
         # Test our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, '72 °F')
-        self.assertTrue(device.has_temp)
-        self.assertFalse(device.has_humidity)
-        self.assertFalse(device.has_lux)
-        self.assertEqual(device.temp, 72)
-        self.assertEqual(device.temp_unit, '°F')
-        self.assertIsNone(device.humidity)
-        self.assertIsNone(device.humidity_unit)
-        self.assertIsNone(device.lux)
-        self.assertIsNone(device.lux_unit)
+        assert device is not None
+        assert device.status == '72 °F'
+        assert device.has_temp
+        assert not device.has_humidity
+        assert not device.has_lux
+        assert device.temp == 72
+        assert device.temp_unit == '°F'
+        assert device.humidity is None
+        assert device.humidity_unit is None
+        assert device.lux is None
+        assert device.lux_unit is None

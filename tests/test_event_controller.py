@@ -17,6 +17,7 @@ import tests.mock.panel as PANEL
 import tests.mock.devices.secure_barrier as COVER
 import tests.mock.devices.door_contact as DOORCONTACT
 import tests.mock.devices.ir_camera as IRCAMERA
+import pytest
 
 
 USERNAME = 'foobar'
@@ -59,17 +60,17 @@ class TestEventController(unittest.TestCase):
 
         # Get our device
         device = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(device)
+        assert device is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callback
         callback = Mock()
 
         # Register our device id
-        self.assertTrue(events.add_device_callback(device.device_id, callback))
+        assert events.add_device_callback(device.device_id, callback)
 
     @requests_mock.mock()
     def tests_device_registration(self, m):
@@ -94,17 +95,17 @@ class TestEventController(unittest.TestCase):
 
         # Get our device
         device = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(device)
+        assert device is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         def _our_callback(device):
-            self.assertIsNotNone(device)
+            assert device is not None
 
         # Register our device
-        self.assertTrue(events.add_device_callback(device, _our_callback))
+        assert events.add_device_callback(device, _our_callback)
 
     @requests_mock.mock()
     def tests_device_all_unregistration(self, m):
@@ -129,20 +130,20 @@ class TestEventController(unittest.TestCase):
 
         # Get our device
         device = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(device)
+        assert device is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         def _our_callback(device):
-            self.assertIsNotNone(device)
+            assert device is not None
 
         # Register our device
-        self.assertTrue(events.add_device_callback(device, _our_callback))
+        assert events.add_device_callback(device, _our_callback)
 
         # Unregister all callbacks
-        self.assertTrue(events.remove_all_device_callbacks(device))
+        assert events.remove_all_device_callbacks(device)
 
     @requests_mock.mock()
     def tests_invalid_device(self, m):
@@ -167,22 +168,22 @@ class TestEventController(unittest.TestCase):
 
         # Get our device
         device = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(device)
+        assert device is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callback
         callback = Mock()
 
         # Test that no device returns false
-        self.assertFalse(events.add_device_callback(None, callback))
+        assert not events.add_device_callback(None, callback)
 
         # Create a fake device and attempt to register that
         fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             events.add_device_callback(fake_device, callback)
 
     @requests_mock.mock()
@@ -208,61 +209,61 @@ class TestEventController(unittest.TestCase):
 
         # Get our device
         device = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(device)
+        assert device is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Test that no device returns false
-        self.assertFalse(events.remove_all_device_callbacks(None))
+        assert not events.remove_all_device_callbacks(None)
 
         # Create a fake device and attempt to unregister that
         fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             events.remove_all_device_callbacks(fake_device)
 
     def tests_event_registration(self):
         """Tests that events register correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callback
         callback = Mock()
 
         # Test that a valid event registers
-        self.assertTrue(events.add_event_callback(TIMELINE.ALARM_GROUP, callback))
+        assert events.add_event_callback(TIMELINE.ALARM_GROUP, callback)
 
         # Test that no event group returns false
-        self.assertFalse(events.add_event_callback(None, callback))
+        assert not events.add_event_callback(None, callback)
 
         # Test that an invalid event throws exception
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             events.add_event_callback("lol", callback)
 
     def tests_timeline_registration(self):
         """Tests that timeline events register correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callback
         callback = Mock()
 
         # Test that a valid timeline event registers
-        self.assertTrue(events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, callback))
+        assert events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, callback)
 
         # Test that no timeline event returns false
-        self.assertFalse(events.add_timeline_callback(None, callback))
+        assert not events.add_timeline_callback(None, callback)
 
         # Test that an invalid timeline event string throws exception
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             events.add_timeline_callback("lol", callback)
 
         # Test that an invalid timeline event dict throws exception
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             events.add_timeline_callback({"lol": "lol"}, callback)
 
     @requests_mock.mock()
@@ -288,16 +289,16 @@ class TestEventController(unittest.TestCase):
 
         # Get our device
         device = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(device)
+        assert device is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         callback = Mock()
 
         # Register our device id
-        self.assertTrue(events.add_device_callback(device.device_id, callback))
+        assert events.add_device_callback(device.device_id, callback)
 
         # Set up device update URL
         device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
@@ -317,7 +318,7 @@ class TestEventController(unittest.TestCase):
         callback.assert_called_with(device)
 
         # Test that our device updated
-        self.assertEqual(device.status, CONST.STATUS_OPEN)
+        assert device.status == CONST.STATUS_OPEN
 
         # Test that no device ID cleanly returns
         events._on_device_update(None)
@@ -329,18 +330,16 @@ class TestEventController(unittest.TestCase):
         """Tests that event updates callback correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callbacks
         capture_callback = Mock()
         alarm_callback = Mock()
 
         # Register our events
-        self.assertTrue(
-            events.add_event_callback(TIMELINE.CAPTURE_GROUP, capture_callback)
-        )
+        assert events.add_event_callback(TIMELINE.CAPTURE_GROUP, capture_callback)
 
-        self.assertTrue(events.add_event_callback(TIMELINE.ALARM_GROUP, alarm_callback))
+        assert events.add_event_callback(TIMELINE.ALARM_GROUP, alarm_callback)
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -358,7 +357,7 @@ class TestEventController(unittest.TestCase):
         """Tests that timeline updates callback correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callbacks
         all_callback = Mock()
@@ -366,13 +365,11 @@ class TestEventController(unittest.TestCase):
         opened_callback = Mock()
 
         # Register our events
-        self.assertTrue(events.add_timeline_callback(TIMELINE.ALL, all_callback))
+        assert events.add_timeline_callback(TIMELINE.ALL, all_callback)
 
-        self.assertTrue(
-            events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, image_callback)
-        )
+        assert events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, image_callback)
 
-        self.assertTrue(events.add_timeline_callback(TIMELINE.OPENED, opened_callback))
+        assert events.add_timeline_callback(TIMELINE.OPENED, opened_callback)
 
         # Call our events callback method and trigger an image capture event
         # pylint: disable=protected-access
@@ -410,16 +407,16 @@ class TestEventController(unittest.TestCase):
 
         # Get our alarm device
         alarm = self.abode.get_alarm()
-        self.assertIsNotNone(alarm)
+        assert alarm is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         callback = Mock()
 
         # Register our alarm for callback
-        self.assertTrue(events.add_device_callback(alarm.device_id, callback))
+        assert events.add_device_callback(alarm.device_id, callback)
 
         # Call our mode changed callback method
         # pylint: disable=protected-access
@@ -427,7 +424,7 @@ class TestEventController(unittest.TestCase):
         callback.assert_called_with(alarm)
 
         # Test that our alarm state is set properly
-        self.assertEqual(alarm.mode, CONST.MODE_HOME)
+        assert alarm.mode == CONST.MODE_HOME
 
         # Test that no mode cleanly returns
         events._on_mode_change(None)
@@ -439,14 +436,14 @@ class TestEventController(unittest.TestCase):
         """Tests that callbacks that throw exceptions don't bomb."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create callbacks
         def _callback(event_json):
             raise Exception("CHAOS!!!")
 
         # Register events callback
-        self.assertTrue(events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, _callback))
+        assert events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, _callback)
 
         # Call our events callback method and trigger an image capture event
         # pylint: disable=protected-access
@@ -482,19 +479,19 @@ class TestEventController(unittest.TestCase):
 
         # Get our devices
         cover = self.abode.get_device(COVER.DEVICE_ID)
-        self.assertIsNotNone(cover)
+        assert cover is not None
 
         doorcontact = self.abode.get_device(DOORCONTACT.DEVICE_ID)
-        self.assertIsNotNone(doorcontact)
+        assert doorcontact is not None
 
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         callback = Mock()
 
         # Register our devices
-        self.assertTrue(events.add_device_callback([cover, doorcontact], callback))
+        assert events.add_device_callback([cover, doorcontact], callback)
 
         # Set up device update URL's
         cover_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
@@ -520,33 +517,31 @@ class TestEventController(unittest.TestCase):
         callback.assert_called_with(cover)
 
         # Test that our device updated
-        self.assertEqual(cover.status, CONST.STATUS_OPEN)
+        assert cover.status == CONST.STATUS_OPEN
 
         # Test that our other device didn't update
-        self.assertEqual(doorcontact.status, CONST.STATUS_CLOSED)
+        assert doorcontact.status == CONST.STATUS_CLOSED
 
         # Call our device callback method for our door contact
         events._on_device_update(doorcontact.device_id)
         callback.assert_has_calls([call(cover), call(doorcontact)])
 
         # Test that our door updated now
-        self.assertEqual(doorcontact.status, CONST.STATUS_OPEN)
+        assert doorcontact.status == CONST.STATUS_OPEN
 
     def tests_multi_events_callback(self):
         """Tests that multiple event updates callback correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callback
         callback = Mock()
 
         # Register our events
-        self.assertTrue(
-            events.add_event_callback(
+        assert events.add_event_callback(
                 [TIMELINE.ALARM_GROUP, TIMELINE.CAPTURE_GROUP], callback
             )
-        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -560,17 +555,15 @@ class TestEventController(unittest.TestCase):
         """Tests that multiple timeline updates callback correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callback
         callback = Mock()
 
         # Register our events
-        self.assertTrue(
-            events.add_timeline_callback(
+        assert events.add_timeline_callback(
                 [TIMELINE.CAPTURE_IMAGE, TIMELINE.OPENED], callback
             )
-        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access
@@ -584,17 +577,15 @@ class TestEventController(unittest.TestCase):
         """Tests that automation updates callback correctly."""
         # Get the event controller
         events = self.abode.events
-        self.assertIsNotNone(events)
+        assert events is not None
 
         # Create mock callbacks
         automation_callback = Mock()
 
         # Register our events
-        self.assertTrue(
-            events.add_event_callback(
+        assert events.add_event_callback(
                 TIMELINE.AUTOMATION_EDIT_GROUP, automation_callback
             )
-        )
 
         # Call our events callback method and trigger a capture group event
         # pylint: disable=protected-access

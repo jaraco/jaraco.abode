@@ -56,12 +56,12 @@ class TestSecureBarrier(unittest.TestCase):
         device = self.abode.get_device(COVER.DEVICE_ID)
 
         # Test our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_CLOSED)
-        self.assertFalse(device.battery_low)
-        self.assertFalse(device.no_response)
-        self.assertFalse(device.is_on)
-        self.assertFalse(device.is_open)
+        assert device is not None
+        assert device.status == CONST.STATUS_CLOSED
+        assert not device.battery_low
+        assert not device.no_response
+        assert not device.is_on
+        assert not device.is_open
 
         # Set up our direct device get url
         device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
@@ -80,11 +80,11 @@ class TestSecureBarrier(unittest.TestCase):
         # Refesh device and test changes
         device.refresh()
 
-        self.assertEqual(device.status, CONST.STATUS_OPEN)
-        self.assertTrue(device.battery_low)
-        self.assertTrue(device.no_response)
-        self.assertTrue(device.is_on)
-        self.assertTrue(device.is_open)
+        assert device.status == CONST.STATUS_OPEN
+        assert device.battery_low
+        assert device.no_response
+        assert device.is_on
+        assert device.is_open
 
     @requests_mock.mock()
     def tests_cover_status_changes(self, m):
@@ -111,9 +111,9 @@ class TestSecureBarrier(unittest.TestCase):
         device = self.abode.get_device(COVER.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_CLOSED)
-        self.assertFalse(device.is_open)
+        assert device is not None
+        assert device.status == CONST.STATUS_CLOSED
+        assert not device.is_open
 
         # Set up control url response
         control_url = CONST.BASE_URL + COVER.CONTROL_URL
@@ -125,9 +125,9 @@ class TestSecureBarrier(unittest.TestCase):
         )
 
         # Change the cover to open
-        self.assertTrue(device.open_cover())
-        self.assertEqual(device.status, CONST.STATUS_OPEN)
-        self.assertTrue(device.is_open)
+        assert device.open_cover()
+        assert device.status == CONST.STATUS_OPEN
+        assert device.is_open
 
         # Change response
         m.put(
@@ -138,6 +138,6 @@ class TestSecureBarrier(unittest.TestCase):
         )
 
         # Change the mode to "off"
-        self.assertTrue(device.close_cover())
-        self.assertEqual(device.status, CONST.STATUS_CLOSED)
-        self.assertFalse(device.is_open)
+        assert device.close_cover()
+        assert device.status == CONST.STATUS_CLOSED
+        assert not device.is_open

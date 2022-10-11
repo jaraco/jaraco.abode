@@ -13,6 +13,7 @@ import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.automation as AUTOMATION
+import pytest
 
 # from abodepy.exceptions import AbodeException
 
@@ -62,13 +63,13 @@ class TestDevice(unittest.TestCase):
         automation = self.abode.get_automation(AID_1)
 
         # Check automation states match
-        self.assertIsNotNone(automation)
+        assert automation is not None
         # pylint: disable=W0212
-        self.assertEqual(automation._automation, automation_json)
-        self.assertEqual(automation.automation_id, str(automation_json['id']))
-        self.assertEqual(automation.name, automation_json['name'])
-        self.assertEqual(automation.is_enabled, automation_json['enabled'])
-        self.assertIsNotNone(automation.desc)
+        assert automation._automation == automation_json
+        assert automation.automation_id == str(automation_json['id'])
+        assert automation.name == automation_json['name']
+        assert automation.is_enabled == automation_json['enabled']
+        assert automation.desc is not None
 
     def tests_automation_refresh(self, m):
         """Check the automation Abode class refreshes."""
@@ -116,12 +117,12 @@ class TestDevice(unittest.TestCase):
 
         # Check automation states match
         # pylint: disable=W0212
-        self.assertIsNotNone(automation)
-        self.assertEqual(automation._automation, automation_json[0])
+        assert automation is not None
+        assert automation._automation == automation_json[0]
 
         # Refresh and retest
         automation.refresh()
-        self.assertEqual(automation._automation, automation_json_changed[0])
+        assert automation._automation == automation_json_changed[0]
 
         # Refresh with get_automation() and test
         automation_text_changed = (
@@ -138,7 +139,7 @@ class TestDevice(unittest.TestCase):
         # Refresh and retest
         automation = self.abode.get_automation(AID_1, refresh=True)
 
-        self.assertEqual(automation._automation, automation_json_changed[0])
+        assert automation._automation == automation_json_changed[0]
 
         # Test refresh returning an incorrect ID throws exception
         # Set up refreshed automation
@@ -154,7 +155,7 @@ class TestDevice(unittest.TestCase):
 
         m.get(automation_id_url, text=automation_text_changed)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             automation.refresh()
 
     def tests_multiple_automations(self, m):
@@ -191,21 +192,21 @@ class TestDevice(unittest.TestCase):
 
         # Test that the automations return the correct number
         automations = self.abode.get_automations()
-        self.assertEqual(len(automations), 3)
+        assert len(automations) == 3
 
         # Get the first automation and test
         # pylint: disable=W0212
         automation_1 = self.abode.get_automation(AID_1)
-        self.assertIsNotNone(automation_1)
-        self.assertEqual(automation_1._automation, automation_json[0])
+        assert automation_1 is not None
+        assert automation_1._automation == automation_json[0]
 
         automation_2 = self.abode.get_automation(AID_2)
-        self.assertIsNotNone(automation_2)
-        self.assertEqual(automation_2._automation, automation_json[1])
+        assert automation_2 is not None
+        assert automation_2._automation == automation_json[1]
 
         automation_3 = self.abode.get_automation(AID_3)
-        self.assertIsNotNone(automation_3)
-        self.assertEqual(automation_3._automation, automation_json[2])
+        assert automation_3 is not None
+        assert automation_3._automation == automation_json[2]
 
     def tests_automation_class_reuse(self, m):
         """Check that automations reuse the same classes when refreshed."""
@@ -237,17 +238,17 @@ class TestDevice(unittest.TestCase):
 
         # Test that the automations return the correct number
         automations = self.abode.get_automations()
-        self.assertEqual(len(automations), 2)
+        assert len(automations) == 2
 
         # Get the automations and test
         # pylint: disable=W0212
         automation_1 = self.abode.get_automation(AID_1)
-        self.assertIsNotNone(automation_1)
-        self.assertEqual(automation_1._automation, automation_json[0])
+        assert automation_1 is not None
+        assert automation_1._automation == automation_json[0]
 
         automation_2 = self.abode.get_automation(AID_2)
-        self.assertIsNotNone(automation_2)
-        self.assertEqual(automation_2._automation, automation_json[1])
+        assert automation_2 is not None
+        assert automation_2._automation == automation_json[1]
 
         # Update the automations
         automation_text = (
@@ -272,24 +273,24 @@ class TestDevice(unittest.TestCase):
 
         # Update
         automations_changed = self.abode.get_automations(refresh=True)
-        self.assertEqual(len(automations_changed), 3)
+        assert len(automations_changed) == 3
 
         # Check that the original two automations have updated
         # and are using the same class
         automation_1_changed = self.abode.get_automation(AID_1)
-        self.assertIsNotNone(automation_1_changed)
-        self.assertEqual(automation_1_changed._automation, automation_json_changed[0])
-        self.assertIs(automation_1, automation_1_changed)
+        assert automation_1_changed is not None
+        assert automation_1_changed._automation == automation_json_changed[0]
+        assert automation_1 is automation_1_changed
 
         automation_2_changed = self.abode.get_automation(AID_2)
-        self.assertIsNotNone(automation_2_changed)
-        self.assertEqual(automation_2_changed._automation, automation_json_changed[1])
-        self.assertIs(automation_2, automation_2_changed)
+        assert automation_2_changed is not None
+        assert automation_2_changed._automation == automation_json_changed[1]
+        assert automation_2 is automation_2_changed
 
         # Check that the third new automation is correct
         automation_3 = self.abode.get_automation(AID_3)
-        self.assertIsNotNone(automation_3)
-        self.assertEqual(automation_3._automation, automation_json_changed[2])
+        assert automation_3 is not None
+        assert automation_3._automation == automation_json_changed[2]
 
     def tests_automation_enable(self, m):
         """Check that automations can change their enable state."""
@@ -318,9 +319,9 @@ class TestDevice(unittest.TestCase):
         # Get the automation and test
         # pylint: disable=W0212
         automation = self.abode.get_automation(AID_1)
-        self.assertIsNotNone(automation)
-        self.assertEqual(automation._automation, automation_json[0])
-        self.assertTrue(automation.is_enabled)
+        assert automation is not None
+        assert automation._automation == automation_json[0]
+        assert automation.is_enabled
 
         # Set up our active state change and URL
         set_active_url = str.replace(
@@ -336,7 +337,7 @@ class TestDevice(unittest.TestCase):
 
         # Test the changed state
         automation.enable(False)
-        self.assertFalse(automation.is_enabled)
+        assert not automation.is_enabled
 
         # Change the state back, this time with an array response
         m.patch(
@@ -350,7 +351,7 @@ class TestDevice(unittest.TestCase):
 
         # Test the changed state
         automation.enable(True)
-        self.assertTrue(automation.is_enabled)
+        assert automation.is_enabled
 
         # Test that the response returns the wrong state
         m.patch(
@@ -362,7 +363,7 @@ class TestDevice(unittest.TestCase):
             + ']',
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             automation.enable(False)
 
         # Test that the response returns the wrong id
@@ -375,7 +376,7 @@ class TestDevice(unittest.TestCase):
             + ']',
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             automation.enable(True)
 
     def tests_automation_trigger(self, m):
@@ -403,7 +404,7 @@ class TestDevice(unittest.TestCase):
         # Get the automation and test
         # pylint: disable=W0212
         automation = self.abode.get_automation(AID_1)
-        self.assertIsNotNone(automation)
+        assert automation is not None
 
         # Set up our automation trigger reply
         set_active_url = str.replace(
@@ -412,4 +413,4 @@ class TestDevice(unittest.TestCase):
         m.post(set_active_url, text=MOCK.generic_response_ok())
 
         # Test triggering
-        self.assertTrue(automation.trigger())
+        assert automation.trigger()

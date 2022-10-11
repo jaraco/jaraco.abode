@@ -12,6 +12,7 @@ import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.devices as DEVICES
 import tests.mock.devices.door_lock as DOOR_LOCK
+import pytest
 
 
 USERNAME = 'foobar'
@@ -56,11 +57,11 @@ class TestDoorLock(unittest.TestCase):
         device = self.abode.get_device(DOOR_LOCK.DEVICE_ID)
 
         # Test our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_LOCKCLOSED)
-        self.assertFalse(device.battery_low)
-        self.assertFalse(device.no_response)
-        self.assertTrue(device.is_locked)
+        assert device is not None
+        assert device.status == CONST.STATUS_LOCKCLOSED
+        assert not device.battery_low
+        assert not device.no_response
+        assert device.is_locked
 
         # Set up our direct device get url
         device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', DOOR_LOCK.DEVICE_ID)
@@ -79,10 +80,10 @@ class TestDoorLock(unittest.TestCase):
         # Refesh device and test changes
         device.refresh()
 
-        self.assertEqual(device.status, CONST.STATUS_LOCKOPEN)
-        self.assertTrue(device.battery_low)
-        self.assertTrue(device.no_response)
-        self.assertFalse(device.is_locked)
+        assert device.status == CONST.STATUS_LOCKOPEN
+        assert device.battery_low
+        assert device.no_response
+        assert not device.is_locked
 
     @requests_mock.mock()
     def tests_lock_device_mode_changes(self, m):
@@ -109,9 +110,9 @@ class TestDoorLock(unittest.TestCase):
         device = self.abode.get_device(DOOR_LOCK.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_LOCKCLOSED)
-        self.assertTrue(device.is_locked)
+        assert device is not None
+        assert device.status == CONST.STATUS_LOCKCLOSED
+        assert device.is_locked
 
         # Set up control url response
         control_url = CONST.BASE_URL + DOOR_LOCK.CONTROL_URL
@@ -123,9 +124,9 @@ class TestDoorLock(unittest.TestCase):
         )
 
         # Change the mode to "on"
-        self.assertTrue(device.unlock())
-        self.assertEqual(device.status, CONST.STATUS_LOCKOPEN)
-        self.assertFalse(device.is_locked)
+        assert device.unlock()
+        assert device.status == CONST.STATUS_LOCKOPEN
+        assert not device.is_locked
 
         # Change response
         m.put(
@@ -136,9 +137,9 @@ class TestDoorLock(unittest.TestCase):
         )
 
         # Change the mode to "off"
-        self.assertTrue(device.lock())
-        self.assertEqual(device.status, CONST.STATUS_LOCKCLOSED)
-        self.assertTrue(device.is_locked)
+        assert device.lock()
+        assert device.status == CONST.STATUS_LOCKCLOSED
+        assert device.is_locked
 
         # Test that an invalid status response throws exception
         m.put(
@@ -148,5 +149,5 @@ class TestDoorLock(unittest.TestCase):
             ),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.unlock()

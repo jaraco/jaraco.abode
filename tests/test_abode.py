@@ -50,18 +50,18 @@ class TestAbode(unittest.TestCase):
     def tests_initialization(self):
         """Verify we can initialize abode."""
         # pylint: disable=protected-access
-        self.assertEqual(self.abode._cache[CONST.ID], USERNAME)
+        assert self.abode._cache[CONST.ID] == USERNAME
         # pylint: disable=protected-access
-        self.assertEqual(self.abode._cache[CONST.PASSWORD], PASSWORD)
+        assert self.abode._cache[CONST.PASSWORD] == PASSWORD
 
     def tests_no_credentials(self):
         """Check that we throw an exception when no username/password."""
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login()
 
         # pylint: disable=protected-access
         self.abode_no_cred._cache[CONST.ID] = USERNAME
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login()
 
     @requests_mock.mock()
@@ -73,9 +73,9 @@ class TestAbode(unittest.TestCase):
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
         # pylint: disable=protected-access
-        self.assertEqual(self.abode_no_cred._cache[CONST.ID], USERNAME)
+        assert self.abode_no_cred._cache[CONST.ID] == USERNAME
         # pylint: disable=protected-access
-        self.assertEqual(self.abode_no_cred._cache[CONST.PASSWORD], PASSWORD)
+        assert self.abode_no_cred._cache[CONST.PASSWORD] == PASSWORD
 
     @requests_mock.mock()
     def tests_manual_login_with_mfa(self, m):
@@ -86,9 +86,9 @@ class TestAbode(unittest.TestCase):
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD, mfa_code=654321)
 
         # pylint: disable=protected-access
-        self.assertEqual(self.abode_no_cred._cache[CONST.ID], USERNAME)
+        assert self.abode_no_cred._cache[CONST.ID] == USERNAME
         # pylint: disable=protected-access
-        self.assertEqual(self.abode_no_cred._cache[CONST.PASSWORD], PASSWORD)
+        assert self.abode_no_cred._cache[CONST.PASSWORD] == PASSWORD
 
     @requests_mock.mock()
     def tests_auto_login(self, m):
@@ -112,13 +112,13 @@ class TestAbode(unittest.TestCase):
         )
 
         # pylint: disable=W0212
-        self.assertEqual(abode._cache[CONST.ID], 'fizz')
-        self.assertEqual(abode._cache[CONST.PASSWORD], 'buzz')
-        self.assertEqual(abode._token, MOCK.AUTH_TOKEN)
-        self.assertEqual(abode._panel, json.loads(panel_json))
-        self.assertEqual(abode._user, json.loads(user_json))
-        self.assertIsNone(abode._devices)
-        self.assertIsNone(abode._automations)
+        assert abode._cache[CONST.ID] == 'fizz'
+        assert abode._cache[CONST.PASSWORD] == 'buzz'
+        assert abode._token == MOCK.AUTH_TOKEN
+        assert abode._panel == json.loads(panel_json)
+        assert abode._user == json.loads(user_json)
+        assert abode._devices is None
+        assert abode._automations is None
 
         abode.logout()
 
@@ -149,17 +149,17 @@ class TestAbode(unittest.TestCase):
         )
 
         # pylint: disable=W0212
-        self.assertEqual(abode._cache[CONST.ID], 'fizz')
-        self.assertEqual(abode._cache[CONST.PASSWORD], 'buzz')
-        self.assertEqual(abode._token, MOCK.AUTH_TOKEN)
-        self.assertEqual(abode._user, json.loads(user_json))
-        self.assertIsNotNone(abode._panel)
+        assert abode._cache[CONST.ID] == 'fizz'
+        assert abode._cache[CONST.PASSWORD] == 'buzz'
+        assert abode._token == MOCK.AUTH_TOKEN
+        assert abode._user == json.loads(user_json)
+        assert abode._panel is not None
 
         # Contains one device, our alarm
-        self.assertEqual(abode._devices, {'area_1': abode.get_alarm()})
+        assert abode._devices == {'area_1': abode.get_alarm()}
 
         # Contains no automations
-        self.assertEqual(abode._automations, {})
+        assert abode._automations == {}
 
         abode.logout()
 
@@ -172,7 +172,7 @@ class TestAbode(unittest.TestCase):
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
         # Check that we raise an Exception with a failed login request.
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     @requests_mock.mock()
@@ -186,7 +186,7 @@ class TestAbode(unittest.TestCase):
 
         # Check that we raise an Exception when the MFA code is required
         # but not supplied
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     @requests_mock.mock()
@@ -197,7 +197,7 @@ class TestAbode(unittest.TestCase):
         )
 
         # Check that we raise an Exception with a bad MFA code
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(
                 username=USERNAME, password=PASSWORD, mfa_code=123456
             )
@@ -212,7 +212,7 @@ class TestAbode(unittest.TestCase):
         )
 
         # Check that we raise an Exception with an unknown MFA type
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     @requests_mock.mock()
@@ -229,7 +229,7 @@ class TestAbode(unittest.TestCase):
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
         # Check that we raise an Exception with a failed logout request.
-        with self.assertRaises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(abodepy.AbodeAuthenticationException):
             self.abode_no_cred.logout()
 
     @requests_mock.mock()
@@ -244,7 +244,7 @@ class TestAbode(unittest.TestCase):
         self.abode.login()
 
         # Check that we eat the exception gracefully
-        self.assertFalse(self.abode.logout())
+        assert not self.abode.logout()
 
     @requests_mock.mock()
     def tests_full_setup(self, m):
@@ -266,26 +266,26 @@ class TestAbode(unittest.TestCase):
         original_session = self.abode._session
 
         # pylint: disable=W0212
-        self.assertEqual(self.abode._cache[CONST.ID], USERNAME)
-        self.assertEqual(self.abode._cache[CONST.PASSWORD], PASSWORD)
-        self.assertEqual(self.abode._token, auth_token)
-        self.assertEqual(self.abode._user, json.loads(user_json))
-        self.assertIsNotNone(self.abode._panel)
-        self.assertIsNotNone(self.abode.get_alarm())
-        self.assertIsNotNone(self.abode._get_session())
-        self.assertEqual(self.abode._get_session(), original_session)
-        self.assertIsNotNone(self.abode.events)
+        assert self.abode._cache[CONST.ID] == USERNAME
+        assert self.abode._cache[CONST.PASSWORD] == PASSWORD
+        assert self.abode._token == auth_token
+        assert self.abode._user == json.loads(user_json)
+        assert self.abode._panel is not None
+        assert self.abode.get_alarm() is not None
+        assert self.abode._get_session() is not None
+        assert self.abode._get_session() == original_session
+        assert self.abode.events is not None
 
         self.abode.logout()
 
         # pylint: disable=W0212
-        self.assertIsNone(self.abode._token)
-        self.assertIsNone(self.abode._panel)
-        self.assertIsNone(self.abode._user)
-        self.assertIsNone(self.abode._devices)
-        self.assertIsNone(self.abode._automations)
-        self.assertIsNotNone(self.abode._session)
-        self.assertNotEqual(self.abode._get_session(), original_session)
+        assert self.abode._token is None
+        assert self.abode._panel is None
+        assert self.abode._user is None
+        assert self.abode._devices is None
+        assert self.abode._automations is None
+        assert self.abode._session is not None
+        assert self.abode._get_session() != original_session
 
     @requests_mock.mock()
     def tests_reauthorize(self, m):
@@ -316,7 +316,7 @@ class TestAbode(unittest.TestCase):
         self.abode.get_devices()
 
         # pylint: disable=W0212
-        self.assertEqual(self.abode._token, new_token)
+        assert self.abode._token == new_token
 
     @requests_mock.mock()
     def tests_send_request_exception(self, m):
@@ -347,7 +347,7 @@ class TestAbode(unittest.TestCase):
         self.abode.get_devices()
 
         # pylint: disable=W0212
-        self.assertEqual(self.abode._token, new_token)
+        assert self.abode._token == new_token
 
     @requests_mock.mock()
     def tests_continuous_bad_auth(self, m):
@@ -356,18 +356,18 @@ class TestAbode(unittest.TestCase):
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.get(CONST.DEVICES_URL, text=MOCK.response_forbidden(), status_code=403)
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.get_devices()
 
     def tests_default_mode(self):
         """Test that the default mode fails if not of type home or away."""
         self.abode.set_default_mode(CONST.MODE_HOME)
-        self.assertEqual(self.abode.default_mode, CONST.MODE_HOME)
+        assert self.abode.default_mode == CONST.MODE_HOME
 
         self.abode.set_default_mode(CONST.MODE_AWAY)
-        self.assertEqual(self.abode.default_mode, CONST.MODE_AWAY)
+        assert self.abode.default_mode == CONST.MODE_AWAY
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_default_mode('foobar')
 
     @requests_mock.mock()
@@ -394,10 +394,10 @@ class TestAbode(unittest.TestCase):
         # Get and check devices
         # pylint: disable=W0212
         dc1a_dev = self.abode.get_device(dc1_devid)
-        self.assertEqual(json.loads(dc1a)['id'], dc1a_dev.device_id)
+        assert json.loads(dc1a)['id'] == dc1a_dev.device_id
 
         dc2a_dev = self.abode.get_device(dc2_devid)
-        self.assertEqual(json.loads(dc2a)['id'], dc2a_dev.device_id)
+        assert json.loads(dc2a)['id'] == dc2a_dev.device_id
 
         # Change device states
         dc1b = DOOR_CONTACT.device(devid=dc1_devid, status=CONST.STATUS_OFF)
@@ -413,12 +413,12 @@ class TestAbode(unittest.TestCase):
         # Future note: "if a is b" tests that the object is the same
         # Thus asserting dc1a_dev is dc1b_dev tests if they are the same object
         dc1b_dev = self.abode.get_device(dc1_devid)
-        self.assertEqual(json.loads(dc1b)['id'], dc1b_dev.device_id)
-        self.assertIs(dc1a_dev, dc1b_dev)
+        assert json.loads(dc1b)['id'] == dc1b_dev.device_id
+        assert dc1a_dev is dc1b_dev
 
         dc2b_dev = self.abode.get_device(dc2_devid)
-        self.assertEqual(json.loads(dc2b)['id'], dc2b_dev.device_id)
-        self.assertIs(dc2a_dev, dc2b_dev)
+        assert json.loads(dc2b)['id'] == dc2b_dev.device_id
+        assert dc2a_dev is dc2b_dev
 
     @requests_mock.mock()
     def tests_settings_validation(self, m):
@@ -429,7 +429,7 @@ class TestAbode(unittest.TestCase):
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
         m.get(CONST.SETTINGS_URL, text=MOCK.generic_response_ok())
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting("fliptrix", "foobar")
 
     @requests_mock.mock()
@@ -452,13 +452,13 @@ class TestAbode(unittest.TestCase):
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
 
     @requests_mock.mock()
@@ -482,11 +482,11 @@ class TestAbode(unittest.TestCase):
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
 
         # 10 seconds is invalid here
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(
                 CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
             )
@@ -514,13 +514,13 @@ class TestAbode(unittest.TestCase):
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
 
     @requests_mock.mock()
@@ -548,13 +548,13 @@ class TestAbode(unittest.TestCase):
         except abodepy.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('cache_path')
@@ -586,13 +586,13 @@ class TestAbode(unittest.TestCase):
 
         # Test that our cookies are fully realized prior to login
         # pylint: disable=W0212
-        self.assertIsNotNone(abode._cache['id'])
-        self.assertIsNotNone(abode._cache['password'])
-        self.assertIsNotNone(abode._cache['uuid'])
-        self.assertIsNotNone(abode._cache['cookies'])
+        assert abode._cache['id'] is not None
+        assert abode._cache['password'] is not None
+        assert abode._cache['uuid'] is not None
+        assert abode._cache['cookies'] is not None
 
         # Test that we now have a cookies file
-        self.assertTrue(os.path.exists(self.cache_path))
+        assert os.path.exists(self.cache_path)
 
         # Copy our current cookies file and data
         first_cookies_data = abode._cache
@@ -608,7 +608,7 @@ class TestAbode(unittest.TestCase):
         )
 
         # Test that the cookie data is the same
-        self.assertEqual(abode._cache['uuid'], first_cookies_data['uuid'])
+        assert abode._cache['uuid'] == first_cookies_data['uuid']
 
     @pytest.mark.usefixtures('cache_path')
     @requests_mock.mock()
@@ -635,9 +635,9 @@ class TestAbode(unittest.TestCase):
 
         # Test that some cache exists
         # pylint: disable=W0212
-        self.assertIsNotNone(empty_abode._cache['id'])
-        self.assertIsNotNone(empty_abode._cache['password'])
-        self.assertIsNotNone(empty_abode._cache['uuid'])
+        assert empty_abode._cache['id'] is not None
+        assert empty_abode._cache['password'] is not None
+        assert empty_abode._cache['uuid'] is not None
 
     @pytest.mark.usefixtures('cache_path')
     @requests_mock.mock()
@@ -664,6 +664,6 @@ class TestAbode(unittest.TestCase):
 
         # Test that some cache exists
         # pylint: disable=W0212
-        self.assertIsNotNone(empty_abode._cache['id'])
-        self.assertIsNotNone(empty_abode._cache['password'])
-        self.assertIsNotNone(empty_abode._cache['uuid'])
+        assert empty_abode._cache['id'] is not None
+        assert empty_abode._cache['password'] is not None
+        assert empty_abode._cache['uuid'] is not None

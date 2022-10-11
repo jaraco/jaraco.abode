@@ -12,6 +12,7 @@ import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.devices as DEVICES
 import tests.mock.devices.hue as HUE
+import pytest
 
 
 USERNAME = 'foobar'
@@ -61,18 +62,18 @@ class TestHue(unittest.TestCase):
         device = self.abode.get_device(HUE.DEVICE_ID)
 
         # Test our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertEqual(device.brightness, "0")
-        self.assertEqual(device.color, (60, 57))  # (hue, saturation)
-        self.assertEqual(device.color_temp, 6536)
-        self.assertTrue(device.has_brightness)
-        self.assertTrue(device.is_dimmable)
-        self.assertTrue(device.has_color)
-        self.assertTrue(device.is_color_capable)
-        self.assertFalse(device.battery_low)
-        self.assertFalse(device.no_response)
-        self.assertFalse(device.is_on)
+        assert device is not None
+        assert device.status == CONST.STATUS_OFF
+        assert device.brightness == "0"
+        assert device.color == (60, 57)  # (hue, saturation)
+        assert device.color_temp == 6536
+        assert device.has_brightness
+        assert device.is_dimmable
+        assert device.has_color
+        assert device.is_color_capable
+        assert not device.battery_low
+        assert not device.no_response
+        assert not device.is_on
 
         # Set up our direct device get url
         device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', HUE.DEVICE_ID)
@@ -96,16 +97,16 @@ class TestHue(unittest.TestCase):
         # Refesh device and test changes
         device.refresh()
 
-        self.assertEqual(device.status, CONST.STATUS_ON)
-        self.assertEqual(device.color, (104, 22))  # (hue, saturation)
-        self.assertEqual(device.color_temp, 4000)
-        self.assertTrue(device.has_brightness)
-        self.assertTrue(device.is_dimmable)
-        self.assertFalse(device.has_color)
-        self.assertTrue(device.is_color_capable)
-        self.assertTrue(device.battery_low)
-        self.assertTrue(device.no_response)
-        self.assertTrue(device.is_on)
+        assert device.status == CONST.STATUS_ON
+        assert device.color == (104, 22)  # (hue, saturation)
+        assert device.color_temp == 4000
+        assert device.has_brightness
+        assert device.is_dimmable
+        assert not device.has_color
+        assert device.is_color_capable
+        assert device.battery_low
+        assert device.no_response
+        assert device.is_on
 
     @requests_mock.mock()
     def tests_hue_status_changes(self, m):
@@ -137,9 +138,9 @@ class TestHue(unittest.TestCase):
         device = self.abode.get_device(HUE.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
+        assert device is not None
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
 
         # Set up control url response
         control_url = CONST.BASE_URL + HUE.CONTROL_URL
@@ -151,9 +152,9 @@ class TestHue(unittest.TestCase):
         )
 
         # Change the mode to "on"
-        self.assertTrue(device.switch_on())
-        self.assertEqual(device.status, CONST.STATUS_ON)
-        self.assertTrue(device.is_on)
+        assert device.switch_on()
+        assert device.status == CONST.STATUS_ON
+        assert device.is_on
 
         # Change response
         m.put(
@@ -164,9 +165,9 @@ class TestHue(unittest.TestCase):
         )
 
         # Change the mode to "off"
-        self.assertTrue(device.switch_off())
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
+        assert device.switch_off()
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
 
         # Test that an invalid status response throws exception
         m.put(
@@ -176,7 +177,7 @@ class TestHue(unittest.TestCase):
             ),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.switch_on()
 
     @requests_mock.mock()
@@ -209,10 +210,10 @@ class TestHue(unittest.TestCase):
         device = self.abode.get_device(HUE.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
-        self.assertEqual(device.color_temp, 6536)
+        assert device is not None
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
+        assert device.color_temp == 6536
 
         # Set up integrations url response
         m.post(
@@ -221,8 +222,8 @@ class TestHue(unittest.TestCase):
         )
 
         # Change the color temp
-        self.assertTrue(device.set_color_temp(5554))
-        self.assertEqual(device.color_temp, 5554)
+        assert device.set_color_temp(5554)
+        assert device.color_temp == 5554
 
         # Change response
         m.post(
@@ -231,10 +232,10 @@ class TestHue(unittest.TestCase):
         )
 
         # Change the color to something that mismatches
-        self.assertTrue(device.set_color_temp(4436))
+        assert device.set_color_temp(4436)
 
         # Assert that the color is set to the response color
-        self.assertEqual(device.color_temp, 4434)
+        assert device.color_temp == 4434
 
         # Test that an invalid ID in response throws exception
         m.post(
@@ -244,7 +245,7 @@ class TestHue(unittest.TestCase):
             ),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.set_color_temp(4434)
 
     @requests_mock.mock()
@@ -277,10 +278,10 @@ class TestHue(unittest.TestCase):
         device = self.abode.get_device(HUE.DEVICE_ID)
 
         # Test that we have our device
-        self.assertIsNotNone(device)
-        self.assertEqual(device.status, CONST.STATUS_OFF)
-        self.assertFalse(device.is_on)
-        self.assertEqual(device.color, (60, 57))  # (hue, saturation)
+        assert device is not None
+        assert device.status == CONST.STATUS_OFF
+        assert not device.is_on
+        assert device.color == (60, 57)  # (hue, saturation)
 
         # Set up integrations url response
         m.post(
@@ -289,8 +290,8 @@ class TestHue(unittest.TestCase):
         )
 
         # Change the color temp
-        self.assertTrue(device.set_color((70, 80)))
-        self.assertEqual(device.color, (70, 80))  # (hue, saturation)
+        assert device.set_color((70, 80))
+        assert device.color == (70, 80)  # (hue, saturation)
 
         # Change response
         m.post(
@@ -299,10 +300,10 @@ class TestHue(unittest.TestCase):
         )
 
         # Change the color to something that mismatches
-        self.assertTrue(device.set_color((44, 44)))
+        assert device.set_color((44, 44))
 
         # Assert that the color is set to the response color
-        self.assertEqual(device.color, (55, 85))  # (hue, saturation)
+        assert device.color == (55, 85)  # (hue, saturation)
 
         # Test that an invalid ID in response throws exception
         m.post(
@@ -312,5 +313,5 @@ class TestHue(unittest.TestCase):
             ),
         )
 
-        with self.assertRaises(abodepy.AbodeException):
+        with pytest.raises(abodepy.AbodeException):
             device.set_color((44, 44))
