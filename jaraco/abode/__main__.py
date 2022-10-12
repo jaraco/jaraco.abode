@@ -249,38 +249,83 @@ def _log_errors_and_logout(abode):
         abode.logout()
 
 
-def main():
-    """Execute command line helper."""
-    args = _check_args(get_arguments())
+def _device_print(dev, append=''):
+    _LOGGER.info("%s%s", dev.desc, append)
 
-    setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
-    with _log_errors_and_logout(_create_abode_instance()) as abode:
-        if args.mfa:
-            abode.login(mfa_code=args.mfa)
-            # fetch devices from Abode
-            abode.get_devices()
+def _device_callback(dev):
+    _device_print(dev, ", At: " + time.strftime("%Y-%m-%d %H:%M:%S"))
 
-        # Output current mode.
-        if args.mode:
-            _LOGGER.info("Current alarm mode: %s", abode.get_alarm().mode)
 
-        # Change system mode.
-        if args.arm:
-            if abode.get_alarm().set_mode(args.arm):
-                _LOGGER.info("Alarm mode changed to: %s", args.arm)
-            else:
-                _LOGGER.warning("Failed to change alarm mode to: %s", args.arm)
+def _timeline_callback(tl_json):
+    event_code = int(tl_json['event_code'])
+    if 5100 <= event_code <= 5199:
+        # Ignore device changes
+        return
 
-        # Set setting
-        for setting in args.set or []:
+    _LOGGER.info(
+        "%s - %s at %s %s",
+        tl_json['event_name'],
+        tl_json['event_type'],
+        tl_json['date'],
+        tl_json['time'],
+    )
+
+
+class Dispatcher:
+    def __init__(self, abode, args):
+        self.abode = abode
+        self.args = args
+
+    def dispatch(self):
+        self.login()
+        self.output_current_mode()
+        self.change_system_mode()
+        self.set_setting()
+        self.switch_on()
+        self.switch_off()
+        self.lock()
+        self.unlock()
+        self.output_json()
+        self.print_all_automations()
+        self.enable_automation()
+        self.disable_automation()
+        self.trigger_automation()
+        self.trigger_image_capture()
+        self.save_camera_image()
+        self.print_all_devices()
+        self.print_specific_devices()
+        self.start_device_change_listener()
+
+    def login(self):
+        if not self.args.mfa:
+            return
+        self.abode.login(mfa_code=self.args.mfa)
+        # fetch devices from Abode
+        self.abode.get_devices()
+
+    def output_current_mode(self):
+        if not self.args.mode:
+            return
+        _LOGGER.info("Current alarm mode: %s", self.abode.get_alarm().mode)
+
+    def change_system_mode(self):
+        if not self.args.arm:
+            return
+        if self.abode.get_alarm().set_mode(self.args.arm):
+            _LOGGER.info("Alarm mode changed to: %s", self.args.arm)
+        else:
+            _LOGGER.warning("Failed to change alarm mode to: %s", self.args.arm)
+
+    def set_setting(self):
+        for setting in self.args.set or []:
             keyval = setting.split("=")
-            if abode.set_setting(keyval[0], keyval[1]):
+            if self.abode.set_setting(keyval[0], keyval[1]):
                 _LOGGER.info("Setting %s changed to %s", keyval[0], keyval[1])
 
-        # Switch on
-        for device_id in args.on or []:
-            device = abode.get_device(device_id)
+    def switch_on(self):
+        for device_id in self.args.on or []:
+            device = self.abode.get_device(device_id)
 
             if device:
                 if device.switch_on():
@@ -288,9 +333,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Switch off
-        for device_id in args.off or []:
-            device = abode.get_device(device_id)
+    def switch_off(self):
+        for device_id in self.args.off or []:
+            device = self.abode.get_device(device_id)
 
             if device:
                 if device.switch_off():
@@ -298,9 +343,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Lock
-        for device_id in args.lock or []:
-            device = abode.get_device(device_id)
+    def lock(self):
+        for device_id in self.args.lock or []:
+            device = self.abode.get_device(device_id)
 
             if device:
                 if device.lock():
@@ -308,9 +353,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Unlock
-        for device_id in args.unlock or []:
-            device = abode.get_device(device_id)
+    def unlock(self):
+        for device_id in self.args.unlock or []:
+            device = self.abode.get_device(device_id)
 
             if device:
                 if device.unlock():
@@ -318,9 +363,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Output Json
-        for device_id in args.json or []:
-            device = abode.get_device(device_id)
+    def output_json(self):
+        for device_id in self.args.json or []:
+            device = self.abode.get_device(device_id)
 
             if device:
                 # pylint: disable=protected-access
@@ -335,18 +380,15 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Print
-        def _device_print(dev, append=''):
-            _LOGGER.info("%s%s", dev.desc, append)
+    def print_all_automations(self):
+        if not self.args.automations:
+            return
+        for automation in self.abode.get_automations():
+            _device_print(automation)
 
-        # Print out all automations
-        if args.automations:
-            for automation in abode.get_automations():
-                _device_print(automation)
-
-        # Enable automation
-        for automation_id in args.activate or []:
-            automation = abode.get_automation(automation_id)
+    def enable_automation(self):
+        for automation_id in self.args.activate or []:
+            automation = self.abode.get_automation(automation_id)
 
             if automation:
                 if automation.enable(True):
@@ -354,9 +396,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
-        # Disable automation
-        for automation_id in args.deactivate or []:
-            automation = abode.get_automation(automation_id)
+    def disable_automation(self):
+        for automation_id in self.args.deactivate or []:
+            automation = self.abode.get_automation(automation_id)
 
             if automation:
                 if automation.enable(False):
@@ -364,9 +406,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
-        # Trigger automation
-        for automation_id in args.trigger or []:
-            automation = abode.get_automation(automation_id)
+    def trigger_automation(self):
+        for automation_id in self.args.trigger or []:
+            automation = self.abode.get_automation(automation_id)
 
             if automation:
                 if automation.trigger():
@@ -374,9 +416,9 @@ def main():
             else:
                 _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
-        # Trigger image capture
-        for device_id in args.capture or []:
-            device = abode.get_device(device_id)
+    def trigger_image_capture(self):
+        for device_id in self.args.capture or []:
+            device = self.abode.get_device(device_id)
 
             if device:
                 if device.capture():
@@ -388,10 +430,10 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Save camera image
-        for keyval in args.image or []:
+    def save_camera_image(self):
+        for keyval in self.args.image or []:
             devloc = keyval.split("=")
-            device = abode.get_device(devloc[0])
+            device = self.abode.get_device(devloc[0])
 
             if device:
                 try:
@@ -404,60 +446,58 @@ def main():
             else:
                 _LOGGER.warning("Could not find device with id: %s", devloc[0])
 
-        # Print out all devices.
-        if args.devices:
-            for device in abode.get_devices():
+    def print_all_devices(self):
+        if not self.args.devices:
+            return
+        for device in self.abode.get_devices():
+            _device_print(device)
+
+    def print_specific_devices(self):
+        if not self.args.device:
+            return
+        for device_id in self.args.device:
+            device = self.abode.get_device(device_id)
+
+            if device:
                 _device_print(device)
 
-        def _device_callback(dev):
-            _device_print(dev, ", At: " + time.strftime("%Y-%m-%d %H:%M:%S"))
+                # Register the specific devices if we decide to listen.
+                self.abode.events.add_device_callback(device_id, _device_callback)
+            else:
+                _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        def _timeline_callback(tl_json):
-            event_code = int(tl_json['event_code'])
-            if 5100 <= event_code <= 5199:
-                # Ignore device changes
-                return
+    def start_device_change_listener(self):
+        if not self.args.listen:
+            return
+        # If no devices were specified then listen to all devices.
+        if self.args.device is None:
+            _LOGGER.info("Adding all devices to listener...")
 
-            _LOGGER.info(
-                "%s - %s at %s %s",
-                tl_json['event_name'],
-                tl_json['event_type'],
-                tl_json['date'],
-                tl_json['time'],
-            )
+            for device in self.abode.get_devices():
+                self.abode.events.add_device_callback(
+                    device.device_id, _device_callback
+                )
 
-        # Print out specific devices by device id.
-        if args.device:
-            for device_id in args.device:
-                device = abode.get_device(device_id)
+        self.abode.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
 
-                if device:
-                    _device_print(device)
+        _LOGGER.info("Listening for device and timeline updates...")
+        self.abode.events.start()
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            self.abode.events.stop()
+            _LOGGER.info("Device update listening stopped.")
 
-                    # Register the specific devices if we decide to listen.
-                    abode.events.add_device_callback(device_id, _device_callback)
-                else:
-                    _LOGGER.warning("Could not find device with id: %s", device_id)
 
-        # Start device change listener.
-        if args.listen:
-            # If no devices were specified then we listen to all devices.
-            if args.device is None:
-                _LOGGER.info("Adding all devices to listener...")
+def main():
+    """Execute command line helper."""
+    args = _check_args(get_arguments())
 
-                for device in abode.get_devices():
-                    abode.events.add_device_callback(device.device_id, _device_callback)
+    setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
-            abode.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
-
-            _LOGGER.info("Listening for device and timeline updates...")
-            abode.events.start()
-            try:
-                while True:
-                    time.sleep(1)
-            except KeyboardInterrupt:
-                abode.events.stop()
-                _LOGGER.info("Device update listening stopped.")
+    with _log_errors_and_logout(_create_abode_instance()) as abode:
+        Dispatcher(abode, args).dispatch()
 
 
 if __name__ == '__main__':
