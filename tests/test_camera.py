@@ -29,8 +29,6 @@ def set_cam_type(device_type):
     if device_type == CONST.DEVICE_MOTION_CAMERA:
         return IRCAMERA
 
-    return None
-
 
 @requests_mock.Mocker()
 class TestCamera(unittest.TestCase):

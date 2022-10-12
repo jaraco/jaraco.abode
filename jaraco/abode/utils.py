@@ -22,8 +22,6 @@ def load_cache(filename):
         except (pickle.UnpicklingError, ValueError):
             _LOGGER.warning("Corrupted pickle file: %s", filename)
 
-        return None
-
 
 def gen_uuid():
     """Generate a new Abode UUID."""

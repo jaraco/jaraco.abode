@@ -559,5 +559,3 @@ def new_device(device_json, abode):
 
     if generic_type == CONST.TYPE_UNKNOWN_SENSOR:
         return _new_sensor(device_json, abode)
-
-    return None

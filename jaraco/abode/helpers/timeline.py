@@ -70,8 +70,6 @@ def map_event_code(event_code):  # noqa: C901
     if 6000 <= event_code <= 6100:
         return ARM_FAULT_GROUP
 
-    return None
-
 
 # Specific timeline events by event code.
 
