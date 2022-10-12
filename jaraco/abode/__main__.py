@@ -5,6 +5,7 @@ import argparse
 import contextlib
 
 from . import Abode
+from .helpers import constants as CONST
 from .helpers import timeline as TIMELINE
 from .exceptions import AbodeException
 
@@ -61,7 +62,7 @@ def get_arguments():
         '--cache',
         metavar='pickle_file',
         help='Create/update/use a pickle cache for the username and password.',
-        required=False,
+        default=CONST.CACHE_PATH,
     )
 
     parser.add_argument(
@@ -216,27 +217,12 @@ def get_arguments():
 
 
 def _create_abode_instance(args):
-    if args.cache and args.username and args.password:
-        return Abode(
-            username=args.username,
-            password=args.password,
-            get_devices=args.mfa is None,
-            cache_path=args.cache,
-        )
-    elif args.cache and not (not args.username or not args.password):
-        return Abode(get_devices=args.mfa is None, cache_path=args.cache)
     return Abode(
         username=args.username,
         password=args.password,
         get_devices=args.mfa is None,
+        cache_path=args.cache,
     )
-
-
-def _check_args(args):
-    if not args.cache and (not args.username or not args.password):
-        raise Exception("Please supply a cache or username and password.")
-
-    return args
 
 
 @contextlib.contextmanager
@@ -492,7 +478,7 @@ class Dispatcher:
 
 def main():
     """Execute command line helper."""
-    args = _check_args(get_arguments())
+    args = get_arguments()
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
