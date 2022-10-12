@@ -7,7 +7,7 @@ Welcome to |project| documentation!
    history
 
 
-.. automodule:: abodepy
+.. automodule:: jaraco.abode
     :members:
     :undoc-members:
     :show-inheritance:
