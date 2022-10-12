@@ -1,3 +1,8 @@
+v0.5.0
+======
+
+Added ``abode`` command, superseding ``abodepy``.
+
 v0.4.0
 ======
 
