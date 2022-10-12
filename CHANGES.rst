@@ -1,3 +1,8 @@
+v0.4.0
+======
+
+Moved modules to ``jaraco.abode``.
+
 v0.3.0
 ======
 
