@@ -1,6 +1,6 @@
 """Mock Abode Panel Response."""
 
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 
 def get_response_ok(

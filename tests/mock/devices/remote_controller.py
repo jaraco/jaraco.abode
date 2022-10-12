@@ -1,5 +1,5 @@
 """Mock Abode Remote Controller (Keyfob) Device."""
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 DEVICE_ID = 'RF:0000416bb'
 

@@ -1,5 +1,5 @@
 """Mock Abode Power Switch Sensor Device."""
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 DEVICE_ID = 'RF:00000008'
 

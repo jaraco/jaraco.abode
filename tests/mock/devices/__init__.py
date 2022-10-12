@@ -2,7 +2,7 @@
 Mock devices that mimic actual data from Abode servers.
 
 This file should be updated any time the Abode server responses
-change so we can test that abodepy can still communicate.
+change to confirm this library can still communicate.
 """
 
 EMPTY_DEVICE_RESPONSE = '[]'

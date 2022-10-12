@@ -1,5 +1,5 @@
 """Mock Abode PIR Device."""
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 DEVICE_ID = 'ZB:00000055'
 

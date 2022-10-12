@@ -6,7 +6,7 @@ includes a few required device fields. This is so that we can easily translate
 the panel/alarm itself into a Home Assistant device.
 """
 import json
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 import tests.mock.panel as PANEL
 

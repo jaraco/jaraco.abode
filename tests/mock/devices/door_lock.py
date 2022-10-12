@@ -1,5 +1,5 @@
 """Mock Abode Door Lock Device."""
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 DEVICE_ID = 'ZW:0000006'
 CONTROL_URL = 'api/v1/control/lock/' + DEVICE_ID

@@ -4,10 +4,10 @@ import unittest
 
 import requests_mock
 
-import abodepy
-from abodepy.exceptions import AbodeException
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.errors as ERROR
+import jaraco.abode
+from jaraco.abode.exceptions import AbodeException
+import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.helpers.errors as ERROR
 import tests.mock as MOCK
 import tests.mock.devices.ipcam as IPCAM
 import tests.mock.devices.ir_camera as IRCAMERA
@@ -38,7 +38,7 @@ class TestCamera(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(
+        self.abode = jaraco.abode.Abode(
             username=USERNAME, password=PASSWORD, disable_cache=True
         )
 
@@ -210,7 +210,7 @@ class TestCamera(unittest.TestCase):
             file_path = CONST.BASE_URL + cam_type.FILE_PATH
             m.head(file_path, status_code=302)
 
-            with pytest.raises(abodepy.AbodeException):
+            with pytest.raises(jaraco.abode.AbodeException):
                 device.refresh_image()
 
             # Test that a bad file_path response code results in an exception
@@ -221,7 +221,7 @@ class TestCamera(unittest.TestCase):
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
 
-            with pytest.raises(abodepy.AbodeException):
+            with pytest.raises(jaraco.abode.AbodeException):
                 device.refresh_image()
 
             # Test that an an empty timeline event throws exception
@@ -233,7 +233,7 @@ class TestCamera(unittest.TestCase):
                 + "]",
             )
 
-            with pytest.raises(abodepy.AbodeException):
+            with pytest.raises(jaraco.abode.AbodeException):
                 device.refresh_image()
 
             # Test that an unexpected timeline event throws exception
@@ -245,7 +245,7 @@ class TestCamera(unittest.TestCase):
                 + "]",
             )
 
-            with pytest.raises(abodepy.AbodeException):
+            with pytest.raises(jaraco.abode.AbodeException):
                 device.refresh_image()
 
     def tests_camera_no_image_update(self, m):
@@ -324,7 +324,7 @@ class TestCamera(unittest.TestCase):
 
             # Test that bad response returns False
             m.get(cam_type.LOCATION_HEADER, status_code=400)
-            with pytest.raises(abodepy.AbodeException):
+            with pytest.raises(jaraco.abode.AbodeException):
                 device.image_to_file(path, get_image=True)
 
             # Test that the image fails to update returns False
@@ -358,5 +358,5 @@ class TestCamera(unittest.TestCase):
         assert device.privacy_mode(False)
 
         # Test that an invalid privacy response throws exception
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device.privacy_mode(True)

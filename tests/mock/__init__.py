@@ -2,7 +2,7 @@
 Mock responses that mimic actual data from Abode servers.
 
 This file should be updated any time the Abode server responses
-change so we can test that abodepy can still communicate.
+change to confirm that this library can still communicate.
 """
 
 AUTH_TOKEN = 'web-1eb04ba2236d85f49d4b9b4bb91665f2'

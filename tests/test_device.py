@@ -4,16 +4,16 @@ import unittest
 
 import requests_mock
 
-import abodepy
+import jaraco.abode
 
-from abodepy.devices import AbodeDevice
-from abodepy.devices.alarm import AbodeAlarm
-from abodepy.devices.binary_sensor import AbodeBinarySensor
-from abodepy.devices.cover import AbodeCover
-from abodepy.devices.light import AbodeLight
-from abodepy.devices.lock import AbodeLock
-from abodepy.devices.switch import AbodeSwitch
-import abodepy.helpers.constants as CONST
+from jaraco.abode.devices import AbodeDevice
+from jaraco.abode.devices.alarm import AbodeAlarm
+from jaraco.abode.devices.binary_sensor import AbodeBinarySensor
+from jaraco.abode.devices.cover import AbodeCover
+from jaraco.abode.devices.light import AbodeLight
+from jaraco.abode.devices.lock import AbodeLock
+from jaraco.abode.devices.switch import AbodeSwitch
+import jaraco.abode.helpers.constants as CONST
 import tests.mock.devices as DEVICES
 import tests.mock.devices.door_contact as DOOR_CONTACT
 import tests.mock.devices.door_lock as DOOR_LOCK
@@ -45,7 +45,7 @@ class TestDevice(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(
+        self.abode = jaraco.abode.Abode(
             username=USERNAME, password=PASSWORD, disable_cache=True
         )
 
@@ -66,17 +66,17 @@ class TestDevice(unittest.TestCase):
 
         device_json = json.loads(device_text)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device_json['type_tag'] = ""
-            abodepy.new_device(device_json, self.abode)
+            jaraco.abode.new_device(device_json, self.abode)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device_json['type_tag'] = None
-            abodepy.new_device(device_json, self.abode)
+            jaraco.abode.new_device(device_json, self.abode)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             del device_json['type_tag']
-            abodepy.new_device(device_json, self.abode)
+            jaraco.abode.new_device(device_json, self.abode)
 
     def tests_device_auto_naming(self):
         """Check the generic Abode device creates a name."""
@@ -92,17 +92,17 @@ class TestDevice(unittest.TestCase):
         device_json = json.loads(device_text)
 
         device_json['name'] = ""
-        device = abodepy.new_device(device_json, self.abode)
+        device = jaraco.abode.new_device(device_json, self.abode)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
         device_json['name'] = None
-        device = abodepy.new_device(device_json, self.abode)
+        device = jaraco.abode.new_device(device_json, self.abode)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
         del device_json['name']
-        device = abodepy.new_device(device_json, self.abode)
+        device = jaraco.abode.new_device(device_json, self.abode)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
@@ -387,7 +387,7 @@ class TestDevice(unittest.TestCase):
             ),
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device.switch_on()
 
         # Test that an invalid status in response throws exception
@@ -398,7 +398,7 @@ class TestDevice(unittest.TestCase):
             ),
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device.switch_on()
 
     @requests_mock.mock()
@@ -462,7 +462,7 @@ class TestDevice(unittest.TestCase):
             text=DEVICES.level_put_response_ok(devid='ZW:deadbeef', level='25'),
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device.set_level(25)
 
         # Test that an invalid level in response throws exception
@@ -471,7 +471,7 @@ class TestDevice(unittest.TestCase):
             text=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='98'),
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             device.set_level('28')
 
     @requests_mock.mock()

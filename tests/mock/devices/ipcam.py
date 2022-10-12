@@ -1,5 +1,5 @@
 """Mock Abode IP Camera Device."""
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 DEVICE_ID = 'ZB:00000305'
 CONTROL_URL = 'api/v1/cams/' + DEVICE_ID + '/record'

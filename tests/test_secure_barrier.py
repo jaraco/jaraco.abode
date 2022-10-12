@@ -3,8 +3,8 @@ import unittest
 
 import requests_mock
 
-import abodepy
-import abodepy.helpers.constants as CONST
+import jaraco.abode
+import jaraco.abode.helpers.constants as CONST
 
 import tests.mock.login as LOGIN
 import tests.mock.oauth_claims as OAUTH_CLAIMS
@@ -23,7 +23,7 @@ class TestSecureBarrier(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(
+        self.abode = jaraco.abode.Abode(
             username=USERNAME, password=PASSWORD, disable_cache=True
         )
 

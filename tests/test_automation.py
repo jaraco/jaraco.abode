@@ -4,8 +4,8 @@ import unittest
 
 import requests_mock
 
-import abodepy
-import abodepy.helpers.constants as CONST
+import jaraco.abode
+import jaraco.abode.helpers.constants as CONST
 
 import tests.mock as MOCK
 import tests.mock.login as LOGIN
@@ -29,7 +29,7 @@ class TestDevice(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(
+        self.abode = jaraco.abode.Abode(
             username=USERNAME, password=PASSWORD, disable_cache=True
         )
 
@@ -153,7 +153,7 @@ class TestDevice(unittest.TestCase):
 
         m.get(automation_id_url, text=automation_text_changed)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             automation.refresh()
 
     def tests_multiple_automations(self, m):
@@ -361,7 +361,7 @@ class TestDevice(unittest.TestCase):
             + ']',
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             automation.enable(False)
 
         # Test that the response returns the wrong id
@@ -374,7 +374,7 @@ class TestDevice(unittest.TestCase):
             + ']',
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             automation.enable(True)
 
     def tests_automation_trigger(self, m):

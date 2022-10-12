@@ -5,10 +5,10 @@ from unittest.mock import call, Mock
 
 import requests_mock
 
-import abodepy
-import abodepy.helpers.constants as CONST
-import abodepy.helpers.timeline as TIMELINE
-from abodepy.devices.binary_sensor import AbodeBinarySensor
+import jaraco.abode
+import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.helpers.timeline as TIMELINE
+from jaraco.abode.devices.binary_sensor import AbodeBinarySensor
 
 import tests.mock.login as LOGIN
 import tests.mock.oauth_claims as OAUTH_CLAIMS
@@ -29,7 +29,7 @@ class TestEventController(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(
+        self.abode = jaraco.abode.Abode(
             username=USERNAME, password=PASSWORD, disable_cache=True
         )
 
@@ -183,7 +183,7 @@ class TestEventController(unittest.TestCase):
         # Create a fake device and attempt to register that
         fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             events.add_device_callback(fake_device, callback)
 
     @requests_mock.mock()
@@ -221,7 +221,7 @@ class TestEventController(unittest.TestCase):
         # Create a fake device and attempt to unregister that
         fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             events.remove_all_device_callbacks(fake_device)
 
     def tests_event_registration(self):
@@ -240,7 +240,7 @@ class TestEventController(unittest.TestCase):
         assert not events.add_event_callback(None, callback)
 
         # Test that an invalid event throws exception
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             events.add_event_callback("lol", callback)
 
     def tests_timeline_registration(self):
@@ -259,11 +259,11 @@ class TestEventController(unittest.TestCase):
         assert not events.add_timeline_callback(None, callback)
 
         # Test that an invalid timeline event string throws exception
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             events.add_timeline_callback("lol", callback)
 
         # Test that an invalid timeline event dict throws exception
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             events.add_timeline_callback({"lol": "lol"}, callback)
 
     @requests_mock.mock()

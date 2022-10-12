@@ -1,5 +1,5 @@
 """Mock Non-Existent Device."""
-import abodepy.helpers.constants as CONST
+import jaraco.abode.helpers.constants as CONST
 
 DEVICE_ID = 'RF:deadbeef'
 

@@ -9,8 +9,8 @@ import json
 import pytest
 import requests
 
-import abodepy
-import abodepy.helpers.constants as CONST
+import jaraco.abode
+import jaraco.abode.helpers.constants as CONST
 
 import tests.mock as MOCK
 import tests.mock.login as LOGIN
@@ -33,8 +33,10 @@ def cache_path(tmp_path, request):
 @pytest.fixture(autouse=True)
 def abode_objects(request):
     self = request.instance
-    self.abode_no_cred = abodepy.Abode(disable_cache=True)
-    self.abode = abodepy.Abode(username=USERNAME, password=PASSWORD, disable_cache=True)
+    self.abode_no_cred = jaraco.abode.Abode(disable_cache=True)
+    self.abode = jaraco.abode.Abode(
+        username=USERNAME, password=PASSWORD, disable_cache=True
+    )
 
 
 @pytest.fixture
@@ -43,7 +45,7 @@ def m(requests_mock):
 
 
 class TestAbode:
-    """Test the Abode class in abodepy."""
+    """Test the Abode class."""
 
     def tests_initialization(self):
         """Verify we can initialize abode."""
@@ -54,12 +56,12 @@ class TestAbode:
 
     def tests_no_credentials(self):
         """Check that we throw an exception when no username/password."""
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login()
 
         # pylint: disable=protected-access
         self.abode_no_cred._cache[CONST.ID] = USERNAME
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login()
 
     def tests_manual_login(self, m):
@@ -98,7 +100,7 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=panel_json)
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
 
-        abode = abodepy.Abode(
+        abode = jaraco.abode.Abode(
             username='fizz',
             password='buzz',
             auto_login=True,
@@ -133,7 +135,7 @@ class TestAbode:
         m.get(CONST.AUTOMATION_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
 
-        abode = abodepy.Abode(
+        abode = jaraco.abode.Abode(
             username='fizz',
             password='buzz',
             auto_login=False,
@@ -165,7 +167,7 @@ class TestAbode:
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
         # Check that we raise an Exception with a failed login request.
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_login_mfa_required(self, m):
@@ -178,7 +180,7 @@ class TestAbode:
 
         # Check that we raise an Exception when the MFA code is required
         # but not supplied
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_login_bad_mfa_code(self, m):
@@ -188,7 +190,7 @@ class TestAbode:
         )
 
         # Check that we raise an Exception with a bad MFA code
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login(
                 username=USERNAME, password=PASSWORD, mfa_code=123456
             )
@@ -202,7 +204,7 @@ class TestAbode:
         )
 
         # Check that we raise an Exception with an unknown MFA type
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_logout_failure(self, m):
@@ -218,7 +220,7 @@ class TestAbode:
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
         # Check that we raise an Exception with a failed logout request.
-        with pytest.raises(abodepy.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.logout()
 
     def tests_logout_exception(self, m):
@@ -340,7 +342,7 @@ class TestAbode:
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
         m.get(CONST.DEVICES_URL, text=MOCK.response_forbidden(), status_code=403)
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.get_devices()
 
     def tests_default_mode(self):
@@ -351,7 +353,7 @@ class TestAbode:
         self.abode.set_default_mode(CONST.MODE_AWAY)
         assert self.abode.default_mode == CONST.MODE_AWAY
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_default_mode('foobar')
 
     def test_all_device_refresh(self, m):
@@ -411,7 +413,7 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
         m.get(CONST.SETTINGS_URL, text=MOCK.generic_response_ok())
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting("fliptrix", "foobar")
 
     def tests_general_settings(self, m):
@@ -430,16 +432,16 @@ class TestAbode:
             self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
 
             self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
-        except abodepy.AbodeException:
+        except jaraco.abode.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
 
     def tests_area_settings(self, m):
@@ -459,14 +461,14 @@ class TestAbode:
                 CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
             )
 
-        except abodepy.AbodeException:
+        except jaraco.abode.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
 
         # 10 seconds is invalid here
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(
                 CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
             )
@@ -490,16 +492,16 @@ class TestAbode:
                 CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
             )
 
-        except abodepy.AbodeException:
+        except jaraco.abode.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
 
     def tests_siren_settings(self, m):
@@ -523,16 +525,16 @@ class TestAbode:
                 CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE
             )
 
-        except abodepy.AbodeException:
+        except jaraco.abode.AbodeException:
             self.fail("set_setting() raised AbodeException unexpectedly")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('cache_path')
@@ -545,7 +547,7 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
 
         # Create abode
-        abode = abodepy.Abode(
+        abode = jaraco.abode.Abode(
             username='fizz',
             password='buzz',
             auto_login=False,
@@ -575,7 +577,7 @@ class TestAbode:
         first_cookies_data = abode._cache
 
         # New abode instance reads in old data
-        abode = abodepy.Abode(
+        abode = jaraco.abode.Abode(
             username='fizz',
             password='buzz',
             auto_login=False,
@@ -600,7 +602,7 @@ class TestAbode:
         self.cache_path.write_text('')
 
         # Cookies are created
-        empty_abode = abodepy.Abode(
+        empty_abode = jaraco.abode.Abode(
             username='fizz',
             password='buzz',
             auto_login=True,
@@ -628,7 +630,7 @@ class TestAbode:
         self.cache_path.write_text('Invalid file goes here')
 
         # Cookies are created
-        empty_abode = abodepy.Abode(
+        empty_abode = jaraco.abode.Abode(
             username='fizz',
             password='buzz',
             auto_login=True,

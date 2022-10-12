@@ -3,8 +3,8 @@ import unittest
 
 import requests_mock
 
-import abodepy
-import abodepy.helpers.constants as CONST
+import jaraco.abode
+import jaraco.abode.helpers.constants as CONST
 
 import tests.mock.login as LOGIN
 import tests.mock.oauth_claims as OAUTH_CLAIMS
@@ -24,7 +24,7 @@ class TestAlarm(unittest.TestCase):
 
     def setUp(self):
         """Set up Abode module."""
-        self.abode = abodepy.Abode(
+        self.abode = jaraco.abode.Abode(
             username=USERNAME, password=PASSWORD, disable_cache=True
         )
 
@@ -206,11 +206,11 @@ class TestAlarm(unittest.TestCase):
         assert alarm.is_away
 
         # Test that no mode throws exception
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             alarm.set_mode(mode=None)
 
         # Test that an invalid mode throws exception
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             alarm.set_mode('chestnuts')
 
         # Test that an invalid mode change response throws exception
@@ -219,7 +219,7 @@ class TestAlarm(unittest.TestCase):
             text=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             alarm.set_mode(CONST.MODE_HOME)
 
         # Test that an invalid area in mode change response throws exception
@@ -228,5 +228,5 @@ class TestAlarm(unittest.TestCase):
             text=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
         )
 
-        with pytest.raises(abodepy.AbodeException):
+        with pytest.raises(jaraco.abode.AbodeException):
             alarm.set_mode(CONST.MODE_HOME)
