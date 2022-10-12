@@ -232,26 +232,27 @@ def _create_abode_instance(args):
     )
 
 
+def _check_args(args):
+    if not args.cache and (not args.username or not args.password):
+        raise Exception("Please supply a cache or username and password.")
+
+    return args
+
+
 def main():
     """Execute command line helper."""
-    args = get_arguments()
+    args = _check_args(get_arguments())
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
     abode = None
 
-    if not args.cache:
-        if not args.username or not args.password:
-            raise Exception("Please supply a cache or username and password.")
-
     try:
         abode = _create_abode_instance()
 
-        # Since the MFA code is very time sensitive, if the user has provided
-        # one we should use it to log in as soon as possible
         if args.mfa:
             abode.login(mfa_code=args.mfa)
-            # Now we can fetch devices from Abode
+            # fetch devices from Abode
             abode.get_devices()
 
         # Output current mode.
