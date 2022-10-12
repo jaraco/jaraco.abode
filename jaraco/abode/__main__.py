@@ -215,6 +215,23 @@ def get_arguments():
     return parser.parse_args()
 
 
+def _create_abode_instance(args):
+    if args.cache and args.username and args.password:
+        return Abode(
+            username=args.username,
+            password=args.password,
+            get_devices=args.mfa is None,
+            cache_path=args.cache,
+        )
+    elif args.cache and not (not args.username or not args.password):
+        return Abode(get_devices=args.mfa is None, cache_path=args.cache)
+    return Abode(
+        username=args.username,
+        password=args.password,
+        get_devices=args.mfa is None,
+    )
+
+
 def main():
     """Execute command line helper."""
     args = get_arguments()
@@ -236,22 +253,7 @@ def main():
             raise Exception("Please supply a cache or username and password.")
 
     try:
-        # Create Abode instance.
-        if args.cache and args.username and args.password:
-            abode = Abode(
-                username=args.username,
-                password=args.password,
-                get_devices=args.mfa is None,
-                cache_path=args.cache,
-            )
-        elif args.cache and not (not args.username or not args.password):
-            abode = Abode(get_devices=args.mfa is None, cache_path=args.cache)
-        else:
-            abode = Abode(
-                username=args.username,
-                password=args.password,
-                get_devices=args.mfa is None,
-            )
+        abode = _create_abode_instance()
 
         # Since the MFA code is very time sensitive, if the user has provided
         # one we should use it to log in as soon as possible
