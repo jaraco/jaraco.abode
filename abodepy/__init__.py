@@ -1,4 +1,5 @@
 import sys
+import warnings
 
 import jaraco.abode
 
@@ -12,3 +13,9 @@ for name in tuple(sys.modules):
 del sys
 globals().update(vars(jaraco.abode))
 del jaraco
+
+
+warnings.warn(
+    "abodepy is deprecated. Import from jaraco.abode instead.",
+    stacklevel=2,
+)
