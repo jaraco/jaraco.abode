@@ -215,7 +215,7 @@ def get_arguments():
     return parser.parse_args()
 
 
-def call():
+def main():
     """Execute command line helper."""
     args = get_arguments()
 
@@ -462,11 +462,6 @@ def call():
     finally:
         if abode:
             abode.logout()
-
-
-def main():
-    """Execute from command line."""
-    call()
 
 
 if __name__ == '__main__':
