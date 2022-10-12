@@ -15,8 +15,6 @@ import tests.mock.panel as PANEL
 import tests.mock.automation as AUTOMATION
 import pytest
 
-# from abodepy.exceptions import AbodeException
-
 
 USERNAME = 'foobar'
 PASSWORD = 'deadbeef'
