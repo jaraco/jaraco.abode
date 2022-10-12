@@ -1,3 +1,8 @@
+v0.5.1
+======
+
+Cleaned up README and other references to ``abodepy``.
+
 v0.5.0
 ======
 
