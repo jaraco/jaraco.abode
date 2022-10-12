@@ -31,7 +31,7 @@ ALL_EVENT_GROUPS = [
 ]
 
 
-def map_event_code(event_code):
+def map_event_code(event_code):  # noqa: C901
     """Map a specific event_code to an event group."""
     event_code = int(event_code)
 

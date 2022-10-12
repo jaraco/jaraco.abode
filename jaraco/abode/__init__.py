@@ -99,7 +99,7 @@ class Abode:
         if get_automations:
             self.get_automations()
 
-    def login(self, username=None, password=None, mfa_code=None):
+    def login(self, username=None, password=None, mfa_code=None):  # noqa: C901
         """Explicit Abode login."""
         if username is not None:
             self._cache[CONST.ID] = username
@@ -202,7 +202,7 @@ class Abode:
         self.get_devices(refresh=True)
         self.get_automations(refresh=True)
 
-    def get_devices(self, refresh=False, generic_type=None):
+    def get_devices(self, refresh=False, generic_type=None):  # noqa: C901
         """Get all devices from Abode."""
         if refresh or self._devices is None:
             if self._devices is None:

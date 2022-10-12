@@ -131,7 +131,7 @@ class SocketIO:
 
             self._thread.join()
 
-    def _run_socketio_thread(self):
+    def _run_socketio_thread(self):  # noqa: C901
         self._running = True
 
         # Back off for Error restarting
