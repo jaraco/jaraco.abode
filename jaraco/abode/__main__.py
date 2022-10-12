@@ -236,15 +236,7 @@ def main():
     """Execute command line helper."""
     args = get_arguments()
 
-    # Set up logging
-    if args.debug:
-        log_level = logging.DEBUG
-    elif args.quiet:
-        log_level = logging.WARN
-    else:
-        log_level = logging.INFO
-
-    setup_logging(log_level)
+    setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
     abode = None
 
