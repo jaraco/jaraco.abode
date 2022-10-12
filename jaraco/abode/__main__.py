@@ -1,8 +1,8 @@
 import json
 import logging
 import time
-
 import argparse
+import contextlib
 
 from . import Abode
 from .helpers import timeline as TIMELINE
@@ -239,17 +239,23 @@ def _check_args(args):
     return args
 
 
+@contextlib.contextmanager
+def _log_errors_and_logout(abode):
+    try:
+        yield abode
+    except abode.AbodeException as exc:
+        _LOGGER.error(exc)
+    finally:
+        abode.logout()
+
+
 def main():
     """Execute command line helper."""
     args = _check_args(get_arguments())
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
-    abode = None
-
-    try:
-        abode = _create_abode_instance()
-
+    with _log_errors_and_logout(_create_abode_instance()) as abode:
         if args.mfa:
             abode.login(mfa_code=args.mfa)
             # fetch devices from Abode
@@ -452,11 +458,6 @@ def main():
             except KeyboardInterrupt:
                 abode.events.stop()
                 _LOGGER.info("Device update listening stopped.")
-    except abode.AbodeException as exc:
-        _LOGGER.error(exc)
-    finally:
-        if abode:
-            abode.logout()
 
 
 if __name__ == '__main__':
