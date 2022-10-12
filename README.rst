@@ -36,8 +36,8 @@ Command Line Usage
 ==================
 Simple command line implementation arguments::
 
-    $ abodepy --help
-      usage: AbodePy: Command Line Utility [-h] -u USERNAME -p PASSWORD [--mode]
+    $ abode --help
+      usage: jaraco.abode: Command Line Utility [-h] -u USERNAME -p PASSWORD [--mode]
                                            [--arm mode] [--set setting=value]
                                            [--devices] [--device device_id]
                                            [--json device_id] [--on device_id]
@@ -78,19 +78,19 @@ Simple command line implementation arguments::
 
 You can get the current alarm mode::
 
-    $ abodepy -u USERNAME -p PASSWORD --mode
+    $ abode -u USERNAME -p PASSWORD --mode
     
       Mode: standby
     
 To set the alarm mode, one of 'standby', 'home', or 'away'::
 
-    $ abodepy -u USERNAME -p PASSWORD --arm home
+    $ abode -u USERNAME -p PASSWORD --arm home
     
       Mode set to: home
 
 A full list of devices and their current states::
 
-    $ abodepy -u USERNAME -p PASSWORD --devices
+    $ abode -u USERNAME -p PASSWORD --devices
     
       Device Name: Glass Break Sensor, Device ID: RF:xxxxxxxx, Device Type: GLASS, Device Status: Online
       Device Name: Keypad, Device ID: RF:xxxxxxxx, Device Type: Keypad, Device Status: Online
@@ -107,27 +107,27 @@ A full list of devices and their current states::
 
 The current state of a specific device using the device id::
 
-    $ abodepy -u USERNAME -p PASSWORD --device ZW:xxxxxxxx
+    $ abode -u USERNAME -p PASSWORD --device ZW:xxxxxxxx
     
       Device Name: Garage Door Deadbolt, Device ID: ZW:xxxxxxxx, Device Type: Door Lock, Device Status: LockClosed
 
 Additionally, multiple specific devices using the device id::
     
-    $ abodepy -u USERNAME -p PASSWORD --device ZW:xxxxxxxx --device RF:xxxxxxxx
+    $ abode -u USERNAME -p PASSWORD --device ZW:xxxxxxxx --device RF:xxxxxxxx
     
       Device Name: Garage Door Deadbolt, Device ID: ZW:xxxxxxxx, Device Type: Door Lock, Device Status: LockClosed
       Device Name: Back Door, Device ID: RF:xxxxxxxx, Device Type: Door Contact, Device Status: Closed
     
 You can switch a device on or off, or lock and unlock a device by passing multiple arguments::
 
-    $ abodepy -u USERNAME -p PASSWORD --lock ZW:xxxxxxxx --switchOn ZW:xxxxxxxx
+    $ abode -u USERNAME -p PASSWORD --lock ZW:xxxxxxxx --switchOn ZW:xxxxxxxx
     
       Locked device with id: ZW:xxxxxxxx
       Switched on device with id: ZW:xxxxxxxx
    
 You can also block and listen for all mode and change events as they occur::
 
-    $ abodepy -u USERNAME -p PASSWORD --listen
+    $ abode -u USERNAME -p PASSWORD --listen
     
       No devices specified, adding all devices to listener...
       Listening for device updates...
@@ -145,7 +145,7 @@ Keyboard interrupt (CTRL+C) to exit listening mode.
 
 To obtain a list of automations::
 
-    $ abodepy -u USERNAME -p PASSWORD --automations
+    $ abode -u USERNAME -p PASSWORD --automations
     
       Deadbolts Lock Home (ID: 6) - status - active
       Auto Home (ID: 3) - location - active
@@ -157,22 +157,22 @@ To obtain a list of automations::
       
 To activate or deactivate an automation::
 
-    $ abodepy -u USERNAME -p PASSWORD --activate 1
+    $ abode -u USERNAME -p PASSWORD --activate 1
     
       Activated automation with id: 1
       
 To trigger a manual (quick) automation::
 
-    $ abodepy -u USERNAME -p PASSWORD --trigger 7
+    $ abode -u USERNAME -p PASSWORD --trigger 7
     
       Triggered automation with id: 1
 
 Settings
 ========
 
-You can change settings with abodepy either using abode.set_setting(setting, value) or through the command line::
+Change settings either using abode.set_setting(setting, value) or through the command line::
 
-  $ abodepy -u USERNAME -p PASSWORD --set beeper_mute=1
+  $ abode -u USERNAME -p PASSWORD --set beeper_mute=1
   
     Setting beeper_mute changed to 1
 

@@ -49,7 +49,7 @@ def setup_logging(log_level=logging.INFO):
 
 def get_arguments():
     """Get parsed arguments."""
-    parser = argparse.ArgumentParser("AbodePy: Command Line Utility")
+    parser = argparse.ArgumentParser("jaraco.abode: Command Line Utility")
 
     parser.add_argument('-u', '--username', help='Username', required=False)
 
