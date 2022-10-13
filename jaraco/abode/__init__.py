@@ -47,6 +47,8 @@ class Abode:
         self._user = None
         self._cache_path = cache_path
         self._disable_cache = disable_cache
+        self._username = username
+        self._password = password
 
         self._event_controller = AbodeEventController(self, url=CONST.SOCKETIO_URL)
 
@@ -61,8 +63,6 @@ class Abode:
 
         # Create a new cache template
         self._cache = {
-            CONST.ID: None,
-            CONST.PASSWORD: None,
             CONST.UUID: UTILS.gen_uuid(),
             CONST.COOKIES: None,
         }
@@ -71,26 +71,12 @@ class Abode:
         if not disable_cache:
             self._load_cache()
 
-        # If the username and password were passed in, update
-        # the cache and save
-        if username:
-            self._cache[CONST.ID] = username
-
-        if password:
-            self._cache[CONST.PASSWORD] = password
-
-        self._save_cache()
-
         # Load persisted cookies (which contains the UUID and the session ID)
         # if available
         if CONST.COOKIES in self._cache and self._cache[CONST.COOKIES] is not None:
             self._session.cookies = self._cache[CONST.COOKIES]
 
-        if (
-            self._cache[CONST.ID] is not None
-            and self._cache[CONST.PASSWORD] is not None
-            and auto_login
-        ):
+        if auto_login:
             self.login()
 
         if get_devices:
@@ -101,26 +87,21 @@ class Abode:
 
     def login(self, username=None, password=None, mfa_code=None):  # noqa: C901
         """Explicit Abode login."""
-        if username is not None:
-            self._cache[CONST.ID] = username
-        if password is not None:
-            self._cache[CONST.PASSWORD] = password
-
-        if self._cache[CONST.ID] is None or not isinstance(self._cache[CONST.ID], str):
-            raise AbodeAuthenticationException(ERROR.USERNAME)
-
-        if self._cache[CONST.PASSWORD] is None or not isinstance(
-            self._cache[CONST.PASSWORD], str
-        ):
-            raise AbodeAuthenticationException(ERROR.PASSWORD)
-
-        self._save_cache()
 
         self._token = None
 
+        username = username or self._username
+        password = password or self._password
+
+        if not isinstance(username, str):
+            raise AbodeAuthenticationException(ERROR.USERNAME)
+
+        if not isinstance(password, str):
+            raise AbodeAuthenticationException(ERROR.PASSWORD)
+
         login_data = {
-            CONST.ID: self._cache[CONST.ID],
-            CONST.PASSWORD: self._cache[CONST.PASSWORD],
+            CONST.ID: username,
+            CONST.PASSWORD: password,
             CONST.UUID: self._cache[CONST.UUID],
         }
 
