@@ -1,3 +1,5 @@
+"""Command-line interface."""
+
 import json
 import logging
 import time
@@ -49,7 +51,11 @@ def setup_logging(log_level=logging.INFO):
 
 
 def build_parser():
-    """Get parsed arguments."""
+    """
+    Get parsed arguments.
+
+    >>> parser = build_parser()
+    """
     parser = argparse.ArgumentParser("jaraco.abode: Command Line Utility")
 
     parser.add_argument('-u', '--username', help='Username', required=False)
