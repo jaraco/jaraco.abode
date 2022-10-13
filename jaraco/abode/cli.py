@@ -48,7 +48,7 @@ def setup_logging(log_level=logging.INFO):
     logger.setLevel(log_level)
 
 
-def get_arguments():
+def build_parser():
     """Get parsed arguments."""
     parser = argparse.ArgumentParser("jaraco.abode: Command Line Utility")
 
@@ -213,7 +213,7 @@ def get_arguments():
         action="store_true",
     )
 
-    return parser.parse_args()
+    return parser
 
 
 def _create_abode_instance(args):
@@ -478,7 +478,7 @@ class Dispatcher:
 
 def main():
     """Execute command line helper."""
-    args = get_arguments()
+    args = build_parser().parse_args()
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
