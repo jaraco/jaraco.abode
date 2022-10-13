@@ -472,7 +472,7 @@ def main():
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
-    with _log_errors_and_logout(_create_abode_instance()) as abode:
+    with _log_errors_and_logout(_create_abode_instance(args)) as abode:
         Dispatcher(abode, args).dispatch()
 
 
