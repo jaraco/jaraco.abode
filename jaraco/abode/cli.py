@@ -58,11 +58,11 @@ def build_parser():
     """
     parser = argparse.ArgumentParser("jaraco.abode: Command Line Utility")
 
-    parser.add_argument('-u', '--username', help='Username', required=False)
+    parser.add_argument('-u', '--username', help='Username')
 
-    parser.add_argument('-p', '--password', help='Password', required=False)
+    parser.add_argument('-p', '--password', help='Password')
 
-    parser.add_argument('--mfa', help='Multifactor authentication code', required=False)
+    parser.add_argument('--mfa', help='Multifactor authentication code')
 
     parser.add_argument(
         '--cache',
@@ -74,27 +74,26 @@ def build_parser():
     parser.add_argument(
         '--mode',
         help='Output current alarm mode',
-        required=False,
         default=False,
         action="store_true",
     )
 
     parser.add_argument(
-        '--arm', metavar='mode', help='Arm alarm to mode', required=False
+        '--arm',
+        metavar='mode',
+        help='Arm alarm to mode',
     )
 
     parser.add_argument(
         '--set',
         metavar='setting=value',
         help='Set setting to a value',
-        required=False,
         action='append',
     )
 
     parser.add_argument(
         '--devices',
         help='Output all devices',
-        required=False,
         default=False,
         action="store_true",
     )
@@ -103,7 +102,6 @@ def build_parser():
         '--device',
         metavar='device_id',
         help='Output one device for device_id',
-        required=False,
         action='append',
     )
 
@@ -111,7 +109,6 @@ def build_parser():
         '--json',
         metavar='device_id',
         help='Output the json for device_id',
-        required=False,
         action='append',
     )
 
@@ -119,7 +116,6 @@ def build_parser():
         '--on',
         metavar='device_id',
         help='Switch on a given device_id',
-        required=False,
         action='append',
     )
 
@@ -127,7 +123,6 @@ def build_parser():
         '--off',
         metavar='device_id',
         help='Switch off a given device_id',
-        required=False,
         action='append',
     )
 
@@ -135,7 +130,6 @@ def build_parser():
         '--lock',
         metavar='device_id',
         help='Lock a given device_id',
-        required=False,
         action='append',
     )
 
@@ -143,14 +137,12 @@ def build_parser():
         '--unlock',
         metavar='device_id',
         help='Unlock a given device_id',
-        required=False,
         action='append',
     )
 
     parser.add_argument(
         '--automations',
         help='Output all automations',
-        required=False,
         default=False,
         action="store_true",
     )
@@ -159,7 +151,6 @@ def build_parser():
         '--activate',
         metavar='automation_id',
         help='Activate (enable) an automation by automation_id',
-        required=False,
         action='append',
     )
 
@@ -167,7 +158,6 @@ def build_parser():
         '--deactivate',
         metavar='automation_id',
         help='Deactivate (disable) an automation by automation_id',
-        required=False,
         action='append',
     )
 
@@ -175,7 +165,6 @@ def build_parser():
         '--trigger',
         metavar='automation_id',
         help='Trigger (apply) a manual (quick) automation by automation_id',
-        required=False,
         action='append',
     )
 
@@ -183,7 +172,6 @@ def build_parser():
         '--capture',
         metavar='device_id',
         help='Trigger a new image capture for the given device_id',
-        required=False,
         action='append',
     )
 
@@ -191,14 +179,12 @@ def build_parser():
         '--image',
         metavar='device_id=location/image.jpg',
         help='Save an image from a camera (if available) to the given path',
-        required=False,
         action='append',
     )
 
     parser.add_argument(
         '--listen',
         help='Block and listen for device_id',
-        required=False,
         default=False,
         action="store_true",
     )
@@ -206,7 +192,6 @@ def build_parser():
     parser.add_argument(
         '--debug',
         help='Enable debug logging',
-        required=False,
         default=False,
         action="store_true",
     )
@@ -214,7 +199,6 @@ def build_parser():
     parser.add_argument(
         '--quiet',
         help='Output only warnings and errors',
-        required=False,
         default=False,
         action="store_true",
     )
