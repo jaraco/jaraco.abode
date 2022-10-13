@@ -253,7 +253,7 @@ def main():
             raise Exception("Please supply a cache or username and password.")
 
     try:
-        abode = _create_abode_instance()
+        abode = _create_abode_instance(args)
 
         # Since the MFA code is very time sensitive, if the user has provided
         # one we should use it to log in as soon as possible
