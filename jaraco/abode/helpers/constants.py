@@ -210,7 +210,6 @@ def get_generic_type(type_tag):
         DEVICE_OUTDOOR_MOTION_CAMERA: TYPE_CAMERA,
         DEVICE_OUTDOOR_SMART_CAMERA: TYPE_CAMERA,
         DEVICE_MINI_CAM: TYPE_CAMERA,
-
         # Covers
         DEVICE_SECURE_BARRIER: TYPE_COVER,
         # Lights (Dimmers)
