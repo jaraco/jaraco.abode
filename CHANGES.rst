@@ -1,3 +1,9 @@
+v0.6.0
+======
+
+#6: Added support for new event codes in ALARM_END_GROUP and
+ARM_FAULT_GROUP groups.
+
 v0.5.2
 ======
 
