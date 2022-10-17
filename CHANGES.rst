@@ -1,6 +1,8 @@
 v0.6.0
 ======
 
+#5: Added support for Abode Cam 2 devices.
+
 #6: Added support for new event codes in ALARM_END_GROUP and
 ARM_FAULT_GROUP groups.
 
