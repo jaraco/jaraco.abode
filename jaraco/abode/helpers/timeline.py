@@ -40,7 +40,7 @@ def map_event_code(event_code):  # noqa: C901
     if 1100 <= event_code <= 1199:
         return ALARM_GROUP
 
-    if 3100 <= event_code <= 3199:
+    if 3100 <= event_code <= 3199 or 4000 <= event_code <= 4001:
         return ALARM_END_GROUP
 
     if 1300 <= event_code <= 1399:
@@ -67,7 +67,7 @@ def map_event_code(event_code):  # noqa: C901
     if 5200 <= event_code <= 5299:
         return AUTOMATION_GROUP
 
-    if 6000 <= event_code <= 6100:
+    if 6000 <= event_code <= 6100 or 4002 <= event_code <= 4003:
         return ARM_FAULT_GROUP
 
 
