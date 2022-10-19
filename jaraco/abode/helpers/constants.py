@@ -1,7 +1,5 @@
 """AbodePy constants."""
 
-REQUIRED_PYTHON_VER = (3, 6, 0)
-
 PROJECT_GITHUB_USERNAME = 'jaraco'
 PROJECT_GITHUB_REPOSITORY = 'jaraco.abode'
 
