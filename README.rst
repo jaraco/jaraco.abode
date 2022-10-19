@@ -76,21 +76,32 @@ Simple command line implementation arguments::
         --debug               Enable debug logging
         --quiet               Output only warnings and errors
 
-You can get the current alarm mode::
+First invocation, simply log in::
 
-    $ abode -u USERNAME -p PASSWORD --mode
+    $ abode --username happy-customer@example.com
+    Password for happy-customer@example.com:
+2022-10-18 20:30:18 INFO (MainThread) [jaraco.abode] Updating all devices...
+2022-10-18 20:30:18 INFO (MainThread) [jaraco.abode] Login successful
+2022-10-18 20:30:19 INFO (MainThread) [jaraco.abode] Logout successful
+
+Pass ``--username`` with each invocation or set the environment variable
+``ABODE_USERNAME`` in the environment.
+
+Get the current alarm mode::
+
+    $ abode --mode
     
       Mode: standby
     
-To set the alarm mode, one of 'standby', 'home', or 'away'::
+Set the alarm mode to one of 'standby', 'home', or 'away'::
 
-    $ abode -u USERNAME -p PASSWORD --arm home
+    $ abode --arm home
     
       Mode set to: home
 
-A full list of devices and their current states::
+List all devices and their current states::
 
-    $ abode -u USERNAME -p PASSWORD --devices
+    $ abode --devices
     
       Device Name: Glass Break Sensor, Device ID: RF:xxxxxxxx, Device Type: GLASS, Device Status: Online
       Device Name: Keypad, Device ID: RF:xxxxxxxx, Device Type: Keypad, Device Status: Online
@@ -105,29 +116,29 @@ A full list of devices and their current states::
       Device Name: Garage Door Deadbolt, Device ID: ZW:xxxxxxxx, Device Type: Door Lock, Device Status: LockClosed
       Device Name: Alarm area_1, Device ID: area_1, Device Type: Alarm, Device Status: standby
 
-The current state of a specific device using the device id::
+Query the current state of a specific device using the device id::
 
-    $ abode -u USERNAME -p PASSWORD --device ZW:xxxxxxxx
+    $ abode --device ZW:xxxxxxxx
     
       Device Name: Garage Door Deadbolt, Device ID: ZW:xxxxxxxx, Device Type: Door Lock, Device Status: LockClosed
 
-Additionally, multiple specific devices using the device id::
+Query multiple specific devices by device id::
     
-    $ abode -u USERNAME -p PASSWORD --device ZW:xxxxxxxx --device RF:xxxxxxxx
+    $ abode --device ZW:xxxxxxxx --device RF:xxxxxxxx
     
       Device Name: Garage Door Deadbolt, Device ID: ZW:xxxxxxxx, Device Type: Door Lock, Device Status: LockClosed
       Device Name: Back Door, Device ID: RF:xxxxxxxx, Device Type: Door Contact, Device Status: Closed
     
-You can switch a device on or off, or lock and unlock a device by passing multiple arguments::
+Switch a device on or off, or lock and unlock a device by passing multiple arguments::
 
-    $ abode -u USERNAME -p PASSWORD --lock ZW:xxxxxxxx --switchOn ZW:xxxxxxxx
+    $ abode --lock ZW:xxxxxxxx --switchOn ZW:xxxxxxxx
     
       Locked device with id: ZW:xxxxxxxx
       Switched on device with id: ZW:xxxxxxxx
    
-You can also block and listen for all mode and change events as they occur::
+Block and listen for all mode and change events as they occur::
 
-    $ abode -u USERNAME -p PASSWORD --listen
+    $ abode --listen
     
       No devices specified, adding all devices to listener...
       Listening for device updates...
@@ -145,7 +156,7 @@ Keyboard interrupt (CTRL+C) to exit listening mode.
 
 To obtain a list of automations::
 
-    $ abode -u USERNAME -p PASSWORD --automations
+    $ abode --automations
     
       Deadbolts Lock Home (ID: 6) - status - active
       Auto Home (ID: 3) - location - active
@@ -157,13 +168,13 @@ To obtain a list of automations::
       
 To activate or deactivate an automation::
 
-    $ abode -u USERNAME -p PASSWORD --activate 1
+    $ abode --activate 1
     
       Activated automation with id: 1
       
 To trigger a manual (quick) automation::
 
-    $ abode -u USERNAME -p PASSWORD --trigger 7
+    $ abode --trigger 7
     
       Triggered automation with id: 1
 
@@ -172,7 +183,7 @@ Settings
 
 Change settings either using abode.set_setting(setting, value) or through the command line::
 
-  $ abode -u USERNAME -p PASSWORD --set beeper_mute=1
+  $ abode --set beeper_mute=1
   
     Setting beeper_mute changed to 1
 
