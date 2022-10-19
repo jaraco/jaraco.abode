@@ -10,6 +10,14 @@ each invocation, the default username is loaded from the
 ABODE_USERNAME environment variable. If the password is not
 present, the user will be prompted for it on the first invocation.
 
+v0.6.0
+======
+
+#5: Added support for Abode Cam 2 devices.
+
+#6: Added support for new event codes in ALARM_END_GROUP and
+ARM_FAULT_GROUP groups.
+
 v0.5.2
 ======
 
