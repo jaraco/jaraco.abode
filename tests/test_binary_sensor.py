@@ -106,10 +106,6 @@ class TestBinarySensors(unittest.TestCase):
 
         # Test our devices
         for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type == CONST.DEVICE_ALARM:
-                continue
-
             assert not device.is_on, device.type + " is_on failed"
             assert not device.battery_low, device.type + " battery_low failed"
             assert not device.no_response, device.type + " no_response failed"
