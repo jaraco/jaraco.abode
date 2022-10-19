@@ -483,12 +483,9 @@ def _new_sensor(device_json, abode):
 
     version = device_json.get('version', '')
 
-    # this.version.startsWith('MINIPIR') == true ? 'Occupancy Sensor'
-    # : 'Motion Sensor';
-    if version and version.lower().startswith('minipir'):
-        device_json['generic_type'] = CONST.TYPE_OCCUPANCY
-    else:
-        device_json['generic_type'] = CONST.TYPE_MOTION
+    device_json['generic_type'] = (
+        CONST.TYPE_OCCUPANCY if version.startswith('MINIPIR') else CONST.TYPE_MOTION
+    )
 
     return AbodeBinarySensor(device_json, abode)
 
