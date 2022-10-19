@@ -34,55 +34,57 @@ API calls faster than 60 seconds is not recommended as it can overwhelm Abode's 
   
 Command Line Usage
 ==================
+
 Simple command line implementation arguments::
 
     $ abode --help
-      usage: jaraco.abode: Command Line Utility [-h] -u USERNAME -p PASSWORD [--mode]
-                                           [--arm mode] [--set setting=value]
-                                           [--devices] [--device device_id]
-                                           [--json device_id] [--on device_id]
-                                           [--off device_id] [--lock device_id]
-                                           [--unlock device_id] [--automations]
-                                           [--activate automation_id]
-                                           [--deactivate automation_id]
-                                           [--trigger automation_id] [--listen]
-                                           [--debug] [--quiet]
-      
-      optional arguments:
-        -h, --help            show this help message and exit
-        -u USERNAME, --username USERNAME
-                              Username
-        -p PASSWORD, --password PASSWORD
-                              Password
-        --mode                Output current alarm mode
-        --arm mode            Arm alarm to mode
-        --set setting=value   Set setting to a value
-        --devices             Output all devices
-        --device device_id    Output one device for device_id
-        --json device_id      Output the json for device_id
-        --on device_id        Switch on a given device_id
-        --off device_id       Switch off a given device_id
-        --lock device_id      Lock a given device_id
-        --unlock device_id    Unlock a given device_id
-        --automations         Output all automations
-        --activate automation_id
-                              Activate (enable) an automation by  automation_id
-        --deactivate automation_id
-                              Deactivate (disable) an automation by automation_id
-        --trigger automation_id
-                              Trigger (apply) an automation (manual quick-action) by
-                              automation_id
-        --listen              Block and listen for device_id
-        --debug               Enable debug logging
-        --quiet               Output only warnings and errors
+    usage: abode [-h] [-u USERNAME] [-p PASSWORD] [--mfa MFA] [--cache pickle_file]
+                 [--mode] [--arm mode] [--set setting=value] [--devices]
+                 [--device device_id] [--json device_id] [--on device_id] [--off device_id]
+                 [--lock device_id] [--unlock device_id] [--automations]
+                 [--activate automation_id] [--deactivate automation_id]
+                 [--trigger automation_id] [--capture device_id]
+                 [--image device_id=location/image.jpg] [--listen] [--debug] [--quiet]
+
+    options:
+      -h, --help            show this help message and exit
+      -u USERNAME, --username USERNAME
+                            Username
+      -p PASSWORD, --password PASSWORD
+                            Password
+      --mfa MFA             Multifactor authentication code
+      --cache pickle_file   Create/update/use a pickle cache for the username and password.
+      --mode                Output current alarm mode
+      --arm mode            Arm alarm to mode
+      --set setting=value   Set setting to a value
+      --devices             Output all devices
+      --device device_id    Output one device for device_id
+      --json device_id      Output the json for device_id
+      --on device_id        Switch on a given device_id
+      --off device_id       Switch off a given device_id
+      --lock device_id      Lock a given device_id
+      --unlock device_id    Unlock a given device_id
+      --automations         Output all automations
+      --activate automation_id
+                            Activate (enable) an automation by automation_id
+      --deactivate automation_id
+                            Deactivate (disable) an automation by automation_id
+      --trigger automation_id
+                            Trigger (apply) a manual (quick) automation by automation_id
+      --capture device_id   Trigger a new image capture for the given device_id
+      --image device_id=location/image.jpg
+                            Save an image from a camera (if available) to the given path
+      --listen              Block and listen for device_id
+      --debug               Enable debug logging
+      --quiet               Output only warnings and errors
 
 First invocation, simply log in::
 
     $ abode --username happy-customer@example.com
     Password for happy-customer@example.com:
-2022-10-18 20:30:18 INFO (MainThread) [jaraco.abode] Updating all devices...
-2022-10-18 20:30:18 INFO (MainThread) [jaraco.abode] Login successful
-2022-10-18 20:30:19 INFO (MainThread) [jaraco.abode] Logout successful
+    2022-10-18 20:30:18 INFO (MainThread) [jaraco.abode] Updating all devices...
+    2022-10-18 20:30:18 INFO (MainThread) [jaraco.abode] Login successful
+    2022-10-18 20:30:19 INFO (MainThread) [jaraco.abode] Logout successful
 
 Pass ``--username`` with each invocation or set the environment variable
 ``ABODE_USERNAME`` in the environment.

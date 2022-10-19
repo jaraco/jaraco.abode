@@ -60,7 +60,7 @@ def build_parser():
 
     >>> parser = build_parser()
     """
-    parser = argparse.ArgumentParser("jaraco.abode: Command Line Utility")
+    parser = argparse.ArgumentParser("abode")
 
     parser.add_argument(
         '-u', '--username', help='Username', default=os.environ.get('ABODE_USERNAME')
