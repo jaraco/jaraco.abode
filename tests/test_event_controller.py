@@ -101,11 +101,8 @@ class TestEventController(unittest.TestCase):
         events = self.abode.events
         assert events is not None
 
-        def _our_callback(device):
-            assert device is not None
-
         # Register our device
-        assert events.add_device_callback(device, _our_callback)
+        assert events.add_device_callback(device, lambda device: None)
 
     @requests_mock.mock()
     def tests_device_all_unregistration(self, m):
@@ -136,11 +133,8 @@ class TestEventController(unittest.TestCase):
         events = self.abode.events
         assert events is not None
 
-        def _our_callback(device):
-            assert device is not None
-
         # Register our device
-        assert events.add_device_callback(device, _our_callback)
+        assert events.add_device_callback(device, lambda device: None)
 
         # Unregister all callbacks
         assert events.remove_all_device_callbacks(device)
