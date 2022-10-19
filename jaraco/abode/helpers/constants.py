@@ -69,7 +69,7 @@ ALL_MODES = [MODE_STANDBY, MODE_HOME, MODE_AWAY]
 
 ALL_MODES_STR = ", ".join(ALL_MODES)
 
-ARMED = {'home': True, 'away': True, 'standby': False}
+ARMED = dict(home=True, away=True, standby=False)
 
 STATUS_ONLINE = 'Online'
 STATUS_OFFLINE = 'Offline'
