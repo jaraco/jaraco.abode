@@ -165,7 +165,7 @@ class Abode:
             response = self._session.post(CONST.LOGOUT_URL, headers=header_data)
             response_object = json.loads(response.text)
         except OSError as exc:
-            _LOGGER.warning("Caught exception during logout: %s", str(exc))
+            _LOGGER.warning("Caught exception during logout: %s", exc)
             return
 
         if response.status_code != 200:
