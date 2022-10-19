@@ -1,5 +1,9 @@
 """The exceptions used by AbodePy."""
 
+import json
+
+import requests
+
 
 class AbodeException(Exception):
     """Class to throw general abode exception."""
@@ -16,6 +20,19 @@ class AbodeException(Exception):
 
 class AbodeAuthenticationException(AbodeException):
     """Class to throw authentication exception."""
+
+    @classmethod
+    def raise_for(cls, response):
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as exc:
+            raise cls((response.status_code, cls.best_message(response))) from exc
+
+    @staticmethod
+    def best_message(response):
+        if response.headers.get('Content-Type') == 'application/json':
+            return json.loads(response.text)['message']
+        return response.text
 
 
 class SocketIOException(AbodeException):

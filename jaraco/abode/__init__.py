@@ -112,8 +112,7 @@ class Abode:
 
         response = self._session.post(CONST.LOGIN_URL, json=login_data)
 
-        if response.status_code != 200:
-            raise AbodeAuthenticationException((response.status_code, response.text))
+        AbodeAuthenticationException.raise_for(response)
 
         response_object = json.loads(response.text)
 
@@ -130,11 +129,7 @@ class Abode:
             self._save_cache()
 
         oauth_response = self._session.get(CONST.OAUTH_TOKEN_URL)
-
-        if oauth_response.status_code != 200:
-            raise AbodeAuthenticationException(
-                (oauth_response.status_code, oauth_response.text)
-            )
+        AbodeAuthenticationException.raise_for(oauth_response)
 
         oauth_response_object = json.loads(oauth_response.text)
 
@@ -163,15 +158,11 @@ class Abode:
 
         try:
             response = self._session.post(CONST.LOGOUT_URL, headers=header_data)
-            response_object = json.loads(response.text)
         except OSError as exc:
             _LOGGER.warning("Caught exception during logout: %s", exc)
             return
 
-        if response.status_code != 200:
-            raise AbodeAuthenticationException(
-                (response.status_code, response_object['message'])
-            )
+        AbodeAuthenticationException.raise_for(response)
 
         _LOGGER.debug("Logout Response: %s", response.text)
 
