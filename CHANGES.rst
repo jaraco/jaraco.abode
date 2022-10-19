@@ -1,3 +1,15 @@
+v0.7.0
+======
+
+#1: Passwords are no longer stored in or retrieved from the cache
+file. Instead, credentials must be supplied on the command line
+or loaded from `keyring <https://pypi.org/project/keyring>`_.
+This approach allows the passwords to be stored in a secure,
+encrypted, system store. To avoid requiring a username on
+each invocation, the default username is loaded from the
+ABODE_USERNAME environment variable. If the password is not
+present, the user will be prompted for it on the first invocation.
+
 v0.6.0
 ======
 

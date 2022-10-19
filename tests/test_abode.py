@@ -50,9 +50,9 @@ class TestAbode:
     def tests_initialization(self):
         """Verify we can initialize abode."""
         # pylint: disable=protected-access
-        assert self.abode._cache[CONST.ID] == USERNAME
+        assert self.abode._username == USERNAME
         # pylint: disable=protected-access
-        assert self.abode._cache[CONST.PASSWORD] == PASSWORD
+        assert self.abode._password == PASSWORD
 
     def tests_no_credentials(self):
         """Check that we throw an exception when no username/password."""
@@ -60,7 +60,7 @@ class TestAbode:
             self.abode_no_cred.login()
 
         # pylint: disable=protected-access
-        self.abode_no_cred._cache[CONST.ID] = USERNAME
+        self.abode_no_cred._username = USERNAME
         with pytest.raises(jaraco.abode.AbodeAuthenticationException):
             self.abode_no_cred.login()
 
@@ -71,22 +71,12 @@ class TestAbode:
 
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
-        # pylint: disable=protected-access
-        assert self.abode_no_cred._cache[CONST.ID] == USERNAME
-        # pylint: disable=protected-access
-        assert self.abode_no_cred._cache[CONST.PASSWORD] == PASSWORD
-
     def tests_manual_login_with_mfa(self, m):
         """Check that we can login with MFA code."""
         m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
 
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD, mfa_code=654321)
-
-        # pylint: disable=protected-access
-        assert self.abode_no_cred._cache[CONST.ID] == USERNAME
-        # pylint: disable=protected-access
-        assert self.abode_no_cred._cache[CONST.PASSWORD] == PASSWORD
 
     def tests_auto_login(self, m):
         """Test that automatic login works."""
@@ -109,8 +99,8 @@ class TestAbode:
         )
 
         # pylint: disable=W0212
-        assert abode._cache[CONST.ID] == 'fizz'
-        assert abode._cache[CONST.PASSWORD] == 'buzz'
+        assert abode._username == 'fizz'
+        assert abode._password == 'buzz'
         assert abode._token == MOCK.AUTH_TOKEN
         assert abode._panel == json.loads(panel_json)
         assert abode._user == json.loads(user_json)
@@ -145,8 +135,8 @@ class TestAbode:
         )
 
         # pylint: disable=W0212
-        assert abode._cache[CONST.ID] == 'fizz'
-        assert abode._cache[CONST.PASSWORD] == 'buzz'
+        assert abode._username == 'fizz'
+        assert abode._password == 'buzz'
         assert abode._token == MOCK.AUTH_TOKEN
         assert abode._user == json.loads(user_json)
         assert abode._panel is not None
@@ -255,8 +245,8 @@ class TestAbode:
         original_session = self.abode._session
 
         # pylint: disable=W0212
-        assert self.abode._cache[CONST.ID] == USERNAME
-        assert self.abode._cache[CONST.PASSWORD] == PASSWORD
+        assert self.abode._username == USERNAME
+        assert self.abode._password == PASSWORD
         assert self.abode._token == auth_token
         assert self.abode._user == json.loads(user_json)
         assert self.abode._panel is not None
@@ -565,8 +555,6 @@ class TestAbode:
 
         # Test that our cookies are fully realized prior to login
         # pylint: disable=W0212
-        assert abode._cache['id'] is not None
-        assert abode._cache['password'] is not None
         assert abode._cache['uuid'] is not None
         assert abode._cache['cookies'] is not None
 
@@ -613,8 +601,6 @@ class TestAbode:
 
         # Test that some cache exists
         # pylint: disable=W0212
-        assert empty_abode._cache['id'] is not None
-        assert empty_abode._cache['password'] is not None
         assert empty_abode._cache['uuid'] is not None
 
     @pytest.mark.usefixtures('cache_path')
@@ -641,6 +627,4 @@ class TestAbode:
 
         # Test that some cache exists
         # pylint: disable=W0212
-        assert empty_abode._cache['id'] is not None
-        assert empty_abode._cache['password'] is not None
         assert empty_abode._cache['uuid'] is not None

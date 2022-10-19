@@ -1,10 +1,14 @@
 """Command-line interface."""
 
+import os
 import json
 import logging
 import time
 import argparse
 import contextlib
+import getpass
+
+import keyring
 
 from . import Abode
 from .helpers import constants as CONST
@@ -56,9 +60,11 @@ def build_parser():
 
     >>> parser = build_parser()
     """
-    parser = argparse.ArgumentParser("jaraco.abode: Command Line Utility")
+    parser = argparse.ArgumentParser("abode")
 
-    parser.add_argument('-u', '--username', help='Username')
+    parser.add_argument(
+        '-u', '--username', help='Username', default=os.environ.get('ABODE_USERNAME')
+    )
 
     parser.add_argument('-p', '--password', help='Password')
 
@@ -466,9 +472,24 @@ class Dispatcher:
             _LOGGER.info("Device update listening stopped.")
 
 
+def _get_password(args):
+    if not args.username:
+        raise SystemExit("Username unknown. Pass a username or set ABODE_USERNAME.")
+    args.password = args.password or _get_or_set_password(args.username)
+
+
+def _get_or_set_password(username):
+    password = keyring.get_password(CONST.BASE_URL, username)
+    if not password:
+        password = getpass.getpass(f"Password for {username}: ")
+        keyring.set_password(CONST.BASE_URL, username, password)
+    return password
+
+
 def main():
     """Execute command line helper."""
     args = build_parser().parse_args()
+    _get_password(args)
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
