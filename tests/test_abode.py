@@ -414,16 +414,13 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
         m.put(CONST.SETTINGS_URL, text=MOCK.generic_response_ok())
 
-        try:
-            self.abode.set_setting(
-                CONST.SETTING_CAMERA_RESOLUTION, CONST.SETTING_CAMERA_RES_640_480
-            )
+        self.abode.set_setting(
+            CONST.SETTING_CAMERA_RESOLUTION, CONST.SETTING_CAMERA_RES_640_480
+        )
 
-            self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
+        self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
 
-            self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
-        except jaraco.abode.AbodeException:
-            self.fail("set_setting() raised AbodeException unexpectedly")
+        self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
 
         with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
@@ -442,17 +439,13 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
         m.put(CONST.AREAS_URL, text=MOCK.generic_response_ok())
 
-        try:
-            self.abode.set_setting(
-                CONST.SETTING_ENTRY_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
-            )
+        self.abode.set_setting(
+            CONST.SETTING_ENTRY_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
+        )
 
-            self.abode.set_setting(
-                CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
-            )
-
-        except jaraco.abode.AbodeException:
-            self.fail("set_setting() raised AbodeException unexpectedly")
+        self.abode.set_setting(
+            CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
+        )
 
         with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
@@ -471,19 +464,15 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
         m.put(CONST.SOUNDS_URL, text=MOCK.generic_response_ok())
 
-        try:
-            self.abode.set_setting(CONST.SETTING_DOOR_CHIME, CONST.SETTING_SOUND_LOW)
+        self.abode.set_setting(CONST.SETTING_DOOR_CHIME, CONST.SETTING_SOUND_LOW)
 
-            self.abode.set_setting(
-                CONST.SETTING_ALARM_LENGTH, CONST.SETTING_ALARM_LENGTH_2MIN
-            )
+        self.abode.set_setting(
+            CONST.SETTING_ALARM_LENGTH, CONST.SETTING_ALARM_LENGTH_2MIN
+        )
 
-            self.abode.set_setting(
-                CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
-            )
-
-        except jaraco.abode.AbodeException:
-            self.fail("set_setting() raised AbodeException unexpectedly")
+        self.abode.set_setting(
+            CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
+        )
 
         with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
@@ -502,21 +491,13 @@ class TestAbode:
         m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
         m.put(CONST.SIREN_URL, text=MOCK.generic_response_ok())
 
-        try:
-            self.abode.set_setting(
-                CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, CONST.SETTING_ENABLE
-            )
+        self.abode.set_setting(
+            CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, CONST.SETTING_ENABLE
+        )
 
-            self.abode.set_setting(
-                CONST.SETTING_SIREN_CONFIRM_SOUNDS, CONST.SETTING_ENABLE
-            )
+        self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, CONST.SETTING_ENABLE)
 
-            self.abode.set_setting(
-                CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE
-            )
-
-        except jaraco.abode.AbodeException:
-            self.fail("set_setting() raised AbodeException unexpectedly")
+        self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE)
 
         with pytest.raises(jaraco.abode.AbodeException):
             self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
