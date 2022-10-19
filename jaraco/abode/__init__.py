@@ -5,7 +5,8 @@ An Abode alarm Python library.
 import json
 import logging
 import os
-import requests
+
+from requests_toolbelt import sessions
 from requests.exceptions import RequestException
 
 from .automation import AbodeAutomation
@@ -59,7 +60,7 @@ class Abode:
         self._automations = None
 
         # Create a requests session to persist the cookies
-        self._session = requests.session()
+        self._session = sessions.BaseUrlSession(CONST.BASE_URL)
 
         # Create a new cache template
         self._cache = {
@@ -153,7 +154,7 @@ class Abode:
         if self._token:
             header_data = {'ABODE-API-KEY': self._token}
 
-            self._session = requests.session()
+            self._session = sessions.BaseUrlSession(CONST.BASE_URL)
             self._token = None
             self._panel = None
             self._user = None
