@@ -14,40 +14,38 @@ MFA_CODE = 'mfa_code'
 # URLS
 BASE_URL = 'https://my.goabode.com/'
 
-LOGIN_URL = BASE_URL + 'api/auth2/login'
-LOGOUT_URL = BASE_URL + 'api/v1/logout'
+LOGIN_URL = '/api/auth2/login'
+LOGOUT_URL = '/api/v1/logout'
 
-OAUTH_TOKEN_URL = BASE_URL + 'api/auth2/claims'
+OAUTH_TOKEN_URL = '/api/auth2/claims'
 
-PARAMS_URL = BASE_URL + 'api/v1/devices_beta/'
+PARAMS_URL = '/api/v1/devices_beta/'
 
-PANEL_URL = BASE_URL + 'api/v1/panel'
+PANEL_URL = '/api/v1/panel'
 
-INTEGRATIONS_URL = BASE_URL + 'integrations/v1/devices/'
+INTEGRATIONS_URL = '/integrations/v1/devices/'
 
 
 def get_panel_mode_url(area, mode):
     """Create panel URL."""
-    return BASE_URL + 'api/v1/panel/mode/' + area + '/' + mode
+    return '/api/v1/panel/mode/' + area + '/' + mode
 
 
-DEVICES_URL = BASE_URL + 'api/v1/devices'
-DEVICE_URL = BASE_URL + 'api/v1/devices/$DEVID$'
+DEVICES_URL = '/api/v1/devices'
+DEVICE_URL = '/api/v1/devices/$DEVID$'
 
-AREAS_URL = BASE_URL + 'api/v1/areas'
+AREAS_URL = '/api/v1/areas'
 
-SETTINGS_URL = BASE_URL + 'api/v1/panel/setting'
-SOUNDS_URL = BASE_URL + 'api/v1/sounds'
-SIREN_URL = BASE_URL + 'api/v1/siren'
+SETTINGS_URL = '/api/v1/panel/setting'
+SOUNDS_URL = '/api/v1/sounds'
+SIREN_URL = '/api/v1/siren'
 
-AUTOMATION_URL = BASE_URL + 'integrations/v1/automations/'
+AUTOMATION_URL = '/integrations/v1/automations/'
 AUTOMATION_ID_URL = AUTOMATION_URL + '$AUTOMATIONID$/'
 AUTOMATION_APPLY_URL = AUTOMATION_ID_URL + 'apply'
 
 TIMELINE_IMAGES_ID_URL = (
-    BASE_URL
-    + 'api/v1/timeline?device_id=$DEVID$&dir=next'
-    + '&event_label=Image+Capture&size=1'
+    '/api/v1/timeline?device_id=$DEVID$&dir=next&event_label=Image+Capture&size=1'
 )
 
 # NOTIFICATION CONSTANTS

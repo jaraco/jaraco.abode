@@ -322,19 +322,19 @@ class Abode:
             raise AbodeException(ERROR.INVALID_SETTING, CONST.ALL_SETTINGS)
 
         if setting in CONST.PANEL_SETTINGS:
-            url = CONST.SETTINGS_URL
+            path = CONST.SETTINGS_URL
             data = self._panel_settings(setting, value, validate_value)
         elif setting in CONST.AREA_SETTINGS:
-            url = CONST.AREAS_URL
+            path = CONST.AREAS_URL
             data = self._area_settings(area, setting, value, validate_value)
         elif setting in CONST.SOUND_SETTINGS:
-            url = CONST.SOUNDS_URL
+            path = CONST.SOUNDS_URL
             data = self._sound_settings(area, setting, value, validate_value)
         elif setting in CONST.SIREN_SETTINGS:
-            url = CONST.SIREN_URL
+            path = CONST.SIREN_URL
             data = self._siren_settings(setting, value, validate_value)
 
-        return self.send_request(method="put", url=url, data=data)
+        return self.send_request(method="put", path=path, data=data)
 
     @staticmethod
     def _panel_settings(setting, value, validate_value):
@@ -416,7 +416,7 @@ class Abode:
 
         return {'action': setting, 'option': value}
 
-    def send_request(self, method, url, headers=None, data=None, is_retry=False):
+    def send_request(self, method, path, headers=None, data=None, is_retry=False):
         """Send requests to Abode."""
         if not self._token:
             self.login()
@@ -428,7 +428,7 @@ class Abode:
         headers['ABODE-API-KEY'] = self._token
 
         try:
-            response = getattr(self._session, method)(url, headers=headers, json=data)
+            response = getattr(self._session, method)(path, headers=headers, json=data)
 
             if response and response.status_code < 400:
                 return response
@@ -440,7 +440,7 @@ class Abode:
             # attempt.
             self._token = None
 
-            return self.send_request(method, url, headers, data, True)
+            return self.send_request(method, path, headers, data, True)
 
         raise AbodeException((ERROR.REQUEST))
 

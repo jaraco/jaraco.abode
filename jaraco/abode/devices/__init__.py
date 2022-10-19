@@ -30,11 +30,13 @@ class AbodeDevice:
     def set_status(self, status):
         """Set device status."""
         if self._json_state['control_url']:
-            url = CONST.BASE_URL + self._json_state['control_url']
+            path = self._json_state['control_url']
 
             status_data = {'status': str(status)}
 
-            response = self._abode.send_request(method="put", url=url, data=status_data)
+            response = self._abode.send_request(
+                method="put", path=path, data=status_data
+            )
             response_object = json.loads(response.text)
 
             _LOGGER.debug("Set Status Response: %s", response.text)
@@ -90,14 +92,14 @@ class AbodeDevice:
         """
         return self._json_state.get(name.lower(), {})
 
-    def refresh(self, url=CONST.DEVICE_URL):
+    def refresh(self, path=CONST.DEVICE_URL):
         """Refresh the devices json object data.
 
         Only needed if you're not using the notification service.
         """
-        url = url.replace('$DEVID$', self.device_id)
+        path = path.replace('$DEVID$', self.device_id)
 
-        response = self._abode.send_request(method="get", url=url)
+        response = self._abode.send_request(method="get", path=path)
         response_object = json.loads(response.text)
 
         _LOGGER.debug("Device Refresh Response: %s", response.text)

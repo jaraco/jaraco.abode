@@ -124,7 +124,7 @@ class AbodeCamera(AbodeDevice):
         if self._json_state['privacy']:
             privacy = '1' if enable else '0'
 
-            url = CONST.PARAMS_URL + self.device_id
+            path = CONST.PARAMS_URL + self.device_id
 
             camera_data = {
                 'mac': self._json_state['camera_mac'],
@@ -133,7 +133,9 @@ class AbodeCamera(AbodeDevice):
                 'id': self.device_id,
             }
 
-            response = self._abode.send_request(method="put", url=url, data=camera_data)
+            response = self._abode.send_request(
+                method="put", path=path, data=camera_data
+            )
             response_object = json.loads(response.text)
 
             _LOGGER.debug("Camera Privacy Mode Response: %s", response.text)

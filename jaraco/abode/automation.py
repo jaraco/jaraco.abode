@@ -20,12 +20,14 @@ class AbodeAutomation:
 
     def enable(self, enable):
         """Enable or disable the automation."""
-        url = str.replace(CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', self.automation_id)
+        path = str.replace(
+            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', self.automation_id
+        )
 
         self._automation['enabled'] = enable
 
         response = self._abode.send_request(
-            method="patch", url=url, data={'enabled': enable}
+            method="patch", path=path, data={'enabled': enable}
         )
 
         response_object = json.loads(response.text)
@@ -47,11 +49,11 @@ class AbodeAutomation:
 
     def trigger(self):
         """Trigger the automation."""
-        url = str.replace(
+        path = str.replace(
             CONST.AUTOMATION_APPLY_URL, '$AUTOMATIONID$', self.automation_id
         )
 
-        self._abode.send_request(method="post", url=url)
+        self._abode.send_request(method="post", path=path)
 
         _LOGGER.info("Automation triggered: %s", self.name)
 
@@ -59,9 +61,11 @@ class AbodeAutomation:
 
     def refresh(self):
         """Refresh the automation."""
-        url = str.replace(CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', self.automation_id)
+        path = str.replace(
+            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', self.automation_id
+        )
 
-        response = self._abode.send_request(method="get", url=url)
+        response = self._abode.send_request(method="get", path=path)
         response_object = json.loads(response.text)
 
         if isinstance(response_object, (tuple, list)):
