@@ -1,5 +1,7 @@
 """Test the Abode binary sensors."""
 import unittest
+import functools
+import itertools
 
 import requests_mock
 
@@ -167,11 +169,14 @@ class TestBinarySensors(unittest.TestCase):
         m.get(CONST.DEVICES_URL, text=all_devices)
 
         # Refesh devices and test changes
-        for device in self.abode.get_devices(refresh=True):
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in skip_alarms(self.abode.get_devices(refresh=True)):
             assert device.is_on, device.type + " is_on failed"
             assert device.battery_low, device.type + " battery_low failed"
             assert device.no_response, device.type + " no_response failed"
+
+
+def is_alarm(device):
+    return device.type_tag == CONST.DEVICE_ALARM
+
+
+skip_alarms = functools.partial(itertools.filterfalse, is_alarm)
