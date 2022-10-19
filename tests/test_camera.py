@@ -162,7 +162,7 @@ class TestCamera(unittest.TestCase):
             # Test that AbodeException is raised with no control URLs
             with pytest.raises(AbodeException) as exc:
                 device.capture()
-                assert str(exc.exception) == ERROR.MISSING_CONTROL_URL
+            assert (exc.value.errcode, exc.value.message) == ERROR.MISSING_CONTROL_URL
 
     def tests_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
