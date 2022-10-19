@@ -147,8 +147,6 @@ class Abode:
 
         _LOGGER.info("Login successful")
 
-        return True
-
     def logout(self):
         """Explicit Abode logout."""
         if self._token:
@@ -166,7 +164,7 @@ class Abode:
                 response_object = json.loads(response.text)
             except OSError as exc:
                 _LOGGER.warning("Caught exception during logout: %s", str(exc))
-                return False
+                return
 
             if response.status_code != 200:
                 raise AbodeAuthenticationException(
@@ -176,8 +174,6 @@ class Abode:
             _LOGGER.debug("Logout Response: %s", response.text)
 
             _LOGGER.info("Logout successful")
-
-        return True
 
     def refresh(self):
         """Do a full refresh of all devices and automations."""
