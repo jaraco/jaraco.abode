@@ -20,9 +20,7 @@ class AbodeAutomation:
 
     def enable(self, enable):
         """Enable or disable the automation."""
-        path = str.replace(
-            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', self.automation_id
-        )
+        path = CONST.AUTOMATION_ID_URL.format(id=self.automation_id)
 
         self._automation['enabled'] = enable
 
@@ -49,9 +47,7 @@ class AbodeAutomation:
 
     def trigger(self):
         """Trigger the automation."""
-        path = str.replace(
-            CONST.AUTOMATION_APPLY_URL, '$AUTOMATIONID$', self.automation_id
-        )
+        path = CONST.AUTOMATION_APPLY_URL.format(id=self.automation_id)
 
         self._abode.send_request(method="post", path=path)
 
@@ -61,9 +57,7 @@ class AbodeAutomation:
 
     def refresh(self):
         """Refresh the automation."""
-        path = str.replace(
-            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', self.automation_id
-        )
+        path = CONST.AUTOMATION_ID_URL.format(id=self.automation_id)
 
         response = self._abode.send_request(method="get", path=path)
         response_object = json.loads(response.text)

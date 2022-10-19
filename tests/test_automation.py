@@ -101,9 +101,7 @@ class TestDevice(unittest.TestCase):
 
         automation_json_changed = json.loads(automation_text_changed)
 
-        automation_id_url = str.replace(
-            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', str(automation_json[0]['id'])
-        )
+        automation_id_url = CONST.AUTOMATION_ID_URL.format(id=automation_json[0]['id'])
 
         m.get(automation_id_url, text=automation_text_changed)
 
@@ -322,9 +320,7 @@ class TestDevice(unittest.TestCase):
         assert automation.is_enabled
 
         # Set up our active state change and URL
-        set_active_url = str.replace(
-            CONST.AUTOMATION_ID_URL, '$AUTOMATIONID$', str(automation_json[0]['id'])
-        )
+        set_active_url = CONST.AUTOMATION_ID_URL.format(id=automation_json[0]['id'])
 
         m.patch(
             set_active_url,
@@ -405,9 +401,7 @@ class TestDevice(unittest.TestCase):
         assert automation is not None
 
         # Set up our automation trigger reply
-        set_active_url = str.replace(
-            CONST.AUTOMATION_APPLY_URL, '$AUTOMATIONID$', automation.automation_id
-        )
+        set_active_url = CONST.AUTOMATION_APPLY_URL.format(id=automation.automation_id)
         m.post(set_active_url, text=MOCK.generic_response_ok())
 
         # Test triggering

@@ -73,7 +73,7 @@ class TestLM(unittest.TestCase):
         assert device.lux_unit == 'lux'
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', LM.DEVICE_ID)
+        device_url = CONST.DEVICE_URL.format(device_id=LM.DEVICE_ID)
 
         # Change device properties
         m.get(

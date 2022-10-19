@@ -32,7 +32,7 @@ def get_panel_mode_url(area, mode):
 
 
 DEVICES_URL = '/api/v1/devices'
-DEVICE_URL = '/api/v1/devices/$DEVID$'
+DEVICE_URL = '/api/v1/devices/{device_id}'
 
 AREAS_URL = '/api/v1/areas'
 
@@ -41,11 +41,11 @@ SOUNDS_URL = '/api/v1/sounds'
 SIREN_URL = '/api/v1/siren'
 
 AUTOMATION_URL = '/integrations/v1/automations/'
-AUTOMATION_ID_URL = AUTOMATION_URL + '$AUTOMATIONID$/'
+AUTOMATION_ID_URL = AUTOMATION_URL + '{id}/'
 AUTOMATION_APPLY_URL = AUTOMATION_ID_URL + 'apply'
 
 TIMELINE_IMAGES_ID_URL = (
-    '/api/v1/timeline?device_id=$DEVID$&dir=next&event_label=Image+Capture&size=1'
+    '/api/v1/timeline?device_id={device_id}&dir=next&event_label=Image+Capture&size=1'
 )
 
 # NOTIFICATION CONSTANTS

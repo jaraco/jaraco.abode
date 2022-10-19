@@ -65,7 +65,7 @@ class TestValve(unittest.TestCase):
         assert not device.is_dimmable
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', VALVE.DEVICE_ID)
+        device_url = CONST.DEVICE_URL.format(device_id=VALVE.DEVICE_ID)
 
         # Change device properties
         m.get(

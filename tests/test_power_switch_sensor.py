@@ -64,7 +64,7 @@ class TestPowerSwitchSensor(unittest.TestCase):
         assert not device.is_on
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', POWERSENSOR.DEVICE_ID)
+        device_url = CONST.DEVICE_URL.format(device_id=POWERSENSOR.DEVICE_ID)
 
         # Change device properties
         m.get(

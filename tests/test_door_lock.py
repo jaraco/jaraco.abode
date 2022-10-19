@@ -64,7 +64,7 @@ class TestDoorLock(unittest.TestCase):
         assert device.is_locked
 
         # Set up our direct device get url
-        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', DOOR_LOCK.DEVICE_ID)
+        device_url = CONST.DEVICE_URL.format(device_id=DOOR_LOCK.DEVICE_ID)
 
         # Change device properties
         m.get(

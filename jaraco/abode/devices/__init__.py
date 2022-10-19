@@ -97,7 +97,7 @@ class AbodeDevice:
 
         Only needed if you're not using the notification service.
         """
-        path = path.replace('$DEVID$', self.device_id)
+        path = path.format(device_id=self.device_id)
 
         response = self._abode.send_request(method="get", path=path)
         response_object = json.loads(response.text)

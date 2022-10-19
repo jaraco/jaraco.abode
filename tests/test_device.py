@@ -168,7 +168,7 @@ class TestDevice(unittest.TestCase):
 
         # Set up offline device
         device_text_offline = '[' + GLASS.device(status=CONST.STATUS_OFFLINE) + ']'
-        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', GLASS.DEVICE_ID)
+        device_url = CONST.DEVICE_URL.format(device_id=GLASS.DEVICE_ID)
         m.get(device_url, text=device_text_offline)
 
         # Logout to reset everything

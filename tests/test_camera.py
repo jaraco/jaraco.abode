@@ -90,7 +90,7 @@ class TestCamera(unittest.TestCase):
             assert not device.no_response
 
             # Set up our direct device get url
-            device_url = str.replace(CONST.DEVICE_URL, "$DEVID$", device.device_id)
+            device_url = CONST.DEVICE_URL.format(device_id=device.device_id)
 
             # Change device properties
             m.get(
@@ -187,7 +187,7 @@ class TestCamera(unittest.TestCase):
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
+            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
 
             m.get(url, text="[" + cam_type.timeline_event(device.device_id) + "]")
             # Set up our file path response
@@ -223,7 +223,7 @@ class TestCamera(unittest.TestCase):
                 device.refresh_image()
 
             # Test that an an empty timeline event throws exception
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
+            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
             m.get(
                 url,
                 text="["
@@ -235,7 +235,7 @@ class TestCamera(unittest.TestCase):
                 device.refresh_image()
 
             # Test that an unexpected timeline event throws exception
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
+            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
             m.get(
                 url,
                 text="["
@@ -266,7 +266,7 @@ class TestCamera(unittest.TestCase):
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
+            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
             m.get(url, text="[]")
 
             # Refresh the image
@@ -296,7 +296,7 @@ class TestCamera(unittest.TestCase):
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, "$DEVID$", device.device_id)
+            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
             m.get(url, text="[" + cam_type.timeline_event(device.device_id) + "]")
 
             # Set up our file path response

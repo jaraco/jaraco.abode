@@ -301,7 +301,7 @@ class TestEventController(unittest.TestCase):
         assert events.add_device_callback(device.device_id, callback)
 
         # Set up device update URL
-        device_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
+        device_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
         m.get(
             device_url,
             text=COVER.device(
@@ -494,7 +494,7 @@ class TestEventController(unittest.TestCase):
         assert events.add_device_callback([cover, doorcontact], callback)
 
         # Set up device update URL's
-        cover_url = str.replace(CONST.DEVICE_URL, '$DEVID$', COVER.DEVICE_ID)
+        cover_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
         m.get(
             cover_url,
             text=COVER.device(
@@ -505,7 +505,7 @@ class TestEventController(unittest.TestCase):
             ),
         )
 
-        door_url = str.replace(CONST.DEVICE_URL, '$DEVID$', DOORCONTACT.DEVICE_ID)
+        door_url = CONST.DEVICE_URL.format(device_id=DOORCONTACT.DEVICE_ID)
         m.get(
             door_url,
             text=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN),

@@ -47,7 +47,7 @@ class AbodeCamera(AbodeDevice):
 
     def refresh_image(self):
         """Get the most recent camera image."""
-        url = str.replace(CONST.TIMELINE_IMAGES_ID_URL, '$DEVID$', self.device_id)
+        url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=self.device_id)
         response = self._abode.send_request("get", url)
 
         _LOGGER.debug("Get image response: %s", response.text)
