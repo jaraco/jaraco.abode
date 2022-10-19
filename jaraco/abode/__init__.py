@@ -149,31 +149,33 @@ class Abode:
 
     def logout(self):
         """Explicit Abode logout."""
-        if self._token:
-            header_data = {'ABODE-API-KEY': self._token}
+        if not self._token:
+            return
 
-            self._session = sessions.BaseUrlSession(CONST.BASE_URL)
-            self._token = None
-            self._panel = None
-            self._user = None
-            self._devices = None
-            self._automations = None
+        header_data = {'ABODE-API-KEY': self._token}
 
-            try:
-                response = self._session.post(CONST.LOGOUT_URL, headers=header_data)
-                response_object = json.loads(response.text)
-            except OSError as exc:
-                _LOGGER.warning("Caught exception during logout: %s", str(exc))
-                return
+        self._session = sessions.BaseUrlSession(CONST.BASE_URL)
+        self._token = None
+        self._panel = None
+        self._user = None
+        self._devices = None
+        self._automations = None
 
-            if response.status_code != 200:
-                raise AbodeAuthenticationException(
-                    (response.status_code, response_object['message'])
-                )
+        try:
+            response = self._session.post(CONST.LOGOUT_URL, headers=header_data)
+            response_object = json.loads(response.text)
+        except OSError as exc:
+            _LOGGER.warning("Caught exception during logout: %s", str(exc))
+            return
 
-            _LOGGER.debug("Logout Response: %s", response.text)
+        if response.status_code != 200:
+            raise AbodeAuthenticationException(
+                (response.status_code, response_object['message'])
+            )
 
-            _LOGGER.info("Logout successful")
+        _LOGGER.debug("Logout Response: %s", response.text)
+
+        _LOGGER.info("Logout successful")
 
     def refresh(self):
         """Do a full refresh of all devices and automations."""
