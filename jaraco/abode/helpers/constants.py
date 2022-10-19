@@ -28,7 +28,7 @@ INTEGRATIONS_URL = '/integrations/v1/devices/'
 
 def get_panel_mode_url(area, mode):
     """Create panel URL."""
-    return '/api/v1/panel/mode/' + area + '/' + mode
+    return f'/api/v1/panel/mode/{area}/{mode}'
 
 
 DEVICES_URL = '/api/v1/devices'
