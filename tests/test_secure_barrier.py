@@ -1,9 +1,5 @@
 """Test the Abode device classes."""
-import unittest
 
-import requests_mock
-
-import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
 import tests.mock.login as LOGIN
@@ -14,24 +10,9 @@ import tests.mock.devices as DEVICES
 import tests.mock.devices.secure_barrier as COVER
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestSecureBarrier(unittest.TestCase):
+class TestSecureBarrier:
     """Test the AbodePy cover class."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_cover_device_properties(self, m):
         """Tests that cover devices properties work as expected."""
         # Set up URL's
@@ -86,7 +67,6 @@ class TestSecureBarrier(unittest.TestCase):
         assert device.is_on
         assert device.is_open
 
-    @requests_mock.mock()
     def tests_cover_status_changes(self, m):
         """Tests that cover device changes work as expected."""
         # Set up URL's

@@ -1,8 +1,5 @@
 """Test the Abode camera class."""
 import os
-import unittest
-
-import requests_mock
 
 import jaraco.abode
 from jaraco.abode.exceptions import AbodeException
@@ -17,9 +14,6 @@ import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.panel as PANEL
 import pytest
 
-USERNAME = "foobar"
-PASSWORD = "deadbeef"
-
 
 def set_cam_type(device_type):
     """Return camera type_tag."""
@@ -30,40 +24,29 @@ def set_cam_type(device_type):
         return IRCAMERA
 
 
-@requests_mock.Mocker()
-class TestCamera(unittest.TestCase):
+@pytest.fixture(autouse=True)
+def all_devices(request):
+    request.instance.all_devices = (
+        "["
+        + IRCAMERA.device(
+            devid=IRCAMERA.DEVICE_ID,
+            status=CONST.STATUS_ONLINE,
+            low_battery=False,
+            no_response=False,
+        )
+        + ","
+        + IPCAM.device(
+            devid=IPCAM.DEVICE_ID,
+            status=CONST.STATUS_ONLINE,
+            low_battery=False,
+            no_response=False,
+        )
+        + "]"
+    )
+
+
+class TestCamera:
     """Test the AbodePy camera."""
-
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-        self.all_devices = (
-            "["
-            + IRCAMERA.device(
-                devid=IRCAMERA.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
-                low_battery=False,
-                no_response=False,
-            )
-            + ","
-            + IPCAM.device(
-                devid=IPCAM.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
-                low_battery=False,
-                no_response=False,
-            )
-            + "]"
-        )
-
-        # Logout to reset everything
-        self.abode.logout()
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
 
     def tests_camera_properties(self, m):
         """Tests that camera properties work as expected."""

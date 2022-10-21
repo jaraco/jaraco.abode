@@ -1,8 +1,5 @@
 """Test the Abode device classes."""
 import json
-import unittest
-
-import requests_mock
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
@@ -16,26 +13,13 @@ import tests.mock.automation as AUTOMATION
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
 AID_1 = '47fae27488f74f55b964a81a066c3a01'
 AID_2 = '47fae27488f74f55b964a81a066c3a02'
 AID_3 = '47fae27488f74f55b964a81a066c3a03'
 
 
-@requests_mock.Mocker()
-class TestDevice(unittest.TestCase):
+class TestDevice:
     """Test the generic AbodePy device class."""
-
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
 
     def tests_automation_init(self, m):
         """Check the Abode automation class init's properly."""

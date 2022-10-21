@@ -1,8 +1,4 @@
 """Test the Abode device classes."""
-import unittest
-
-import requests_mock
-
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
@@ -15,24 +11,9 @@ import tests.mock.devices.alarm as ALARM
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestAlarm(unittest.TestCase):
+class TestAlarm:
     """Test the generic AbodePy device class."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_abode_alarm_setup(self, m):
         """Check that Abode alarm device is set up properly."""
         panel = PANEL.get_response_ok(mode=CONST.MODE_STANDBY)
@@ -49,7 +30,6 @@ class TestAlarm(unittest.TestCase):
         # pylint: disable=W0212
         assert alarm_device._json_state == alarm
 
-    @requests_mock.mock()
     def tests_alarm_device_properties(self, m):
         """Check that the abode device properties are working."""
         # Set up URL's
@@ -107,7 +87,6 @@ class TestAlarm(unittest.TestCase):
         assert alarm.status == CONST.MODE_HOME
         assert alarm.is_on
 
-    @requests_mock.mock()
     def tests_alarm_device_mode_changes(self, m):
         """Test that the abode alarm can change/report modes."""
         # Set up URL's

@@ -1,9 +1,5 @@
 """Test the Abode device classes."""
-import unittest
 
-import requests_mock
-
-import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
 import tests.mock.login as LOGIN
@@ -13,24 +9,9 @@ import tests.mock.panel as PANEL
 import tests.mock.devices.lm as LM
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestLM(unittest.TestCase):
+class TestLM:
     """Test the AbodePy sensor class/LM."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_cover_lm_properties(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URL's
@@ -105,7 +86,6 @@ class TestLM(unittest.TestCase):
         assert device.lux == 100
         assert device.lux_unit == 'lux'
 
-    @requests_mock.mock()
     def tests_lm_float_units(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URL's
@@ -147,7 +127,6 @@ class TestLM(unittest.TestCase):
         assert device.lux == 14.11
         assert device.lux_unit == 'lux'
 
-    @requests_mock.mock()
     def tests_lm_temp_only(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URL's

@@ -1,7 +1,4 @@
 """Test the Abode device classes."""
-import unittest
-
-import requests_mock
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
@@ -15,24 +12,9 @@ import tests.mock.devices.dimmer as DIMMER
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestDimmer(unittest.TestCase):
+class TestDimmer:
     """Test the AbodePy light device with a dimmer."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_dimmer_device_properties(self, m):
         """Tests that dimmer light devices properties work as expected."""
         # Set up URL's
@@ -93,7 +75,6 @@ class TestDimmer(unittest.TestCase):
         assert device.no_response
         assert device.is_on
 
-    @requests_mock.mock()
     def tests_dimmer_status_changes(self, m):
         """Tests that dimmer device changes work as expected."""
         # Set up URL's

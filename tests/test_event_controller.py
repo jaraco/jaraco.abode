@@ -1,9 +1,6 @@
 """Test the Abode event controller class."""
 import json
-import unittest
 from unittest.mock import call, Mock
-
-import requests_mock
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
@@ -20,24 +17,9 @@ import tests.mock.devices.ir_camera as IRCAMERA
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestEventController(unittest.TestCase):
+class TestEventController:
     """Test the AbodePy event controller."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_device_id_registration(self, m):
         """Tests that we can register for device events with a device id."""
         # Set up URL's
@@ -72,7 +54,6 @@ class TestEventController(unittest.TestCase):
         # Register our device id
         assert events.add_device_callback(device.device_id, callback)
 
-    @requests_mock.mock()
     def tests_device_registration(self, m):
         """Tests that we can register for device events with a device."""
         # Set up URL's
@@ -104,7 +85,6 @@ class TestEventController(unittest.TestCase):
         # Register our device
         assert events.add_device_callback(device, lambda device: None)
 
-    @requests_mock.mock()
     def tests_device_all_unregistration(self, m):
         """Tests that we can unregister for all device events."""
         # Set up URL's
@@ -139,7 +119,6 @@ class TestEventController(unittest.TestCase):
         # Unregister all callbacks
         assert events.remove_all_device_callbacks(device)
 
-    @requests_mock.mock()
     def tests_invalid_device(self, m):
         """Tests that invalid devices are not registered."""
         # Set up URL's
@@ -180,7 +159,6 @@ class TestEventController(unittest.TestCase):
         with pytest.raises(jaraco.abode.AbodeException):
             events.add_device_callback(fake_device, callback)
 
-    @requests_mock.mock()
     def tests_invalid_all_device_unregister(self, m):
         """Tests that invalid devices are not all unregistered."""
         # Set up URL's
@@ -260,7 +238,6 @@ class TestEventController(unittest.TestCase):
         with pytest.raises(jaraco.abode.AbodeException):
             events.add_timeline_callback({"lol": "lol"}, callback)
 
-    @requests_mock.mock()
     def tests_device_callback(self, m):
         """Tests that device updates callback correctly."""
         # Set up URL's
@@ -378,7 +355,6 @@ class TestEventController(unittest.TestCase):
         # Test that an invalid event exits cleanly
         events._on_timeline_update({"invalid": "event"})
 
-    @requests_mock.mock()
     def tests_alarm_callback(self, m):
         """Tests that alarm device updates callback correctly."""
         # Set up URL's
@@ -444,7 +420,6 @@ class TestEventController(unittest.TestCase):
         event_json = json.loads(IRCAMERA.timeline_event())
         events._on_timeline_update(event_json)
 
-    @requests_mock.mock()
     def tests_multi_device_callback(self, m):
         """Tests that multiple device updates callback correctly."""
         # Set up URL's

@@ -1,7 +1,4 @@
 """Test the Abode device classes."""
-import unittest
-
-import requests_mock
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
@@ -15,24 +12,9 @@ import tests.mock.devices.valve as VALVE
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestValve(unittest.TestCase):
+class TestValve:
     """Test the AbodePy valve."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_switch_device_properties(self, m):
         """Tests that switch devices properties work as expected."""
         # Set up URL's
@@ -86,7 +68,6 @@ class TestValve(unittest.TestCase):
         assert device.no_response
         assert device.is_on
 
-    @requests_mock.mock()
     def tests_switch_status_changes(self, m):
         """Tests that switch device changes work as expected."""
         # Set up URL's

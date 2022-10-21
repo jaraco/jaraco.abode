@@ -1,11 +1,7 @@
 """Test the Abode binary sensors."""
-import unittest
 import functools
 import itertools
 
-import requests_mock
-
-import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
 import tests.mock.login as LOGIN
@@ -21,24 +17,9 @@ import tests.mock.devices.status_display as STATUS_DISPLAY
 import tests.mock.devices.water_sensor as WATER_SENSOR
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestBinarySensors(unittest.TestCase):
+class TestBinarySensors:
     """Test the AbodePy binary sensors."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_binary_sensor_properties(self, m):
         """Tests that binary sensor device properties work as expected."""
         # Set up URL's

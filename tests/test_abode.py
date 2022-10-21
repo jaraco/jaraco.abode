@@ -21,9 +21,6 @@ import tests.mock.devices as DEVICES
 import tests.mock.devices.door_contact as DOOR_CONTACT
 import tests.mock.user as USER
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
 
 @pytest.fixture
 def cache_path(tmp_path, request):
@@ -34,14 +31,10 @@ def cache_path(tmp_path, request):
 def abode_objects(request):
     self = request.instance
     self.abode_no_cred = jaraco.abode.Abode(disable_cache=True)
-    self.abode = jaraco.abode.Abode(
-        username=USERNAME, password=PASSWORD, disable_cache=True
-    )
 
 
-@pytest.fixture
-def m(requests_mock):
-    return requests_mock
+USERNAME = 'foobar'
+PASSWORD = 'deadbeef'
 
 
 class TestAbode:

@@ -1,7 +1,4 @@
 """Test the Abode device classes."""
-import unittest
-
-import requests_mock
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
@@ -15,24 +12,9 @@ import tests.mock.devices.hue as HUE
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestHue(unittest.TestCase):
+class TestHue:
     """Test the AbodePy light device with Hue."""
 
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
-
-    @requests_mock.mock()
     def tests_hue_device_properties(self, m):
         """Tests that hue light devices properties work as expected."""
         # Set up URL's
@@ -108,7 +90,6 @@ class TestHue(unittest.TestCase):
         assert device.no_response
         assert device.is_on
 
-    @requests_mock.mock()
     def tests_hue_status_changes(self, m):
         """Tests that hue device changes work as expected."""
         # Set up URL's
@@ -180,7 +161,6 @@ class TestHue(unittest.TestCase):
         with pytest.raises(jaraco.abode.AbodeException):
             device.switch_on()
 
-    @requests_mock.mock()
     def tests_hue_color_temp_changes(self, m):
         """Tests that hue device color temp changes work as expected."""
         # Set up URL's
@@ -248,7 +228,6 @@ class TestHue(unittest.TestCase):
         with pytest.raises(jaraco.abode.AbodeException):
             device.set_color_temp(4434)
 
-    @requests_mock.mock()
     def tests_hue_color_changes(self, m):
         """Tests that hue device color changes work as expected."""
         # Set up URL's

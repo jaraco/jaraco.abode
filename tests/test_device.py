@@ -1,8 +1,5 @@
 """Test the Abode device classes."""
 import json
-import unittest
-
-import requests_mock
 
 import jaraco.abode
 
@@ -36,22 +33,8 @@ import tests.mock.panel as PANEL
 import pytest
 
 
-USERNAME = 'foobar'
-PASSWORD = 'deadbeef'
-
-
-class TestDevice(unittest.TestCase):
+class TestDevice:
     """Test the generic AbodePy device class."""
-
-    def setUp(self):
-        """Set up Abode module."""
-        self.abode = jaraco.abode.Abode(
-            username=USERNAME, password=PASSWORD, disable_cache=True
-        )
-
-    def tearDown(self):
-        """Clean up after test."""
-        self.abode = None
 
     def tests_device_mapping_typetag(self):
         """Check the generic Abode device maps to none without typetag."""
@@ -106,7 +89,6 @@ class TestDevice(unittest.TestCase):
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
-    @requests_mock.mock()
     def tests_device_init(self, m):
         """Check the generic Abode device class init's properly."""
         # Set up URLs
@@ -153,7 +135,6 @@ class TestDevice(unittest.TestCase):
         assert device.out_of_order
         assert device.desc is not None
 
-    @requests_mock.mock()
     def tests_generic_device_refresh(self, m):
         """Check the generic Abode device class init's properly."""
         # Set up URL's
@@ -182,7 +163,6 @@ class TestDevice(unittest.TestCase):
         device = self.abode.get_device(GLASS.DEVICE_ID, refresh=True)
         assert device.status == CONST.STATUS_OFFLINE
 
-    @requests_mock.mock()
     def tests_multiple_devices(self, m):
         """Tests that multiple devices are returned properly."""
         # Set up URL's
@@ -226,7 +206,6 @@ class TestDevice(unittest.TestCase):
         psd = self.abode.get_device(GLASS.DEVICE_ID)
         assert psd is not None
 
-    @requests_mock.mock()
     def tests_unknown_devices(self, m):
         """Tests that multiple devices are returned properly."""
         # Set up URL's
@@ -250,7 +229,6 @@ class TestDevice(unittest.TestCase):
         assert devices is not None
         assert len(devices) == 1
 
-    @requests_mock.mock()
     def tests_device_category_filter(self, m):
         """Tests that device category filter returns requested results."""
         # Set up URL's
@@ -302,7 +280,6 @@ class TestDevice(unittest.TestCase):
         assert devices is not None
         assert len(devices) == 2
 
-    @requests_mock.mock()
     def tests_no_control_url(self, m):
         """Check that devices return false without control url's."""
         # Set up URL's
@@ -323,7 +300,6 @@ class TestDevice(unittest.TestCase):
         assert not device.set_status('1')
         assert not device.set_level('99')
 
-    @requests_mock.mock()
     def tests_device_status_changes(self, m):
         """Tests that device status changes work as expected."""
         # Set up URL's
@@ -401,7 +377,6 @@ class TestDevice(unittest.TestCase):
         with pytest.raises(jaraco.abode.AbodeException):
             device.switch_on()
 
-    @requests_mock.mock()
     def tests_device_level_changes(self, m):
         """Tests that device level changes work as expected."""
         # Set up URL's
@@ -474,7 +449,6 @@ class TestDevice(unittest.TestCase):
         with pytest.raises(jaraco.abode.AbodeException):
             device.set_level('28')
 
-    @requests_mock.mock()
     def tests_all_devices(self, m):
         """Tests that all mocked devices are mapped correctly."""
         # Set up URL's
