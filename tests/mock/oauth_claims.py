@@ -2,7 +2,7 @@
 
 import json
 
-from tests.mock import OAUTH_TOKEN
+from . import OAUTH_TOKEN
 
 
 def get_response_ok(oauth_token=OAUTH_TOKEN):

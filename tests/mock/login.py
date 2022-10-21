@@ -2,9 +2,9 @@
 
 import json
 
-from tests.mock import AUTH_TOKEN
-import tests.mock.panel as panel
-import tests.mock.user as user
+from . import AUTH_TOKEN
+from . import panel
+from . import user
 
 
 def post_response_ok(auth_token=AUTH_TOKEN, user_response=user.get_response_ok()):
