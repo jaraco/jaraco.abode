@@ -7,13 +7,13 @@ import jaraco.abode
 from jaraco.abode.exceptions import AbodeException
 import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.errors as ERROR
-import tests.mock as MOCK
-import tests.mock.devices.ipcam as IPCAM
-import tests.mock.devices.ir_camera as IRCAMERA
-import tests.mock.login as LOGIN
-import tests.mock.logout as LOGOUT
-import tests.mock.oauth_claims as OAUTH_CLAIMS
-import tests.mock.panel as PANEL
+from . import mock as MOCK
+from .mock.devices import ipcam as IPCAM
+from .mock.devices import ir_camera as IRCAMERA
+from .mock import login as LOGIN
+from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import panel as PANEL
 
 
 def set_cam_type(device_type):

@@ -5,12 +5,12 @@ import pytest
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
-import tests.mock.login as LOGIN
-import tests.mock.oauth_claims as OAUTH_CLAIMS
-import tests.mock.logout as LOGOUT
-import tests.mock.panel as PANEL
-import tests.mock.devices as DEVICES
-import tests.mock.devices.valve as VALVE
+from .mock import login as LOGIN
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import logout as LOGOUT
+from .mock import panel as PANEL
+from .mock import devices as DEVICES
+from .mock.devices import valve as VALVE
 
 
 class TestValve:

@@ -12,25 +12,25 @@ from jaraco.abode.devices.light import AbodeLight
 from jaraco.abode.devices.lock import AbodeLock
 from jaraco.abode.devices.switch import AbodeSwitch
 import jaraco.abode.helpers.constants as CONST
-import tests.mock.devices as DEVICES
-import tests.mock.devices.door_contact as DOOR_CONTACT
-import tests.mock.devices.door_lock as DOOR_LOCK
-import tests.mock.devices.glass as GLASS
-import tests.mock.devices.ir_camera as IR_CAMERA
-import tests.mock.devices.keypad as KEYPAD
-import tests.mock.devices.pir as PIR
-import tests.mock.devices.power_switch_meter as POWERMETER
-import tests.mock.devices.power_switch_sensor as POWERSENSOR
-import tests.mock.devices.remote_controller as REMOTE_CONTROLLER
-import tests.mock.devices.secure_barrier as SECUREBARRIER
-import tests.mock.devices.siren as SIREN
-import tests.mock.devices.status_display as STATUS_DISPLAY
-import tests.mock.devices.water_sensor as WATER_SENSOR
-import tests.mock.devices.unknown as UNKNOWN
-import tests.mock.login as LOGIN
-import tests.mock.oauth_claims as OAUTH_CLAIMS
-import tests.mock.logout as LOGOUT
-import tests.mock.panel as PANEL
+from .mock import devices as DEVICES
+from .mock.devices import door_contact as DOOR_CONTACT
+from .mock.devices import door_lock as DOOR_LOCK
+from .mock.devices import glass as GLASS
+from .mock.devices import ir_camera as IR_CAMERA
+from .mock.devices import keypad as KEYPAD
+from .mock.devices import pir as PIR
+from .mock.devices import power_switch_meter as POWERMETER
+from .mock.devices import power_switch_sensor as POWERSENSOR
+from .mock.devices import remote_controller as REMOTE_CONTROLLER
+from .mock.devices import secure_barrier as SECUREBARRIER
+from .mock.devices import siren as SIREN
+from .mock.devices import status_display as STATUS_DISPLAY
+from .mock.devices import water_sensor as WATER_SENSOR
+from .mock.devices import unknown as UNKNOWN
+from .mock import login as LOGIN
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import logout as LOGOUT
+from .mock import panel as PANEL
 
 
 class TestDevice:

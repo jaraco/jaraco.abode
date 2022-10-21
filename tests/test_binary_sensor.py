@@ -4,17 +4,17 @@ import itertools
 
 import jaraco.abode.helpers.constants as CONST
 
-import tests.mock.login as LOGIN
-import tests.mock.oauth_claims as OAUTH_CLAIMS
-import tests.mock.logout as LOGOUT
-import tests.mock.panel as PANEL
-import tests.mock.devices.door_contact as DOOR_CONTACT
-import tests.mock.devices.glass as GLASS
-import tests.mock.devices.keypad as KEYPAD
-import tests.mock.devices.remote_controller as REMOTE_CONTROLLER
-import tests.mock.devices.siren as SIREN
-import tests.mock.devices.status_display as STATUS_DISPLAY
-import tests.mock.devices.water_sensor as WATER_SENSOR
+from .mock import login as LOGIN
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import logout as LOGOUT
+from .mock import panel as PANEL
+from .mock.devices import door_contact as DOOR_CONTACT
+from .mock.devices import glass as GLASS
+from .mock.devices import keypad as KEYPAD
+from .mock.devices import remote_controller as REMOTE_CONTROLLER
+from .mock.devices import siren as SIREN
+from .mock.devices import status_display as STATUS_DISPLAY
+from .mock.devices import water_sensor as WATER_SENSOR
 
 
 class TestBinarySensors:

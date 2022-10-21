@@ -9,13 +9,13 @@ import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.timeline as TIMELINE
 from jaraco.abode.devices.binary_sensor import AbodeBinarySensor
 
-import tests.mock.login as LOGIN
-import tests.mock.oauth_claims as OAUTH_CLAIMS
-import tests.mock.logout as LOGOUT
-import tests.mock.panel as PANEL
-import tests.mock.devices.secure_barrier as COVER
-import tests.mock.devices.door_contact as DOORCONTACT
-import tests.mock.devices.ir_camera as IRCAMERA
+from .mock import login as LOGIN
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import logout as LOGOUT
+from .mock import panel as PANEL
+from .mock.devices import secure_barrier as COVER
+from .mock.devices import door_contact as DOORCONTACT
+from .mock.devices import ir_camera as IRCAMERA
 
 
 class TestEventController:
