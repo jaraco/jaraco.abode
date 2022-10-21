@@ -14,12 +14,13 @@ from .. import panel as PANEL
 
 def device(area='1', panel=PANEL.get_response_ok(mode=CONST.MODE_STANDBY)):
     """Alarm mock device."""
-    alarm = json.loads(panel)
-    alarm['name'] = CONST.ALARM_NAME
-    alarm['id'] = CONST.ALARM_DEVICE_ID + area
-    alarm['type'] = CONST.ALARM_TYPE
-    alarm['type_tag'] = CONST.DEVICE_ALARM
-    alarm['generic_type'] = CONST.TYPE_ALARM
-    alarm['uuid'] = alarm.get('mac').replace(':', '').lower()
-
-    return alarm
+    panel_ob = json.loads(panel)
+    return dict(
+        panel_ob,
+        name=CONST.ALARM_NAME,
+        id=CONST.ALARM_DEVICE_ID + area,
+        type=CONST.ALARM_TYPE,
+        type_tag=CONST.DEVICE_ALARM,
+        generic_type=CONST.TYPE_ALARM,
+        uuid=panel_ob.get('mac').replace(':', '').lower(),
+    )
