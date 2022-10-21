@@ -1,3 +1,13 @@
+v0.8.0
+======
+
+#3: Removed test dependency on npm.
+
+#4: Project is now continuously tested on Windows.
+
+Cleaned up usage of unittest in tests.
+
+
 v0.7.0
 ======
 
