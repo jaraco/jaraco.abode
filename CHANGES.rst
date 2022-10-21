@@ -1,3 +1,8 @@
+v1.0.0
+======
+
+Removed abodepy compatibility.
+
 v0.8.0
 ======
 
