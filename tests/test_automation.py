@@ -3,6 +3,7 @@ import json
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
+import pytest
 
 import tests.mock as MOCK
 import tests.mock.login as LOGIN
@@ -10,7 +11,6 @@ import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.automation as AUTOMATION
-import pytest
 
 
 AID_1 = '47fae27488f74f55b964a81a066c3a01'

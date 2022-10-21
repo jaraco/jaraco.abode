@@ -1,6 +1,8 @@
 """Test the Abode camera class."""
 import os
 
+import pytest
+
 import jaraco.abode
 from jaraco.abode.exceptions import AbodeException
 import jaraco.abode.helpers.constants as CONST
@@ -12,7 +14,6 @@ import tests.mock.login as LOGIN
 import tests.mock.logout as LOGOUT
 import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.panel as PANEL
-import pytest
 
 
 def set_cam_type(device_type):

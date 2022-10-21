@@ -3,13 +3,14 @@
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
+import pytest
+
 import tests.mock.login as LOGIN
 import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.devices as DEVICES
 import tests.mock.devices.door_lock as DOOR_LOCK
-import pytest
 
 
 class TestDoorLock:

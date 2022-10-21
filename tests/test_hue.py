@@ -1,5 +1,7 @@
 """Test the Abode device classes."""
 
+import pytest
+
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 
@@ -9,7 +11,6 @@ import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
 import tests.mock.devices as DEVICES
 import tests.mock.devices.hue as HUE
-import pytest
 
 
 class TestHue:

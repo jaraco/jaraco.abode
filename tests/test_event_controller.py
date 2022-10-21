@@ -2,6 +2,8 @@
 import json
 from unittest.mock import call, Mock
 
+import pytest
+
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.timeline as TIMELINE
@@ -14,7 +16,6 @@ import tests.mock.panel as PANEL
 import tests.mock.devices.secure_barrier as COVER
 import tests.mock.devices.door_contact as DOORCONTACT
 import tests.mock.devices.ir_camera as IRCAMERA
-import pytest
 
 
 class TestEventController:

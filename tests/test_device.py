@@ -1,8 +1,9 @@
 """Test the Abode device classes."""
 import json
 
-import jaraco.abode
+import pytest
 
+import jaraco.abode
 from jaraco.abode.devices import AbodeDevice
 from jaraco.abode.devices.alarm import AbodeAlarm
 from jaraco.abode.devices.binary_sensor import AbodeBinarySensor
@@ -30,7 +31,6 @@ import tests.mock.login as LOGIN
 import tests.mock.oauth_claims as OAUTH_CLAIMS
 import tests.mock.logout as LOGOUT
 import tests.mock.panel as PANEL
-import pytest
 
 
 class TestDevice:
