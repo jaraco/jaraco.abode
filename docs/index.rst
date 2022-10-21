@@ -5,12 +5,7 @@ Welcome to |project| documentation!
    :maxdepth: 1
 
    history
-
-
-.. automodule:: jaraco.abode
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   api
 
 
 Indices and tables

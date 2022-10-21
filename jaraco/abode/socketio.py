@@ -3,9 +3,9 @@ import collections
 import json
 import logging
 import threading
+import random
 
 from datetime import datetime
-from random import random
 
 from lomond import WebSocket
 from lomond import events
@@ -184,7 +184,7 @@ class SocketIO:
                 _LOGGER.warning("Websocket Error: %s", exc)
 
             if self._running:
-                wait_for = min_wait + random() * min(random_wait, 2**retries)
+                wait_for = min_wait + random.random() * min(random_wait, 2**retries)
 
                 _LOGGER.info("Waiting %f seconds before reconnecting...", wait_for)
 
