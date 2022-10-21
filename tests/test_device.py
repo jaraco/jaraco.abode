@@ -34,7 +34,7 @@ import tests.mock.panel as PANEL
 
 
 class TestDevice:
-    """Test the generic AbodePy device class."""
+    """Test the generic device class."""
 
     def tests_device_mapping_typetag(self):
         """Check the generic Abode device maps to none without typetag."""

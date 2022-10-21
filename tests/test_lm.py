@@ -10,7 +10,7 @@ import tests.mock.devices.lm as LM
 
 
 class TestLM:
-    """Test the AbodePy sensor class/LM."""
+    """Test the sensor class/LM."""
 
     def tests_cover_lm_properties(self, m):
         """Tests that sensor/LM devices properties work as expected."""

@@ -18,7 +18,7 @@ import tests.mock.devices.water_sensor as WATER_SENSOR
 
 
 class TestBinarySensors:
-    """Test the AbodePy binary sensors."""
+    """Test the binary sensors."""
 
     def tests_binary_sensor_properties(self, m):
         """Tests that binary sensor device properties work as expected."""

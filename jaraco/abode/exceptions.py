@@ -1,5 +1,3 @@
-"""The exceptions used by AbodePy."""
-
 import json
 
 import requests

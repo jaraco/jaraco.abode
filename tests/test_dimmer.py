@@ -14,7 +14,7 @@ import tests.mock.devices.dimmer as DIMMER
 
 
 class TestDimmer:
-    """Test the AbodePy light device with a dimmer."""
+    """Test the light device with a dimmer."""
 
     def tests_dimmer_device_properties(self, m):
         """Tests that dimmer light devices properties work as expected."""

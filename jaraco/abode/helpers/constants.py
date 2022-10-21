@@ -1,5 +1,3 @@
-"""AbodePy constants."""
-
 PROJECT_GITHUB_USERNAME = 'jaraco'
 PROJECT_GITHUB_REPOSITORY = 'jaraco.abode'
 

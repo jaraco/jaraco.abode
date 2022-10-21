@@ -14,7 +14,7 @@ import tests.mock.devices.valve as VALVE
 
 
 class TestValve:
-    """Test the AbodePy valve."""
+    """Test the valve."""
 
     def tests_switch_device_properties(self, m):
         """Tests that switch devices properties work as expected."""

@@ -18,8 +18,8 @@ AID_2 = '47fae27488f74f55b964a81a066c3a02'
 AID_3 = '47fae27488f74f55b964a81a066c3a03'
 
 
-class TestDevice:
-    """Test the generic AbodePy device class."""
+class TestAutomation:
+    """Test the automation class."""
 
     def tests_automation_init(self, m):
         """Check the Abode automation class init's properly."""

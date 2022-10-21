@@ -14,7 +14,7 @@ import tests.mock.devices.power_switch_meter as POWERMETER
 
 
 class TestPowerSwitchMeter:
-    """Test the AbodePy power switch meter class."""
+    """Test the power switch meter class."""
 
     def tests_switch_device_properties(self, m):
         """Tests that switch devices properties work as expected."""

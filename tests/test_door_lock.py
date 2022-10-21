@@ -14,7 +14,7 @@ import tests.mock.devices.door_lock as DOOR_LOCK
 
 
 class TestDoorLock:
-    """Test the generic AbodePy device class."""
+    """Test the door lock."""
 
     def tests_lock_device_properties(self, m):
         """Tests that lock devices properties work as expected."""

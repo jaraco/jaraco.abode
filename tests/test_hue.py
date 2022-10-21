@@ -14,7 +14,7 @@ import tests.mock.devices.hue as HUE
 
 
 class TestHue:
-    """Test the AbodePy light device with Hue."""
+    """Test the light device with Hue."""
 
     def tests_hue_device_properties(self, m):
         """Tests that hue light devices properties work as expected."""

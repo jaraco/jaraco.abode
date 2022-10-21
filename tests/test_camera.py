@@ -47,7 +47,7 @@ def all_devices(request):
 
 
 class TestCamera:
-    """Test the AbodePy camera."""
+    """Test the camera."""
 
     def tests_camera_properties(self, m):
         """Tests that camera properties work as expected."""

@@ -19,7 +19,7 @@ import tests.mock.devices.ir_camera as IRCAMERA
 
 
 class TestEventController:
-    """Test the AbodePy event controller."""
+    """Test the event controller."""
 
     def tests_device_id_registration(self, m):
         """Tests that we can register for device events with a device id."""

@@ -12,7 +12,7 @@ import tests.mock.devices.alarm as ALARM
 
 
 class TestAlarm:
-    """Test the generic AbodePy device class."""
+    """Test the Alarm class."""
 
     def tests_abode_alarm_setup(self, m):
         """Check that Abode alarm device is set up properly."""

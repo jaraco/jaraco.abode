@@ -11,7 +11,7 @@ import tests.mock.devices.secure_barrier as COVER
 
 
 class TestSecureBarrier:
-    """Test the AbodePy cover class."""
+    """Test the secure barrier class."""
 
     def tests_cover_device_properties(self, m):
         """Tests that cover devices properties work as expected."""

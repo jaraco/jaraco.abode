@@ -1,7 +1,7 @@
 """
 Mock Internal Alarm Device.
 
-AbodePy creates an internal device that is a standard panel response that
+The library creates an internal device that is a standard panel response that
 includes a few required device fields. This is so that we can easily translate
 the panel/alarm itself into a Home Assistant device.
 """
