@@ -16,10 +16,7 @@ _LOGGER = logging.getLogger(__name__)
 class AbodeCamera(AbodeDevice):
     """Class to represent a camera device."""
 
-    def __init__(self, json_obj, abode):
-        """Set up Abode alarm device."""
-        AbodeDevice.__init__(self, json_obj, abode)
-        self._image_url = None
+    _image_url = None
 
     def capture(self):
         """Request a new camera image."""
