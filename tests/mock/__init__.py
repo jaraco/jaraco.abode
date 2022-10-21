@@ -12,9 +12,13 @@ AUTH_TOKEN = 'web-1eb04ba2236d85f49d4b9b4bb91665f2'
 OAUTH_TOKEN = 'ohyeahthisisanoauthtoken'
 
 
+def dump(*args, **kwargs):
+    return json.dumps(dict(*args, **kwargs), indent=4)
+
+
 def response_forbidden():
     """Return the invalid API key response json."""
-    return json.dumps(dict(code=403, message='Invalid API Key'))
+    return dump(code=403, message='Invalid API Key')
 
 
 def generic_response_ok():
@@ -23,4 +27,4 @@ def generic_response_ok():
 
     Used for settings changes.
     """
-    return json.dumps(dict(code=200, message='OK'))
+    return dump(code=200, message='OK')

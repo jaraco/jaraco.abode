@@ -1,12 +1,8 @@
 """Mock Abode Claims Response."""
 
-import json
-
-from . import OAUTH_TOKEN
+from . import OAUTH_TOKEN, dump
 
 
 def get_response_ok(oauth_token=OAUTH_TOKEN):
     """Return the oauth2 claims token."""
-    return json.dumps(
-        dict(token_type='Bearer', access_token=oauth_token, expires_in=3600)
-    )
+    return dump(token_type='Bearer', access_token=oauth_token, expires_in=3600)
