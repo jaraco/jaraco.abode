@@ -1,4 +1,3 @@
-"""Init file for devices directory."""
 import json
 import logging
 
