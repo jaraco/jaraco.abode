@@ -27,9 +27,8 @@ def set_cam_type(device_type):
         return IRCAMERA
 
 
-@pytest.fixture(autouse=True)
-def all_devices(request):
-    request.instance.all_devices = (
+def all_devices():
+    return (
         "["
         + IRCAMERA.device(
             devid=IRCAMERA.DEVICE_ID,
@@ -48,18 +47,21 @@ def all_devices(request):
     )
 
 
+@pytest.fixture(autouse=True)
+def setup_URLs(m):
+    # Set up mock URLs
+    m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
+    m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
+    m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
+    m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+    m.get(CONST.DEVICES_URL, text=all_devices())
+
+
 class TestCamera:
     """Test the camera."""
 
     def tests_camera_properties(self, m):
         """Tests that camera properties work as expected."""
-        # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
-
         # Get our camera
         for device in self.abode.get_devices():
             # Skip alarm devices
@@ -98,13 +100,6 @@ class TestCamera:
 
     def tests_camera_capture(self, m):
         """Tests that camera devices capture new images."""
-        # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
-
         # Test our camera devices
         for device in self.abode.get_devices():
             # Skip alarm devices
@@ -139,13 +134,6 @@ class TestCamera:
 
     def test_camera_capture_no_control_URLs(self, m):
         """Tests that camera devices capture new images."""
-        # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
-
         # Test our camera devices
         for device in self.abode.get_devices():
             # Skip alarm devices
@@ -164,13 +152,6 @@ class TestCamera:
 
     def tests_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
-        # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
-
         # Test our camera devices
         for device in self.abode.get_devices():
             # Skip alarm devices
@@ -246,13 +227,6 @@ class TestCamera:
 
     def tests_camera_no_image_update(self, m):
         """Tests that camera updates correctly with no timeline events."""
-        # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
-
         # Test our camera devices
         for device in self.abode.get_devices():
             # Skip alarm devices
@@ -273,13 +247,6 @@ class TestCamera:
 
     def tests_camera_image_write(self, m):
         """Tests that camera images will write to a file."""
-        # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
-
         # Test our camera devices
         for device in self.abode.get_devices():
             # Skip alarm devices
@@ -329,12 +296,6 @@ class TestCamera:
 
     def tests_camera_privacy_mode(self, m):
         """Tests camera privacy mode."""
-        # Set up mock URLs
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=self.all_devices)
 
         # Get the IP camera and test we have it
         device = self.abode.get_device(IPCAM.DEVICE_ID)
