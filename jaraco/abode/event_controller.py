@@ -196,21 +196,17 @@ class AbodeEventController:
             # Callbacks should still execute even if refresh fails (Abode
             # server issues) so that the entity availability in Home Assistant
             # is updated since we are in fact connected to the web socket.
-            for callbacks in self._connection_status_callbacks.items():
-                for callback in callbacks[1]:
+            for callbacks in self._connection_status_callbacks.values:
+                for callback in callbacks:
                     _execute_callback(callback)
 
     def _on_socket_disconnected(self):
         """Socket IO disconnected callback."""
         self._connected = False
 
-        for callbacks in self._connection_status_callbacks.items():
-            # Check if list is not empty.
-            # Applicable when remove_all_device_callbacks
-            # is called before _on_socket_disconnected.
-            if callbacks[1]:
-                for callback in callbacks[1]:
-                    _execute_callback(callback)
+        for callbacks in self._connection_status_callbacks.values():
+            for callback in callbacks:
+                _execute_callback(callback)
 
     def _on_device_update(self, devid):
         """Device callback from Abode SocketIO server."""
@@ -229,7 +225,7 @@ class AbodeEventController:
             _LOGGER.debug("Got device update for unknown device: %s", devid)
             return
 
-        for callback in self._device_callbacks.get(device.device_id, ()):
+        for callback in self._device_callbacks[device.device_id]:
             _execute_callback(callback, device)
 
     def _on_mode_change(self, mode):
@@ -256,7 +252,7 @@ class AbodeEventController:
         # pylint: disable=W0212
         alarm_device._json_state['mode']['area_1'] = mode
 
-        for callback in self._device_callbacks.get(alarm_device.device_id, ()):
+        for callback in self._device_callbacks[alarm_device.device_id]:
             _execute_callback(callback, alarm_device)
 
     def _on_timeline_update(self, event):
@@ -290,9 +286,8 @@ class AbodeEventController:
         # Attempt to map the event code to a group and callback
         event_group = TIMELINE.map_event_code(event_code)
 
-        if event_group:
-            for callback in self._event_callbacks.get(event_group, ()):
-                _execute_callback(callback, event)
+        for callback in self._event_callbacks[event_group]:
+            _execute_callback(callback, event)
 
     def _on_automation_update(self, event):
         """Automation update broadcast from Abode SocketIO server."""
@@ -301,7 +296,7 @@ class AbodeEventController:
         if isinstance(event, (tuple, list)):
             event = event[0]
 
-        for callback in self._event_callbacks.get(event_group, ()):
+        for callback in self._event_callbacks[event_group]:
             _execute_callback(callback, event)
 
 
