@@ -8,6 +8,7 @@ from ..exceptions import AbodeException
 from ..devices.switch import AbodeSwitch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
+from .control import needs_control_url
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -16,11 +17,9 @@ _LOGGER = logging.getLogger(__name__)
 class AbodeLight(AbodeSwitch):
     """Class for lights (dimmers)."""
 
+    @needs_control_url
     def set_color_temp(self, color_temp):
         """Set device color."""
-        if not self._json_state['control_url']:
-            return False
-
         url = CONST.INTEGRATIONS_URL + self._device_uuid
 
         color_data = {
@@ -52,13 +51,10 @@ class AbodeLight(AbodeSwitch):
         self.update({'statuses': {'color_temp': color_temp}})
 
         _LOGGER.info("Set device %s color_temp to: %s", self.device_id, color_temp)
-        return True
 
+    @needs_control_url
     def set_color(self, color):
         """Set device color."""
-        if not self._json_state['control_url']:
-            return False
-
         url = CONST.INTEGRATIONS_URL + self._device_uuid
 
         hue, saturation = color
@@ -95,8 +91,6 @@ class AbodeLight(AbodeSwitch):
         self.update({'statuses': {'hue': hue, 'saturation': saturation}})
 
         _LOGGER.info("Set device %s color to: %s", self.device_id, (hue, saturation))
-
-        return True
 
     @property
     def brightness(self):

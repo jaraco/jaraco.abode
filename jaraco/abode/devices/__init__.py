@@ -5,6 +5,7 @@ from ..exceptions import AbodeException
 
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
+from .control import needs_control_url
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -26,11 +27,9 @@ class AbodeDevice:
 
         self._update_name()
 
+    @needs_control_url
     def set_status(self, status):
         """Set device status."""
-        if not self._json_state['control_url']:
-            return False
-
         path = self._json_state['control_url']
 
         status_data = {'status': str(status)}
@@ -52,13 +51,9 @@ class AbodeDevice:
 
         _LOGGER.info("Set device %s status to: %s", self.device_id, status)
 
-        return True
-
+    @needs_control_url
     def set_level(self, level):
         """Set device level."""
-        if not self._json_state['control_url']:
-            return False
-
         url = CONST.BASE_URL + self._json_state['control_url']
 
         level_data = {'level': str(level)}
@@ -77,8 +72,6 @@ class AbodeDevice:
         self.update(response_object)
 
         _LOGGER.info("Set device %s level to: %s", self.device_id, level)
-
-        return True
 
     def get_value(self, name):
         """Get a value from the json object.
