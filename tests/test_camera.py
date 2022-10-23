@@ -3,6 +3,8 @@ import os
 
 import pytest
 
+from jaraco.collections import DictFilter
+
 import jaraco.abode
 from jaraco.abode.exceptions import AbodeException
 import jaraco.abode.helpers.constants as CONST
@@ -135,13 +137,10 @@ class TestCamera:
             # Capture an image with a failure
             assert not device.capture()
 
-            # Remove control URLs from JSON to test if Abode makes
-            # changes to JSON
-            # pylint: disable=protected-access
-            for key in list(device._json_state.keys()):
-                if key.startswith("control_url"):
-                    # pylint: disable=protected-access
-                    del device._json_state[key]
+            # Remove control URLs from JSON
+            device._json_state = DictFilter(
+                device._json_state, include_pattern='(?!control_url)'
+            )
 
             # Test that AbodeException is raised with no control URLs
             with pytest.raises(AbodeException) as exc:
