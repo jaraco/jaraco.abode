@@ -18,87 +18,85 @@ class AbodeLight(AbodeSwitch):
 
     def set_color_temp(self, color_temp):
         """Set device color."""
-        if self._json_state['control_url']:
-            url = CONST.INTEGRATIONS_URL + self._device_uuid
+        if not self._json_state['control_url']:
+            return False
 
-            color_data = {
-                'action': 'setcolortemperature',
-                'colorTemperature': int(color_temp),
-            }
+        url = CONST.INTEGRATIONS_URL + self._device_uuid
 
-            response = self._abode.send_request("post", url, data=color_data)
-            response_object = json.loads(response.text)
+        color_data = {
+            'action': 'setcolortemperature',
+            'colorTemperature': int(color_temp),
+        }
 
-            _LOGGER.debug("Set Color Temp Response: %s", response.text)
+        response = self._abode.send_request("post", url, data=color_data)
+        response_object = json.loads(response.text)
 
-            if response_object['idForPanel'] != self.device_id:
-                raise AbodeException((ERROR.SET_STATUS_DEV_ID))
+        _LOGGER.debug("Set Color Temp Response: %s", response.text)
 
-            if response_object['colorTemperature'] != int(color_temp):
-                _LOGGER.warning(
-                    (
-                        "Set color temp mismatch for device %s. "
-                        "Request val: %s, Response val: %s "
-                    ),
-                    self.device_id,
-                    color_temp,
-                    response_object['colorTemperature'],
-                )
+        if response_object['idForPanel'] != self.device_id:
+            raise AbodeException((ERROR.SET_STATUS_DEV_ID))
 
-                color_temp = response_object['colorTemperature']
+        if response_object['colorTemperature'] != int(color_temp):
+            _LOGGER.warning(
+                (
+                    "Set color temp mismatch for device %s. "
+                    "Request val: %s, Response val: %s "
+                ),
+                self.device_id,
+                color_temp,
+                response_object['colorTemperature'],
+            )
 
-            self.update({'statuses': {'color_temp': color_temp}})
+            color_temp = response_object['colorTemperature']
 
-            _LOGGER.info("Set device %s color_temp to: %s", self.device_id, color_temp)
-            return True
+        self.update({'statuses': {'color_temp': color_temp}})
 
-        return False
+        _LOGGER.info("Set device %s color_temp to: %s", self.device_id, color_temp)
+        return True
 
     def set_color(self, color):
         """Set device color."""
-        if self._json_state['control_url']:
-            url = CONST.INTEGRATIONS_URL + self._device_uuid
+        if not self._json_state['control_url']:
+            return False
 
-            hue, saturation = color
-            color_data = {
-                'action': 'setcolor',
-                'hue': int(hue),
-                'saturation': int(saturation),
-            }
+        url = CONST.INTEGRATIONS_URL + self._device_uuid
 
-            response = self._abode.send_request("post", url, data=color_data)
-            response_object = json.loads(response.text)
+        hue, saturation = color
+        color_data = {
+            'action': 'setcolor',
+            'hue': int(hue),
+            'saturation': int(saturation),
+        }
 
-            _LOGGER.debug("Set Color Response: %s", response.text)
+        response = self._abode.send_request("post", url, data=color_data)
+        response_object = json.loads(response.text)
 
-            if response_object['idForPanel'] != self.device_id:
-                raise AbodeException((ERROR.SET_STATUS_DEV_ID))
+        _LOGGER.debug("Set Color Response: %s", response.text)
 
-            # Abode will sometimes return hue value off by 1 (rounding error)
-            hue_comparison = math.isclose(response_object["hue"], int(hue), abs_tol=1)
-            if not hue_comparison or (response_object["saturation"] != int(saturation)):
-                _LOGGER.warning(
-                    (
-                        "Set color mismatch for device %s. "
-                        "Request val: %s, Response val: %s "
-                    ),
-                    self.device_id,
-                    (hue, saturation),
-                    (response_object['hue'], response_object['saturation']),
-                )
+        if response_object['idForPanel'] != self.device_id:
+            raise AbodeException((ERROR.SET_STATUS_DEV_ID))
 
-                hue = response_object['hue']
-                saturation = response_object['saturation']
-
-            self.update({'statuses': {'hue': hue, 'saturation': saturation}})
-
-            _LOGGER.info(
-                "Set device %s color to: %s", self.device_id, (hue, saturation)
+        # Abode will sometimes return hue value off by 1 (rounding error)
+        hue_comparison = math.isclose(response_object["hue"], int(hue), abs_tol=1)
+        if not hue_comparison or (response_object["saturation"] != int(saturation)):
+            _LOGGER.warning(
+                (
+                    "Set color mismatch for device %s. "
+                    "Request val: %s, Response val: %s "
+                ),
+                self.device_id,
+                (hue, saturation),
+                (response_object['hue'], response_object['saturation']),
             )
 
-            return True
+            hue = response_object['hue']
+            saturation = response_object['saturation']
 
-        return False
+        self.update({'statuses': {'hue': hue, 'saturation': saturation}})
+
+        _LOGGER.info("Set device %s color to: %s", self.device_id, (hue, saturation))
+
+        return True
 
     @property
     def brightness(self):

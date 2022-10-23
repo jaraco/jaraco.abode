@@ -28,59 +28,57 @@ class AbodeDevice:
 
     def set_status(self, status):
         """Set device status."""
-        if self._json_state['control_url']:
-            path = self._json_state['control_url']
+        if not self._json_state['control_url']:
+            return False
 
-            status_data = {'status': str(status)}
+        path = self._json_state['control_url']
 
-            response = self._abode.send_request(
-                method="put", path=path, data=status_data
-            )
-            response_object = json.loads(response.text)
+        status_data = {'status': str(status)}
 
-            _LOGGER.debug("Set Status Response: %s", response.text)
+        response = self._abode.send_request(method="put", path=path, data=status_data)
+        response_object = json.loads(response.text)
 
-            if response_object['id'] != self.device_id:
-                raise AbodeException((ERROR.SET_STATUS_DEV_ID))
+        _LOGGER.debug("Set Status Response: %s", response.text)
 
-            if response_object['status'] != str(status):
-                raise AbodeException((ERROR.SET_STATUS_STATE))
+        if response_object['id'] != self.device_id:
+            raise AbodeException((ERROR.SET_STATUS_DEV_ID))
 
-            # Note: Status result is of int type, not of new status of device.
-            # Seriously, why would you do that?
-            # So, can't set status here must be done at device level.
+        if response_object['status'] != str(status):
+            raise AbodeException((ERROR.SET_STATUS_STATE))
 
-            _LOGGER.info("Set device %s status to: %s", self.device_id, status)
+        # Note: Status result is of int type, not of new status of device.
+        # Seriously, why would you do that?
+        # So, can't set status here must be done at device level.
 
-            return True
+        _LOGGER.info("Set device %s status to: %s", self.device_id, status)
 
-        return False
+        return True
 
     def set_level(self, level):
         """Set device level."""
-        if self._json_state['control_url']:
-            url = CONST.BASE_URL + self._json_state['control_url']
+        if not self._json_state['control_url']:
+            return False
 
-            level_data = {'level': str(level)}
+        url = CONST.BASE_URL + self._json_state['control_url']
 
-            response = self._abode.send_request("put", url, data=level_data)
-            response_object = json.loads(response.text)
+        level_data = {'level': str(level)}
 
-            _LOGGER.debug("Set Level Response: %s", response.text)
+        response = self._abode.send_request("put", url, data=level_data)
+        response_object = json.loads(response.text)
 
-            if response_object['id'] != self.device_id:
-                raise AbodeException((ERROR.SET_STATUS_DEV_ID))
+        _LOGGER.debug("Set Level Response: %s", response.text)
 
-            if response_object['level'] != str(level):
-                raise AbodeException((ERROR.SET_STATUS_STATE))
+        if response_object['id'] != self.device_id:
+            raise AbodeException((ERROR.SET_STATUS_DEV_ID))
 
-            self.update(response_object)
+        if response_object['level'] != str(level):
+            raise AbodeException((ERROR.SET_STATUS_STATE))
 
-            _LOGGER.info("Set device %s level to: %s", self.device_id, level)
+        self.update(response_object)
 
-            return True
+        _LOGGER.info("Set device %s level to: %s", self.device_id, level)
 
-        return False
+        return True
 
     def get_value(self, name):
         """Get a value from the json object.
