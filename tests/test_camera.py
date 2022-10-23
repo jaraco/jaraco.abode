@@ -137,6 +137,21 @@ class TestCamera:
             # Capture an image with a failure
             assert not device.capture()
 
+    def test_camera_capture_no_control_URLs(self, m):
+        """Tests that camera devices capture new images."""
+        # Set up URL's
+        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.DEVICES_URL, text=self.all_devices)
+
+        # Test our camera devices
+        for device in self.abode.get_devices():
+            # Skip alarm devices
+            if device.type_tag == CONST.DEVICE_ALARM:
+                continue
+
             # Remove control URLs from JSON
             device._json_state = DictFilter(
                 device._json_state, include_pattern='(?!control_url)'
