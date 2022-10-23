@@ -60,14 +60,16 @@ def setup_URLs(m):
 class TestCamera:
     """Test the camera."""
 
+    def camera_devices(self):
+        return (
+            device
+            for device in self.abode.get_devices()
+            if device.type_tag != CONST.DEVICE_ALARM
+        )
+
     def tests_camera_properties(self, m):
         """Tests that camera properties work as expected."""
-        # Get our camera
-        for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in self.camera_devices():
             # Specify which device module to use based on type_tag
             cam_type = set_cam_type(device.type_tag)
 
@@ -100,12 +102,7 @@ class TestCamera:
 
     def tests_camera_capture(self, m):
         """Tests that camera devices capture new images."""
-        # Test our camera devices
-        for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in self.camera_devices():
             # Specify which device module to use based on type_tag
             cam_type = set_cam_type(device.type_tag)
 
@@ -134,12 +131,7 @@ class TestCamera:
 
     def test_camera_capture_no_control_URLs(self, m):
         """Tests that camera devices capture new images."""
-        # Test our camera devices
-        for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in self.camera_devices():
             # Remove control URLs from JSON
             device._json_state = DictFilter(
                 device._json_state, include_pattern='(?!control_url)'
@@ -152,12 +144,7 @@ class TestCamera:
 
     def tests_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
-        # Test our camera devices
-        for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in self.camera_devices():
             # Specify which device module to use based on type_tag
             cam_type = set_cam_type(device.type_tag)
 
@@ -227,12 +214,7 @@ class TestCamera:
 
     def tests_camera_no_image_update(self, m):
         """Tests that camera updates correctly with no timeline events."""
-        # Test our camera devices
-        for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in self.camera_devices():
             # Test that we have our device
             assert device is not None
             assert device.status == CONST.STATUS_ONLINE
@@ -247,12 +229,7 @@ class TestCamera:
 
     def tests_camera_image_write(self, m):
         """Tests that camera images will write to a file."""
-        # Test our camera devices
-        for device in self.abode.get_devices():
-            # Skip alarm devices
-            if device.type_tag == CONST.DEVICE_ALARM:
-                continue
-
+        for device in self.camera_devices():
             # Specify which device module to use based on type_tag
             cam_type = set_cam_type(device.type_tag)
 
