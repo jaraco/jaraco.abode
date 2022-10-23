@@ -36,7 +36,7 @@ class AbodeAutomation:
         if str(response_object['id']) != str(self._automation['id']) or str(
             response_object['enabled']
         ) != str(self._automation['enabled']):
-            raise AbodeException((ERROR.INVALID_AUTOMATION_EDIT_RESPONSE))
+            raise AbodeException(ERROR.INVALID_AUTOMATION_EDIT_RESPONSE)
 
         self.update(response_object)
 
@@ -66,7 +66,7 @@ class AbodeAutomation:
             response_object = response_object[0]
 
         if str(response_object['id']) != self.automation_id:
-            raise AbodeException((ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE))
+            raise AbodeException(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
 
         self.update(response_object)
 

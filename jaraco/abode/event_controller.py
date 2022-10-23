@@ -88,7 +88,7 @@ class AbodeEventController:
 
             # Validate the device is valid
             if not self._abode.get_device(device_id):
-                raise AbodeException((ERROR.EVENT_DEVICE_INVALID))
+                raise AbodeException(ERROR.EVENT_DEVICE_INVALID)
 
             _LOGGER.debug("Subscribing to updates for device_id: %s", device_id)
 
@@ -111,7 +111,7 @@ class AbodeEventController:
                 device_id = device.device_id
 
             if not self._abode.get_device(device_id):
-                raise AbodeException((ERROR.EVENT_DEVICE_INVALID))
+                raise AbodeException(ERROR.EVENT_DEVICE_INVALID)
 
             if device_id not in self._device_callbacks:
                 return False
@@ -152,12 +152,12 @@ class AbodeEventController:
 
         for timeline_event in timeline_events:
             if not isinstance(timeline_event, dict):
-                raise AbodeException((ERROR.EVENT_CODE_MISSING))
+                raise AbodeException(ERROR.EVENT_CODE_MISSING)
 
             event_code = timeline_event.get('event_code')
 
             if not event_code:
-                raise AbodeException((ERROR.EVENT_CODE_MISSING))
+                raise AbodeException(ERROR.EVENT_CODE_MISSING)
 
             _LOGGER.debug("Subscribing to timeline event: %s", timeline_event)
 

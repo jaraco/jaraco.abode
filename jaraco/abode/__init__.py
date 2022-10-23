@@ -431,7 +431,7 @@ class Abode:
 
             return self.send_request(method, path, headers, data, True)
 
-        raise AbodeException((ERROR.REQUEST))
+        raise AbodeException(ERROR.REQUEST)
 
     @property
     def default_mode(self):
@@ -495,7 +495,7 @@ def new_device(device_json, abode):
     type_tag = device_json.get('type_tag')
 
     if not type_tag:
-        raise AbodeException((ERROR.UNABLE_TO_MAP_DEVICE))
+        raise AbodeException(ERROR.UNABLE_TO_MAP_DEVICE)
 
     generic_type = CONST.get_generic_type(type_tag.lower())
     device_json['generic_type'] = generic_type

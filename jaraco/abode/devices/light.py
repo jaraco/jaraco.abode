@@ -33,7 +33,7 @@ class AbodeLight(AbodeSwitch):
         _LOGGER.debug("Set Color Temp Response: %s", response.text)
 
         if response_object['idForPanel'] != self.device_id:
-            raise AbodeException((ERROR.SET_STATUS_DEV_ID))
+            raise AbodeException(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['colorTemperature'] != int(color_temp):
             _LOGGER.warning(
@@ -70,7 +70,7 @@ class AbodeLight(AbodeSwitch):
         _LOGGER.debug("Set Color Response: %s", response.text)
 
         if response_object['idForPanel'] != self.device_id:
-            raise AbodeException((ERROR.SET_STATUS_DEV_ID))
+            raise AbodeException(ERROR.SET_STATUS_DEV_ID)
 
         # Abode will sometimes return hue value off by 1 (rounding error)
         hue_comparison = math.isclose(response_object["hue"], int(hue), abs_tol=1)
