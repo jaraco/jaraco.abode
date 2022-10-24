@@ -1,3 +1,8 @@
+v1.0.1
+======
+
+Refactoring and cleanup.
+
 v1.0.0
 ======
 
