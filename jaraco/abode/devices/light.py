@@ -1,5 +1,4 @@
 """Abode light device."""
-import json
 import logging
 import math
 
@@ -28,7 +27,7 @@ class AbodeLight(AbodeSwitch):
         }
 
         response = self._abode.send_request("post", url, data=color_data)
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         _LOGGER.debug("Set Color Temp Response: %s", response.text)
 
@@ -65,7 +64,7 @@ class AbodeLight(AbodeSwitch):
         }
 
         response = self._abode.send_request("post", url, data=color_data)
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         _LOGGER.debug("Set Color Response: %s", response.text)
 

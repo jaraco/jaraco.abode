@@ -1,4 +1,3 @@
-import json
 import logging
 
 from ..exceptions import AbodeException
@@ -35,7 +34,7 @@ class AbodeDevice:
         status_data = {'status': str(status)}
 
         response = self._abode.send_request(method="put", path=path, data=status_data)
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         _LOGGER.debug("Set Status Response: %s", response.text)
 
@@ -59,7 +58,7 @@ class AbodeDevice:
         level_data = {'level': str(level)}
 
         response = self._abode.send_request("put", url, data=level_data)
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         _LOGGER.debug("Set Level Response: %s", response.text)
 
@@ -90,7 +89,7 @@ class AbodeDevice:
         path = path.format(device_id=self.device_id)
 
         response = self._abode.send_request(method="get", path=path)
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         _LOGGER.debug("Device Refresh Response: %s", response.text)
 

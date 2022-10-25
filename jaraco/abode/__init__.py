@@ -2,7 +2,6 @@
 An Abode alarm Python library.
 """
 
-import json
 import logging
 import os
 
@@ -111,10 +110,8 @@ class Abode:
             login_data['remember_me'] = 1
 
         response = self._session.post(CONST.LOGIN_URL, json=login_data)
-
         AbodeAuthenticationException.raise_for(response)
-
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         # Check for multi-factor authentication
         if 'mfa_type' in response_object:
@@ -130,8 +127,7 @@ class Abode:
 
         oauth_response = self._session.get(CONST.OAUTH_TOKEN_URL)
         AbodeAuthenticationException.raise_for(oauth_response)
-
-        oauth_response_object = json.loads(oauth_response.text)
+        oauth_response_object = oauth_response.json()
 
         _LOGGER.debug("Login Response: %s", response.text)
 
@@ -181,7 +177,7 @@ class Abode:
 
             _LOGGER.info("Updating all devices...")
             response = self.send_request("get", CONST.DEVICES_URL)
-            response_object = json.loads(response.text)
+            response_object = response.json()
 
             if response_object and not isinstance(response_object, (tuple, list)):
                 response_object = [response_object]
@@ -207,7 +203,7 @@ class Abode:
 
             # We will be treating the Abode panel itself as an armable device.
             panel_response = self.send_request("get", CONST.PANEL_URL)
-            panel_json = json.loads(panel_response.text)
+            panel_json = panel_response.json()
 
             self._panel.update(panel_json)
 
@@ -255,7 +251,7 @@ class Abode:
 
             _LOGGER.info("Updating all automations...")
             response = self.send_request("get", CONST.AUTOMATION_URL)
-            response_object = json.loads(response.text)
+            response_object = response.json()
 
             if response_object and not isinstance(response_object, (tuple, list)):
                 response_object = [response_object]

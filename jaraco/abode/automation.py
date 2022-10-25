@@ -1,5 +1,4 @@
 """Representation of an automation configured in Abode."""
-import json
 import logging
 
 from .exceptions import AbodeException
@@ -28,7 +27,7 @@ class AbodeAutomation:
             method="patch", path=path, data={'enabled': enable}
         )
 
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         if isinstance(response_object, (tuple, list)):
             response_object = response_object[0]
@@ -60,7 +59,7 @@ class AbodeAutomation:
         path = CONST.AUTOMATION_ID_URL.format(id=self.automation_id)
 
         response = self._abode.send_request(method="get", path=path)
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         if isinstance(response_object, (tuple, list)):
             response_object = response_object[0]

@@ -1,5 +1,4 @@
 """Abode alarm device."""
-import json
 import logging
 
 from ..exceptions import AbodeException
@@ -47,7 +46,7 @@ class AbodeAlarm(AbodeSwitch):
 
         _LOGGER.debug("Set Alarm Home Response: %s", response.text)
 
-        response_object = json.loads(response.text)
+        response_object = response.json()
 
         if response_object['area'] != self._area:
             raise AbodeException(ERROR.SET_MODE_AREA)

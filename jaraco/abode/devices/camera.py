@@ -1,5 +1,4 @@
 """Abode camera device."""
-import json
 import logging
 from shutil import copyfileobj
 import requests
@@ -49,7 +48,7 @@ class AbodeCamera(AbodeDevice):
 
         _LOGGER.debug("Get image response: %s", response.text)
 
-        return self.update_image_location(json.loads(response.text))
+        return self.update_image_location(response.json())
 
     def update_image_location(self, timeline_json):
         """Update the image location."""
@@ -133,7 +132,7 @@ class AbodeCamera(AbodeDevice):
             response = self._abode.send_request(
                 method="put", path=path, data=camera_data
             )
-            response_object = json.loads(response.text)
+            response_object = response.json()
 
             _LOGGER.debug("Camera Privacy Mode Response: %s", response.text)
 

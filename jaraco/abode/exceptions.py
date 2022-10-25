@@ -1,5 +1,3 @@
-import json
-
 import requests
 
 
@@ -29,7 +27,7 @@ class AbodeAuthenticationException(AbodeException):
     @staticmethod
     def best_message(response):
         if response.headers.get('Content-Type') == 'application/json':
-            return json.loads(response.text)['message']
+            return response.json()['message']
         return response.text
 
 
