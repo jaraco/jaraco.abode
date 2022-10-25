@@ -218,14 +218,12 @@ class Abode:
                 self._devices[alarm_device.device_id] = alarm_device
 
         if generic_type:
-            devices = []
-            for device in self._devices.values():
-                if (
-                    device.generic_type is not None
-                    and device.generic_type in generic_type
-                ):
-                    devices.append(device)
-            return devices
+            return [
+                device
+                for device in self._devices.values()
+                if device.generic_type is not None
+                and device.generic_type in generic_type
+            ]
 
         return list(self._devices.values())
 
