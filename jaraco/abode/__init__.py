@@ -169,53 +169,10 @@ class Abode:
         self.get_devices(refresh=True)
         self.get_automations(refresh=True)
 
-    def get_devices(self, refresh=False, generic_type=None):  # noqa: C901
+    def get_devices(self, refresh=False, generic_type=None):
         """Get all devices from Abode."""
         if refresh or self._devices is None:
-            if self._devices is None:
-                self._devices = {}
-
-            _LOGGER.info("Updating all devices...")
-            response = self.send_request("get", CONST.DEVICES_URL)
-            response_object = response.json()
-
-            if response_object and not isinstance(response_object, (tuple, list)):
-                response_object = [response_object]
-
-            _LOGGER.debug("Get Devices Response: %s", response.text)
-
-            for device_json in response_object:
-                # Attempt to reuse an existing device
-                device = self._devices.get(device_json['id'])
-
-                # No existing device, create a new one
-                if device:
-                    device.update(device_json)
-                else:
-                    device = new_device(device_json, self)
-
-                    if not device:
-                        _LOGGER.debug("Skipping unknown device: %s", device_json)
-
-                        continue
-
-                    self._devices[device.device_id] = device
-
-            # We will be treating the Abode panel itself as an armable device.
-            panel_response = self.send_request("get", CONST.PANEL_URL)
-            panel_json = panel_response.json()
-
-            self._panel.update(panel_json)
-
-            _LOGGER.debug("Get Mode Panel Response: %s", response.text)
-
-            alarm_device = self._devices.get(CONST.ALARM_DEVICE_ID + '1')
-
-            if alarm_device:
-                alarm_device.update(self._panel)
-            else:
-                alarm_device = ALARM.create_alarm(self._panel, self)
-                self._devices[alarm_device.device_id] = alarm_device
+            self._load_devices()
 
         if generic_type:
             return [
@@ -226,6 +183,52 @@ class Abode:
             ]
 
         return list(self._devices.values())
+
+    def _load_devices(self):
+        if self._devices is None:
+            self._devices = {}
+
+        _LOGGER.info("Updating all devices...")
+        response = self.send_request("get", CONST.DEVICES_URL)
+        response_object = response.json()
+
+        if response_object and not isinstance(response_object, (tuple, list)):
+            response_object = [response_object]
+
+        _LOGGER.debug("Get Devices Response: %s", response.text)
+
+        for device_json in response_object:
+            # Attempt to reuse an existing device
+            device = self._devices.get(device_json['id'])
+
+            # No existing device, create a new one
+            if device:
+                device.update(device_json)
+            else:
+                device = new_device(device_json, self)
+
+                if not device:
+                    _LOGGER.debug("Skipping unknown device: %s", device_json)
+
+                    continue
+
+                self._devices[device.device_id] = device
+
+        # We will be treating the Abode panel itself as an armable device.
+        panel_response = self.send_request("get", CONST.PANEL_URL)
+        panel_json = panel_response.json()
+
+        self._panel.update(panel_json)
+
+        _LOGGER.debug("Get Mode Panel Response: %s", response.text)
+
+        alarm_device = self._devices.get(CONST.ALARM_DEVICE_ID + '1')
+
+        if alarm_device:
+            alarm_device.update(self._panel)
+        else:
+            alarm_device = ALARM.create_alarm(self._panel, self)
+            self._devices[alarm_device.device_id] = alarm_device
 
     def get_device(self, device_id, refresh=False):
         """Get a single device."""
