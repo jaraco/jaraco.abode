@@ -177,7 +177,7 @@ class Abode:
         return [
             device
             for device in self._devices.values()
-            if not generic_type or device.generic_type in generic_type
+            if not generic_type or device.generic_type == generic_type
         ]
 
     def _load_devices(self):
