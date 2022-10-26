@@ -283,10 +283,6 @@ class Abode:
 
     def get_alarm(self, area='1', refresh=False):
         """Shortcut method to get the alarm device."""
-        if self._devices is None:
-            self.get_devices()
-            refresh = False
-
         return self.get_device(CONST.ALARM_DEVICE_ID + area, refresh)
 
     def set_default_mode(self, default_mode):
