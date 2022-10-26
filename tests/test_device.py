@@ -269,13 +269,13 @@ class TestDevice:
         self.abode.logout()
 
         # Get our glass devices
-        devices = self.abode.get_devices(generic_type=(CONST.TYPE_CONNECTIVITY))
+        devices = self.abode.get_devices(generic_type=CONST.TYPE_CONNECTIVITY)
 
         assert devices is not None
         assert len(devices) == 1
 
         # Get our power switch devices
-        devices = self.abode.get_devices(generic_type=(CONST.TYPE_SWITCH))
+        devices = self.abode.get_devices(generic_type=CONST.TYPE_SWITCH)
 
         assert devices is not None
         assert len(devices) == 2
