@@ -174,15 +174,11 @@ class Abode:
         if refresh or self._devices is None:
             self._load_devices()
 
-        if generic_type:
-            return [
-                device
-                for device in self._devices.values()
-                if device.generic_type is not None
-                and device.generic_type in generic_type
-            ]
-
-        return list(self._devices.values())
+        return [
+            device
+            for device in self._devices.values()
+            if not generic_type or device.generic_type in generic_type
+        ]
 
     def _load_devices(self):
         if self._devices is None:
