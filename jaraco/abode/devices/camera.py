@@ -21,10 +21,10 @@ class AbodeCamera(AbodeDevice):
         """Request a new camera image."""
         # Abode IP cameras use a different URL for image captures.
         if 'control_url_snapshot' in self._json_state:
-            url = CONST.BASE_URL + self._json_state['control_url_snapshot']
+            url = self._json_state['control_url_snapshot']
 
         elif 'control_url' in self._json_state:
-            url = CONST.BASE_URL + self._json_state['control_url']
+            url = self._json_state['control_url']
 
         else:
             raise AbodeException(ERROR.MISSING_CONTROL_URL)
@@ -73,8 +73,7 @@ class AbodeCamera(AbodeDevice):
 
         # Perform a "head" request for the image and look for a
         # 302 Found response
-        url = CONST.BASE_URL + file_path
-        response = self._abode.send_request("head", url)
+        response = self._abode.send_request("head", file_path)
 
         if response.status_code != 302:
             _LOGGER.warning(

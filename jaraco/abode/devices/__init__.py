@@ -53,7 +53,7 @@ class AbodeDevice:
     @needs_control_url
     def set_level(self, level):
         """Set device level."""
-        url = CONST.BASE_URL + self._json_state['control_url']
+        url = self._json_state['control_url']
 
         level_data = {'level': str(level)}
 

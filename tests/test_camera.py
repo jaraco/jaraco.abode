@@ -112,10 +112,10 @@ class TestCamera:
 
             # Determine URL based on device type
             if device.type_tag == CONST.DEVICE_IP_CAM:
-                url = CONST.BASE_URL + cam_type.CONTROL_URL_SNAPSHOT
+                url = cam_type.CONTROL_URL_SNAPSHOT
 
             elif device.type_tag == CONST.DEVICE_MOTION_CAMERA:
-                url = CONST.BASE_URL + cam_type.CONTROL_URL
+                url = cam_type.CONTROL_URL
 
             # Set up capture URL response
             m.put(url, text=MOCK.generic_response_ok())
@@ -157,9 +157,8 @@ class TestCamera:
 
             m.get(url, text="[" + cam_type.timeline_event(device.device_id) + "]")
             # Set up our file path response
-            file_path = CONST.BASE_URL + cam_type.FILE_PATH
             m.head(
-                file_path,
+                cam_type.FILE_PATH,
                 status_code=302,
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
@@ -171,16 +170,14 @@ class TestCamera:
             assert device.image_url == cam_type.LOCATION_HEADER
 
             # Test that a bad file_path response header results in an exception
-            file_path = CONST.BASE_URL + cam_type.FILE_PATH
-            m.head(file_path, status_code=302)
+            m.head(cam_type.FILE_PATH, status_code=302)
 
             with pytest.raises(jaraco.abode.AbodeException):
                 device.refresh_image()
 
             # Test that a bad file_path response code results in an exception
-            file_path = CONST.BASE_URL + cam_type.FILE_PATH
             m.head(
-                file_path,
+                cam_type.FILE_PATH,
                 status_code=200,
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
@@ -242,9 +239,8 @@ class TestCamera:
             m.get(url, text="[" + cam_type.timeline_event(device.device_id) + "]")
 
             # Set up our file path response
-            file_path = CONST.BASE_URL + cam_type.FILE_PATH
             m.head(
-                file_path,
+                cam_type.FILE_PATH,
                 status_code=302,
                 headers={"Location": cam_type.LOCATION_HEADER},
             )

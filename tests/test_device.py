@@ -329,7 +329,7 @@ class TestDevice:
         assert not device.is_on
 
         # Set up control url response
-        control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
+        control_url = POWERSENSOR.CONTROL_URL
         m.put(
             control_url,
             text=DEVICES.status_put_response_ok(
@@ -408,9 +408,8 @@ class TestDevice:
         assert not device.is_on
 
         # Set up control url response
-        control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
         m.put(
-            control_url,
+            POWERSENSOR.CONTROL_URL,
             text=DEVICES.level_put_response_ok(
                 devid=POWERSENSOR.DEVICE_ID, level='100'
             ),
@@ -421,9 +420,8 @@ class TestDevice:
         # self.assertEqual(device.level, '100')
 
         # Change response
-        control_url = CONST.BASE_URL + POWERSENSOR.CONTROL_URL
         m.put(
-            control_url,
+            POWERSENSOR.CONTROL_URL,
             text=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='25'),
         )
 
@@ -433,7 +431,7 @@ class TestDevice:
 
         # Test that an invalid device ID in response throws exception
         m.put(
-            control_url,
+            POWERSENSOR.CONTROL_URL,
             text=DEVICES.level_put_response_ok(devid='ZW:deadbeef', level='25'),
         )
 
@@ -442,7 +440,7 @@ class TestDevice:
 
         # Test that an invalid level in response throws exception
         m.put(
-            control_url,
+            POWERSENSOR.CONTROL_URL,
             text=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='98'),
         )
 
