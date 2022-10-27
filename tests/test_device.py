@@ -122,7 +122,7 @@ class TestDevice:
 
         # Check device states match
         assert device is not None
-        # pylint: disable=W0212
+
         assert device.name == device_json[0]['name']
         assert device.type == device_json[0]['type']
         assert device.type_tag == device_json[0]['type_tag']

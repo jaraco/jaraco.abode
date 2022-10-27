@@ -177,7 +177,6 @@ class AbodeEventController:
 
     def _on_socket_started(self):
         """Socket IO startup callback."""
-        # pylint: disable=W0212
         cookies = self._abode._get_session().cookies.get_dict()
         cookie_string = "; ".join([str(x) + "=" + str(y) for x, y in cookies.items()])
 
@@ -189,7 +188,6 @@ class AbodeEventController:
 
         try:
             self._abode.refresh()
-        # pylint: disable=W0703
         except Exception as exc:
             _LOGGER.warning("Captured exception during Abode refresh: %s", exc)
         finally:
@@ -249,7 +247,6 @@ class AbodeEventController:
         # At the time of development, refreshing after mode change notification
         # didn't seem to get the latest update immediately. As such, we will
         # force the mode status now to match the notification.
-        # pylint: disable=W0212
         alarm_device._json_state['mode']['area_1'] = mode
 
         for callback in self._device_callbacks[alarm_device.device_id]:
@@ -304,6 +301,5 @@ def _execute_callback(callback, *args, **kwargs):
     # Callback with some data, capturing any exceptions to prevent chaos
     try:
         callback(*args, **kwargs)
-    # pylint: disable=W0703
     except Exception as exc:
         _LOGGER.warning("Captured exception during callback: %s", exc)

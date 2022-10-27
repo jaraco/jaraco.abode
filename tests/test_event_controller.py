@@ -285,7 +285,7 @@ class TestEventController:
         )
 
         # Call our device callback method
-        # pylint: disable=protected-access
+
         events._on_device_update(device.device_id)
         callback.assert_called_with(device)
 
@@ -314,7 +314,7 @@ class TestEventController:
         assert events.add_event_callback(TIMELINE.ALARM_GROUP, alarm_callback)
 
         # Call our events callback method and trigger a capture group event
-        # pylint: disable=protected-access
+
         event_json = json.loads(IRCAMERA.timeline_event())
         events._on_timeline_update(event_json)
 
@@ -344,7 +344,7 @@ class TestEventController:
         assert events.add_timeline_callback(TIMELINE.OPENED, opened_callback)
 
         # Call our events callback method and trigger an image capture event
-        # pylint: disable=protected-access
+
         event_json = json.loads(IRCAMERA.timeline_event())
         events._on_timeline_update(event_json)
 
@@ -390,7 +390,7 @@ class TestEventController:
         assert events.add_device_callback(alarm.device_id, callback)
 
         # Call our mode changed callback method
-        # pylint: disable=protected-access
+
         events._on_mode_change(CONST.MODE_HOME)
         callback.assert_called_with(alarm)
 
@@ -417,7 +417,7 @@ class TestEventController:
         assert events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, _callback)
 
         # Call our events callback method and trigger an image capture event
-        # pylint: disable=protected-access
+
         event_json = json.loads(IRCAMERA.timeline_event())
         events._on_timeline_update(event_json)
 
@@ -482,7 +482,7 @@ class TestEventController:
         )
 
         # Call our device callback method for our cover
-        # pylint: disable=protected-access
+
         events._on_device_update(cover.device_id)
         callback.assert_called_with(cover)
 
@@ -514,7 +514,7 @@ class TestEventController:
         )
 
         # Call our events callback method and trigger a capture group event
-        # pylint: disable=protected-access
+
         event_json = json.loads(IRCAMERA.timeline_event())
         events._on_timeline_update(event_json)
 
@@ -536,7 +536,7 @@ class TestEventController:
         )
 
         # Call our events callback method and trigger a capture group event
-        # pylint: disable=protected-access
+
         event_json = json.loads(IRCAMERA.timeline_event())
         events._on_timeline_update(event_json)
 
@@ -558,7 +558,7 @@ class TestEventController:
         )
 
         # Call our events callback method and trigger a capture group event
-        # pylint: disable=protected-access
+
         events._on_automation_update('{}')
 
         # Our capture callback should get one, but our alarm should not

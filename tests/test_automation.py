@@ -46,7 +46,7 @@ class TestAutomation:
 
         # Check automation states match
         assert automation is not None
-        # pylint: disable=W0212
+
         assert automation._automation == automation_json
         assert automation.automation_id == str(automation_json['id'])
         assert automation.name == automation_json['name']
@@ -96,7 +96,7 @@ class TestAutomation:
         automation = self.abode.get_automation(AID_1)
 
         # Check automation states match
-        # pylint: disable=W0212
+
         assert automation is not None
         assert automation._automation == automation_json[0]
 
@@ -175,7 +175,7 @@ class TestAutomation:
         assert len(automations) == 3
 
         # Get the first automation and test
-        # pylint: disable=W0212
+
         automation_1 = self.abode.get_automation(AID_1)
         assert automation_1 is not None
         assert automation_1._automation == automation_json[0]
@@ -221,7 +221,7 @@ class TestAutomation:
         assert len(automations) == 2
 
         # Get the automations and test
-        # pylint: disable=W0212
+
         automation_1 = self.abode.get_automation(AID_1)
         assert automation_1 is not None
         assert automation_1._automation == automation_json[0]
@@ -297,7 +297,7 @@ class TestAutomation:
         self.abode.logout()
 
         # Get the automation and test
-        # pylint: disable=W0212
+
         automation = self.abode.get_automation(AID_1)
         assert automation is not None
         assert automation._automation == automation_json[0]
@@ -380,7 +380,7 @@ class TestAutomation:
         self.abode.logout()
 
         # Get the automation and test
-        # pylint: disable=W0212
+
         automation = self.abode.get_automation(AID_1)
         assert automation is not None
 

@@ -85,7 +85,7 @@ class AbodeAlarm(AbodeSwitch):
     def refresh(self, url=CONST.PANEL_URL):
         """Refresh the alarm device."""
         response_object = AbodeDevice.refresh(self, url)
-        # pylint: disable=W0212
+
         self._abode._panel.update(response_object[0])
 
         return response_object

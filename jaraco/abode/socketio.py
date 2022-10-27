@@ -95,7 +95,6 @@ class SocketIO:
         else:
             self._cookie = None
 
-    # pylint: disable=C0103
     def on(self, event_name, callback):
         """Register callback for a SocketIO event."""
         if not event_name:
@@ -123,7 +122,6 @@ class SocketIO:
         if self._thread:
             _LOGGER.info("Stopping SocketIO thread...")
 
-            # pylint: disable=W0212
             self._running = False
 
             if self._exit_event:
@@ -246,7 +244,6 @@ class SocketIO:
         else:
             _LOGGER.debug("Ignoring EngineIO packet: %s", _event.text)
 
-    # pylint: disable=R0201
     def _on_websocket_backoff(self, _event):
         return
 
@@ -329,7 +326,6 @@ class SocketIO:
                     callback(event_data)
                 else:
                     callback()
-            # pylint: disable=W0703
             except Exception as exc:
                 _LOGGER.exception(
                     "Captured exception during SocketIO event callback: %s", exc

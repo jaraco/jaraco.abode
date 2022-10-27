@@ -350,7 +350,6 @@ class Dispatcher:
             device = self.abode.get_device(device_id)
 
             if device:
-                # pylint: disable=protected-access
                 print(
                     json.dumps(
                         device._json_state,

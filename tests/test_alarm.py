@@ -27,7 +27,7 @@ class TestAlarm:
         alarm_device = self.abode.get_alarm()
 
         assert alarm_device is not None
-        # pylint: disable=W0212
+
         assert alarm_device._json_state == alarm
 
     def tests_alarm_device_properties(self, m):
