@@ -42,8 +42,6 @@ class AbodeAutomation:
         _LOGGER.info("Set automation %s enable to: %s", self.name, self.is_enabled)
         _LOGGER.debug("Automation response: %s", response.text)
 
-        return True
-
     def trigger(self):
         """Trigger the automation."""
         path = CONST.AUTOMATION_APPLY_URL.format(id=self.automation_id)
@@ -51,8 +49,6 @@ class AbodeAutomation:
         self._abode.send_request(method="post", path=path)
 
         _LOGGER.info("Automation triggered: %s", self.name)
-
-        return True
 
     def refresh(self):
         """Refresh the automation."""

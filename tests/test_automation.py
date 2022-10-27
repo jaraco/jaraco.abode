@@ -389,4 +389,4 @@ class TestAutomation:
         m.post(set_active_url, text=MOCK.generic_response_ok())
 
         # Test triggering
-        assert automation.trigger()
+        automation.trigger()
