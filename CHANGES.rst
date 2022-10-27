@@ -1,3 +1,8 @@
+v1.1.0
+======
+
+#8: Added support for camera snapshots.
+
 v1.0.1
 ======
 

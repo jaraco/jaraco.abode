@@ -34,6 +34,7 @@ def device(
         sresp_mode_3='0',
         sresp_entry_3='0',
         sresp_exit_3='0',
+        uuid='1234567890',
         version='852_00.00.03.05TC',
         origin='abode',
         control_url='api/v1/cams/ZB:00000005/capture',
