@@ -1,4 +1,5 @@
 """Test the Abode camera class."""
+import base64
 import os
 
 import pytest
@@ -266,6 +267,95 @@ class TestCamera:
             # Test that the image fails to update returns False
             m.get(url, text="[]")
             assert not device.image_to_file(path, get_image=True)
+
+    def tests_camera_snapshot(self, m):
+        """Tests that camera devices capture new snapshots."""
+        for device in self.camera_devices():
+            # Specify which device module to use based on type_tag
+            cam_type = set_cam_type(device.type_tag)
+
+            # Test that we have our device
+            assert device is not None
+            assert device.status == CONST.STATUS_ONLINE
+
+            # Set up snapshot URL response
+            snapshot_url = (
+                f"{CONST.CAMERA_INTEGRATIONS_URL}{device.device_uuid}/snapshot"
+            )
+            m.post(snapshot_url, text='{"base64Image":"test"}')
+
+            # Retrieve a snapshot
+            assert device.snapshot()
+
+            # Failed snapshot retrieval due to timeout response
+            m.post(snapshot_url, text=cam_type.get_capture_timeout(), status_code=600)
+            assert not device.snapshot()
+
+            # Failed snapshot retrieval due to missing data
+            m.post(snapshot_url, text="{}")
+            assert not device.snapshot()
+
+    def tests_camera_snapshot_write(self, m):
+        """Tests that camera snapshots will write to a file."""
+        for device in self.camera_devices():
+            # Specify which device module to use based on type_tag
+            cam_type = set_cam_type(device.type_tag)
+
+            # Test that we have our device
+            assert device is not None
+            assert device.status == CONST.STATUS_ONLINE
+
+            # Set up snapshot URL and image response
+            snapshot_url = (
+                f"{CONST.CAMERA_INTEGRATIONS_URL}{device.device_uuid}/snapshot"
+            )
+            image_response = b"this is a beautiful jpeg image"
+            b64_image = str(base64.b64encode(image_response), "utf-8")
+            m.post(snapshot_url, text='{"base64Image":"' + b64_image + '"}')
+
+            # Request the snapshot and write to file
+            path = "test.jpg"
+            assert device.snapshot_to_file(path, get_snapshot=True)
+
+            # Test the file written and cleanup
+            image_data = open(path, "rb").read()
+            assert image_response == image_data
+            os.remove(path)
+
+            # Test that bad response returns False
+            m.post(snapshot_url, text=cam_type.get_capture_timeout(), status_code=600)
+            assert not device.snapshot_to_file(path, get_snapshot=True)
+
+    def tests_camera_snapshot_data_url(self, m):
+        """Tests that camera snapshots can be converted to a data url."""
+        for device in self.camera_devices():
+            # Specify which device module to use based on type_tag
+            cam_type = set_cam_type(device.type_tag)
+
+            # Test that we have our device
+            assert device is not None
+            assert device.status == CONST.STATUS_ONLINE
+
+            # Set up snapshot URL and image response
+            snapshot_url = (
+                f"{CONST.CAMERA_INTEGRATIONS_URL}{device.device_uuid}/snapshot"
+            )
+            image_response = b"this is a beautiful jpeg image"
+            b64_image = str(base64.b64encode(image_response), "utf-8")
+            m.post(snapshot_url, text='{"base64Image":"' + b64_image + '"}')
+
+            # Request the snapshot as a data url
+            data_url = device.snapshot_data_url(get_snapshot=True)
+
+            # Test the data url matches the image response
+            header, encoded = data_url.split(",", 1)
+            decoded = base64.b64decode(encoded)
+            assert header == "data:image/jpeg;base64"
+            assert decoded == image_response
+
+            # Test that bad response returns an empty string
+            m.post(snapshot_url, text=cam_type.get_capture_timeout(), status_code=600)
+            assert device.snapshot_data_url(get_snapshot=True) == ""
 
     def tests_camera_privacy_mode(self, m):
         """Tests camera privacy mode."""
