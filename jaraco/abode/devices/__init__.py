@@ -178,6 +178,5 @@ class AbodeDevice:
     @property
     def desc(self):
         """Get a short description of the device."""
-        # Garage Entry Door (ZW:00000003) - Door Lock - Closed
         tmpl = '{name} (ID: {device_id}, UUID: {device_uuid}) - {type} - {status}'
         return tmpl.format_map(DictAdapter(self))
