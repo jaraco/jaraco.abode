@@ -26,8 +26,6 @@ class AbodeDevice:
         self._generic_type = json_obj.get('generic_type')
         self._abode = abode
 
-        self._update_name()
-
     @needs_control_url
     def set_status(self, status):
         """Set device status."""
@@ -109,13 +107,6 @@ class AbodeDevice:
         Only updates keys already present.
         """
         self._json_state.update(Projection(self._json_state, json_state))
-        self._update_name()
-
-    def _update_name(self):
-        """Set the device name from _json_state, with a sensible default."""
-        self._name = self._json_state.get('name')
-        if not self._name:
-            self._name = self.type + ' ' + self.device_id
 
     @property
     def status(self):
@@ -146,7 +137,8 @@ class AbodeDevice:
     @property
     def name(self):
         """Get the name of this device."""
-        return self._name
+        fallback = f'{self.type} {self.device_id}'
+        return self._json_state.get('name') or fallback
 
     @property
     def generic_type(self):
