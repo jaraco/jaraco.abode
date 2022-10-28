@@ -27,7 +27,7 @@ class AbodeAlarm(AbodeSwitch):
 
     def __init__(self, json_obj, abode, area='1'):
         """Set up Abode alarm device."""
-        AbodeSwitch.__init__(self, json_obj, abode)
+        super().__init__(json_obj, abode)
         self._area = area
 
     def set_mode(self, mode):

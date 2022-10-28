@@ -7,7 +7,7 @@ class AbodeException(Exception):
     def __init__(self, error, details=None):
         """Initialize AbodeException."""
         # Call the base class constructor with the parameters it needs
-        super(AbodeException, self).__init__(error[1])
+        super().__init__(error[1])
 
         self.errcode = error[0]
         self.message = error[1]
