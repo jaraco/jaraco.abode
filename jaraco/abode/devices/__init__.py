@@ -1,6 +1,6 @@
 import logging
 
-from jaraco.collections import DictAdapter
+from jaraco.collections import DictAdapter, Projection
 
 from ..exceptions import AbodeException
 
@@ -108,9 +108,7 @@ class AbodeDevice:
 
         Only updates keys already present.
         """
-        self._json_state.update(
-            {k: json_state[k] for k in json_state if k in self._json_state}
-        )
+        self._json_state.update(Projection(self._json_state, json_state))
         self._update_name()
 
     def _update_name(self):
