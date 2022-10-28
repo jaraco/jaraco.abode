@@ -106,10 +106,10 @@ class AbodeDevice:
     def update(self, json_state):
         """Update the json data from a dictionary.
 
-        Only updates if it already exists in the device.
+        Only updates keys already present.
         """
         self._json_state.update(
-            {k: json_state[k] for k in json_state if self._json_state.get(k)}
+            {k: json_state[k] for k in json_state if k in self._json_state}
         )
         self._update_name()
 
