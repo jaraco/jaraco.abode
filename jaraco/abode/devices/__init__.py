@@ -127,23 +127,23 @@ class AbodeDevice:
     @property
     def battery_low(self):
         """Is battery level low."""
-        return int(self.get_value('faults').get('low_battery', '0')) == 1
+        return bool(int(self.get_value('faults').get('low_battery', '0')))
 
     @property
     def no_response(self):
         """Is the device responding."""
-        return int(self.get_value('faults').get('no_response', '0')) == 1
+        return bool(int(self.get_value('faults').get('no_response', '0')))
 
     @property
     def out_of_order(self):
         """Is the device out of order."""
-        return int(self.get_value('faults').get('out_of_order', '0')) == 1
+        return bool(int(self.get_value('faults').get('out_of_order', '0')))
 
     @property
     def tampered(self):
         """Has the device been tampered with."""
         # 'tempered' - Typo in API?
-        return int(self.get_value('faults').get('tempered', '0')) == 1
+        return bool(int(self.get_value('faults').get('tempered', '0')))
 
     @property
     def name(self):
