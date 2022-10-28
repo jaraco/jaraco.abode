@@ -1,5 +1,7 @@
 import logging
 
+from jaraco.collections import DictAdapter
+
 from ..exceptions import AbodeException
 
 from ..helpers import constants as CONST
@@ -177,6 +179,5 @@ class AbodeDevice:
     def desc(self):
         """Get a short description of the device."""
         # Garage Entry Door (ZW:00000003) - Door Lock - Closed
-        return '{0} (ID: {1}, UUID: {2}) - {3} - {4}'.format(
-            self.name, self.device_id, self.device_uuid, self.type, self.status
-        )
+        tmpl = '{name} (ID: {device_id}, UUID: {device_uuid}) - {type} - {status}'
+        return tmpl.format_map(DictAdapter(self))
