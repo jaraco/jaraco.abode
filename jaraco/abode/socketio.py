@@ -102,7 +102,7 @@ class SocketIO:
 
         _LOGGER.debug("Adding callback for event name: %s", event_name)
 
-        self._callbacks[event_name].append((callback))
+        self._callbacks[event_name].append(callback)
 
         return True
 

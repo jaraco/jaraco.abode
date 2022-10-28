@@ -255,7 +255,7 @@ class TestCamera:
             assert device.image_to_file(path, get_image=True)
 
             # Test the file written and cleanup
-            image_data = open(path, "r").read()
+            image_data = open(path).read()
             assert image_response, image_data
             os.remove(path)
 

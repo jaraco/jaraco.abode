@@ -89,6 +89,6 @@ class AbodeAutomation:
     @property
     def desc(self):
         """Get a short description of the automation."""
-        return '{0} (ID: {1}, Enabled: {2})'.format(
+        return '{} (ID: {}, Enabled: {})'.format(
             self.name, self.automation_id, self.is_enabled
         )

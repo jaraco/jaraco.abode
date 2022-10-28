@@ -55,7 +55,7 @@ class AbodeEventController:
 
         _LOGGER.debug("Subscribing to Abode connection updates for: %s", unique_id)
 
-        self._connection_status_callbacks[unique_id].append((callback))
+        self._connection_status_callbacks[unique_id].append(callback)
 
         return True
 
@@ -92,7 +92,7 @@ class AbodeEventController:
 
             _LOGGER.debug("Subscribing to updates for device_id: %s", device_id)
 
-            self._device_callbacks[device_id].append((callback))
+            self._device_callbacks[device_id].append(callback)
 
         return True
 
@@ -138,7 +138,7 @@ class AbodeEventController:
 
             _LOGGER.debug("Subscribing to event group: %s", event_group)
 
-            self._event_callbacks[event_group].append((callback))
+            self._event_callbacks[event_group].append(callback)
 
         return True
 
@@ -161,7 +161,7 @@ class AbodeEventController:
 
             _LOGGER.debug("Subscribing to timeline event: %s", timeline_event)
 
-            self._timeline_callbacks[event_code].append((callback))
+            self._timeline_callbacks[event_code].append(callback)
 
         return True
 
