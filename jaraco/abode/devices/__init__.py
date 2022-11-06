@@ -15,21 +15,21 @@ _LOGGER = logging.getLogger(__name__)
 class AbodeDevice:
     """Class to represent each Abode device."""
 
-    def __init__(self, json_obj, abode):
+    def __init__(self, state, abode):
         """Set up Abode device."""
-        self._json_state = json_obj
-        self._device_id = json_obj.get('id')
-        self._device_uuid = json_obj.get('uuid')
-        self._name = json_obj.get('name')
-        self._type = json_obj.get('type')
-        self._type_tag = json_obj.get('type_tag')
-        self._generic_type = json_obj.get('generic_type')
+        self._state = state
+        self._device_id = state.get('id')
+        self._device_uuid = state.get('uuid')
+        self._name = state.get('name')
+        self._type = state.get('type')
+        self._type_tag = state.get('type_tag')
+        self._generic_type = state.get('generic_type')
         self._abode = abode
 
     @needs_control_url
     def set_status(self, status):
         """Set device status."""
-        path = self._json_state['control_url']
+        path = self._state['control_url']
 
         status_data = {'status': str(status)}
 
@@ -53,7 +53,7 @@ class AbodeDevice:
     @needs_control_url
     def set_level(self, level):
         """Set device level."""
-        url = self._json_state['control_url']
+        url = self._state['control_url']
 
         level_data = {'level': str(level)}
 
@@ -79,7 +79,7 @@ class AbodeDevice:
         from if it has the data you require.
         This data is updated by the subscription service.
         """
-        return self._json_state.get(name.lower(), {})
+        return self._state.get(name.lower(), {})
 
     def refresh(self, path=CONST.DEVICE_URL):
         """Refresh the devices json object data.
@@ -106,7 +106,7 @@ class AbodeDevice:
 
         Only updates keys already present.
         """
-        self._json_state.update(Projection(self._json_state, json_state))
+        self._state.update(Projection(self._state, json_state))
 
     @property
     def status(self):
@@ -138,7 +138,7 @@ class AbodeDevice:
     def name(self):
         """Get the name of this device."""
         fallback = f'{self.type} {self.device_id}'
-        return self._json_state.get('name') or fallback
+        return self._state.get('name') or fallback
 
     @property
     def generic_type(self):

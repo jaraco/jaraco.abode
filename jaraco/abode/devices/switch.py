@@ -12,7 +12,7 @@ class AbodeSwitch(AbodeDevice):
         success = self.set_status(CONST.STATUS_ON_INT)
 
         if success:
-            self._json_state['status'] = CONST.STATUS_ON
+            self._state['status'] = CONST.STATUS_ON
 
         return success
 
@@ -21,7 +21,7 @@ class AbodeSwitch(AbodeDevice):
         success = self.set_status(CONST.STATUS_OFF_INT)
 
         if success:
-            self._json_state['status'] = CONST.STATUS_OFF
+            self._state['status'] = CONST.STATUS_OFF
 
         return success
 

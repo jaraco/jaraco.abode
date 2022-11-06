@@ -134,9 +134,7 @@ class TestCamera:
         """Tests that camera devices capture new images."""
         for device in self.camera_devices():
             # Remove control URLs from JSON
-            device._json_state = DictFilter(
-                device._json_state, include_pattern='(?!control_url)'
-            )
+            device._state = DictFilter(device._state, include_pattern='(?!control_url)')
 
             # Test that AbodeException is raised with no control URLs
             with pytest.raises(AbodeException) as exc:

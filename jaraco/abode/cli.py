@@ -352,7 +352,7 @@ class Dispatcher:
             if device:
                 print(
                     json.dumps(
-                        device._json_state,
+                        device._state,
                         sort_keys=True,
                         indent=4,
                         separators=(',', ': '),

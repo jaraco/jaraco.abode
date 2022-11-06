@@ -9,7 +9,7 @@ class AbodeSensor(AbodeBinarySensor):
     """Class to represent a sensor device."""
 
     def _get_status(self, key):
-        return self._json_state.get(CONST.STATUSES_KEY, {}).get(key)
+        return self._state.get(CONST.STATUSES_KEY, {}).get(key)
 
     def _get_numeric_status(self, key):
         """Extract the numeric value from the statuses object."""

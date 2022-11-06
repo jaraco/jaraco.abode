@@ -12,7 +12,7 @@ class AbodeCover(AbodeSwitch):
         success = self.set_status(CONST.STATUS_OPEN_INT)
 
         if success:
-            self._json_state['status'] = CONST.STATUS_OPEN
+            self._state['status'] = CONST.STATUS_OPEN
 
         return success
 
@@ -21,7 +21,7 @@ class AbodeCover(AbodeSwitch):
         success = self.set_status(CONST.STATUS_CLOSED_INT)
 
         if success:
-            self._json_state['status'] = CONST.STATUS_CLOSED
+            self._state['status'] = CONST.STATUS_CLOSED
 
         return success
 

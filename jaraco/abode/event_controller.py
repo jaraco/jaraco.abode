@@ -247,7 +247,7 @@ class AbodeEventController:
         # At the time of development, refreshing after mode change notification
         # didn't seem to get the latest update immediately. As such, we will
         # force the mode status now to match the notification.
-        alarm_device._json_state['mode']['area_1'] = mode
+        alarm_device._state['mode']['area_1'] = mode
 
         for callback in self._device_callbacks[alarm_device.device_id]:
             _execute_callback(callback, alarm_device)

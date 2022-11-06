@@ -22,11 +22,11 @@ class AbodeCamera(AbodeDevice):
     def capture(self):
         """Request a new camera image."""
         # Abode IP cameras use a different URL for image captures.
-        if 'control_url_snapshot' in self._json_state:
-            url = self._json_state['control_url_snapshot']
+        if 'control_url_snapshot' in self._state:
+            url = self._state['control_url_snapshot']
 
-        elif 'control_url' in self._json_state:
-            url = self._json_state['control_url']
+        elif 'control_url' in self._state:
+            url = self._state['control_url']
 
         else:
             raise AbodeException(ERROR.MISSING_CONTROL_URL)
@@ -159,13 +159,13 @@ class AbodeCamera(AbodeDevice):
 
     def privacy_mode(self, enable):
         """Set camera privacy mode (camera on/off)."""
-        if self._json_state['privacy']:
+        if self._state['privacy']:
             privacy = '1' if enable else '0'
 
             path = CONST.PARAMS_URL + self.device_id
 
             camera_data = {
-                'mac': self._json_state['camera_mac'],
+                'mac': self._state['camera_mac'],
                 'privacy': privacy,
                 'action': 'setParam',
                 'id': self.device_id,

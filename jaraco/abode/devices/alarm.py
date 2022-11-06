@@ -54,7 +54,7 @@ class AbodeAlarm(AbodeSwitch):
         if response_object['mode'] != mode:
             raise AbodeException(ERROR.SET_MODE_MODE)
 
-        self._json_state['mode'][(self.device_id)] = response_object['mode']
+        self._state['mode'][(self.device_id)] = response_object['mode']
 
         _LOGGER.info(
             "Set alarm %s mode to: %s", self._device_id, response_object['mode']
@@ -125,14 +125,14 @@ class AbodeAlarm(AbodeSwitch):
     @property
     def battery(self):
         """Return true if base station on battery backup."""
-        return int(self._json_state.get('battery', '0')) == 1
+        return int(self._state.get('battery', '0')) == 1
 
     @property
     def is_cellular(self):
         """Return true if base station on cellular backup."""
-        return int(self._json_state.get('is_cellular', '0')) == 1
+        return int(self._state.get('is_cellular', '0')) == 1
 
     @property
     def mac_address(self):
         """Get the hub mac address."""
-        return self._json_state.get('mac')
+        return self._state.get('mac')

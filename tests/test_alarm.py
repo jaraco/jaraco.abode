@@ -28,7 +28,7 @@ class TestAlarm:
 
         assert alarm_device is not None
 
-        assert alarm_device._json_state == alarm
+        assert alarm_device._state == alarm
 
     def tests_alarm_device_properties(self, m):
         """Check that the abode device properties are working."""

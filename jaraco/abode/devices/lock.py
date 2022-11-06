@@ -12,7 +12,7 @@ class AbodeLock(AbodeDevice):
         success = self.set_status(CONST.STATUS_LOCKCLOSED_INT)
 
         if success:
-            self._json_state['status'] = CONST.STATUS_LOCKCLOSED
+            self._state['status'] = CONST.STATUS_LOCKCLOSED
 
         return success
 
@@ -21,7 +21,7 @@ class AbodeLock(AbodeDevice):
         success = self.set_status(CONST.STATUS_LOCKOPEN_INT)
 
         if success:
-            self._json_state['status'] = CONST.STATUS_LOCKOPEN
+            self._state['status'] = CONST.STATUS_LOCKOPEN
 
         return success
 
