@@ -18,13 +18,24 @@ class AbodeDevice:
     def __init__(self, state, abode):
         """Set up Abode device."""
         self._state = state
-        self._device_id = state.get('id')
-        self._device_uuid = state.get('uuid')
-        self._name = state.get('name')
-        self._type = state.get('type')
-        self._type_tag = state.get('type_tag')
-        self._generic_type = state.get('generic_type')
         self._abode = abode
+
+    def __getattr__(self, name):
+        if name in '_name _type _type_tag _generic_type'.split():
+            name = name.lstrip('_')
+
+        try:
+            return self._state[name]
+        except KeyError as exc:
+            raise AttributeError(name) from exc
+
+    @property
+    def _device_id(self):
+        return self.id
+
+    @property
+    def _device_uuid(self):
+        return self.uuid
 
     @needs_control_url
     def set_status(self, status):
