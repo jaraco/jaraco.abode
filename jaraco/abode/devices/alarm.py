@@ -1,5 +1,6 @@
 """Abode alarm device."""
 import logging
+import copy
 
 from ..exceptions import AbodeException
 
@@ -10,16 +11,21 @@ from ..helpers import errors as ERROR
 _LOGGER = logging.getLogger(__name__)
 
 
+def state_from_panel(panel_state, area='1'):
+    """Adapt panel state to alarm state."""
+    alarm_state = copy.deepcopy(panel_state)
+    alarm_state['name'] = CONST.ALARM_NAME
+    alarm_state['id'] = CONST.ALARM_DEVICE_ID + area
+    alarm_state['type'] = CONST.ALARM_TYPE
+    alarm_state['type_tag'] = CONST.DEVICE_ALARM
+    alarm_state['generic_type'] = CONST.TYPE_ALARM
+    alarm_state['uuid'] = alarm_state.get('mac').replace(':', '').lower()
+    return alarm_state
+
+
 def create_alarm(panel_json, abode, area='1'):
     """Create a new alarm device from a panel response."""
-    panel_json['name'] = CONST.ALARM_NAME
-    panel_json['id'] = CONST.ALARM_DEVICE_ID + area
-    panel_json['type'] = CONST.ALARM_TYPE
-    panel_json['type_tag'] = CONST.DEVICE_ALARM
-    panel_json['generic_type'] = CONST.TYPE_ALARM
-    panel_json['uuid'] = panel_json.get('mac').replace(':', '').lower()
-
-    return AbodeAlarm(panel_json, abode, area)
+    return AbodeAlarm(state_from_panel(panel_json), abode, area)
 
 
 class AbodeAlarm(AbodeSwitch):
