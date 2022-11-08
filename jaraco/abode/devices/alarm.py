@@ -96,6 +96,9 @@ class AbodeAlarm(AbodeSwitch):
 
         return response_object
 
+    def update(self, state):
+        super().update(state_from_panel(state, area=self._area))
+
     @property
     def is_on(self):
         """Is alarm armed."""
