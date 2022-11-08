@@ -14,7 +14,7 @@ def device(
     low_battery=False,
     no_response=False,
 ):
-    """Dimmer  mock device."""
+    """Dimmer mock device."""
     return dump(
         id=devid,
         type_tag='device_type.dimmer',

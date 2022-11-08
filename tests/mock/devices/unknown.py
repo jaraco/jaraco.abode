@@ -10,7 +10,7 @@ DEVICE_ID = 'RF:deadbeef'
 def device(
     devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
 ):
-    """Remote controller mock device."""
+    """Unknown mock device."""
     return dump(
         id=devid,
         type_tag='device_type.dead_beef',

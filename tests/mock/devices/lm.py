@@ -20,7 +20,7 @@ def device(
     low_battery=False,
     no_response=False,
 ):
-    """PIR mock device."""
+    """LM mock device."""
     return dump(
         id=devid,
         type_tag="device_type.lm",
