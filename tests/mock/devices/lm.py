@@ -5,7 +5,6 @@ from .. import dump
 DEVICE_ID = 'ZB:eee888801'
 
 TEMP_F = '72 °F'
-TEMP_C = '72 °C'
 
 LUX = '0 lx'
 
