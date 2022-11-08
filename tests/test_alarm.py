@@ -52,6 +52,7 @@ class TestAlarm:
 
         # Get alarm and test
         alarm = self.abode.get_alarm()
+        assert alarm.device_id == 'area_1'
         assert alarm is not None
         assert alarm.mode == CONST.MODE_STANDBY
         assert alarm.status == CONST.MODE_STANDBY
@@ -72,6 +73,7 @@ class TestAlarm:
         # Refresh alarm and test
         alarm.refresh()
 
+        assert alarm.device_id == 'area_1'
         assert alarm.mode == CONST.MODE_AWAY
         assert alarm.status == CONST.MODE_AWAY
         assert not alarm.battery

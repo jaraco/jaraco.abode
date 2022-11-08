@@ -1,3 +1,9 @@
+v1.2.0
+======
+
+#9: Internal refactoring to store the device state directly and
+reflect it as properties.
+
 v1.1.0
 ======
 
