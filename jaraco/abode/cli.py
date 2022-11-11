@@ -494,7 +494,3 @@ def main():
 
     with _log_errors_and_logout(_create_abode_instance(args)) as abode:
         Dispatcher(abode, args).dispatch()
-
-
-if __name__ == '__main__':
-    main()
