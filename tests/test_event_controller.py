@@ -1,5 +1,4 @@
 """Test the Abode event controller class."""
-import json
 from unittest.mock import call, Mock
 
 import pytest
@@ -24,13 +23,13 @@ class TestEventController:
     def tests_device_id_registration(self, m):
         """Tests that we can register for device events with a device id."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -58,13 +57,13 @@ class TestEventController:
     def tests_device_registration(self, m):
         """Tests that we can register for device events with a device."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -89,13 +88,13 @@ class TestEventController:
     def tests_device_all_unregistration(self, m):
         """Tests that we can unregister for all device events."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -123,13 +122,13 @@ class TestEventController:
     def tests_invalid_device(self, m):
         """Tests that invalid devices are not registered."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -155,7 +154,7 @@ class TestEventController:
         assert not events.add_device_callback(None, callback)
 
         # Create a fake device and attempt to register that
-        fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
+        fake_device = AbodeBinarySensor(DOORCONTACT.device(), self.abode)
 
         with pytest.raises(jaraco.abode.AbodeException):
             events.add_device_callback(fake_device, callback)
@@ -163,13 +162,13 @@ class TestEventController:
     def tests_invalid_all_device_unregister(self, m):
         """Tests that invalid devices are not all unregistered."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -192,7 +191,7 @@ class TestEventController:
         assert not events.remove_all_device_callbacks(None)
 
         # Create a fake device and attempt to unregister that
-        fake_device = AbodeBinarySensor(json.loads(DOORCONTACT.device()), self.abode)
+        fake_device = AbodeBinarySensor(DOORCONTACT.device(), self.abode)
 
         with pytest.raises(jaraco.abode.AbodeException):
             events.remove_all_device_callbacks(fake_device)
@@ -242,13 +241,13 @@ class TestEventController:
     def tests_device_callback(self, m):
         """Tests that device updates callback correctly."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -276,7 +275,7 @@ class TestEventController:
         device_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
         m.get(
             device_url,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_OPEN,
                 low_battery=False,
@@ -315,7 +314,7 @@ class TestEventController:
 
         # Call our events callback method and trigger a capture group event
 
-        event_json = json.loads(IRCAMERA.timeline_event())
+        event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
         # Our capture callback should get one, but our alarm should not
@@ -345,7 +344,7 @@ class TestEventController:
 
         # Call our events callback method and trigger an image capture event
 
-        event_json = json.loads(IRCAMERA.timeline_event())
+        event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
         # all and image callbacks should have one, opened none
@@ -359,13 +358,13 @@ class TestEventController:
     def tests_alarm_callback(self, m):
         """Tests that alarm device updates callback correctly."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
@@ -418,30 +417,29 @@ class TestEventController:
 
         # Call our events callback method and trigger an image capture event
 
-        event_json = json.loads(IRCAMERA.timeline_event())
+        event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
     def tests_multi_device_callback(self, m):
         """Tests that multiple device updates callback correctly."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text='['
-            + COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
-                low_battery=False,
-                no_response=False,
-            )
-            + ", "
-            + DOORCONTACT.device(
-                devid=DOORCONTACT.DEVICE_ID, status=CONST.STATUS_CLOSED
-            )
-            + ']',
+            json=[
+                COVER.device(
+                    devid=COVER.DEVICE_ID,
+                    status=CONST.STATUS_CLOSED,
+                    low_battery=False,
+                    no_response=False,
+                ),
+                DOORCONTACT.device(
+                    devid=DOORCONTACT.DEVICE_ID, status=CONST.STATUS_CLOSED
+                ),
+            ],
         )
 
         # Logout to reset everything
@@ -467,7 +465,7 @@ class TestEventController:
         cover_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
         m.get(
             cover_url,
-            text=COVER.device(
+            json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_OPEN,
                 low_battery=False,
@@ -478,7 +476,7 @@ class TestEventController:
         door_url = CONST.DEVICE_URL.format(device_id=DOORCONTACT.DEVICE_ID)
         m.get(
             door_url,
-            text=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN),
+            json=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN),
         )
 
         # Call our device callback method for our cover
@@ -515,7 +513,7 @@ class TestEventController:
 
         # Call our events callback method and trigger a capture group event
 
-        event_json = json.loads(IRCAMERA.timeline_event())
+        event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
         # Ensure our callback was called
@@ -537,7 +535,7 @@ class TestEventController:
 
         # Call our events callback method and trigger a capture group event
 
-        event_json = json.loads(IRCAMERA.timeline_event())
+        event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
         # Ensure our callback was called

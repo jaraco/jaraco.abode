@@ -19,13 +19,13 @@ class TestDoorLock:
     def tests_lock_device_properties(self, m):
         """Tests that lock devices properties work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=DOOR_LOCK.device(
+            json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
                 status=CONST.STATUS_LOCKCLOSED,
                 low_battery=False,
@@ -52,7 +52,7 @@ class TestDoorLock:
         # Change device properties
         m.get(
             device_url,
-            text=DOOR_LOCK.device(
+            json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
                 status=CONST.STATUS_LOCKOPEN,
                 low_battery=True,
@@ -71,13 +71,13 @@ class TestDoorLock:
     def tests_lock_device_mode_changes(self, m):
         """Tests that lock device changes work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=DOOR_LOCK.device(
+            json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
                 status=CONST.STATUS_LOCKCLOSED,
                 low_battery=False,
@@ -100,7 +100,7 @@ class TestDoorLock:
         control_url = CONST.BASE_URL + DOOR_LOCK.CONTROL_URL
         m.put(
             control_url,
-            text=DEVICES.status_put_response_ok(
+            json=DEVICES.status_put_response_ok(
                 devid=DOOR_LOCK.DEVICE_ID, status=CONST.STATUS_LOCKOPEN_INT
             ),
         )
@@ -113,7 +113,7 @@ class TestDoorLock:
         # Change response
         m.put(
             control_url,
-            text=DEVICES.status_put_response_ok(
+            json=DEVICES.status_put_response_ok(
                 devid=DOOR_LOCK.DEVICE_ID, status=CONST.STATUS_LOCKCLOSED_INT
             ),
         )
@@ -126,7 +126,7 @@ class TestDoorLock:
         # Test that an invalid status response throws exception
         m.put(
             control_url,
-            text=DEVICES.status_put_response_ok(
+            json=DEVICES.status_put_response_ok(
                 devid=DOOR_LOCK.DEVICE_ID, status=CONST.STATUS_LOCKCLOSED_INT
             ),
         )

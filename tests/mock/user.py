@@ -1,11 +1,9 @@
 """Mock Abode User Response."""
 
-from . import dump
-
 
 def get_response_ok():
     """Return the user response data."""
-    return dump(
+    return dict(
         id='user@email.com',
         email='user@email.com',
         first_name='John',

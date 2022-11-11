@@ -2,14 +2,12 @@
 
 import jaraco.abode.helpers.constants as CONST
 
-from . import dump
-
 
 def get_response_ok(
     mode=CONST.MODE_STANDBY, battery=False, is_cellular=False, mac='00:11:22:33:44:55'
 ):
     """Return panel response json."""
-    return dump(
+    return dict(
         version='ABGW 0.0.2.17F ABGW-L1-XA36J 3.1.2.6.1 Z-Wave 3.95',
         report_account='5555',
         online='1',
@@ -61,4 +59,4 @@ def get_response_ok(
 
 def put_response_ok(area='1', mode=CONST.MODE_STANDBY):
     """Return panel mode response json."""
-    return dump(area=area, mode=mode)
+    return dict(area=area, mode=mode)

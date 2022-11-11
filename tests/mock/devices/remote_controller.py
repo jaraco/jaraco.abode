@@ -1,8 +1,6 @@
 """Mock Abode Remote Controller (Keyfob) Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 
 DEVICE_ID = 'RF:0000416bb'
 
@@ -11,7 +9,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
 ):
     """Remote controller mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.remote_controller',
         type='Remote Controller',

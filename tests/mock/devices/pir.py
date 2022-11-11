@@ -1,8 +1,6 @@
 """Mock Abode PIR Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 
 DEVICE_ID = 'ZB:00000055'
 
@@ -11,7 +9,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
 ):
     """PIR mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.pir',
         model='L1',

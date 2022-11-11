@@ -1,8 +1,6 @@
 """Mock Non-Existent Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 
 DEVICE_ID = 'RF:deadbeef'
 
@@ -11,7 +9,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
 ):
     """Unknown mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.dead_beef',
         type='Dead Beef Detector',

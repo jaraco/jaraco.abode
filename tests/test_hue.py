@@ -19,13 +19,13 @@ class TestHue:
     def tests_hue_device_properties(self, m):
         """Tests that hue light devices properties work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=HUE.device(
+            json=HUE.device(
                 devid=HUE.DEVICE_ID,
                 status=CONST.STATUS_OFF,
                 level=0,
@@ -64,7 +64,7 @@ class TestHue:
         # Change device properties
         m.get(
             device_url,
-            text=HUE.device(
+            json=HUE.device(
                 devid=HUE.DEVICE_ID,
                 status=CONST.STATUS_ON,
                 level=45,
@@ -94,13 +94,13 @@ class TestHue:
     def tests_hue_status_changes(self, m):
         """Tests that hue device changes work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=HUE.device(
+            json=HUE.device(
                 devid=HUE.DEVICE_ID,
                 status=CONST.STATUS_OFF,
                 level=0,
@@ -128,7 +128,7 @@ class TestHue:
         control_url = CONST.BASE_URL + HUE.CONTROL_URL
         m.put(
             control_url,
-            text=DEVICES.status_put_response_ok(
+            json=DEVICES.status_put_response_ok(
                 devid=HUE.DEVICE_ID, status=CONST.STATUS_ON_INT
             ),
         )
@@ -141,7 +141,7 @@ class TestHue:
         # Change response
         m.put(
             control_url,
-            text=DEVICES.status_put_response_ok(
+            json=DEVICES.status_put_response_ok(
                 devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
             ),
         )
@@ -154,7 +154,7 @@ class TestHue:
         # Test that an invalid status response throws exception
         m.put(
             control_url,
-            text=DEVICES.status_put_response_ok(
+            json=DEVICES.status_put_response_ok(
                 devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
             ),
         )
@@ -165,13 +165,13 @@ class TestHue:
     def tests_hue_color_temp_changes(self, m):
         """Tests that hue device color temp changes work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=HUE.device(
+            json=HUE.device(
                 devid=HUE.DEVICE_ID,
                 status=CONST.STATUS_OFF,
                 level=0,
@@ -199,7 +199,7 @@ class TestHue:
         # Set up integrations url response
         m.post(
             HUE.INTEGRATIONS_URL,
-            text=HUE.color_temp_post_response_ok(devid=HUE.DEVICE_ID, color_temp=5554),
+            json=HUE.color_temp_post_response_ok(devid=HUE.DEVICE_ID, color_temp=5554),
         )
 
         # Change the color temp
@@ -209,7 +209,7 @@ class TestHue:
         # Change response
         m.post(
             HUE.INTEGRATIONS_URL,
-            text=HUE.color_temp_post_response_ok(devid=HUE.DEVICE_ID, color_temp=4434),
+            json=HUE.color_temp_post_response_ok(devid=HUE.DEVICE_ID, color_temp=4434),
         )
 
         # Change the color to something that mismatches
@@ -221,7 +221,7 @@ class TestHue:
         # Test that an invalid ID in response throws exception
         m.post(
             HUE.INTEGRATIONS_URL,
-            text=HUE.color_temp_post_response_ok(
+            json=HUE.color_temp_post_response_ok(
                 devid=(HUE.DEVICE_ID + "23"), color_temp=4434
             ),
         )
@@ -232,13 +232,13 @@ class TestHue:
     def tests_hue_color_changes(self, m):
         """Tests that hue device color changes work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
             CONST.DEVICES_URL,
-            text=HUE.device(
+            json=HUE.device(
                 devid=HUE.DEVICE_ID,
                 status=CONST.STATUS_OFF,
                 level=0,
@@ -266,7 +266,7 @@ class TestHue:
         # Set up integrations url response
         m.post(
             HUE.INTEGRATIONS_URL,
-            text=HUE.color_post_response_ok(devid=HUE.DEVICE_ID, hue=70, saturation=80),
+            json=HUE.color_post_response_ok(devid=HUE.DEVICE_ID, hue=70, saturation=80),
         )
 
         # Change the color temp
@@ -276,7 +276,7 @@ class TestHue:
         # Change response
         m.post(
             HUE.INTEGRATIONS_URL,
-            text=HUE.color_post_response_ok(devid=HUE.DEVICE_ID, hue=55, saturation=85),
+            json=HUE.color_post_response_ok(devid=HUE.DEVICE_ID, hue=55, saturation=85),
         )
 
         # Change the color to something that mismatches
@@ -288,7 +288,7 @@ class TestHue:
         # Test that an invalid ID in response throws exception
         m.post(
             HUE.INTEGRATIONS_URL,
-            text=HUE.color_post_response_ok(
+            json=HUE.color_post_response_ok(
                 devid=(HUE.DEVICE_ID + "23"), hue=55, saturation=85
             ),
         )

@@ -1,8 +1,6 @@
 """Mock Abode IR Camera Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 DEVICE_ID = 'ZB:00000005'
 CONTROL_URL = 'api/v1/cams/' + DEVICE_ID + '/capture'
 
@@ -11,7 +9,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
 ):
     """IR camera mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.ir_camera',
         type='Motion Camera',
@@ -63,7 +61,7 @@ def device(
 
 def get_capture_timeout():
     """Mock timeout response."""
-    return dump(
+    return dict(
         code=600, message='Image Capture request has timed out', title='', detail=None
     )
 
@@ -79,7 +77,7 @@ LOCATION_HEADER = (
 
 def timeline_event(devid=DEVICE_ID, event_code='5001', file_path=FILE_PATH):
     """Camera Timeline Event Mockup."""
-    return dump(
+    return dict(
         id=devid,
         event_utc='1503518105',
         nest_activity_zones=None,

@@ -1,8 +1,6 @@
 """Mock Abode Power Switch Sensor Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 
 DEVICE_ID = 'RF:00000008'
 
@@ -11,7 +9,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_OFF, low_battery=False, no_response=False
 ):
     """Water sensor mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.water_sensor',
         type='Water Sensor',

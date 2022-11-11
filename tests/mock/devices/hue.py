@@ -1,8 +1,6 @@
 """Mock Abode Power Switch Sensor Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 DEVICE_ID = 'ZB:00000106'
 DEVICE_UUID = 'abcd33455232fff31232'
 CONTROL_URL = 'api/v1/control/light/' + DEVICE_ID
@@ -11,12 +9,12 @@ INTEGRATIONS_URL = CONST.INTEGRATIONS_URL + DEVICE_UUID
 
 def color_temp_post_response_ok(devid, color_temp):
     """Return color temp change response json."""
-    return dump(idForPanel=devid, colorTemperature=int(color_temp))
+    return dict(idForPanel=devid, colorTemperature=int(color_temp))
 
 
 def color_post_response_ok(devid, hue, saturation):
     """Return color change response json."""
-    return dump(idForPanel=devid, hue=int(hue), saturation=int(saturation))
+    return dict(idForPanel=devid, hue=int(hue), saturation=int(saturation))
 
 
 def device(
@@ -32,7 +30,7 @@ def device(
     no_response=False,
 ):
     """Hue mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.hue',
         type='RGB Dimmer',

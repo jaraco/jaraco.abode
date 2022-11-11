@@ -23,66 +23,58 @@ class TestBinarySensors:
     def tests_binary_sensor_properties(self, m):
         """Tests that binary sensor device properties work as expected."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up all Binary Sensor Devices in "off states"
-        all_devices = (
-            '['
-            + DOOR_CONTACT.device(
+        all_devices = [
+            DOOR_CONTACT.device(
                 devid=DOOR_CONTACT.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
                 low_battery=False,
                 no_response=False,
-            )
-            + ','
-            + GLASS.device(
+            ),
+            GLASS.device(
                 devid=GLASS.DEVICE_ID,
                 status=CONST.STATUS_OFFLINE,
                 low_battery=False,
                 no_response=False,
-            )
-            + ','
-            + KEYPAD.device(
+            ),
+            KEYPAD.device(
                 devid=KEYPAD.DEVICE_ID,
                 status=CONST.STATUS_OFFLINE,
                 low_battery=False,
                 no_response=False,
-            )
-            + ','
-            + REMOTE_CONTROLLER.device(
+            ),
+            REMOTE_CONTROLLER.device(
                 devid=REMOTE_CONTROLLER.DEVICE_ID,
                 status=CONST.STATUS_OFFLINE,
                 low_battery=False,
                 no_response=False,
-            )
-            + ','
-            + SIREN.device(
+            ),
+            SIREN.device(
                 devid=SIREN.DEVICE_ID,
                 status=CONST.STATUS_OFFLINE,
                 low_battery=False,
                 no_response=False,
-            )
-            + ','
-            + STATUS_DISPLAY.device(
+            ),
+            STATUS_DISPLAY.device(
                 devid=STATUS_DISPLAY.DEVICE_ID,
                 status=CONST.STATUS_OFFLINE,
                 low_battery=False,
                 no_response=False,
-            )
-            + ','
-            + WATER_SENSOR.device(
+            ),
+            WATER_SENSOR.device(
                 devid=WATER_SENSOR.DEVICE_ID,
                 status=CONST.STATUS_OFFLINE,
                 low_battery=False,
                 no_response=False,
-            )
-            + ']'
-        )
+            ),
+        ]
 
-        m.get(CONST.DEVICES_URL, text=all_devices)
+        m.get(CONST.DEVICES_URL, json=all_devices)
 
         # Logout to reset everything
         self.abode.logout()
@@ -94,60 +86,52 @@ class TestBinarySensors:
             assert not device.no_response, device.type + " no_response failed"
 
         # Set up all Binary Sensor Devices in "off states"
-        all_devices = (
-            '['
-            + DOOR_CONTACT.device(
+        all_devices = [
+            DOOR_CONTACT.device(
                 devid=DOOR_CONTACT.DEVICE_ID,
                 status=CONST.STATUS_OPEN,
                 low_battery=True,
                 no_response=True,
-            )
-            + ','
-            + GLASS.device(
+            ),
+            GLASS.device(
                 devid=GLASS.DEVICE_ID,
                 status=CONST.STATUS_ONLINE,
                 low_battery=True,
                 no_response=True,
-            )
-            + ','
-            + KEYPAD.device(
+            ),
+            KEYPAD.device(
                 devid=KEYPAD.DEVICE_ID,
                 status=CONST.STATUS_ONLINE,
                 low_battery=True,
                 no_response=True,
-            )
-            + ','
-            + REMOTE_CONTROLLER.device(
+            ),
+            REMOTE_CONTROLLER.device(
                 devid=REMOTE_CONTROLLER.DEVICE_ID,
                 status=CONST.STATUS_ONLINE,
                 low_battery=True,
                 no_response=True,
-            )
-            + ','
-            + SIREN.device(
+            ),
+            SIREN.device(
                 devid=SIREN.DEVICE_ID,
                 status=CONST.STATUS_ONLINE,
                 low_battery=True,
                 no_response=True,
-            )
-            + ','
-            + STATUS_DISPLAY.device(
+            ),
+            STATUS_DISPLAY.device(
                 devid=STATUS_DISPLAY.DEVICE_ID,
                 status=CONST.STATUS_ONLINE,
                 low_battery=True,
                 no_response=True,
-            )
-            + ','
-            + WATER_SENSOR.device(
+            ),
+            WATER_SENSOR.device(
                 devid=WATER_SENSOR.DEVICE_ID,
                 status=CONST.STATUS_ONLINE,
                 low_battery=True,
                 no_response=True,
-            )
-            + ']'
-        )
+            ),
+        ]
 
-        m.get(CONST.DEVICES_URL, text=all_devices)
+        m.get(CONST.DEVICES_URL, json=all_devices)
 
         # Refesh devices and test changes
         for device in skip_alarms(self.abode.get_devices(refresh=True)):

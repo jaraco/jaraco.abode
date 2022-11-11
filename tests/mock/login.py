@@ -1,8 +1,5 @@
 """Mock Abode Login Response."""
 
-import json
-
-from . import dump
 from . import AUTH_TOKEN
 from . import panel
 from . import user
@@ -10,12 +7,12 @@ from . import user
 
 def post_response_ok(auth_token=AUTH_TOKEN, user_response=user.get_response_ok()):
     """Return the successful login response json."""
-    return dump(
+    return dict(
         token=auth_token,
         expired_at='2017-06-05 00:14:12',
         initiate_screen='timeline',
-        user=json.loads(user_response),
-        panel=json.loads(panel.get_response_ok()),
+        user=user_response,
+        panel=panel.get_response_ok(),
         permissions=dict(
             premium_streaming='0',
             guest_app='0',
@@ -42,7 +39,7 @@ def post_response_ok(auth_token=AUTH_TOKEN, user_response=user.get_response_ok()
 
 def post_response_bad_request():
     """Return the failed login response json."""
-    return dump(
+    return dict(
         code=400,
         message='Username and password do not match.',
         detail=None,
@@ -51,7 +48,7 @@ def post_response_bad_request():
 
 def post_response_mfa_code_required():
     """Return the MFA code required login response json."""
-    return dump(
+    return dict(
         code=200,
         mfa_type='google_authenticator',
         detail=None,
@@ -60,9 +57,9 @@ def post_response_mfa_code_required():
 
 def post_response_bad_mfa_code():
     """Return the bad MFA code login response json."""
-    return dump(code=400, message='Invalid authentication key.', detail=None)
+    return dict(code=400, message='Invalid authentication key.', detail=None)
 
 
 def post_response_unknown_mfa_type():
     """Return a login response json with an unknown mfa type."""
-    return dump(code=200, mfa_type='sms', detail=None)
+    return dict(code=200, mfa_type='sms', detail=None)

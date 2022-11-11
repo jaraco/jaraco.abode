@@ -1,8 +1,6 @@
 """Mock Abode Status Display Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 
 DEVICE_ID = 'ZB:00000004'
 
@@ -11,7 +9,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
 ):
     """Status display mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.bx',
         type='Status Display',

@@ -1,8 +1,6 @@
 """Mock Abode Door Lock Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 DEVICE_ID = 'ZW:0000006'
 CONTROL_URL = 'api/v1/control/lock/' + DEVICE_ID
 
@@ -14,7 +12,7 @@ def device(
     no_response=False,
 ):
     """Door lock mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.door_lock',
         type='Door Lock',

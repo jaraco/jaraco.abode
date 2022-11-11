@@ -1,8 +1,6 @@
 """Mock Abode Glass Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 DEVICE_ID = 'RF:00000001'
 
 
@@ -16,7 +14,7 @@ def device(
     uuid='91568b0d4c9d58c10d75fdeea887d4f4',
 ):
     """Glass break sensor mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.glass',
         type='GLASS',

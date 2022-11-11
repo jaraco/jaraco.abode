@@ -1,8 +1,6 @@
 """Mock Abode Power Switch Sensor Device."""
 import jaraco.abode.helpers.constants as CONST
 
-from .. import dump
-
 
 DEVICE_ID = 'ZW:0000000a'
 CONTROL_URL = 'api/v1/control/power_switch/' + DEVICE_ID
@@ -12,7 +10,7 @@ def device(
     devid=DEVICE_ID, status=CONST.STATUS_OPEN, low_battery=False, no_response=False
 ):
     """Secure barrier mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag='device_type.secure_barrier',
         type='Secure Barrier',

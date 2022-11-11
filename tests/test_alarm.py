@@ -19,10 +19,10 @@ class TestAlarm:
         panel = PANEL.get_response_ok(mode=CONST.MODE_STANDBY)
         alarm = ALARM.device(area='1', panel=panel)
 
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.get(CONST.DEVICES_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok())
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
 
         alarm_device = self.abode.get_alarm()
 
@@ -33,19 +33,19 @@ class TestAlarm:
     def tests_alarm_device_properties(self, m):
         """Check that the abode device properties are working."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
         m.get(
             CONST.PANEL_URL,
-            text=PANEL.get_response_ok(
+            json=PANEL.get_response_ok(
                 mode=CONST.MODE_STANDBY,
                 battery=True,
                 is_cellular=True,
                 mac='01:AA:b3:C4:d5:66',
             ),
         )
-        m.get(CONST.DEVICES_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
+        m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
         self.abode.logout()
@@ -65,7 +65,7 @@ class TestAlarm:
         # Change alarm properties and state to away and test
         m.get(
             CONST.PANEL_URL,
-            text=PANEL.get_response_ok(
+            json=PANEL.get_response_ok(
                 mode=CONST.MODE_AWAY, battery=False, is_cellular=False
             ),
         )
@@ -81,7 +81,7 @@ class TestAlarm:
         assert alarm.is_on
 
         # Change alarm state to final on state and test
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_HOME))
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_HOME))
 
         # Refresh alarm and test
         alarm.refresh()
@@ -92,11 +92,11 @@ class TestAlarm:
     def tests_alarm_device_mode_changes(self, m):
         """Test that the abode alarm can change/report modes."""
         # Set up URL's
-        m.post(CONST.LOGIN_URL, text=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, text=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, text=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, text=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-        m.get(CONST.DEVICES_URL, text=DEVICES.EMPTY_DEVICE_RESPONSE)
+        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
+        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
+        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
         self.abode.logout()
@@ -110,15 +110,15 @@ class TestAlarm:
         # Set mode URLs
         m.put(
             CONST.get_panel_mode_url('1', CONST.MODE_STANDBY),
-            text=PANEL.put_response_ok(mode=CONST.MODE_STANDBY),
+            json=PANEL.put_response_ok(mode=CONST.MODE_STANDBY),
         )
         m.put(
             CONST.get_panel_mode_url('1', CONST.MODE_AWAY),
-            text=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
+            json=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
         )
         m.put(
             CONST.get_panel_mode_url('1', CONST.MODE_HOME),
-            text=PANEL.put_response_ok(mode=CONST.MODE_HOME),
+            json=PANEL.put_response_ok(mode=CONST.MODE_HOME),
         )
 
         # Set and test text based mode changes
@@ -197,7 +197,7 @@ class TestAlarm:
         # Test that an invalid mode change response throws exception
         m.put(
             CONST.get_panel_mode_url('1', CONST.MODE_HOME),
-            text=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
+            json=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
         )
 
         with pytest.raises(jaraco.abode.AbodeException):
@@ -206,7 +206,7 @@ class TestAlarm:
         # Test that an invalid area in mode change response throws exception
         m.put(
             CONST.get_panel_mode_url('1', CONST.MODE_HOME),
-            text=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
+            json=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
         )
 
         with pytest.raises(jaraco.abode.AbodeException):

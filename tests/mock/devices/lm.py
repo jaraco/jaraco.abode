@@ -1,7 +1,5 @@
 """Mock Abode LM (Light/Temp/Humidity) Device."""
 
-from .. import dump
-
 DEVICE_ID = 'ZB:eee888801'
 
 TEMP_F = '72 °F'
@@ -21,7 +19,7 @@ def device(
     no_response=False,
 ):
     """LM mock device."""
-    return dump(
+    return dict(
         id=devid,
         type_tag="device_type.lm",
         type="LM",

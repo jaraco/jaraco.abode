@@ -1,11 +1,9 @@
 """Mock Abode Automation."""
 
-from . import dump
-
 
 def get_response_ok(name, enabled, aid):
     """Return automation json."""
-    return dump(
+    return dict(
         name=name,
         enabled=str(enabled),
         version=2,
