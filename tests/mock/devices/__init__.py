@@ -5,10 +5,10 @@ This file should be updated any time the Abode server responses
 change to confirm this library can still communicate.
 """
 
-from typing import Any
+from typing import Any, List
 
 
-EMPTY_DEVICE_RESPONSE: list[Any] = []
+EMPTY_DEVICE_RESPONSE: List[Any] = []
 
 
 def status_put_response_ok(devid, status):
