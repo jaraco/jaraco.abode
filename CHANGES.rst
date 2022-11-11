@@ -1,3 +1,8 @@
+v1.2.1
+======
+
+Updated tests to use native objects.
+
 v1.2.0
 ======
 
