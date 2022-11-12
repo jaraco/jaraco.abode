@@ -14,7 +14,7 @@ class Automation:
 
     def __init__(self, abode, automation):
         """Init Automation class."""
-        self._abode = abode
+        self._client = abode
         self._automation = automation
 
     def enable(self, enable):
@@ -23,7 +23,7 @@ class Automation:
 
         self._automation['enabled'] = enable
 
-        response = self._abode.send_request(
+        response = self._client.send_request(
             method="patch", path=path, data={'enabled': enable}
         )
 
@@ -46,7 +46,7 @@ class Automation:
         """Trigger the automation."""
         path = CONST.AUTOMATION_APPLY_URL.format(id=self.automation_id)
 
-        self._abode.send_request(method="post", path=path)
+        self._client.send_request(method="post", path=path)
 
         _LOGGER.info("Automation triggered: %s", self.name)
 
@@ -54,7 +54,7 @@ class Automation:
         """Refresh the automation."""
         path = CONST.AUTOMATION_ID_URL.format(id=self.automation_id)
 
-        response = self._abode.send_request(method="get", path=path)
+        response = self._client.send_request(method="get", path=path)
         response_object = response.json()
 
         if isinstance(response_object, (tuple, list)):

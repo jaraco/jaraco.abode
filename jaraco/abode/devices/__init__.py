@@ -15,10 +15,10 @@ _LOGGER = logging.getLogger(__name__)
 class Device:
     """Class to represent each Abode device."""
 
-    def __init__(self, state, abode):
+    def __init__(self, state, client):
         """Set up Abode device."""
         self._state = state
-        self._abode = abode
+        self._client = client
 
     def __getattr__(self, name):
         if name in '_name _type _type_tag _generic_type'.split():
@@ -44,7 +44,7 @@ class Device:
 
         status_data = {'status': str(status)}
 
-        response = self._abode.send_request(method="put", path=path, data=status_data)
+        response = self._client.send_request(method="put", path=path, data=status_data)
         response_object = response.json()
 
         _LOGGER.debug("Set Status Response: %s", response.text)
@@ -68,7 +68,7 @@ class Device:
 
         level_data = {'level': str(level)}
 
-        response = self._abode.send_request("put", url, data=level_data)
+        response = self._client.send_request("put", url, data=level_data)
         response_object = response.json()
 
         _LOGGER.debug("Set Level Response: %s", response.text)
@@ -99,7 +99,7 @@ class Device:
         """
         path = path.format(device_id=self.device_id)
 
-        response = self._abode.send_request(method="get", path=path)
+        response = self._client.send_request(method="get", path=path)
         response_object = response.json()
 
         _LOGGER.debug("Device Refresh Response: %s", response.text)

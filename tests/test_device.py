@@ -46,7 +46,7 @@ class TestDevice:
 
         with pytest.raises(jaraco.abode.AbodeException):
             del device['type_tag']
-            jaraco.abode.new_device(device, self.abode)
+            jaraco.abode.new_device(device, self.client)
 
     def tests_device_auto_naming(self):
         """Check the generic Abode device creates a name."""
@@ -59,17 +59,17 @@ class TestDevice:
         )
 
         source['name'] = ""
-        device = jaraco.abode.new_device(source, self.abode)
+        device = jaraco.abode.new_device(source, self.client)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
         source['name'] = None
-        device = jaraco.abode.new_device(source, self.abode)
+        device = jaraco.abode.new_device(source, self.client)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
         del source['name']
-        device = jaraco.abode.new_device(source, self.abode)
+        device = jaraco.abode.new_device(source, self.client)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
@@ -96,10 +96,10 @@ class TestDevice:
         m.get(CONST.DEVICES_URL, json=source)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our specific device
-        device = self.abode.get_device(GLASS.DEVICE_ID)
+        device = self.client.get_device(GLASS.DEVICE_ID)
 
         # Check device states match
         assert device is not None
@@ -132,14 +132,14 @@ class TestDevice:
         m.get(device_url, json=[GLASS.device(status=CONST.STATUS_OFFLINE)])
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get the first device and test
-        device = self.abode.get_device(GLASS.DEVICE_ID)
+        device = self.client.get_device(GLASS.DEVICE_ID)
         assert device.status == CONST.STATUS_ONLINE
 
         # Refresh the device and test
-        device = self.abode.get_device(GLASS.DEVICE_ID, refresh=True)
+        device = self.client.get_device(GLASS.DEVICE_ID, refresh=True)
         assert device.status == CONST.STATUS_OFFLINE
 
     def tests_multiple_devices(self, m):
@@ -160,25 +160,25 @@ class TestDevice:
         m.get(CONST.DEVICES_URL, json=dev_list)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our devices
-        devices = self.abode.get_devices()
+        devices = self.client.get_devices()
 
         # Assert four devices - three from above + 1 alarm
         assert devices is not None
         assert len(devices) == 4
 
         # Get each individual device by device ID
-        psd = self.abode.get_device(POWERSENSOR.DEVICE_ID)
+        psd = self.client.get_device(POWERSENSOR.DEVICE_ID)
         assert psd is not None
 
         # Get each individual device by device ID
-        psd = self.abode.get_device(DOOR_CONTACT.DEVICE_ID)
+        psd = self.client.get_device(DOOR_CONTACT.DEVICE_ID)
         assert psd is not None
 
         # Get each individual device by device ID
-        psd = self.abode.get_device(GLASS.DEVICE_ID)
+        psd = self.client.get_device(GLASS.DEVICE_ID)
         assert psd is not None
 
     def tests_unknown_devices(self, m):
@@ -192,10 +192,10 @@ class TestDevice:
         m.get(CONST.DEVICES_URL, json=[UNKNOWN.device()])
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our devices
-        devices = self.abode.get_devices()
+        devices = self.client.get_devices()
 
         # Assert 1 device - skipped device above + 1 alarm
         assert devices is not None
@@ -234,16 +234,16 @@ class TestDevice:
         m.get(CONST.DEVICES_URL, json=dev_list)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our glass devices
-        devices = self.abode.get_devices(generic_type=CONST.TYPE_CONNECTIVITY)
+        devices = self.client.get_devices(generic_type=CONST.TYPE_CONNECTIVITY)
 
         assert devices is not None
         assert len(devices) == 1
 
         # Get our power switch devices
-        devices = self.abode.get_devices(generic_type=CONST.TYPE_SWITCH)
+        devices = self.client.get_devices(generic_type=CONST.TYPE_SWITCH)
 
         assert devices is not None
         assert len(devices) == 2
@@ -259,10 +259,10 @@ class TestDevice:
         m.get(CONST.DEVICES_URL, json=GLASS.device(status=CONST.STATUS_ONLINE))
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get device
-        device = self.abode.get_device(GLASS.DEVICE_ID)
+        device = self.client.get_device(GLASS.DEVICE_ID)
 
         assert device is not None
         assert not device.set_status('1')
@@ -286,10 +286,10 @@ class TestDevice:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our power switch
-        device = self.abode.get_device(POWERSENSOR.DEVICE_ID)
+        device = self.client.get_device(POWERSENSOR.DEVICE_ID)
 
         # Test that we have our device
         assert device is not None
@@ -365,10 +365,10 @@ class TestDevice:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our power switch
-        device = self.abode.get_device(POWERSENSOR.DEVICE_ID)
+        device = self.client.get_device(POWERSENSOR.DEVICE_ID)
 
         # Test that we have our device
         assert device is not None
@@ -443,10 +443,10 @@ class TestDevice:
         m.get(CONST.DEVICES_URL, json=all_devices)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Loop through all devices
-        for device in self.abode.get_devices():
+        for device in self.client.get_devices():
             class_type = {
                 # Alarm
                 CONST.TYPE_ALARM: Alarm,

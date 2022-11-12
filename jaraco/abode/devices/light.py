@@ -26,7 +26,7 @@ class Light(Switch):
             'colorTemperature': int(color_temp),
         }
 
-        response = self._abode.send_request("post", url, data=color_data)
+        response = self._client.send_request("post", url, data=color_data)
         response_object = response.json()
 
         _LOGGER.debug("Set Color Temp Response: %s", response.text)
@@ -63,7 +63,7 @@ class Light(Switch):
             'saturation': int(saturation),
         }
 
-        response = self._abode.send_request("post", url, data=color_data)
+        response = self._client.send_request("post", url, data=color_data)
         response_object = response.json()
 
         _LOGGER.debug("Set Color Response: %s", response.text)

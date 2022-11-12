@@ -34,10 +34,10 @@ class TestDoorLock:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our lock
-        device = self.abode.get_device(DOOR_LOCK.DEVICE_ID)
+        device = self.client.get_device(DOOR_LOCK.DEVICE_ID)
 
         # Test our device
         assert device is not None
@@ -86,10 +86,10 @@ class TestDoorLock:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our power switch
-        device = self.abode.get_device(DOOR_LOCK.DEVICE_ID)
+        device = self.client.get_device(DOOR_LOCK.DEVICE_ID)
 
         # Test that we have our device
         assert device is not None

@@ -77,10 +77,10 @@ class TestBinarySensors:
         m.get(CONST.DEVICES_URL, json=all_devices)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Test our devices
-        for device in self.abode.get_devices():
+        for device in self.client.get_devices():
             assert not device.is_on, device.type + " is_on failed"
             assert not device.battery_low, device.type + " battery_low failed"
             assert not device.no_response, device.type + " no_response failed"
@@ -134,7 +134,7 @@ class TestBinarySensors:
         m.get(CONST.DEVICES_URL, json=all_devices)
 
         # Refesh devices and test changes
-        for device in skip_alarms(self.abode.get_devices(refresh=True)):
+        for device in skip_alarms(self.client.get_devices(refresh=True)):
             assert device.is_on, device.type + " is_on failed"
             assert device.battery_low, device.type + " battery_low failed"
             assert device.no_response, device.type + " no_response failed"

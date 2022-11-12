@@ -27,8 +27,8 @@ from . import utils as UTILS
 _LOGGER = logging.getLogger(__name__)
 
 
-class Abode:
-    """Main Abode class."""
+class Client:
+    """Client to an Abode system."""
 
     def __init__(
         self,
@@ -463,12 +463,12 @@ class Abode:
             UTILS.save_cache(self._cache, self._cache_path)
 
 
-def _new_sensor(device_json, abode):
+def _new_sensor(device_json, client):
     statuses = device_json.get(CONST.STATUSES_KEY, {})
 
     if any(key in statuses for key in CONST.SENSOR_KEYS):
         device_json['generic_type'] = CONST.TYPE_SENSOR
-        return Sensor(device_json, abode)
+        return Sensor(device_json, client)
 
     version = device_json.get('version', '')
 
@@ -476,10 +476,10 @@ def _new_sensor(device_json, abode):
         CONST.TYPE_OCCUPANCY if version.startswith('MINIPIR') else CONST.TYPE_MOTION
     )
 
-    return BinarySensor(device_json, abode)
+    return BinarySensor(device_json, client)
 
 
-def new_device(device_json, abode):
+def new_device(device_json, client):
     """Create new device object for the given type."""
     try:
         type_tag = device_json['type_tag']
@@ -501,4 +501,4 @@ def new_device(device_json, abode):
         CONST.TYPE_UNKNOWN_SENSOR: _new_sensor,
     }
     sensor = sensors.get(generic_type, lambda *args: None)
-    return sensor(device_json, abode)
+    return sensor(device_json, client)

@@ -24,7 +24,7 @@ class TestAlarm:
         m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
 
-        alarm_device = self.abode.get_alarm()
+        alarm_device = self.client.get_alarm()
 
         assert alarm_device is not None
 
@@ -48,10 +48,10 @@ class TestAlarm:
         m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get alarm and test
-        alarm = self.abode.get_alarm()
+        alarm = self.client.get_alarm()
         assert alarm.device_id == 'area_1'
         assert alarm is not None
         assert alarm.mode == CONST.MODE_STANDBY
@@ -99,10 +99,10 @@ class TestAlarm:
         m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Assert that after login we have our alarm device with standby mode
-        alarm = self.abode.get_alarm()
+        alarm = self.client.get_alarm()
 
         assert alarm is not None
         assert alarm.status == CONST.MODE_STANDBY
@@ -166,7 +166,7 @@ class TestAlarm:
         assert not alarm.is_home
         assert not alarm.is_away
 
-        self.abode.set_default_mode(CONST.MODE_HOME)
+        self.client.set_default_mode(CONST.MODE_HOME)
         assert alarm.switch_on()
         assert alarm.mode == CONST.MODE_HOME
         assert not alarm.is_standby
@@ -179,7 +179,7 @@ class TestAlarm:
         assert not alarm.is_home
         assert not alarm.is_away
 
-        self.abode.set_default_mode(CONST.MODE_AWAY)
+        self.client.set_default_mode(CONST.MODE_AWAY)
         assert alarm.switch_on()
         assert alarm.mode == CONST.MODE_AWAY
         assert not alarm.is_standby

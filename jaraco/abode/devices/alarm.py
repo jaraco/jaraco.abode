@@ -46,7 +46,7 @@ class Alarm(Switch):
 
         mode = mode.lower()
 
-        response = self._abode.send_request(
+        response = self._client.send_request(
             "put", CONST.get_panel_mode_url(self._area, mode)
         )
 
@@ -82,7 +82,7 @@ class Alarm(Switch):
 
     def switch_on(self):
         """Arm Abode to default mode."""
-        return self.set_mode(self._abode.default_mode)
+        return self.set_mode(self._client.default_mode)
 
     def switch_off(self):
         """Arm Abode to home mode."""
@@ -92,7 +92,7 @@ class Alarm(Switch):
         """Refresh the alarm device."""
         response_object = super().refresh(url)
 
-        self._abode._panel.update(response_object[0])
+        self._client._panel.update(response_object[0])
 
         return response_object
 

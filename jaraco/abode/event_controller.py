@@ -17,7 +17,7 @@ class EventController:
 
     def __init__(self, abode, url=CONST.SOCKETIO_URL):
         """Init event subscription class."""
-        self._abode = abode
+        self._client = abode
         self._thread = None
         self._running = False
         self._connected = False
@@ -87,7 +87,7 @@ class EventController:
                 device_id = device.device_id
 
             # Validate the device is valid
-            if not self._abode.get_device(device_id):
+            if not self._client.get_device(device_id):
                 raise AbodeException(ERROR.EVENT_DEVICE_INVALID)
 
             _LOGGER.debug("Subscribing to updates for device_id: %s", device_id)
@@ -110,7 +110,7 @@ class EventController:
             if isinstance(device, Device):
                 device_id = device.device_id
 
-            if not self._abode.get_device(device_id):
+            if not self._client.get_device(device_id):
                 raise AbodeException(ERROR.EVENT_DEVICE_INVALID)
 
             if device_id not in self._device_callbacks:
@@ -177,7 +177,7 @@ class EventController:
 
     def _on_socket_started(self):
         """Socket IO startup callback."""
-        cookies = self._abode._get_session().cookies.get_dict()
+        cookies = self._client._get_session().cookies.get_dict()
         cookie_string = "; ".join([str(x) + "=" + str(y) for x, y in cookies.items()])
 
         self._socketio.set_cookie(cookie_string)
@@ -187,7 +187,7 @@ class EventController:
         self._connected = True
 
         try:
-            self._abode.refresh()
+            self._client.refresh()
         except Exception as exc:
             _LOGGER.warning("Captured exception during Abode refresh: %s", exc)
         finally:
@@ -217,7 +217,7 @@ class EventController:
 
         _LOGGER.debug("Device update event for device ID: %s", devid)
 
-        device = self._abode.get_device(devid, True)
+        device = self._client.get_device(devid, True)
 
         if not device:
             _LOGGER.debug("Got device update for unknown device: %s", devid)
@@ -242,7 +242,7 @@ class EventController:
         _LOGGER.debug("Alarm mode change event to: %s", mode)
 
         # We're just going to convert it to an Alarm device
-        alarm_device = self._abode.get_alarm(refresh=True)
+        alarm_device = self._client.get_alarm(refresh=True)
 
         # At the time of development, refreshing after mode change notification
         # didn't seem to get the latest update immediately. As such, we will

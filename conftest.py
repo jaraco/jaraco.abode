@@ -5,11 +5,11 @@ import jaraco.abode
 
 
 @pytest.fixture(autouse=True)
-def abode_instance(request):
+def instance_client(request):
     if request.instance is None:
         return
 
-    request.instance.abode = jaraco.abode.Abode(
+    request.instance.client = jaraco.abode.Client(
         username='foobar', password='deadbeef', disable_cache=True
     )
 

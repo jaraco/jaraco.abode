@@ -61,7 +61,7 @@ class TestCamera:
     def camera_devices(self):
         return (
             device
-            for device in self.abode.get_devices()
+            for device in self.client.get_devices()
             if device.type_tag != CONST.DEVICE_ALARM
         )
 
@@ -352,7 +352,7 @@ class TestCamera:
         """Tests camera privacy mode."""
 
         # Get the IP camera and test we have it
-        device = self.abode.get_device(IPCAM.DEVICE_ID)
+        device = self.client.get_device(IPCAM.DEVICE_ID)
         assert device is not None
         assert device.status == CONST.STATUS_ONLINE
 

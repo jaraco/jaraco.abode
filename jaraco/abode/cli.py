@@ -10,7 +10,7 @@ import getpass
 
 import keyring
 
-from . import Abode
+from . import Client
 from .helpers import constants as CONST
 from .helpers import timeline as TIMELINE
 from .exceptions import AbodeException
@@ -212,8 +212,8 @@ def build_parser():
     return parser
 
 
-def _create_abode_instance(args):
-    return Abode(
+def _create_client_instance(args):
+    return Client(
         username=args.username,
         password=args.password,
         get_devices=args.mfa is None,
@@ -222,13 +222,13 @@ def _create_abode_instance(args):
 
 
 @contextlib.contextmanager
-def _log_errors_and_logout(abode):
+def _log_errors_and_logout(client):
     try:
-        yield abode
+        yield client
     except AbodeException as exc:
         _LOGGER.error(exc)
     finally:
-        abode.logout()
+        client.logout()
 
 
 def _device_print(dev, append=''):
@@ -255,8 +255,8 @@ def _timeline_callback(tl_json):
 
 
 class Dispatcher:
-    def __init__(self, abode, args):
-        self.abode = abode
+    def __init__(self, client, args):
+        self.client = client
         self.args = args
 
     def dispatch(self):
@@ -282,19 +282,19 @@ class Dispatcher:
     def login(self):
         if not self.args.mfa:
             return
-        self.abode.login(mfa_code=self.args.mfa)
+        self.client.login(mfa_code=self.args.mfa)
         # fetch devices from Abode
-        self.abode.get_devices()
+        self.client.get_devices()
 
     def output_current_mode(self):
         if not self.args.mode:
             return
-        _LOGGER.info("Current alarm mode: %s", self.abode.get_alarm().mode)
+        _LOGGER.info("Current alarm mode: %s", self.client.get_alarm().mode)
 
     def change_system_mode(self):
         if not self.args.arm:
             return
-        if self.abode.get_alarm().set_mode(self.args.arm):
+        if self.client.get_alarm().set_mode(self.args.arm):
             _LOGGER.info("Alarm mode changed to: %s", self.args.arm)
         else:
             _LOGGER.warning("Failed to change alarm mode to: %s", self.args.arm)
@@ -302,12 +302,12 @@ class Dispatcher:
     def set_setting(self):
         for setting in self.args.set or []:
             keyval = setting.split("=")
-            if self.abode.set_setting(keyval[0], keyval[1]):
+            if self.client.set_setting(keyval[0], keyval[1]):
                 _LOGGER.info("Setting %s changed to %s", keyval[0], keyval[1])
 
     def switch_on(self):
         for device_id in self.args.on or []:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 if device.switch_on():
@@ -317,7 +317,7 @@ class Dispatcher:
 
     def switch_off(self):
         for device_id in self.args.off or []:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 if device.switch_off():
@@ -327,7 +327,7 @@ class Dispatcher:
 
     def lock(self):
         for device_id in self.args.lock or []:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 if device.lock():
@@ -337,7 +337,7 @@ class Dispatcher:
 
     def unlock(self):
         for device_id in self.args.unlock or []:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 if device.unlock():
@@ -347,7 +347,7 @@ class Dispatcher:
 
     def output_json(self):
         for device_id in self.args.json or []:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 print(
@@ -364,12 +364,12 @@ class Dispatcher:
     def print_all_automations(self):
         if not self.args.automations:
             return
-        for automation in self.abode.get_automations():
+        for automation in self.client.get_automations():
             _device_print(automation)
 
     def enable_automation(self):
         for automation_id in self.args.activate or []:
-            automation = self.abode.get_automation(automation_id)
+            automation = self.client.get_automation(automation_id)
 
             if automation:
                 if automation.enable(True):
@@ -379,7 +379,7 @@ class Dispatcher:
 
     def disable_automation(self):
         for automation_id in self.args.deactivate or []:
-            automation = self.abode.get_automation(automation_id)
+            automation = self.client.get_automation(automation_id)
 
             if automation:
                 if automation.enable(False):
@@ -389,7 +389,7 @@ class Dispatcher:
 
     def trigger_automation(self):
         for automation_id in self.args.trigger or []:
-            automation = self.abode.get_automation(automation_id)
+            automation = self.client.get_automation(automation_id)
 
             if automation:
                 if automation.trigger():
@@ -399,7 +399,7 @@ class Dispatcher:
 
     def trigger_image_capture(self):
         for device_id in self.args.capture or []:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 if device.capture():
@@ -414,7 +414,7 @@ class Dispatcher:
     def save_camera_image(self):
         for keyval in self.args.image or []:
             devloc = keyval.split("=")
-            device = self.abode.get_device(devloc[0])
+            device = self.client.get_device(devloc[0])
 
             if device:
                 try:
@@ -430,20 +430,20 @@ class Dispatcher:
     def print_all_devices(self):
         if not self.args.devices:
             return
-        for device in self.abode.get_devices():
+        for device in self.client.get_devices():
             _device_print(device)
 
     def print_specific_devices(self):
         if not self.args.device:
             return
         for device_id in self.args.device:
-            device = self.abode.get_device(device_id)
+            device = self.client.get_device(device_id)
 
             if device:
                 _device_print(device)
 
                 # Register the specific devices if we decide to listen.
-                self.abode.events.add_device_callback(device_id, _device_callback)
+                self.client.events.add_device_callback(device_id, _device_callback)
             else:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
@@ -454,20 +454,20 @@ class Dispatcher:
         if self.args.device is None:
             _LOGGER.info("Adding all devices to listener...")
 
-            for device in self.abode.get_devices():
-                self.abode.events.add_device_callback(
+            for device in self.client.get_devices():
+                self.client.events.add_device_callback(
                     device.device_id, _device_callback
                 )
 
-        self.abode.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
+        self.client.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
 
         _LOGGER.info("Listening for device and timeline updates...")
-        self.abode.events.start()
+        self.client.events.start()
         try:
             while True:
                 time.sleep(1)
         except KeyboardInterrupt:
-            self.abode.events.stop()
+            self.client.events.stop()
             _LOGGER.info("Device update listening stopped.")
 
 
@@ -492,5 +492,5 @@ def main():
 
     setup_logging(log_level=logging.INFO + 10 * (args.quiet - args.debug))
 
-    with _log_errors_and_logout(_create_abode_instance(args)) as abode:
-        Dispatcher(abode, args).dispatch()
+    with _log_errors_and_logout(_create_client_instance(args)) as client:
+        Dispatcher(client, args).dispatch()

@@ -38,14 +38,14 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our device
-        device = self.abode.get_device(COVER.DEVICE_ID)
+        device = self.client.get_device(COVER.DEVICE_ID)
         assert device is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callback
@@ -72,14 +72,14 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our device
-        device = self.abode.get_device(COVER.DEVICE_ID)
+        device = self.client.get_device(COVER.DEVICE_ID)
         assert device is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Register our device
@@ -103,14 +103,14 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our device
-        device = self.abode.get_device(COVER.DEVICE_ID)
+        device = self.client.get_device(COVER.DEVICE_ID)
         assert device is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Register our device
@@ -137,14 +137,14 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our device
-        device = self.abode.get_device(COVER.DEVICE_ID)
+        device = self.client.get_device(COVER.DEVICE_ID)
         assert device is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callback
@@ -154,7 +154,7 @@ class TestEventController:
         assert not events.add_device_callback(None, callback)
 
         # Create a fake device and attempt to register that
-        fake_device = BinarySensor(DOORCONTACT.device(), self.abode)
+        fake_device = BinarySensor(DOORCONTACT.device(), self.client)
 
         with pytest.raises(jaraco.abode.AbodeException):
             events.add_device_callback(fake_device, callback)
@@ -177,21 +177,21 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our device
-        device = self.abode.get_device(COVER.DEVICE_ID)
+        device = self.client.get_device(COVER.DEVICE_ID)
         assert device is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Test that no device returns false
         assert not events.remove_all_device_callbacks(None)
 
         # Create a fake device and attempt to unregister that
-        fake_device = BinarySensor(DOORCONTACT.device(), self.abode)
+        fake_device = BinarySensor(DOORCONTACT.device(), self.client)
 
         with pytest.raises(jaraco.abode.AbodeException):
             events.remove_all_device_callbacks(fake_device)
@@ -199,7 +199,7 @@ class TestEventController:
     def tests_event_registration(self):
         """Tests that events register correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callback
@@ -218,7 +218,7 @@ class TestEventController:
     def tests_timeline_registration(self):
         """Tests that timeline events register correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callback
@@ -256,14 +256,14 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our device
-        device = self.abode.get_device(COVER.DEVICE_ID)
+        device = self.client.get_device(COVER.DEVICE_ID)
         assert device is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         callback = Mock()
@@ -300,7 +300,7 @@ class TestEventController:
     def tests_events_callback(self):
         """Tests that event updates callback correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callbacks
@@ -327,7 +327,7 @@ class TestEventController:
     def tests_timeline_callback(self):
         """Tests that timeline updates callback correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callbacks
@@ -373,14 +373,14 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our alarm device
-        alarm = self.abode.get_alarm()
+        alarm = self.client.get_alarm()
         assert alarm is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         callback = Mock()
@@ -405,7 +405,7 @@ class TestEventController:
     def tests_execute_callback(self):
         """Tests that callbacks that throw exceptions don't bomb."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create callbacks
@@ -443,17 +443,17 @@ class TestEventController:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our devices
-        cover = self.abode.get_device(COVER.DEVICE_ID)
+        cover = self.client.get_device(COVER.DEVICE_ID)
         assert cover is not None
 
-        doorcontact = self.abode.get_device(DOORCONTACT.DEVICE_ID)
+        doorcontact = self.client.get_device(DOORCONTACT.DEVICE_ID)
         assert doorcontact is not None
 
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         callback = Mock()
@@ -500,7 +500,7 @@ class TestEventController:
     def tests_multi_events_callback(self):
         """Tests that multiple event updates callback correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callback
@@ -522,7 +522,7 @@ class TestEventController:
     def tests_multi_timeline_callback(self):
         """Tests that multiple timeline updates callback correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callback
@@ -544,7 +544,7 @@ class TestEventController:
     def tests_automations_callback(self):
         """Tests that automation updates callback correctly."""
         # Get the event controller
-        events = self.abode.events
+        events = self.client.events
         assert events is not None
 
         # Create mock callbacks

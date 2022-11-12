@@ -35,10 +35,10 @@ class TestDimmer:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our dimmer
-        device = self.abode.get_device(DIMMER.DEVICE_ID)
+        device = self.client.get_device(DIMMER.DEVICE_ID)
 
         # Test our device
         assert device is not None
@@ -95,10 +95,10 @@ class TestDimmer:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our dimmer
-        device = self.abode.get_device(DIMMER.DEVICE_ID)
+        device = self.client.get_device(DIMMER.DEVICE_ID)
 
         # Test that we have our device
         assert device is not None

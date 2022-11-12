@@ -33,10 +33,10 @@ class TestLM:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our power switch
-        device = self.abode.get_device(LM.DEVICE_ID)
+        device = self.client.get_device(LM.DEVICE_ID)
 
         # Test our device
         assert device is not None
@@ -107,10 +107,10 @@ class TestLM:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our power switch
-        device = self.abode.get_device(LM.DEVICE_ID)
+        device = self.client.get_device(LM.DEVICE_ID)
 
         # Test our device
         assert device is not None
@@ -142,10 +142,10 @@ class TestLM:
         )
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our power switch
-        device = self.abode.get_device(LM.DEVICE_ID)
+        device = self.client.get_device(LM.DEVICE_ID)
 
         # Test our device
         assert device is not None

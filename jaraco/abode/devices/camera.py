@@ -32,7 +32,7 @@ class Camera(Device):
             raise AbodeException(ERROR.MISSING_CONTROL_URL)
 
         try:
-            response = self._abode.send_request("put", url)
+            response = self._client.send_request("put", url)
 
             _LOGGER.debug("Capture image response: %s", response.text)
 
@@ -46,7 +46,7 @@ class Camera(Device):
     def refresh_image(self):
         """Get the most recent camera image."""
         url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=self.device_id)
-        response = self._abode.send_request("get", url)
+        response = self._client.send_request("get", url)
 
         _LOGGER.debug("Get image response: %s", response.text)
 
@@ -75,7 +75,7 @@ class Camera(Device):
 
         # Perform a "head" request for the image and look for a
         # 302 Found response
-        response = self._abode.send_request("head", file_path)
+        response = self._client.send_request("head", file_path)
 
         if response.status_code != 302:
             _LOGGER.warning(
@@ -121,7 +121,7 @@ class Camera(Device):
         url = f"{CONST.CAMERA_INTEGRATIONS_URL}{self._device_uuid}/snapshot"
 
         try:
-            response = self._abode.send_request("post", url)
+            response = self._client.send_request("post", url)
             _LOGGER.debug("Camera snapshot response: %s", response.text)
         except AbodeException as exc:
             _LOGGER.warning("Failed to get camera snapshot image: %s", exc)
@@ -171,7 +171,7 @@ class Camera(Device):
                 'id': self.device_id,
             }
 
-            response = self._abode.send_request(
+            response = self._client.send_request(
                 method="put", path=path, data=camera_data
             )
             response_object = response.json()

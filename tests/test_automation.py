@@ -35,10 +35,10 @@ class TestAutomation:
         m.get(CONST.AUTOMATION_URL, json=automation_resp)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get our specific automation
-        automation = self.abode.get_automation(AID_1)
+        automation = self.client.get_automation(AID_1)
 
         # Check automation states match
         assert automation is not None
@@ -76,10 +76,10 @@ class TestAutomation:
         m.get(automation_id_url, json=resp_changed)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get the first automation and test
-        automation = self.abode.get_automation(AID_1)
+        automation = self.client.get_automation(AID_1)
 
         # Check automation states match
 
@@ -100,7 +100,7 @@ class TestAutomation:
         m.get(automation_id_url, json=resp_changed)
 
         # Refresh and retest
-        automation = self.abode.get_automation(AID_1, refresh=True)
+        automation = self.client.get_automation(AID_1, refresh=True)
 
         assert automation._automation == resp_changed[0]
 
@@ -143,23 +143,23 @@ class TestAutomation:
         m.get(CONST.AUTOMATION_URL, json=resp)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Test that the automations return the correct number
-        automations = self.abode.get_automations()
+        automations = self.client.get_automations()
         assert len(automations) == 3
 
         # Get the first automation and test
 
-        automation_1 = self.abode.get_automation(AID_1)
+        automation_1 = self.client.get_automation(AID_1)
         assert automation_1 is not None
         assert automation_1._automation == resp[0]
 
-        automation_2 = self.abode.get_automation(AID_2)
+        automation_2 = self.client.get_automation(AID_2)
         assert automation_2 is not None
         assert automation_2._automation == resp[1]
 
-        automation_3 = self.abode.get_automation(AID_3)
+        automation_3 = self.client.get_automation(AID_3)
         assert automation_3 is not None
         assert automation_3._automation == resp[2]
 
@@ -184,19 +184,19 @@ class TestAutomation:
         m.get(CONST.AUTOMATION_URL, json=resp)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Test that the automations return the correct number
-        automations = self.abode.get_automations()
+        automations = self.client.get_automations()
         assert len(automations) == 2
 
         # Get the automations and test
 
-        automation_1 = self.abode.get_automation(AID_1)
+        automation_1 = self.client.get_automation(AID_1)
         assert automation_1 is not None
         assert automation_1._automation == resp[0]
 
-        automation_2 = self.abode.get_automation(AID_2)
+        automation_2 = self.client.get_automation(AID_2)
         assert automation_2 is not None
         assert automation_2._automation == resp[1]
 
@@ -216,23 +216,23 @@ class TestAutomation:
         m.get(CONST.AUTOMATION_URL, json=resp)
 
         # Update
-        automations_changed = self.abode.get_automations(refresh=True)
+        automations_changed = self.client.get_automations(refresh=True)
         assert len(automations_changed) == 3
 
         # Check that the original two automations have updated
         # and are using the same class
-        automation_1_changed = self.abode.get_automation(AID_1)
+        automation_1_changed = self.client.get_automation(AID_1)
         assert automation_1_changed is not None
         assert automation_1_changed._automation == resp[0]
         assert automation_1 is automation_1_changed
 
-        automation_2_changed = self.abode.get_automation(AID_2)
+        automation_2_changed = self.client.get_automation(AID_2)
         assert automation_2_changed is not None
         assert automation_2_changed._automation == resp[1]
         assert automation_2 is automation_2_changed
 
         # Check that the third new automation is correct
-        automation_3 = self.abode.get_automation(AID_3)
+        automation_3 = self.client.get_automation(AID_3)
         assert automation_3 is not None
         assert automation_3._automation == resp[2]
 
@@ -254,11 +254,11 @@ class TestAutomation:
         m.get(CONST.AUTOMATION_URL, json=resp)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get the automation and test
 
-        automation = self.abode.get_automation(AID_1)
+        automation = self.client.get_automation(AID_1)
         assert automation is not None
         assert automation._automation == resp[0]
         assert automation.is_enabled
@@ -335,11 +335,11 @@ class TestAutomation:
         m.get(CONST.AUTOMATION_URL, json=resp)
 
         # Logout to reset everything
-        self.abode.logout()
+        self.client.logout()
 
         # Get the automation and test
 
-        automation = self.abode.get_automation(AID_1)
+        automation = self.client.get_automation(AID_1)
         assert automation is not None
 
         # Set up our automation trigger reply

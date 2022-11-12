@@ -29,7 +29,7 @@ def cache_path(tmp_path, request):
 @pytest.fixture(autouse=True)
 def abode_objects(request):
     self = request.instance
-    self.abode_no_cred = jaraco.abode.Abode(disable_cache=True)
+    self.client_no_cred = jaraco.abode.Client(disable_cache=True)
 
 
 USERNAME = 'foobar'
@@ -42,32 +42,32 @@ class TestAbode:
     def tests_initialization(self):
         """Verify we can initialize abode."""
 
-        assert self.abode._username == USERNAME
+        assert self.client._username == USERNAME
 
-        assert self.abode._password == PASSWORD
+        assert self.client._password == PASSWORD
 
     def tests_no_credentials(self):
         """Check that we throw an exception when no username/password."""
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.login()
+            self.client_no_cred.login()
 
-        self.abode_no_cred._username = USERNAME
+        self.client_no_cred._username = USERNAME
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.login()
+            self.client_no_cred.login()
 
     def tests_manual_login(self, m):
         """Check that we can manually use the login() function."""
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
 
-        self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
+        self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_manual_login_with_mfa(self, m):
         """Check that we can login with MFA code."""
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
 
-        self.abode_no_cred.login(username=USERNAME, password=PASSWORD, mfa_code=654321)
+        self.client_no_cred.login(username=USERNAME, password=PASSWORD, mfa_code=654321)
 
     def tests_auto_login(self, m):
         """Test that automatic login works."""
@@ -81,7 +81,7 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=panel_json)
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
 
-        abode = jaraco.abode.Abode(
+        client = jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=True,
@@ -89,17 +89,17 @@ class TestAbode:
             disable_cache=True,
         )
 
-        assert abode._username == 'fizz'
-        assert abode._password == 'buzz'
-        assert abode._token == MOCK.AUTH_TOKEN
-        assert abode._panel == panel_json
-        assert abode._user == user_json
-        assert abode._devices is None
-        assert abode._automations is None
+        assert client._username == 'fizz'
+        assert client._password == 'buzz'
+        assert client._token == MOCK.AUTH_TOKEN
+        assert client._panel == panel_json
+        assert client._user == user_json
+        assert client._devices is None
+        assert client._automations is None
 
-        abode.logout()
+        client.logout()
 
-        abode = None
+        client = None
 
     def tests_auto_fetch(self, m):
         """Test that automatic device and automation retrieval works."""
@@ -115,7 +115,7 @@ class TestAbode:
         m.get(CONST.AUTOMATION_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
 
-        abode = jaraco.abode.Abode(
+        client = jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=False,
@@ -124,21 +124,21 @@ class TestAbode:
             disable_cache=True,
         )
 
-        assert abode._username == 'fizz'
-        assert abode._password == 'buzz'
-        assert abode._token == MOCK.AUTH_TOKEN
-        assert abode._user == user_json
-        assert abode._panel is not None
+        assert client._username == 'fizz'
+        assert client._password == 'buzz'
+        assert client._token == MOCK.AUTH_TOKEN
+        assert client._user == user_json
+        assert client._panel is not None
 
         # Contains one device, our alarm
-        assert abode._devices == {'area_1': abode.get_alarm()}
+        assert client._devices == {'area_1': client.get_alarm()}
 
         # Contains no automations
-        assert abode._automations == {}
+        assert client._automations == {}
 
-        abode.logout()
+        client.logout()
 
-        abode = None
+        client = None
 
     def tests_login_failure(self, m):
         """Test login failed."""
@@ -147,7 +147,7 @@ class TestAbode:
 
         # Check that we raise an Exception with a failed login request.
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
+            self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_login_mfa_required(self, m):
         """Tests login with MFA code required but not supplied."""
@@ -160,7 +160,7 @@ class TestAbode:
         # Check that we raise an Exception when the MFA code is required
         # but not supplied
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
+            self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_login_bad_mfa_code(self, m):
         """Tests login with bad MFA code."""
@@ -170,7 +170,7 @@ class TestAbode:
 
         # Check that we raise an Exception with a bad MFA code
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.login(
+            self.client_no_cred.login(
                 username=USERNAME, password=PASSWORD, mfa_code=123456
             )
 
@@ -184,7 +184,7 @@ class TestAbode:
 
         # Check that we raise an Exception with an unknown MFA type
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
+            self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_logout_failure(self, m):
         """Test logout failed."""
@@ -196,11 +196,11 @@ class TestAbode:
             CONST.LOGOUT_URL, json=LOGOUT.post_response_bad_request(), status_code=400
         )
 
-        self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
+        self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
         # Check that we raise an Exception with a failed logout request.
         with pytest.raises(jaraco.abode.AuthenticationException):
-            self.abode_no_cred.logout()
+            self.client_no_cred.logout()
 
     def tests_logout_exception(self, m):
         """Test logout exception."""
@@ -210,10 +210,10 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.post(CONST.LOGOUT_URL, exc=requests.exceptions.ConnectTimeout)
 
-        self.abode.login()
+        self.client.login()
 
         # Check that we eat the exception gracefully
-        assert not self.abode.logout()
+        assert not self.client.logout()
 
     def tests_full_setup(self, m):
         """Check that Abode is set up properly."""
@@ -228,29 +228,29 @@ class TestAbode:
         m.get(CONST.DEVICES_URL, json=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
 
-        self.abode.get_devices()
+        self.client.get_devices()
 
-        original_session = self.abode._session
+        original_session = self.client._session
 
-        assert self.abode._username == USERNAME
-        assert self.abode._password == PASSWORD
-        assert self.abode._token == auth_token
-        assert self.abode._user == user_json
-        assert self.abode._panel is not None
-        assert self.abode.get_alarm() is not None
-        assert self.abode._get_session() is not None
-        assert self.abode._get_session() == original_session
-        assert self.abode.events is not None
+        assert self.client._username == USERNAME
+        assert self.client._password == PASSWORD
+        assert self.client._token == auth_token
+        assert self.client._user == user_json
+        assert self.client._panel is not None
+        assert self.client.get_alarm() is not None
+        assert self.client._get_session() is not None
+        assert self.client._get_session() == original_session
+        assert self.client.events is not None
 
-        self.abode.logout()
+        self.client.logout()
 
-        assert self.abode._token is None
-        assert self.abode._panel is None
-        assert self.abode._user is None
-        assert self.abode._devices is None
-        assert self.abode._automations is None
-        assert self.abode._session is not None
-        assert self.abode._get_session() != original_session
+        assert self.client._token is None
+        assert self.client._panel is None
+        assert self.client._user is None
+        assert self.client._devices is None
+        assert self.client._automations is None
+        assert self.client._session is not None
+        assert self.client._get_session() != original_session
 
     def tests_reauthorize(self, m):
         """Check that Abode can reauthorize after token timeout."""
@@ -277,9 +277,9 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
 
         # Forces a device update
-        self.abode.get_devices()
+        self.client.get_devices()
 
-        assert self.abode._token == new_token
+        assert self.client._token == new_token
 
     def tests_send_request_exception(self, m):
         """Check that send_request recovers from an exception."""
@@ -306,9 +306,9 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
 
         # Forces a device update
-        self.abode.get_devices()
+        self.client.get_devices()
 
-        assert self.abode._token == new_token
+        assert self.client._token == new_token
 
     def tests_continuous_bad_auth(self, m):
         """Check that Abode won't get stuck with repeated failed retries."""
@@ -317,18 +317,18 @@ class TestAbode:
         m.get(CONST.DEVICES_URL, json=MOCK.response_forbidden(), status_code=403)
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.get_devices()
+            self.client.get_devices()
 
     def tests_default_mode(self):
         """Test that the default mode fails if not of type home or away."""
-        self.abode.set_default_mode(CONST.MODE_HOME)
-        assert self.abode.default_mode == CONST.MODE_HOME
+        self.client.set_default_mode(CONST.MODE_HOME)
+        assert self.client.default_mode == CONST.MODE_HOME
 
-        self.abode.set_default_mode(CONST.MODE_AWAY)
-        assert self.abode.default_mode == CONST.MODE_AWAY
+        self.client.set_default_mode(CONST.MODE_AWAY)
+        assert self.client.default_mode == CONST.MODE_AWAY
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_default_mode('foobar')
+            self.client.set_default_mode('foobar')
 
     def test_all_device_refresh(self, m):
         """Check that device refresh works and reuses the same objects."""
@@ -345,17 +345,17 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
 
         # Reset
-        self.abode.logout()
+        self.client.logout()
 
         # Get all devices
-        self.abode.get_devices()
+        self.client.get_devices()
 
         # Get and check devices
 
-        dc1a_dev = self.abode.get_device(dc1_devid)
+        dc1a_dev = self.client.get_device(dc1_devid)
         assert dc1a['id'] == dc1a_dev.device_id
 
-        dc2a_dev = self.abode.get_device(dc2_devid)
+        dc2a_dev = self.client.get_device(dc2_devid)
         assert dc2a['id'] == dc2a_dev.device_id
 
         # Change device states
@@ -366,16 +366,16 @@ class TestAbode:
         m.get(CONST.DEVICES_URL, json=[dc1b, dc2b])
 
         # Refresh all devices
-        self.abode.get_devices(refresh=True)
+        self.client.get_devices(refresh=True)
 
         # Get and check devices again, ensuring they are the same object
         # Future note: "if a is b" tests that the object is the same
         # Thus asserting dc1a_dev is dc1b_dev tests if they are the same object
-        dc1b_dev = self.abode.get_device(dc1_devid)
+        dc1b_dev = self.client.get_device(dc1_devid)
         assert dc1b['id'] == dc1b_dev.device_id
         assert dc1a_dev is dc1b_dev
 
-        dc2b_dev = self.abode.get_device(dc2_devid)
+        dc2b_dev = self.client.get_device(dc2_devid)
         assert dc2b['id'] == dc2b_dev.device_id
         assert dc2a_dev is dc2b_dev
 
@@ -388,7 +388,7 @@ class TestAbode:
         m.get(CONST.SETTINGS_URL, json=MOCK.generic_response_ok())
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting("fliptrix", "foobar")
+            self.client.set_setting("fliptrix", "foobar")
 
     def tests_general_settings(self, m):
         """Check that device panel general settings are working."""
@@ -398,22 +398,22 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.SETTINGS_URL, json=MOCK.generic_response_ok())
 
-        self.abode.set_setting(
+        self.client.set_setting(
             CONST.SETTING_CAMERA_RESOLUTION, CONST.SETTING_CAMERA_RES_640_480
         )
 
-        self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
+        self.client.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
 
-        self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
-
-        with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
+        self.client.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
+            self.client.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
+            self.client.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
+
+        with pytest.raises(jaraco.abode.AbodeException):
+            self.client.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
 
     def tests_area_settings(self, m):
         """Check that device panel areas settings are working."""
@@ -423,20 +423,20 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.AREAS_URL, json=MOCK.generic_response_ok())
 
-        self.abode.set_setting(
+        self.client.set_setting(
             CONST.SETTING_ENTRY_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
         )
 
-        self.abode.set_setting(
+        self.client.set_setting(
             CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
         )
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
+            self.client.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
 
         # 10 seconds is invalid here
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(
+            self.client.set_setting(
                 CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
             )
 
@@ -448,24 +448,24 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.SOUNDS_URL, json=MOCK.generic_response_ok())
 
-        self.abode.set_setting(CONST.SETTING_DOOR_CHIME, CONST.SETTING_SOUND_LOW)
+        self.client.set_setting(CONST.SETTING_DOOR_CHIME, CONST.SETTING_SOUND_LOW)
 
-        self.abode.set_setting(
+        self.client.set_setting(
             CONST.SETTING_ALARM_LENGTH, CONST.SETTING_ALARM_LENGTH_2MIN
         )
 
-        self.abode.set_setting(
+        self.client.set_setting(
             CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
         )
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
+            self.client.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
+            self.client.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
+            self.client.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
 
     def tests_siren_settings(self, m):
         """Check that device panel siren settings are working."""
@@ -475,22 +475,24 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.SIREN_URL, json=MOCK.generic_response_ok())
 
-        self.abode.set_setting(
+        self.client.set_setting(
             CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, CONST.SETTING_ENABLE
         )
 
-        self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, CONST.SETTING_ENABLE)
+        self.client.set_setting(
+            CONST.SETTING_SIREN_CONFIRM_SOUNDS, CONST.SETTING_ENABLE
+        )
 
-        self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE)
-
-        with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
-
-        with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
+        self.client.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE)
 
         with pytest.raises(jaraco.abode.AbodeException):
-            self.abode.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
+            self.client.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
+
+        with pytest.raises(jaraco.abode.AbodeException):
+            self.client.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
+
+        with pytest.raises(jaraco.abode.AbodeException):
+            self.client.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('cache_path')
     def tests_cookies(self, m):
@@ -502,7 +504,7 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
 
         # Create abode
-        abode = jaraco.abode.Abode(
+        client = jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=False,
@@ -514,23 +516,23 @@ class TestAbode:
         # Mock cookie created by Abode after login
         cookie = requests.cookies.create_cookie(name='SESSION', value='COOKIE')
 
-        abode._session.cookies.set_cookie(cookie)
+        client._session.cookies.set_cookie(cookie)
 
-        abode.login()
+        client.login()
 
         # Test that our cookies are fully realized prior to login
 
-        assert abode._cache['uuid'] is not None
-        assert abode._cache['cookies'] is not None
+        assert client._cache['uuid'] is not None
+        assert client._cache['cookies'] is not None
 
         # Test that we now have a cookies file
         assert os.path.exists(self.cache_path)
 
         # Copy our current cookies file and data
-        first_cookies_data = abode._cache
+        first_cookies_data = client._cache
 
-        # New abode instance reads in old data
-        abode = jaraco.abode.Abode(
+        # New client reads in old data
+        client = jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=False,
@@ -540,7 +542,7 @@ class TestAbode:
         )
 
         # Test that the cookie data is the same
-        assert abode._cache['uuid'] == first_cookies_data['uuid']
+        assert client._cache['uuid'] == first_cookies_data['uuid']
 
     @pytest.mark.usefixtures('cache_path')
     def test_empty_cookies(self, m):
@@ -555,7 +557,7 @@ class TestAbode:
         self.cache_path.write_text('')
 
         # Cookies are created
-        empty_abode = jaraco.abode.Abode(
+        empty_client = jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=True,
@@ -566,7 +568,7 @@ class TestAbode:
 
         # Test that some cache exists
 
-        assert empty_abode._cache['uuid'] is not None
+        assert empty_client._cache['uuid'] is not None
 
     @pytest.mark.usefixtures('cache_path')
     def test_invalid_cookies(self, m):
@@ -581,7 +583,7 @@ class TestAbode:
         self.cache_path.write_text('Invalid file goes here')
 
         # Cookies are created
-        empty_abode = jaraco.abode.Abode(
+        empty_client = jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=True,
@@ -592,4 +594,4 @@ class TestAbode:
 
         # Test that some cache exists
 
-        assert empty_abode._cache['uuid'] is not None
+        assert empty_client._cache['uuid'] is not None
