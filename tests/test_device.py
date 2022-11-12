@@ -36,7 +36,6 @@ class TestDevice:
 
     def tests_device_mapping_type_tag(self):
         """Check new device without type_tag raises exception."""
-        # Set up device
         device = GLASS.device(
             status=CONST.STATUS_ONLINE,
             low_battery=True,
@@ -51,7 +50,6 @@ class TestDevice:
 
     def tests_device_auto_naming(self):
         """Check the generic Abode device creates a name."""
-        # Set up device
         source = GLASS.device(
             status=CONST.STATUS_ONLINE,
             low_battery=True,
@@ -120,7 +118,7 @@ class TestDevice:
 
     def tests_generic_device_refresh(self, m):
         """Check the generic Abode device class init's properly."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -146,7 +144,7 @@ class TestDevice:
 
     def tests_multiple_devices(self, m):
         """Tests that multiple devices are returned properly."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -185,7 +183,7 @@ class TestDevice:
 
     def tests_unknown_devices(self, m):
         """Tests that multiple devices are returned properly."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -205,7 +203,7 @@ class TestDevice:
 
     def tests_device_category_filter(self, m):
         """Tests that device category filter returns requested results."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -252,7 +250,7 @@ class TestDevice:
 
     def tests_no_control_url(self, m):
         """Check that devices return false without control url's."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -272,7 +270,7 @@ class TestDevice:
 
     def tests_device_status_changes(self, m):
         """Tests that device status changes work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -349,7 +347,7 @@ class TestDevice:
 
     def tests_device_level_changes(self, m):
         """Tests that device level changes work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -419,7 +417,7 @@ class TestDevice:
 
     def tests_all_devices(self, m):
         """Tests that all mocked devices are mapped correctly."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())

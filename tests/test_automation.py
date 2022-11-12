@@ -51,7 +51,7 @@ class TestAutomation:
 
     def tests_automation_refresh(self, m):
         """Check the automation Abode class refreshes."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -121,7 +121,7 @@ class TestAutomation:
 
     def tests_multiple_automations(self, m):
         """Check that multiple automations work and return correctly."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -165,7 +165,7 @@ class TestAutomation:
 
     def tests_automation_class_reuse(self, m):
         """Check that automations reuse the same classes when refreshed."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -238,7 +238,7 @@ class TestAutomation:
 
     def tests_automation_enable(self, m):
         """Check that automations can change their enable state."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -319,7 +319,7 @@ class TestAutomation:
 
     def tests_automation_trigger(self, m):
         """Check that automations can be triggered."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())

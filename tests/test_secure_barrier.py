@@ -15,7 +15,7 @@ class TestSecureBarrier:
 
     def tests_cover_device_properties(self, m):
         """Tests that cover devices properties work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -69,7 +69,7 @@ class TestSecureBarrier:
 
     def tests_cover_status_changes(self, m):
         """Tests that cover device changes work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())

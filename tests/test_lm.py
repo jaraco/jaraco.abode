@@ -14,7 +14,7 @@ class TestLM:
 
     def tests_cover_lm_properties(self, m):
         """Tests that sensor/LM devices properties work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -88,7 +88,7 @@ class TestLM:
 
     def tests_lm_float_units(self, m):
         """Tests that sensor/LM devices properties work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
@@ -129,7 +129,7 @@ class TestLM:
 
     def tests_lm_temp_only(self, m):
         """Tests that sensor/LM devices properties work as expected."""
-        # Set up URL's
+        # Set up URLs
         m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
