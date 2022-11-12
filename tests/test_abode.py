@@ -316,7 +316,7 @@ class TestAbode:
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
         m.get(CONST.DEVICES_URL, json=MOCK.response_forbidden(), status_code=403)
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.get_devices()
 
     def tests_default_mode(self):
@@ -327,7 +327,7 @@ class TestAbode:
         self.client.set_default_mode(CONST.MODE_AWAY)
         assert self.client.default_mode == CONST.MODE_AWAY
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_default_mode('foobar')
 
     def test_all_device_refresh(self, m):
@@ -387,7 +387,7 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.get(CONST.SETTINGS_URL, json=MOCK.generic_response_ok())
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting("fliptrix", "foobar")
 
     def tests_general_settings(self, m):
@@ -406,13 +406,13 @@ class TestAbode:
 
         self.client.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
 
     def tests_area_settings(self, m):
@@ -431,11 +431,11 @@ class TestAbode:
             CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
 
         # 10 seconds is invalid here
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(
                 CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
             )
@@ -458,13 +458,13 @@ class TestAbode:
             CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
 
     def tests_siren_settings(self, m):
@@ -485,13 +485,13 @@ class TestAbode:
 
         self.client.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE)
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('cache_path')

@@ -44,7 +44,7 @@ class TestDevice:
             out_of_order=True,
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             del device['type_tag']
             jaraco.abode.new_device(device, self.client)
 
@@ -331,7 +331,7 @@ class TestDevice:
             ),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             device.switch_on()
 
         # Test that an invalid status in response throws exception
@@ -342,7 +342,7 @@ class TestDevice:
             ),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             device.switch_on()
 
     def tests_device_level_changes(self, m):
@@ -403,7 +403,7 @@ class TestDevice:
             json=DEVICES.level_put_response_ok(devid='ZW:deadbeef', level='25'),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             device.set_level(25)
 
         # Test that an invalid level in response throws exception
@@ -412,7 +412,7 @@ class TestDevice:
             json=DEVICES.level_put_response_ok(devid=POWERSENSOR.DEVICE_ID, level='98'),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             device.set_level('28')
 
     def tests_all_devices(self, m):

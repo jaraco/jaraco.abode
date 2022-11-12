@@ -140,5 +140,5 @@ class TestDimmer:
             ),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             device.switch_on()

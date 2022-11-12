@@ -187,11 +187,11 @@ class TestAlarm:
         assert alarm.is_away
 
         # Test that no mode throws exception
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             alarm.set_mode(mode=None)
 
         # Test that an invalid mode throws exception
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             alarm.set_mode('chestnuts')
 
         # Test that an invalid mode change response throws exception
@@ -200,7 +200,7 @@ class TestAlarm:
             json=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             alarm.set_mode(CONST.MODE_HOME)
 
         # Test that an invalid area in mode change response throws exception
@@ -209,5 +209,5 @@ class TestAlarm:
             json=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             alarm.set_mode(CONST.MODE_HOME)

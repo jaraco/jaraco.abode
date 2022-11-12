@@ -116,7 +116,7 @@ class TestAutomation:
 
         m.get(automation_id_url, json=resp_changed)
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             automation.refresh()
 
     def tests_multiple_automations(self, m):
@@ -301,7 +301,7 @@ class TestAutomation:
             ],
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             automation.enable(False)
 
         # Test that the response returns the wrong id
@@ -314,7 +314,7 @@ class TestAutomation:
             ],
         )
 
-        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
+        with pytest.raises(jaraco.abode.Exception):
             automation.enable(True)
 
     def tests_automation_trigger(self, m):
