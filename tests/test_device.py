@@ -34,8 +34,8 @@ from .mock import panel as PANEL
 class TestDevice:
     """Test the generic device class."""
 
-    def tests_device_mapping_typetag(self):
-        """Check the generic Abode device maps to none without typetag."""
+    def tests_device_mapping_type_tag(self):
+        """Check new device without type_tag raises exception."""
         # Set up device
         device = GLASS.device(
             status=CONST.STATUS_ONLINE,
@@ -44,14 +44,6 @@ class TestDevice:
             tampered=True,
             out_of_order=True,
         )
-
-        with pytest.raises(jaraco.abode.AbodeException):
-            device['type_tag'] = ""
-            jaraco.abode.new_device(device, self.abode)
-
-        with pytest.raises(jaraco.abode.AbodeException):
-            device['type_tag'] = None
-            jaraco.abode.new_device(device, self.abode)
 
         with pytest.raises(jaraco.abode.AbodeException):
             del device['type_tag']

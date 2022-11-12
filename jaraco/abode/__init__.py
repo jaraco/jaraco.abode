@@ -481,10 +481,10 @@ def _new_sensor(device_json, abode):
 
 def new_device(device_json, abode):
     """Create new device object for the given type."""
-    type_tag = device_json.get('type_tag')
-
-    if not type_tag:
-        raise AbodeException(ERROR.UNABLE_TO_MAP_DEVICE)
+    try:
+        type_tag = device_json['type_tag']
+    except KeyError as exc:
+        raise AbodeException(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
     generic_type = CONST.get_generic_type(type_tag.lower())
     device_json['generic_type'] = generic_type
