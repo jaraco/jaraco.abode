@@ -33,13 +33,13 @@ def enable_color():
             colorfmt,
             datefmt=datefmt,
             reset=True,
-            log_colors={
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'red',
-            },
+            log_colors=dict(
+                DEBUG='cyan',
+                INFO='green',
+                WARNING='yellow',
+                ERROR='red',
+                CRITICAL='red',
+            ),
         )
     )
 
