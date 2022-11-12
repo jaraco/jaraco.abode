@@ -9,6 +9,7 @@ import uuid
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
 
+import jaraco
 from .automation import Automation
 from .devices.binary_sensor import BinarySensor
 from .devices.camera import Camera
@@ -19,12 +20,15 @@ from .devices.switch import Switch
 from .devices.sensor import Sensor
 from .devices.valve import Valve
 from .event_controller import EventController
-from .exceptions import AuthenticationException, AbodeException
+from .exceptions import AuthenticationException, Exception
 from .devices import alarm as ALARM
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from . import collections as COLLECTIONS
 from . import cache as CACHE
+
+__all__ = ['Exception', 'Client']
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -290,7 +294,7 @@ class Client:
     def set_default_mode(self, default_mode):
         """Set the default mode when alarms are turned 'on'."""
         if default_mode.lower() not in (CONST.MODE_AWAY, CONST.MODE_HOME):
-            raise AbodeException(ERROR.INVALID_DEFAULT_ALARM_MODE)
+            raise jaraco.abode.Exception(ERROR.INVALID_DEFAULT_ALARM_MODE)
 
         self._default_alarm_mode = default_mode.lower()
 
@@ -299,7 +303,7 @@ class Client:
         setting = setting.lower()
 
         if setting not in CONST.ALL_SETTINGS:
-            raise AbodeException(ERROR.INVALID_SETTING, CONST.ALL_SETTINGS)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING, CONST.ALL_SETTINGS)
 
         if setting in CONST.PANEL_SETTINGS:
             path = CONST.SETTINGS_URL
@@ -324,7 +328,7 @@ class Client:
                 setting == CONST.SETTING_CAMERA_RESOLUTION
                 and value not in CONST.SETTING_ALL_CAMERA_RES
             ):
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.SETTING_ALL_CAMERA_RES
                 )
             if (
@@ -332,7 +336,7 @@ class Client:
                 in [CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_SILENCE_SOUNDS]
                 and value not in CONST.SETTING_DISABLE_ENABLE
             ):
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
                 )
 
@@ -347,11 +351,11 @@ class Client:
                 setting == CONST.SETTING_EXIT_DELAY_AWAY
                 and value not in CONST.VALID_SETTING_EXIT_AWAY
             ):
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.VALID_SETTING_EXIT_AWAY
                 )
             if value not in CONST.ALL_SETTING_ENTRY_EXIT_DELAY:
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ENTRY_EXIT_DELAY
                 )
 
@@ -365,21 +369,21 @@ class Client:
                 setting in CONST.VALID_SOUND_SETTINGS
                 and value not in CONST.ALL_SETTING_SOUND
             ):
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_SOUND
                 )
             if (
                 setting == CONST.SETTING_ALARM_LENGTH
                 and value not in CONST.ALL_SETTING_ALARM_LENGTH
             ):
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ALARM_LENGTH
                 )
             if (
                 setting == CONST.SETTING_FINAL_BEEPS
                 and value not in CONST.ALL_SETTING_FINAL_BEEPS
             ):
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_FINAL_BEEPS
                 )
 
@@ -390,7 +394,7 @@ class Client:
         """Will validate siren settings and values, returns data packet."""
         if validate_value:
             if value not in CONST.SETTING_DISABLE_ENABLE:
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
                 )
 
@@ -422,7 +426,7 @@ class Client:
 
             return self.send_request(method, path, headers, data, True)
 
-        raise AbodeException(ERROR.REQUEST)
+        raise jaraco.abode.Exception(ERROR.REQUEST)
 
     @property
     def default_mode(self):
@@ -486,7 +490,7 @@ def new_device(device_json, client):
     try:
         type_tag = device_json['type_tag']
     except KeyError as exc:
-        raise AbodeException(ERROR.UNABLE_TO_MAP_DEVICE) from exc
+        raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
     generic_type = CONST.get_generic_type(type_tag.lower())
     device_json['generic_type'] = generic_type

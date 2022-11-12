@@ -2,8 +2,7 @@ import logging
 
 from jaraco.collections import DictAdapter, Projection
 
-from ..exceptions import AbodeException
-
+import jaraco
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from .control import needs_control_url
@@ -50,10 +49,10 @@ class Device:
         _LOGGER.debug("Set Status Response: %s", response.text)
 
         if response_object['id'] != self.device_id:
-            raise AbodeException(ERROR.SET_STATUS_DEV_ID)
+            raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['status'] != str(status):
-            raise AbodeException(ERROR.SET_STATUS_STATE)
+            raise jaraco.abode.Exception(ERROR.SET_STATUS_STATE)
 
         # Note: Status result is of int type, not of new status of device.
         # Seriously, why would you do that?
@@ -74,10 +73,10 @@ class Device:
         _LOGGER.debug("Set Level Response: %s", response.text)
 
         if response_object['id'] != self.device_id:
-            raise AbodeException(ERROR.SET_STATUS_DEV_ID)
+            raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['level'] != str(level):
-            raise AbodeException(ERROR.SET_STATUS_STATE)
+            raise jaraco.abode.Exception(ERROR.SET_STATUS_STATE)
 
         self.update(response_object)
 

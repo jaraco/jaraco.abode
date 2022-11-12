@@ -1,7 +1,8 @@
+import builtins
 import requests
 
 
-class AbodeException(Exception):
+class Exception(builtins.Exception):
     """Class to throw general abode exception."""
 
     def __init__(self, error, details=None):
@@ -14,7 +15,7 @@ class AbodeException(Exception):
         self.details = details
 
 
-class AuthenticationException(AbodeException):
+class AuthenticationException(Exception):
     """Class to throw authentication exception."""
 
     @classmethod
@@ -31,5 +32,5 @@ class AuthenticationException(AbodeException):
         return response.text
 
 
-class SocketIOException(AbodeException):
+class SocketIOException(Exception):
     """Class to throw SocketIO Error exception."""

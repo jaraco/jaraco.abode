@@ -2,8 +2,7 @@
 import logging
 import math
 
-from ..exceptions import AbodeException
-
+import jaraco
 from ..devices.switch import Switch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
@@ -32,7 +31,7 @@ class Light(Switch):
         _LOGGER.debug("Set Color Temp Response: %s", response.text)
 
         if response_object['idForPanel'] != self.device_id:
-            raise AbodeException(ERROR.SET_STATUS_DEV_ID)
+            raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['colorTemperature'] != int(color_temp):
             _LOGGER.warning(
@@ -69,7 +68,7 @@ class Light(Switch):
         _LOGGER.debug("Set Color Response: %s", response.text)
 
         if response_object['idForPanel'] != self.device_id:
-            raise AbodeException(ERROR.SET_STATUS_DEV_ID)
+            raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         # Abode will sometimes return hue value off by 1 (rounding error)
         hue_comparison = math.isclose(response_object["hue"], int(hue), abs_tol=1)

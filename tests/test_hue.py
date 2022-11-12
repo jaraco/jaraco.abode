@@ -159,7 +159,7 @@ class TestHue:
             ),
         )
 
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             device.switch_on()
 
     def tests_hue_color_temp_changes(self, m):
@@ -226,7 +226,7 @@ class TestHue:
             ),
         )
 
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             device.set_color_temp(4434)
 
     def tests_hue_color_changes(self, m):
@@ -293,5 +293,5 @@ class TestHue:
             ),
         )
 
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             device.set_color((44, 44))

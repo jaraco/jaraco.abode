@@ -156,7 +156,7 @@ class TestEventController:
         # Create a fake device and attempt to register that
         fake_device = BinarySensor(DOORCONTACT.device(), self.client)
 
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             events.add_device_callback(fake_device, callback)
 
     def tests_invalid_all_device_unregister(self, m):
@@ -193,7 +193,7 @@ class TestEventController:
         # Create a fake device and attempt to unregister that
         fake_device = BinarySensor(DOORCONTACT.device(), self.client)
 
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             events.remove_all_device_callbacks(fake_device)
 
     def tests_event_registration(self):
@@ -212,7 +212,7 @@ class TestEventController:
         assert not events.add_event_callback(None, callback)
 
         # Test that an invalid event throws exception
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             events.add_event_callback("lol", callback)
 
     def tests_timeline_registration(self):
@@ -231,11 +231,11 @@ class TestEventController:
         assert not events.add_timeline_callback(None, callback)
 
         # Test that an invalid timeline event string throws exception
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             events.add_timeline_callback("lol", callback)
 
         # Test that an invalid timeline event dict throws exception
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             events.add_timeline_callback({"lol": "lol"}, callback)
 
     def tests_device_callback(self, m):

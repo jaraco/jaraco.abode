@@ -132,5 +132,5 @@ class TestValve:
             ),
         )
 
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             device.switch_on()

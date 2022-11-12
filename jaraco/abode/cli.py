@@ -11,10 +11,10 @@ import getpass
 import keyring
 from jaraco.context import suppress
 
+import jaraco.abode
 from . import Client
 from .helpers import constants as CONST
 from .helpers import timeline as TIMELINE
-from .exceptions import AbodeException
 
 _LOGGER = logging.getLogger('abodecl')
 
@@ -228,7 +228,7 @@ def _create_client_instance(args):
 def _log_errors_and_logout(client):
     try:
         yield client
-    except AbodeException as exc:
+    except jaraco.abode.Exception as exc:
         _LOGGER.error(exc)
     finally:
         client.logout()
@@ -425,7 +425,7 @@ class Dispatcher:
                         _LOGGER.info(
                             "Saved image to %s for device id: %s", devloc[1], devloc[0]
                         )
-                except AbodeException as exc:
+                except jaraco.abode.Exception as exc:
                     _LOGGER.warning("Unable to save image: %s", exc)
             else:
                 _LOGGER.warning("Could not find device with id: %s", devloc[0])

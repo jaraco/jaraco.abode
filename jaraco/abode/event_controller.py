@@ -2,8 +2,8 @@
 import collections
 import logging
 
+import jaraco
 from .devices import Device
-from .exceptions import AbodeException
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .helpers import timeline as TIMELINE
@@ -88,7 +88,7 @@ class EventController:
 
             # Validate the device is valid
             if not self._client.get_device(device_id):
-                raise AbodeException(ERROR.EVENT_DEVICE_INVALID)
+                raise jaraco.abode.Exception(ERROR.EVENT_DEVICE_INVALID)
 
             _LOGGER.debug("Subscribing to updates for device_id: %s", device_id)
 
@@ -111,7 +111,7 @@ class EventController:
                 device_id = device.device_id
 
             if not self._client.get_device(device_id):
-                raise AbodeException(ERROR.EVENT_DEVICE_INVALID)
+                raise jaraco.abode.Exception(ERROR.EVENT_DEVICE_INVALID)
 
             if device_id not in self._device_callbacks:
                 return False
@@ -132,7 +132,7 @@ class EventController:
 
         for event_group in event_groups:
             if event_group not in TIMELINE.ALL_EVENT_GROUPS:
-                raise AbodeException(
+                raise jaraco.abode.Exception(
                     ERROR.EVENT_GROUP_INVALID, TIMELINE.ALL_EVENT_GROUPS
                 )
 
@@ -152,12 +152,12 @@ class EventController:
 
         for timeline_event in timeline_events:
             if not isinstance(timeline_event, dict):
-                raise AbodeException(ERROR.EVENT_CODE_MISSING)
+                raise jaraco.abode.Exception(ERROR.EVENT_CODE_MISSING)
 
             event_code = timeline_event.get('event_code')
 
             if not event_code:
-                raise AbodeException(ERROR.EVENT_CODE_MISSING)
+                raise jaraco.abode.Exception(ERROR.EVENT_CODE_MISSING)
 
             _LOGGER.debug("Subscribing to timeline event: %s", timeline_event)
 

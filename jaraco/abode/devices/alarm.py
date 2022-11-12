@@ -2,8 +2,7 @@
 import logging
 import copy
 
-from ..exceptions import AbodeException
-
+import jaraco.abode
 from .switch import Switch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
@@ -39,10 +38,10 @@ class Alarm(Switch):
     def set_mode(self, mode):
         """Set Abode alarm mode."""
         if not mode:
-            raise AbodeException(ERROR.MISSING_ALARM_MODE)
+            raise jaraco.abode.Exception(ERROR.MISSING_ALARM_MODE)
 
         if mode.lower() not in CONST.ALL_MODES:
-            raise AbodeException(ERROR.INVALID_ALARM_MODE, CONST.ALL_MODES)
+            raise jaraco.abode.Exception(ERROR.INVALID_ALARM_MODE, CONST.ALL_MODES)
 
         mode = mode.lower()
 
@@ -55,10 +54,10 @@ class Alarm(Switch):
         response_object = response.json()
 
         if response_object['area'] != self._area:
-            raise AbodeException(ERROR.SET_MODE_AREA)
+            raise jaraco.abode.Exception(ERROR.SET_MODE_AREA)
 
         if response_object['mode'] != mode:
-            raise AbodeException(ERROR.SET_MODE_MODE)
+            raise jaraco.abode.Exception(ERROR.SET_MODE_MODE)
 
         self._state['mode'][(self.device_id)] = response_object['mode']
 

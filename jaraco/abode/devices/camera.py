@@ -4,7 +4,7 @@ import logging
 from shutil import copyfileobj
 import requests
 
-from ..exceptions import AbodeException
+import jaraco
 from ..devices import Device
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
@@ -29,7 +29,7 @@ class Camera(Device):
             url = self._state['control_url']
 
         else:
-            raise AbodeException(ERROR.MISSING_CONTROL_URL)
+            raise jaraco.abode.Exception(ERROR.MISSING_CONTROL_URL)
 
         try:
             response = self._client.send_request("put", url)
@@ -38,7 +38,7 @@ class Camera(Device):
 
             return True
 
-        except AbodeException as exc:
+        except jaraco.abode.Exception as exc:
             _LOGGER.warning("Failed to capture image: %s", exc)
 
         return False
@@ -65,13 +65,13 @@ class Camera(Device):
         # Verify that the event code is of the "CAPTURE IMAGE" event
         event_code = timeline_json.get('event_code')
         if event_code != TIMELINE.CAPTURE_IMAGE['event_code']:
-            raise AbodeException(ERROR.CAM_TIMELINE_EVENT_INVALID)
+            raise jaraco.abode.Exception(ERROR.CAM_TIMELINE_EVENT_INVALID)
 
         # The timeline response has an entry for "file_path" that acts as the
         # location of the image within the Abode servers.
         file_path = timeline_json.get('file_path')
         if not file_path:
-            raise AbodeException(ERROR.CAM_IMAGE_REFRESH_NO_FILE)
+            raise jaraco.abode.Exception(ERROR.CAM_IMAGE_REFRESH_NO_FILE)
 
         # Perform a "head" request for the image and look for a
         # 302 Found response
@@ -83,13 +83,13 @@ class Camera(Device):
                 str(response.status_code),
                 response.text,
             )
-            raise AbodeException(ERROR.CAM_IMAGE_UNEXPECTED_RESPONSE)
+            raise jaraco.abode.Exception(ERROR.CAM_IMAGE_UNEXPECTED_RESPONSE)
 
         # The response should have a location header that is the actual
         # location of the image stored on AWS
         location = response.headers.get('location')
         if not location:
-            raise AbodeException(ERROR.CAM_IMAGE_NO_LOCATION_HEADER)
+            raise jaraco.abode.Exception(ERROR.CAM_IMAGE_NO_LOCATION_HEADER)
 
         self._image_url = location
 
@@ -109,7 +109,7 @@ class Camera(Device):
                 str(response.status_code),
                 response.text,
             )
-            raise AbodeException(ERROR.CAM_IMAGE_REQUEST_INVALID)
+            raise jaraco.abode.Exception(ERROR.CAM_IMAGE_REQUEST_INVALID)
 
         with open(path, 'wb') as imgfile:
             copyfileobj(response.raw, imgfile)
@@ -123,7 +123,7 @@ class Camera(Device):
         try:
             response = self._client.send_request("post", url)
             _LOGGER.debug("Camera snapshot response: %s", response.text)
-        except AbodeException as exc:
+        except jaraco.abode.Exception as exc:
             _LOGGER.warning("Failed to get camera snapshot image: %s", exc)
             return False
 
@@ -179,10 +179,10 @@ class Camera(Device):
             _LOGGER.debug("Camera Privacy Mode Response: %s", response.text)
 
             if response_object['id'] != self.device_id:
-                raise AbodeException(ERROR.SET_STATUS_DEV_ID)
+                raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
             if response_object['privacy'] != str(privacy):
-                raise AbodeException(ERROR.SET_PRIVACY_MODE)
+                raise jaraco.abode.Exception(ERROR.SET_PRIVACY_MODE)
 
             _LOGGER.info("Set camera %s privacy mode to: %s", self.device_id, privacy)
 

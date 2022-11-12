@@ -7,7 +7,6 @@ import pytest
 from jaraco.collections import DictFilter
 
 import jaraco.abode
-from jaraco.abode.exceptions import AbodeException
 import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.errors as ERROR
 from . import mock as MOCK
@@ -133,8 +132,8 @@ class TestCamera:
             # Remove control URLs from JSON
             device._state = DictFilter(device._state, include_pattern='(?!control_url)')
 
-            # Test that AbodeException is raised with no control URLs
-            with pytest.raises(AbodeException) as exc:
+            # Test that jaraco.abode.Exception is raised with no control URLs
+            with pytest.raises(jaraco.abode.Exception) as exc:
                 device.capture()
             assert (exc.value.errcode, exc.value.message) == ERROR.MISSING_CONTROL_URL
 
@@ -168,7 +167,7 @@ class TestCamera:
             # Test that a bad file_path response header results in an exception
             m.head(cam_type.FILE_PATH, status_code=302)
 
-            with pytest.raises(jaraco.abode.AbodeException):
+            with pytest.raises(jaraco.abode.jaraco.abode.Exception):
                 device.refresh_image()
 
             # Test that a bad file_path response code results in an exception
@@ -178,7 +177,7 @@ class TestCamera:
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
 
-            with pytest.raises(jaraco.abode.AbodeException):
+            with pytest.raises(jaraco.abode.jaraco.abode.Exception):
                 device.refresh_image()
 
             # Test that an an empty timeline event throws exception
@@ -188,7 +187,7 @@ class TestCamera:
                 json=[cam_type.timeline_event(device.device_id, file_path="")],
             )
 
-            with pytest.raises(jaraco.abode.AbodeException):
+            with pytest.raises(jaraco.abode.jaraco.abode.Exception):
                 device.refresh_image()
 
             # Test that an unexpected timeline event throws exception
@@ -198,7 +197,7 @@ class TestCamera:
                 json=[cam_type.timeline_event(device.device_id, event_code="1234")],
             )
 
-            with pytest.raises(jaraco.abode.AbodeException):
+            with pytest.raises(jaraco.abode.jaraco.abode.Exception):
                 device.refresh_image()
 
     def tests_camera_no_image_update(self, m):
@@ -252,7 +251,7 @@ class TestCamera:
 
             # Test that bad response returns False
             m.get(cam_type.LOCATION_HEADER, status_code=400)
-            with pytest.raises(jaraco.abode.AbodeException):
+            with pytest.raises(jaraco.abode.jaraco.abode.Exception):
                 device.image_to_file(path, get_image=True)
 
             # Test that the image fails to update returns False
@@ -369,5 +368,5 @@ class TestCamera:
         assert device.privacy_mode(False)
 
         # Test that an invalid privacy response throws exception
-        with pytest.raises(jaraco.abode.AbodeException):
+        with pytest.raises(jaraco.abode.jaraco.abode.Exception):
             device.privacy_mode(True)
