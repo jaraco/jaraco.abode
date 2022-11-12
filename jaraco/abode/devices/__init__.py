@@ -1,4 +1,4 @@
-import importlib
+import importlib.resources
 import logging
 
 from jaraco.collections import DictAdapter, Projection
@@ -185,16 +185,9 @@ class Device:
 
 # import all devices
 device_mods = (
-    'alarm',
-    'binary_sensor',
-    'camera',
-    'control',
-    'cover',
-    'light',
-    'lock',
-    'sensor',
-    'switch',
-    'valve',
+    mod.name.removesuffix('.py')
+    for mod in importlib.resources.files(__package__).iterdir()
+    if mod.name != '__init__.py'
 )
 for mod in device_mods:
     importlib.import_module(f'.{mod}', __package__)
