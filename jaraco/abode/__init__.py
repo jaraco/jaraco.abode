@@ -23,7 +23,7 @@ from .exceptions import AuthenticationException, AbodeException
 from .devices import alarm as ALARM
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
-from . import utils as UTILS
+from . import collections as COLLECTIONS
 from . import cache as CACHE
 
 _LOGGER = logging.getLogger(__name__)
@@ -452,7 +452,7 @@ class Client:
             loaded_cache = CACHE.load_cache(self._cache_path)
 
             if loaded_cache:
-                UTILS.update(self._cache, loaded_cache)
+                COLLECTIONS.update(self._cache, loaded_cache)
             else:
                 _LOGGER.debug("Removing invalid cache file: %s", self._cache_path)
                 os.remove(self._cache_path)
