@@ -4,7 +4,7 @@ import copy
 
 from ..exceptions import AbodeException
 
-from ..devices.switch import AbodeSwitch
+from .switch import AbodeSwitch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 
