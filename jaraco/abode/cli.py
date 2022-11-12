@@ -225,7 +225,7 @@ def _create_abode_instance(args):
 def _log_errors_and_logout(abode):
     try:
         yield abode
-    except abode.AbodeException as exc:
+    except AbodeException as exc:
         _LOGGER.error(exc)
     finally:
         abode.logout()
