@@ -3,11 +3,9 @@
 from collections.abc import Mapping, MutableMapping
 
 
-def update(dct: MutableMapping, dct_merge: Mapping) -> MutableMapping:
-    """Recursively merge dct_merge into dct."""
-    for key, value in dct_merge.items():
-        if key in dct and isinstance(dct[key], Mapping):
-            dct[key] = update(dct[key], value)
-        else:
-            dct[key] = value
-    return dct
+def update(target: MutableMapping, merge: Mapping) -> MutableMapping:
+    """Recursively merge items from merge into target."""
+    for key, value in merge.items():
+        recurse = key in target and isinstance(target[key], Mapping)
+        target[key] = update(target[key], value) if recurse else value
+    return target
