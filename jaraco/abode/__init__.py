@@ -4,6 +4,7 @@ An Abode alarm Python library.
 
 import logging
 import os
+import uuid
 
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
@@ -64,7 +65,7 @@ class Client:
 
         # Create a new cache template
         self._cache = {
-            CONST.UUID: UTILS.gen_uuid(),
+            CONST.UUID: str(uuid.uuid1()),
             CONST.COOKIES: None,
         }
 
