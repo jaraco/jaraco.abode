@@ -4,7 +4,7 @@ import copy
 
 from ..exceptions import AbodeException
 
-from ..devices.switch import AbodeDevice, AbodeSwitch
+from ..devices.switch import AbodeSwitch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 
@@ -90,7 +90,7 @@ class AbodeAlarm(AbodeSwitch):
 
     def refresh(self, url=CONST.PANEL_URL):
         """Refresh the alarm device."""
-        response_object = AbodeDevice.refresh(self, url)
+        response_object = super().refresh(url)
 
         self._abode._panel.update(response_object[0])
 
