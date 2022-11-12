@@ -23,6 +23,7 @@ from .devices import alarm as ALARM
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from . import utils as UTILS
+from . import cache as CACHE
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -447,7 +448,7 @@ class Client:
         """Load existing cache and merge for updating if required."""
         if not self._disable_cache and os.path.exists(self._cache_path):
             _LOGGER.debug("Cache found at: %s", self._cache_path)
-            loaded_cache = UTILS.load_cache(self._cache_path)
+            loaded_cache = CACHE.load_cache(self._cache_path)
 
             if loaded_cache:
                 UTILS.update(self._cache, loaded_cache)
@@ -460,7 +461,7 @@ class Client:
     def _save_cache(self):
         """Trigger a cache save."""
         if not self._disable_cache:
-            UTILS.save_cache(self._cache, self._cache_path)
+            CACHE.save_cache(self._cache, self._cache_path)
 
 
 def _new_sensor(device_json, client):

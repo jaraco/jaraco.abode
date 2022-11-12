@@ -1,26 +1,6 @@
-"""Abodepy utility methods."""
-import logging
-import pickle
+"""Utility methods."""
+
 import uuid
-
-_LOGGER = logging.getLogger(__name__)
-
-
-def save_cache(data, filename):
-    """Save cookies to a file."""
-    with open(filename, 'wb') as handle:
-        pickle.dump(data, handle)
-
-
-def load_cache(filename):
-    """Load cookies from a file."""
-    with open(filename, 'rb') as handle:
-        try:
-            return pickle.load(handle)
-        except EOFError:
-            _LOGGER.warning("Empty pickle file: %s", filename)
-        except (pickle.UnpicklingError, ValueError):
-            _LOGGER.warning("Corrupted pickle file: %s", filename)
 
 
 def gen_uuid():
