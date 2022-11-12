@@ -4,9 +4,6 @@ import pytest
 import jaraco.abode
 
 
-collect_ignore = ['abodepy']
-
-
 @pytest.fixture(autouse=True)
 def abode_instance(request):
     if request.instance is None:
