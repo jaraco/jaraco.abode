@@ -2,15 +2,12 @@
 An Abode alarm Python library.
 """
 
+from jaraco.classes.ancestry import iter_subclasses
+from more_itertools import always_iterable
+
 import jaraco
 from .devices.binary_sensor import BinarySensor
-from .devices.camera import Camera
-from .devices.cover import Cover
-from .devices.light import Light
-from .devices.lock import Lock
-from .devices.switch import Switch
 from .devices.sensor import Sensor
-from .devices.valve import Valve
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .client import Client
@@ -45,16 +42,10 @@ def new_device(device_json, client):
     generic_type = CONST.get_generic_type(type_tag.lower())
     device_json['generic_type'] = generic_type
     sensors = {
-        CONST.TYPE_CONNECTIVITY: BinarySensor,
-        CONST.TYPE_MOISTURE: BinarySensor,
-        CONST.TYPE_OPENING: BinarySensor,
-        CONST.TYPE_CAMERA: Camera,
-        CONST.TYPE_COVER: Cover,
-        CONST.TYPE_LIGHT: Light,
-        CONST.TYPE_LOCK: Lock,
-        CONST.TYPE_SWITCH: Switch,
-        CONST.TYPE_VALVE: Valve,
-        CONST.TYPE_UNKNOWN_SENSOR: _new_sensor,
+        impl: cls
+        for cls in iter_subclasses(jaraco.abode.devices.Device)
+        for impl in always_iterable(cls.implements)
     }
+    sensors[CONST.TYPE_UNKNOWN_SENSOR] = _new_sensor
     sensor = sensors.get(generic_type, lambda *args: None)
     return sensor(device_json, client)

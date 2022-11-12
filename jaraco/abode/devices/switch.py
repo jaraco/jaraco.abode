@@ -1,11 +1,15 @@
 """Abode switch device."""
 
+from typing import Optional, Union, Iterable
+
 from ..devices import Device
 from ..helpers import constants as CONST
 
 
 class Switch(Device):
     """Class to add switch functionality."""
+
+    implements: Optional[Union[str, Iterable[str]]] = CONST.TYPE_SWITCH
 
     def switch_on(self):
         """Turn the switch on."""

@@ -8,6 +8,8 @@ from ..helpers import constants as CONST
 class Sensor(BinarySensor):
     """Class to represent a sensor device."""
 
+    implements = None
+
     def _get_status(self, key):
         return self._state.get(CONST.STATUSES_KEY, {}).get(key)
 

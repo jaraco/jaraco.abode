@@ -16,6 +16,8 @@ _LOGGER = logging.getLogger(__name__)
 class Camera(Device):
     """Class to represent a camera device."""
 
+    implements = CONST.TYPE_CAMERA
+
     _image_url = None
     _snapshot_base64 = None
 

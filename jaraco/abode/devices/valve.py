@@ -7,6 +7,8 @@ from ..helpers import constants as CONST
 class Valve(Switch):
     """Class to add valve functionality."""
 
+    implements = CONST.TYPE_VALVE
+
     def switch_on(self):
         """Open the valve."""
         success = self.set_status(CONST.STATUS_ON_INT)

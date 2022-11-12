@@ -1,11 +1,19 @@
 """Abode binary sensor device."""
 
+from typing import Optional, Union, Iterable
+
 from ..devices import Device
 from ..helpers import constants as CONST
 
 
 class BinarySensor(Device):
     """Class to represent an on / off, online/offline sensor."""
+
+    implements: Optional[Union[str, Iterable[str]]] = (
+        CONST.TYPE_CONNECTIVITY,
+        CONST.TYPE_MOISTURE,
+        CONST.TYPE_OPENING,
+    )
 
     @property
     def is_on(self):

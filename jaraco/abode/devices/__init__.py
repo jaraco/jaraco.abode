@@ -1,3 +1,4 @@
+import importlib
 import logging
 
 from jaraco.collections import DictAdapter, Projection
@@ -180,3 +181,20 @@ class Device:
         """Get a short description of the device."""
         tmpl = '{name} (ID: {device_id}, UUID: {device_uuid}) - {type} - {status}'
         return tmpl.format_map(DictAdapter(self))
+
+
+# import all devices
+device_mods = (
+    'alarm',
+    'binary_sensor',
+    'camera',
+    'control',
+    'cover',
+    'light',
+    'lock',
+    'sensor',
+    'switch',
+    'valve',
+)
+for mod in device_mods:
+    importlib.import_module(f'.{mod}', __package__)
