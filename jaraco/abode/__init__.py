@@ -488,31 +488,17 @@ def new_device(device_json, abode):
 
     generic_type = CONST.get_generic_type(type_tag.lower())
     device_json['generic_type'] = generic_type
-
-    if generic_type in [
-        CONST.TYPE_CONNECTIVITY,
-        CONST.TYPE_MOISTURE,
-        CONST.TYPE_OPENING,
-    ]:
-        return BinarySensor(device_json, abode)
-
-    if generic_type == CONST.TYPE_CAMERA:
-        return Camera(device_json, abode)
-
-    if generic_type == CONST.TYPE_COVER:
-        return Cover(device_json, abode)
-
-    if generic_type == CONST.TYPE_LIGHT:
-        return Light(device_json, abode)
-
-    if generic_type == CONST.TYPE_LOCK:
-        return Lock(device_json, abode)
-
-    if generic_type == CONST.TYPE_SWITCH:
-        return Switch(device_json, abode)
-
-    if generic_type == CONST.TYPE_VALVE:
-        return Valve(device_json, abode)
-
-    if generic_type == CONST.TYPE_UNKNOWN_SENSOR:
-        return _new_sensor(device_json, abode)
+    sensors = {
+        CONST.TYPE_CONNECTIVITY: BinarySensor,
+        CONST.TYPE_MOISTURE: BinarySensor,
+        CONST.TYPE_OPENING: BinarySensor,
+        CONST.TYPE_CAMERA: Camera,
+        CONST.TYPE_COVER: Cover,
+        CONST.TYPE_LIGHT: Light,
+        CONST.TYPE_LOCK: Lock,
+        CONST.TYPE_SWITCH: Switch,
+        CONST.TYPE_VALVE: Valve,
+        CONST.TYPE_UNKNOWN_SENSOR: _new_sensor,
+    }
+    sensor = sensors.get(generic_type, lambda *args: None)
+    return sensor(device_json, abode)
