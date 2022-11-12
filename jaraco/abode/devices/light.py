@@ -4,7 +4,7 @@ import math
 
 from ..exceptions import AbodeException
 
-from ..devices.switch import AbodeSwitch
+from ..devices.switch import Switch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from .control import needs_control_url
@@ -13,7 +13,7 @@ from .control import needs_control_url
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeLight(AbodeSwitch):
+class Light(Switch):
     """Class for lights (dimmers)."""
 
     @needs_control_url

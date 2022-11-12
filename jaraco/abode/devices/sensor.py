@@ -1,11 +1,11 @@
 """Abode sensor device."""
 import re
 
-from ..devices.binary_sensor import AbodeBinarySensor
+from ..devices.binary_sensor import BinarySensor
 from ..helpers import constants as CONST
 
 
-class AbodeSensor(AbodeBinarySensor):
+class Sensor(BinarySensor):
     """Class to represent a sensor device."""
 
     def _get_status(self, key):

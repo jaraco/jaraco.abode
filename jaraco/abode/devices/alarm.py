@@ -4,7 +4,7 @@ import copy
 
 from ..exceptions import AbodeException
 
-from .switch import AbodeSwitch
+from .switch import Switch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 
@@ -25,10 +25,10 @@ def state_from_panel(panel_state, area='1'):
 
 def create_alarm(panel_json, abode, area='1'):
     """Create a new alarm device from a panel response."""
-    return AbodeAlarm(state_from_panel(panel_json), abode, area)
+    return Alarm(state_from_panel(panel_json), abode, area)
 
 
-class AbodeAlarm(AbodeSwitch):
+class Alarm(Switch):
     """Class to represent the Abode alarm as a device."""
 
     def __init__(self, json_obj, abode, area='1'):

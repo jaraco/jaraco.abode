@@ -6,7 +6,7 @@ import pytest
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.timeline as TIMELINE
-from jaraco.abode.devices.binary_sensor import AbodeBinarySensor
+from jaraco.abode.devices.binary_sensor import BinarySensor
 
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -154,7 +154,7 @@ class TestEventController:
         assert not events.add_device_callback(None, callback)
 
         # Create a fake device and attempt to register that
-        fake_device = AbodeBinarySensor(DOORCONTACT.device(), self.abode)
+        fake_device = BinarySensor(DOORCONTACT.device(), self.abode)
 
         with pytest.raises(jaraco.abode.AbodeException):
             events.add_device_callback(fake_device, callback)
@@ -191,7 +191,7 @@ class TestEventController:
         assert not events.remove_all_device_callbacks(None)
 
         # Create a fake device and attempt to unregister that
-        fake_device = AbodeBinarySensor(DOORCONTACT.device(), self.abode)
+        fake_device = BinarySensor(DOORCONTACT.device(), self.abode)
 
         with pytest.raises(jaraco.abode.AbodeException):
             events.remove_all_device_callbacks(fake_device)

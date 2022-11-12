@@ -9,11 +9,11 @@ from .helpers import errors as ERROR
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeAutomation:
+class Automation:
     """Class for viewing and controlling automations."""
 
     def __init__(self, abode, automation):
-        """Init AbodeAutomation class."""
+        """Init Automation class."""
         self._abode = abode
         self._automation = automation
 

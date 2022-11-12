@@ -5,7 +5,7 @@ from shutil import copyfileobj
 import requests
 
 from ..exceptions import AbodeException
-from ..devices import AbodeDevice
+from ..devices import Device
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
@@ -13,7 +13,7 @@ from ..helpers import timeline as TIMELINE
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeCamera(AbodeDevice):
+class Camera(Device):
     """Class to represent a camera device."""
 
     _image_url = None

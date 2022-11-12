@@ -8,17 +8,17 @@ import os
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
 
-from .automation import AbodeAutomation
-from .devices.binary_sensor import AbodeBinarySensor
-from .devices.camera import AbodeCamera
-from .devices.cover import AbodeCover
-from .devices.light import AbodeLight
-from .devices.lock import AbodeLock
-from .devices.switch import AbodeSwitch
-from .devices.sensor import AbodeSensor
-from .devices.valve import AbodeValve
-from .event_controller import AbodeEventController
-from .exceptions import AbodeAuthenticationException, AbodeException
+from .automation import Automation
+from .devices.binary_sensor import BinarySensor
+from .devices.camera import Camera
+from .devices.cover import Cover
+from .devices.light import Light
+from .devices.lock import Lock
+from .devices.switch import Switch
+from .devices.sensor import Sensor
+from .devices.valve import Valve
+from .event_controller import EventController
+from .exceptions import AuthenticationException, AbodeException
 from .devices import alarm as ALARM
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
@@ -50,7 +50,7 @@ class Abode:
         self._username = username
         self._password = password
 
-        self._event_controller = AbodeEventController(self, url=CONST.SOCKETIO_URL)
+        self._event_controller = EventController(self, url=CONST.SOCKETIO_URL)
 
         self._default_alarm_mode = CONST.MODE_AWAY
 
@@ -94,10 +94,10 @@ class Abode:
         password = password or self._password
 
         if not isinstance(username, str):
-            raise AbodeAuthenticationException(ERROR.USERNAME)
+            raise AuthenticationException(ERROR.USERNAME)
 
         if not isinstance(password, str):
-            raise AbodeAuthenticationException(ERROR.PASSWORD)
+            raise AuthenticationException(ERROR.PASSWORD)
 
         login_data = {
             CONST.ID: username,
@@ -110,15 +110,15 @@ class Abode:
             login_data['remember_me'] = 1
 
         response = self._session.post(CONST.LOGIN_URL, json=login_data)
-        AbodeAuthenticationException.raise_for(response)
+        AuthenticationException.raise_for(response)
         response_object = response.json()
 
         # Check for multi-factor authentication
         if 'mfa_type' in response_object:
             if response_object['mfa_type'] == "google_authenticator":
-                raise AbodeAuthenticationException(ERROR.MFA_CODE_REQUIRED)
+                raise AuthenticationException(ERROR.MFA_CODE_REQUIRED)
 
-            raise AbodeAuthenticationException(ERROR.UNKNOWN_MFA_TYPE)
+            raise AuthenticationException(ERROR.UNKNOWN_MFA_TYPE)
 
         # Persist cookies (which contains the UUID and the session ID) to disk
         if self._session.cookies.get_dict():
@@ -126,7 +126,7 @@ class Abode:
             self._save_cache()
 
         oauth_response = self._session.get(CONST.OAUTH_TOKEN_URL)
-        AbodeAuthenticationException.raise_for(oauth_response)
+        AuthenticationException.raise_for(oauth_response)
         oauth_response_object = oauth_response.json()
 
         _LOGGER.debug("Login Response: %s", response.text)
@@ -158,7 +158,7 @@ class Abode:
             _LOGGER.warning("Caught exception during logout: %s", exc)
             return
 
-        AbodeAuthenticationException.raise_for(response)
+        AuthenticationException.raise_for(response)
 
         _LOGGER.debug("Logout Response: %s", response.text)
 
@@ -263,7 +263,7 @@ class Abode:
                 if automation:
                     automation.update(automation_json)
                 else:
-                    automation = AbodeAutomation(self, automation_json)
+                    automation = Automation(self, automation_json)
                     self._automations[automation.automation_id] = automation
 
         return list(self._automations.values())
@@ -468,7 +468,7 @@ def _new_sensor(device_json, abode):
 
     if any(key in statuses for key in CONST.SENSOR_KEYS):
         device_json['generic_type'] = CONST.TYPE_SENSOR
-        return AbodeSensor(device_json, abode)
+        return Sensor(device_json, abode)
 
     version = device_json.get('version', '')
 
@@ -476,7 +476,7 @@ def _new_sensor(device_json, abode):
         CONST.TYPE_OCCUPANCY if version.startswith('MINIPIR') else CONST.TYPE_MOTION
     )
 
-    return AbodeBinarySensor(device_json, abode)
+    return BinarySensor(device_json, abode)
 
 
 def new_device(device_json, abode):
@@ -494,25 +494,25 @@ def new_device(device_json, abode):
         CONST.TYPE_MOISTURE,
         CONST.TYPE_OPENING,
     ]:
-        return AbodeBinarySensor(device_json, abode)
+        return BinarySensor(device_json, abode)
 
     if generic_type == CONST.TYPE_CAMERA:
-        return AbodeCamera(device_json, abode)
+        return Camera(device_json, abode)
 
     if generic_type == CONST.TYPE_COVER:
-        return AbodeCover(device_json, abode)
+        return Cover(device_json, abode)
 
     if generic_type == CONST.TYPE_LIGHT:
-        return AbodeLight(device_json, abode)
+        return Light(device_json, abode)
 
     if generic_type == CONST.TYPE_LOCK:
-        return AbodeLock(device_json, abode)
+        return Lock(device_json, abode)
 
     if generic_type == CONST.TYPE_SWITCH:
-        return AbodeSwitch(device_json, abode)
+        return Switch(device_json, abode)
 
     if generic_type == CONST.TYPE_VALVE:
-        return AbodeValve(device_json, abode)
+        return Valve(device_json, abode)
 
     if generic_type == CONST.TYPE_UNKNOWN_SENSOR:
         return _new_sensor(device_json, abode)

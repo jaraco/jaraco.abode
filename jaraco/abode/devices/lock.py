@@ -1,10 +1,10 @@
 """Abode lock device."""
 
-from ..devices import AbodeDevice
+from ..devices import Device
 from ..helpers import constants as CONST
 
 
-class AbodeLock(AbodeDevice):
+class Lock(Device):
     """Class to represent a door lock."""
 
     def lock(self):

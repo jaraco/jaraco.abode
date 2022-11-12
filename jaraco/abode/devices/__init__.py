@@ -12,7 +12,7 @@ from .control import needs_control_url
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeDevice:
+class Device:
     """Class to represent each Abode device."""
 
     def __init__(self, state, abode):

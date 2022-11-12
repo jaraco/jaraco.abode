@@ -48,11 +48,11 @@ class TestAbode:
 
     def tests_no_credentials(self):
         """Check that we throw an exception when no username/password."""
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.login()
 
         self.abode_no_cred._username = USERNAME
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.login()
 
     def tests_manual_login(self, m):
@@ -146,7 +146,7 @@ class TestAbode:
         m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
 
         # Check that we raise an Exception with a failed login request.
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_login_mfa_required(self, m):
@@ -159,7 +159,7 @@ class TestAbode:
 
         # Check that we raise an Exception when the MFA code is required
         # but not supplied
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_login_bad_mfa_code(self, m):
@@ -169,7 +169,7 @@ class TestAbode:
         )
 
         # Check that we raise an Exception with a bad MFA code
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.login(
                 username=USERNAME, password=PASSWORD, mfa_code=123456
             )
@@ -183,7 +183,7 @@ class TestAbode:
         )
 
         # Check that we raise an Exception with an unknown MFA type
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
     def tests_logout_failure(self, m):
@@ -199,7 +199,7 @@ class TestAbode:
         self.abode_no_cred.login(username=USERNAME, password=PASSWORD)
 
         # Check that we raise an Exception with a failed logout request.
-        with pytest.raises(jaraco.abode.AbodeAuthenticationException):
+        with pytest.raises(jaraco.abode.AuthenticationException):
             self.abode_no_cred.logout()
 
     def tests_logout_exception(self, m):

@@ -5,7 +5,7 @@ class AbodeException(Exception):
     """Class to throw general abode exception."""
 
     def __init__(self, error, details=None):
-        """Initialize AbodeException."""
+        """Initialize Exception."""
         # Call the base class constructor with the parameters it needs
         super().__init__(error[1])
 
@@ -14,7 +14,7 @@ class AbodeException(Exception):
         self.details = details
 
 
-class AbodeAuthenticationException(AbodeException):
+class AuthenticationException(AbodeException):
     """Class to throw authentication exception."""
 
     @classmethod

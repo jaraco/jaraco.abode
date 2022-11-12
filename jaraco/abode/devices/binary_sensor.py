@@ -1,10 +1,10 @@
 """Abode binary sensor device."""
 
-from ..devices import AbodeDevice
+from ..devices import Device
 from ..helpers import constants as CONST
 
 
-class AbodeBinarySensor(AbodeDevice):
+class BinarySensor(Device):
     """Class to represent an on / off, online/offline sensor."""
 
     @property

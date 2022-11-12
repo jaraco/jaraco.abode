@@ -1,10 +1,10 @@
 """Abode valve device."""
 
-from ..devices.switch import AbodeSwitch
+from ..devices.switch import Switch
 from ..helpers import constants as CONST
 
 
-class AbodeValve(AbodeSwitch):
+class Valve(Switch):
     """Class to add valve functionality."""
 
     def switch_on(self):

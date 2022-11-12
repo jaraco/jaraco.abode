@@ -2,7 +2,7 @@
 import collections
 import logging
 
-from .devices import AbodeDevice
+from .devices import Device
 from .exceptions import AbodeException
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
@@ -12,7 +12,7 @@ from . import socketio as sio
 _LOGGER = logging.getLogger(__name__)
 
 
-class AbodeEventController:
+class EventController:
     """Class for subscribing to abode events."""
 
     def __init__(self, abode, url=CONST.SOCKETIO_URL):
@@ -83,7 +83,7 @@ class AbodeEventController:
             device_id = device
 
             # If they gave us an actual device, get that devices ID
-            if isinstance(device, AbodeDevice):
+            if isinstance(device, Device):
                 device_id = device.device_id
 
             # Validate the device is valid
@@ -107,7 +107,7 @@ class AbodeEventController:
         for device in devices:
             device_id = device
 
-            if isinstance(device, AbodeDevice):
+            if isinstance(device, Device):
                 device_id = device.device_id
 
             if not self._abode.get_device(device_id):
