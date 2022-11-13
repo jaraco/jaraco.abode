@@ -8,6 +8,7 @@ import jaraco
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from .control import needs_control_url
+from . import pkg
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -186,6 +187,7 @@ class Device:
     @classmethod
     def new(cls, device_json, client):
         """Create new device object for the given type."""
+        pkg.import_all()
         try:
             type_tag = device_json['type_tag']
         except KeyError as exc:
