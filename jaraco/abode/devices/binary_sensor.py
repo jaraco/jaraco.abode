@@ -9,11 +9,7 @@ from . import base
 class BinarySensor(base.Device):
     """Class to represent an on / off, online/offline sensor."""
 
-    implements: Optional[Union[str, Iterable[str]]] = (
-        CONST.TYPE_CONNECTIVITY,
-        CONST.TYPE_MOISTURE,
-        CONST.TYPE_OPENING,
-    )
+    implements: Optional[Union[str, Iterable[str]]] = CONST.BINARY_SENSOR_TYPES
 
     @property
     def is_on(self):

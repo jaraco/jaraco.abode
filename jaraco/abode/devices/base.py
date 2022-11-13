@@ -184,6 +184,23 @@ class Device:
         tmpl = '{name} (ID: {device_id}, UUID: {device_uuid}) - {type} - {status}'
         return tmpl.format_map(DictAdapter(self))
 
+    @staticmethod
+    def resolve_type_unknown(state):
+        if state['generic_type'] != CONST.TYPE_UNKNOWN_SENSOR:
+            return
+
+        statuses = state.get(CONST.STATUSES_KEY, {})
+
+        if any(key in statuses for key in CONST.SENSOR_KEYS):
+            state['generic_type'] = CONST.TYPE_SENSOR
+            return
+
+        version = state.get('version', '')
+
+        state['generic_type'] = (
+            CONST.TYPE_OCCUPANCY if version.startswith('MINIPIR') else CONST.TYPE_MOTION
+        )
+
     @classmethod
     def new(cls, device_json, client):
         """Create new device object for the given type."""
@@ -193,15 +210,12 @@ class Device:
         except KeyError as exc:
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
-        generic_type = CONST.get_generic_type(type_tag.lower())
-        device_json['generic_type'] = generic_type
+        device_json['generic_type'] = CONST.get_generic_type(type_tag.lower())
+        cls.resolve_type_unknown(device_json)
         sensors = {
             impl: sub_cls
             for sub_cls in iter_subclasses(cls)
             for impl in always_iterable(sub_cls.implements)
         }
-        from .sensor import Sensor
-
-        sensors[CONST.TYPE_UNKNOWN_SENSOR] = Sensor.new
-        sensor = sensors.get(generic_type, lambda *args: None)
+        sensor = sensors.get(device_json['generic_type'], lambda *args: None)
         return sensor(device_json, client)
