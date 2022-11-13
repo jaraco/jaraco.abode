@@ -202,20 +202,20 @@ class Device:
         )
 
     @classmethod
-    def new(cls, device_json, client):
+    def new(cls, state, client):
         """Create new device object for the given type."""
         pkg.import_all()
         try:
-            type_tag = device_json['type_tag']
+            type_tag = state['type_tag']
         except KeyError as exc:
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
-        device_json['generic_type'] = CONST.get_generic_type(type_tag.lower())
-        cls.resolve_type_unknown(device_json)
+        state['generic_type'] = CONST.get_generic_type(type_tag.lower())
+        cls.resolve_type_unknown(state)
         sensors = {
             impl: sub_cls
             for sub_cls in iter_subclasses(cls)
             for impl in always_iterable(sub_cls.implements)
         }
-        sensor = sensors.get(device_json['generic_type'], lambda *args: None)
-        return sensor(device_json, client)
+        sensor = sensors.get(state['generic_type'], lambda *args: None)
+        return sensor(state, client)
