@@ -46,7 +46,7 @@ class TestDevice:
 
         with pytest.raises(jaraco.abode.Exception):
             del device['type_tag']
-            jaraco.abode.new_device(device, self.client)
+            Device.new(device, self.client)
 
     def tests_device_auto_naming(self):
         """Check the generic Abode device creates a name."""
@@ -59,17 +59,17 @@ class TestDevice:
         )
 
         source['name'] = ""
-        device = jaraco.abode.new_device(source, self.client)
+        device = Device.new(source, self.client)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
         source['name'] = None
-        device = jaraco.abode.new_device(source, self.client)
+        device = Device.new(source, self.client)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
         del source['name']
-        device = jaraco.abode.new_device(source, self.client)
+        device = Device.new(source, self.client)
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 

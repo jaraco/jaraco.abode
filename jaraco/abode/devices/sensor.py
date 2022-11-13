@@ -70,3 +70,19 @@ class Sensor(BinarySensor):
     def has_lux(self):
         """Device reports light lux level."""
         return self.lux is not None
+
+    @classmethod
+    def new(cls, device_json, client):
+        statuses = device_json.get(CONST.STATUSES_KEY, {})
+
+        if any(key in statuses for key in CONST.SENSOR_KEYS):
+            device_json['generic_type'] = CONST.TYPE_SENSOR
+            return cls(device_json, client)
+
+        version = device_json.get('version', '')
+
+        device_json['generic_type'] = (
+            CONST.TYPE_OCCUPANCY if version.startswith('MINIPIR') else CONST.TYPE_MOTION
+        )
+
+        return BinarySensor(device_json, client)

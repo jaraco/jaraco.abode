@@ -18,6 +18,7 @@ from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from . import collections as COLLECTIONS
 from . import cache as CACHE
+from .devices.base import Device
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -197,7 +198,7 @@ class Client:
             if device:
                 device.update(device_json)
             else:
-                device = jaraco.abode.new_device(device_json, self)
+                device = Device.new(device_json, self)
 
                 if not device:
                     _LOGGER.debug("Skipping unknown device: %s", device_json)

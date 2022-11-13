@@ -1,6 +1,8 @@
 import logging
 
 from jaraco.collections import DictAdapter, Projection
+from jaraco.classes.ancestry import iter_subclasses
+from more_itertools import always_iterable
 
 import jaraco
 from ..helpers import constants as CONST
@@ -180,3 +182,24 @@ class Device:
         """Get a short description of the device."""
         tmpl = '{name} (ID: {device_id}, UUID: {device_uuid}) - {type} - {status}'
         return tmpl.format_map(DictAdapter(self))
+
+    @classmethod
+    def new(cls, device_json, client):
+        """Create new device object for the given type."""
+        try:
+            type_tag = device_json['type_tag']
+        except KeyError as exc:
+            raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
+
+        generic_type = CONST.get_generic_type(type_tag.lower())
+        device_json['generic_type'] = generic_type
+        sensors = {
+            impl: sub_cls
+            for sub_cls in iter_subclasses(cls)
+            for impl in always_iterable(sub_cls.implements)
+        }
+        from .sensor import Sensor
+
+        sensors[CONST.TYPE_UNKNOWN_SENSOR] = Sensor.new
+        sensor = sensors.get(generic_type, lambda *args: None)
+        return sensor(device_json, client)
