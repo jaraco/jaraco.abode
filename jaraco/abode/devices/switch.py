@@ -2,11 +2,11 @@
 
 from typing import Optional, Union, Iterable
 
-from ..devices import Device
 from ..helpers import constants as CONST
+from . import base
 
 
-class Switch(Device):
+class Switch(base.Device):
     """Class to add switch functionality."""
 
     implements: Optional[Union[str, Iterable[str]]] = CONST.TYPE_SWITCH

@@ -3,7 +3,7 @@ import collections
 import logging
 
 import jaraco
-from .devices import Device
+from .devices.base import Device
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .helpers import timeline as TIMELINE

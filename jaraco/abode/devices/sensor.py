@@ -1,8 +1,8 @@
 """Abode sensor device."""
 import re
 
-from ..devices.binary_sensor import BinarySensor
 from ..helpers import constants as CONST
+from .binary_sensor import BinarySensor
 
 
 class Sensor(BinarySensor):

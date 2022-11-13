@@ -3,10 +3,10 @@ import logging
 import math
 
 import jaraco
-from ..devices.switch import Switch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from .control import needs_control_url
+from .switch import Switch
 
 
 _LOGGER = logging.getLogger(__name__)

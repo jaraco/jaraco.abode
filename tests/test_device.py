@@ -2,7 +2,7 @@
 import pytest
 
 import jaraco.abode
-from jaraco.abode.devices import Device
+from jaraco.abode.devices.base import Device
 from jaraco.abode.devices.alarm import Alarm
 from jaraco.abode.devices.binary_sensor import BinarySensor
 from jaraco.abode.devices.cover import Cover

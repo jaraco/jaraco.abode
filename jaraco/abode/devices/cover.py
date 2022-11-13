@@ -1,7 +1,7 @@
 """Abode cover device."""
 
-from ..devices.switch import Switch
 from ..helpers import constants as CONST
+from .switch import Switch
 
 
 class Cover(Switch):

@@ -5,15 +5,15 @@ from shutil import copyfileobj
 import requests
 
 import jaraco
-from ..devices import Device
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
+from . import base
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Camera(Device):
+class Camera(base.Device):
     """Class to represent a camera device."""
 
     implements = CONST.TYPE_CAMERA

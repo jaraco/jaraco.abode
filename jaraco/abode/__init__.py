@@ -43,7 +43,7 @@ def new_device(device_json, client):
     device_json['generic_type'] = generic_type
     sensors = {
         impl: cls
-        for cls in iter_subclasses(jaraco.abode.devices.Device)
+        for cls in iter_subclasses(jaraco.abode.devices.base.Device)
         for impl in always_iterable(cls.implements)
     }
     sensors[CONST.TYPE_UNKNOWN_SENSOR] = _new_sensor

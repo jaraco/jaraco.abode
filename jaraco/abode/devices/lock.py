@@ -1,10 +1,10 @@
 """Abode lock device."""
 
-from ..devices import Device
 from ..helpers import constants as CONST
+from . import base
 
 
-class Lock(Device):
+class Lock(base.Device):
     """Class to represent a door lock."""
 
     implements = CONST.TYPE_LOCK

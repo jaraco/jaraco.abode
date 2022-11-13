@@ -2,11 +2,11 @@
 
 from typing import Optional, Union, Iterable
 
-from ..devices import Device
 from ..helpers import constants as CONST
+from . import base
 
 
-class BinarySensor(Device):
+class BinarySensor(base.Device):
     """Class to represent an on / off, online/offline sensor."""
 
     implements: Optional[Union[str, Iterable[str]]] = (
