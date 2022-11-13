@@ -212,10 +212,13 @@ class Device:
 
         state['generic_type'] = CONST.get_generic_type(type_tag.lower())
         cls.resolve_type_unknown(state)
-        sensors = {
+        sensor = cls.by_type().get(state['generic_type'], lambda *args: None)
+        return sensor(state, client)
+
+    @classmethod
+    def by_type(cls):
+        return {
             impl: sub_cls
             for sub_cls in iter_subclasses(cls)
             for impl in always_iterable(sub_cls.implements)
         }
-        sensor = sensors.get(state['generic_type'], lambda *args: None)
-        return sensor(state, client)

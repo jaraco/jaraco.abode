@@ -3,13 +3,6 @@ import pytest
 
 import jaraco.abode
 from jaraco.abode.devices.base import Device
-from jaraco.abode.devices.alarm import Alarm
-from jaraco.abode.devices.binary_sensor import BinarySensor
-from jaraco.abode.devices.camera import Camera
-from jaraco.abode.devices.cover import Cover
-from jaraco.abode.devices.light import Light
-from jaraco.abode.devices.lock import Lock
-from jaraco.abode.devices.switch import Switch
 import jaraco.abode.helpers.constants as CONST
 from .mock import devices as DEVICES
 from .mock.devices import door_contact as DOOR_CONTACT
@@ -448,32 +441,7 @@ class TestDevice:
 
         # Loop through all devices
         for device in self.client.get_devices():
-            class_type = {
-                # Alarm
-                CONST.TYPE_ALARM: Alarm,
-                # Binary Sensors
-                CONST.TYPE_CONNECTIVITY: BinarySensor,
-                CONST.TYPE_MOISTURE: BinarySensor,
-                CONST.TYPE_OPENING: BinarySensor,
-                CONST.TYPE_MOTION: BinarySensor,
-                CONST.TYPE_OCCUPANCY: BinarySensor,
-                # Camera
-                CONST.TYPE_CAMERA: Camera,
-                # Cover
-                CONST.TYPE_COVER: Cover,
-                # Dimmer
-                CONST.TYPE_LIGHT: Light,
-                # Lock
-                CONST.TYPE_LOCK: Lock,
-                # Switch
-                CONST.TYPE_SWITCH: Switch,
-            }.get(device.generic_type)
+            class_type = Device.by_type().get(device.generic_type)
 
             assert class_type is not None, device.type + ' is not mapped.'
-            assert isinstance(device, class_type), (
-                device.type
-                + ' is of class '
-                + str(device.__class__.__name__)
-                + ' but mapped to '
-                + str(class_type.__name__)
-            )
+            assert isinstance(device, class_type)

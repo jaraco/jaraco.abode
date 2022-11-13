@@ -30,7 +30,7 @@ def create_alarm(panel_json, abode, area='1'):
 class Alarm(Switch):
     """Class to represent the Abode alarm as a device."""
 
-    implements = None
+    implements = CONST.TYPE_ALARM
 
     def __init__(self, json_obj, abode, area='1'):
         """Set up Abode alarm device."""
