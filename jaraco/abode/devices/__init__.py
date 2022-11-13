@@ -1,7 +1,9 @@
-import importlib.resources
+import importlib
 import logging
 
+import importlib_resources as resources
 from jaraco.collections import DictAdapter, Projection
+from bx_py_utils.compat import removesuffix
 
 import jaraco
 from ..helpers import constants as CONST
@@ -185,8 +187,8 @@ class Device:
 
 # import all devices
 device_mods = (
-    mod.name.removesuffix('.py')
-    for mod in importlib.resources.files(__package__).iterdir()
+    removesuffix(mod.name, '.py')
+    for mod in resources.files(__package__).iterdir()
     if mod.name != '__init__.py'
 )
 for mod in device_mods:
