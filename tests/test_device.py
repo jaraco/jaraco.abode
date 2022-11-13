@@ -5,6 +5,7 @@ import jaraco.abode
 from jaraco.abode.devices.base import Device
 from jaraco.abode.devices.alarm import Alarm
 from jaraco.abode.devices.binary_sensor import BinarySensor
+from jaraco.abode.devices.camera import Camera
 from jaraco.abode.devices.cover import Cover
 from jaraco.abode.devices.light import Light
 from jaraco.abode.devices.lock import Lock
@@ -457,7 +458,7 @@ class TestDevice:
                 CONST.TYPE_MOTION: BinarySensor,
                 CONST.TYPE_OCCUPANCY: BinarySensor,
                 # Camera
-                CONST.TYPE_CAMERA: Device,
+                CONST.TYPE_CAMERA: Camera,
                 # Cover
                 CONST.TYPE_COVER: Cover,
                 # Dimmer
