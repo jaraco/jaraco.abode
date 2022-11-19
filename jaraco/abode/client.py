@@ -6,6 +6,7 @@ import logging
 import os
 import uuid
 
+from more_itertools import always_iterable
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
 
@@ -244,23 +245,18 @@ class Client:
                 self._automations = {}
 
             _LOGGER.info("Updating all automations...")
-            response = self.send_request("get", CONST.AUTOMATION_URL)
-            response_object = response.json()
+            resp = self.send_request("get", CONST.AUTOMATION_URL)
+            _LOGGER.debug("Get Automations Response: %s", resp.text)
 
-            if response_object and not isinstance(response_object, (tuple, list)):
-                response_object = [response_object]
-
-            _LOGGER.debug("Get Automations Response: %s", response.text)
-
-            for automation_json in response_object:
+            for automation_ob in always_iterable(resp.json(), base_type=dict):
                 # Attempt to reuse an existing automation object
-                automation = self._automations.get(str(automation_json['id']))
+                automation = self._automations.get(str(automation_ob['id']))
 
                 # No existing automation, create a new one
                 if automation:
-                    automation.update(automation_json)
+                    automation.update(automation_ob)
                 else:
-                    automation = Automation(self, automation_json)
+                    automation = Automation(self, automation_ob)
                     self._automations[automation.automation_id] = automation
 
         return list(self._automations.values())
