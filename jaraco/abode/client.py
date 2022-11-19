@@ -285,7 +285,7 @@ class Client:
 
         self._default_alarm_mode = default_mode.lower()
 
-    def set_setting(self, setting, value, area='1', validate_value=True):
+    def set_setting(self, setting, value, area='1'):
         """Set an abode system setting to a given value."""
         setting = setting.lower()
 
@@ -294,96 +294,91 @@ class Client:
 
         if setting in CONST.PANEL_SETTINGS:
             path = CONST.SETTINGS_URL
-            data = self._panel_settings(setting, value, validate_value)
+            data = self._panel_settings(setting, value)
         elif setting in CONST.AREA_SETTINGS:
             path = CONST.AREAS_URL
-            data = self._area_settings(area, setting, value, validate_value)
+            data = self._area_settings(area, setting, value)
         elif setting in CONST.SOUND_SETTINGS:
             path = CONST.SOUNDS_URL
-            data = self._sound_settings(area, setting, value, validate_value)
+            data = self._sound_settings(area, setting, value)
         elif setting in CONST.SIREN_SETTINGS:
             path = CONST.SIREN_URL
-            data = self._siren_settings(setting, value, validate_value)
+            data = self._siren_settings(setting, value)
 
         return self.send_request(method="put", path=path, data=data)
 
     @staticmethod
-    def _panel_settings(setting, value, validate_value):
+    def _panel_settings(setting, value):
         """Will validate panel settings and values, returns data packet."""
-        if validate_value:
-            if (
-                setting == CONST.SETTING_CAMERA_RESOLUTION
-                and value not in CONST.SETTING_ALL_CAMERA_RES
-            ):
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.SETTING_ALL_CAMERA_RES
-                )
-            if (
-                setting
-                in [CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_SILENCE_SOUNDS]
-                and value not in CONST.SETTING_DISABLE_ENABLE
-            ):
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
-                )
+        if (
+            setting == CONST.SETTING_CAMERA_RESOLUTION
+            and value not in CONST.SETTING_ALL_CAMERA_RES
+        ):
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.SETTING_ALL_CAMERA_RES
+            )
+        if (
+            setting in [CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_SILENCE_SOUNDS]
+            and value not in CONST.SETTING_DISABLE_ENABLE
+        ):
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
+            )
 
         return {setting: value}
 
     @staticmethod
-    def _area_settings(area, setting, value, validate_value):
+    def _area_settings(area, setting, value):
         """Will validate area settings and values, returns data packet."""
-        if validate_value:
-            # Exit delay has some specific limitations apparently
-            if (
-                setting == CONST.SETTING_EXIT_DELAY_AWAY
-                and value not in CONST.VALID_SETTING_EXIT_AWAY
-            ):
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.VALID_SETTING_EXIT_AWAY
-                )
-            if value not in CONST.ALL_SETTING_ENTRY_EXIT_DELAY:
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ENTRY_EXIT_DELAY
-                )
+        # Exit delay has some specific limitations apparently
+        if (
+            setting == CONST.SETTING_EXIT_DELAY_AWAY
+            and value not in CONST.VALID_SETTING_EXIT_AWAY
+        ):
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.VALID_SETTING_EXIT_AWAY
+            )
+        if value not in CONST.ALL_SETTING_ENTRY_EXIT_DELAY:
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ENTRY_EXIT_DELAY
+            )
 
         return {'area': area, setting: value}
 
     @staticmethod
-    def _sound_settings(area, setting, value, validate_value):
+    def _sound_settings(area, setting, value):
         """Will validate sound settings and values, returns data packet."""
-        if validate_value:
-            if (
-                setting in CONST.VALID_SOUND_SETTINGS
-                and value not in CONST.ALL_SETTING_SOUND
-            ):
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_SOUND
-                )
-            if (
-                setting == CONST.SETTING_ALARM_LENGTH
-                and value not in CONST.ALL_SETTING_ALARM_LENGTH
-            ):
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ALARM_LENGTH
-                )
-            if (
-                setting == CONST.SETTING_FINAL_BEEPS
-                and value not in CONST.ALL_SETTING_FINAL_BEEPS
-            ):
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_FINAL_BEEPS
-                )
+        if (
+            setting in CONST.VALID_SOUND_SETTINGS
+            and value not in CONST.ALL_SETTING_SOUND
+        ):
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_SOUND
+            )
+        if (
+            setting == CONST.SETTING_ALARM_LENGTH
+            and value not in CONST.ALL_SETTING_ALARM_LENGTH
+        ):
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_ALARM_LENGTH
+            )
+        if (
+            setting == CONST.SETTING_FINAL_BEEPS
+            and value not in CONST.ALL_SETTING_FINAL_BEEPS
+        ):
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.ALL_SETTING_FINAL_BEEPS
+            )
 
         return {'area': area, setting: value}
 
     @staticmethod
-    def _siren_settings(setting, value, validate_value):
+    def _siren_settings(setting, value):
         """Will validate siren settings and values, returns data packet."""
-        if validate_value:
-            if value not in CONST.SETTING_DISABLE_ENABLE:
-                raise jaraco.abode.Exception(
-                    ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
-                )
+        if value not in CONST.SETTING_DISABLE_ENABLE:
+            raise jaraco.abode.Exception(
+                ERROR.INVALID_SETTING_VALUE, CONST.SETTING_DISABLE_ENABLE
+            )
 
         return {'action': setting, 'option': value}
 
