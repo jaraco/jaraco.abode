@@ -10,6 +10,7 @@ import getpass
 
 import keyring
 from jaraco.context import suppress
+from more_itertools import always_iterable
 
 import jaraco.abode
 from . import Client
@@ -298,13 +299,13 @@ class Dispatcher:
             _LOGGER.warning("Failed to change alarm mode to: %s", self.args.arm)
 
     def set_setting(self):
-        for setting in self.args.set or []:
+        for setting in always_iterable(self.args.set):
             keyval = setting.split("=")
             if self.client.set_setting(keyval[0], keyval[1]):
                 _LOGGER.info("Setting %s changed to %s", keyval[0], keyval[1])
 
     def switch_on(self):
-        for device_id in self.args.on or []:
+        for device_id in always_iterable(self.args.on):
             device = self.client.get_device(device_id)
 
             if device:
@@ -314,7 +315,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
     def switch_off(self):
-        for device_id in self.args.off or []:
+        for device_id in always_iterable(self.args.off):
             device = self.client.get_device(device_id)
 
             if device:
@@ -324,7 +325,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
     def lock(self):
-        for device_id in self.args.lock or []:
+        for device_id in always_iterable(self.args.lock):
             device = self.client.get_device(device_id)
 
             if device:
@@ -334,7 +335,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
     def unlock(self):
-        for device_id in self.args.unlock or []:
+        for device_id in always_iterable(self.args.unlock):
             device = self.client.get_device(device_id)
 
             if device:
@@ -344,7 +345,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
     def output_json(self):
-        for device_id in self.args.json or []:
+        for device_id in always_iterable(self.args.json):
             device = self.client.get_device(device_id)
 
             if device:
@@ -366,7 +367,7 @@ class Dispatcher:
             _device_print(automation)
 
     def enable_automation(self):
-        for automation_id in self.args.activate or []:
+        for automation_id in always_iterable(self.args.activate):
             automation = self.client.get_automation(automation_id)
 
             if automation:
@@ -376,7 +377,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
     def disable_automation(self):
-        for automation_id in self.args.deactivate or []:
+        for automation_id in always_iterable(self.args.deactivate):
             automation = self.client.get_automation(automation_id)
 
             if automation:
@@ -386,7 +387,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
     def trigger_automation(self):
-        for automation_id in self.args.trigger or []:
+        for automation_id in always_iterable(self.args.trigger):
             automation = self.client.get_automation(automation_id)
 
             if automation:
@@ -396,7 +397,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find automation with id: %s", automation_id)
 
     def trigger_image_capture(self):
-        for device_id in self.args.capture or []:
+        for device_id in always_iterable(self.args.capture):
             device = self.client.get_device(device_id)
 
             if device:
@@ -410,7 +411,7 @@ class Dispatcher:
                 _LOGGER.warning("Could not find device with id: %s", device_id)
 
     def save_camera_image(self):
-        for keyval in self.args.image or []:
+        for keyval in always_iterable(self.args.image):
             devloc = keyval.split("=")
             device = self.client.get_device(devloc[0])
 
