@@ -242,19 +242,14 @@ def _device_callback(dev):
     _device_print(dev, ", At: " + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 
-def _timeline_callback(tl_json):
-    event_code = int(tl_json['event_code'])
+def _timeline_callback(resp):
+    event_code = int(resp['event_code'])
     if 5100 <= event_code <= 5199:
         # Ignore device changes
         return
 
-    _LOGGER.info(
-        "%s - %s at %s %s",
-        tl_json['event_name'],
-        tl_json['event_type'],
-        tl_json['date'],
-        tl_json['time'],
-    )
+    tmpl = '{event_name} - {event_type} at {date} {time}'
+    _LOGGER.info(tmpl.format_map(resp))
 
 
 class Dispatcher:
