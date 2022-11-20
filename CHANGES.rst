@@ -1,3 +1,12 @@
+v2.0.0
+======
+
+Substantial refactoring for better namespacing.
+
+Class names no longer are prefixed by "Abode" (including Exceptions).
+
+"Abode" object is now called "Client".
+
 v1.2.1
 ======
 
