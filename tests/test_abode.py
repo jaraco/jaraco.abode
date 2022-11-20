@@ -10,6 +10,7 @@ import requests
 
 import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
+from jaraco.abode import settings
 
 from . import mock as MOCK
 from .mock import login as LOGIN
@@ -398,22 +399,20 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.SETTINGS_URL, json=MOCK.generic_response_ok())
 
-        self.client.set_setting(
-            CONST.SETTING_CAMERA_RESOLUTION, CONST.SETTING_CAMERA_RES_640_480
-        )
+        self.client.set_setting(settings.CAMERA_RESOLUTION, settings.CAMERA_RES_640_480)
 
-        self.client.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, CONST.SETTING_ENABLE)
+        self.client.set_setting(settings.CAMERA_GRAYSCALE, settings.ENABLE)
 
-        self.client.set_setting(CONST.SETTING_SILENCE_SOUNDS, CONST.SETTING_ENABLE)
+        self.client.set_setting(settings.SILENCE_SOUNDS, settings.ENABLE)
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_CAMERA_RESOLUTION, "foobar")
+            self.client.set_setting(settings.CAMERA_RESOLUTION, "foobar")
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_CAMERA_GRAYSCALE, "foobar")
+            self.client.set_setting(settings.CAMERA_GRAYSCALE, "foobar")
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_SILENCE_SOUNDS, "foobar")
+            self.client.set_setting(settings.SILENCE_SOUNDS, "foobar")
 
     def tests_area_settings(self, m):
         """Check that device panel areas settings are working."""
@@ -424,20 +423,20 @@ class TestAbode:
         m.put(CONST.AREAS_URL, json=MOCK.generic_response_ok())
 
         self.client.set_setting(
-            CONST.SETTING_ENTRY_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
+            settings.ENTRY_DELAY_AWAY, settings.ENTRY_EXIT_DELAY_10SEC
         )
 
         self.client.set_setting(
-            CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_30SEC
+            settings.EXIT_DELAY_AWAY, settings.ENTRY_EXIT_DELAY_30SEC
         )
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_ENTRY_DELAY_AWAY, "foobar")
+            self.client.set_setting(settings.ENTRY_DELAY_AWAY, "foobar")
 
         # 10 seconds is invalid here
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(
-                CONST.SETTING_EXIT_DELAY_AWAY, CONST.SETTING_ENTRY_EXIT_DELAY_10SEC
+                settings.EXIT_DELAY_AWAY, settings.ENTRY_EXIT_DELAY_10SEC
             )
 
     def tests_sound_settings(self, m):
@@ -448,24 +447,20 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.SOUNDS_URL, json=MOCK.generic_response_ok())
 
-        self.client.set_setting(CONST.SETTING_DOOR_CHIME, CONST.SETTING_SOUND_LOW)
+        self.client.set_setting(settings.DOOR_CHIME, settings.SOUND_LOW)
 
-        self.client.set_setting(
-            CONST.SETTING_ALARM_LENGTH, CONST.SETTING_ALARM_LENGTH_2MIN
-        )
+        self.client.set_setting(settings.ALARM_LENGTH, settings.ALARM_LENGTH_2MIN)
 
-        self.client.set_setting(
-            CONST.SETTING_FINAL_BEEPS, CONST.SETTING_FINAL_BEEPS_3SEC
-        )
+        self.client.set_setting(settings.FINAL_BEEPS, settings.FINAL_BEEPS_3SEC)
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_DOOR_CHIME, "foobar")
+            self.client.set_setting(settings.DOOR_CHIME, "foobar")
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_ALARM_LENGTH, "foobar")
+            self.client.set_setting(settings.ALARM_LENGTH, "foobar")
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_FINAL_BEEPS, "foobar")
+            self.client.set_setting(settings.FINAL_BEEPS, "foobar")
 
     def tests_siren_settings(self, m):
         """Check that device panel siren settings are working."""
@@ -475,24 +470,20 @@ class TestAbode:
         m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
         m.put(CONST.SIREN_URL, json=MOCK.generic_response_ok())
 
-        self.client.set_setting(
-            CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, CONST.SETTING_ENABLE
-        )
+        self.client.set_setting(settings.SIREN_ENTRY_EXIT_SOUNDS, settings.ENABLE)
 
-        self.client.set_setting(
-            CONST.SETTING_SIREN_CONFIRM_SOUNDS, CONST.SETTING_ENABLE
-        )
+        self.client.set_setting(settings.SIREN_CONFIRM_SOUNDS, settings.ENABLE)
 
-        self.client.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, CONST.SETTING_ENABLE)
+        self.client.set_setting(settings.SIREN_TAMPER_SOUNDS, settings.ENABLE)
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_SIREN_ENTRY_EXIT_SOUNDS, "foobar")
+            self.client.set_setting(settings.SIREN_ENTRY_EXIT_SOUNDS, "foobar")
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_SIREN_CONFIRM_SOUNDS, "foobar")
+            self.client.set_setting(settings.SIREN_CONFIRM_SOUNDS, "foobar")
 
         with pytest.raises(jaraco.abode.Exception):
-            self.client.set_setting(CONST.SETTING_SIREN_TAMPER_SOUNDS, "foobar")
+            self.client.set_setting(settings.SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('cache_path')
     def tests_cookies(self, m):
