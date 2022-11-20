@@ -1,6 +1,3 @@
-PROJECT_GITHUB_USERNAME = 'jaraco'
-PROJECT_GITHUB_REPOSITORY = 'jaraco.abode'
-
 CACHE_PATH = './abode.pickle'
 COOKIES = "cookies"
 
