@@ -7,6 +7,7 @@ import pytest
 from jaraco.collections import DictFilter
 
 import jaraco.abode
+from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.errors as ERROR
 from . import mock as MOCK
@@ -47,11 +48,11 @@ def all_devices():
 @pytest.fixture(autouse=True)
 def setup_URLs(m):
     # Set up mock URLs
-    m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-    m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-    m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-    m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-    m.get(CONST.DEVICES_URL, json=all_devices())
+    m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+    m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+    m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+    m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+    m.get(urls.DEVICES, json=all_devices())
 
 
 class TestCamera:
@@ -77,7 +78,7 @@ class TestCamera:
             assert not device.no_response
 
             # Set up our direct device get url
-            device_url = CONST.DEVICE_URL.format(device_id=device.device_id)
+            device_url = urls.DEVICE.format(device_id=device.device_id)
 
             # Change device properties
             m.get(
@@ -148,7 +149,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
 
             m.get(url, json=[cam_type.timeline_event(device.device_id)])
             # Set up our file path response
@@ -181,7 +182,7 @@ class TestCamera:
                 device.refresh_image()
 
             # Test that an an empty timeline event throws exception
-            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
             m.get(
                 url,
                 json=[cam_type.timeline_event(device.device_id, file_path="")],
@@ -191,7 +192,7 @@ class TestCamera:
                 device.refresh_image()
 
             # Test that an unexpected timeline event throws exception
-            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
             m.get(
                 url,
                 json=[cam_type.timeline_event(device.device_id, event_code="1234")],
@@ -208,7 +209,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
             m.get(url, json=[])
 
             # Refresh the image
@@ -226,7 +227,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
             m.get(url, json=[cam_type.timeline_event(device.device_id)])
 
             # Set up our file path response
@@ -269,9 +270,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up snapshot URL response
-            snapshot_url = (
-                f"{CONST.CAMERA_INTEGRATIONS_URL}{device.device_uuid}/snapshot"
-            )
+            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.device_uuid}/snapshot"
             m.post(snapshot_url, json=dict(base64Image='test'))
 
             # Retrieve a snapshot
@@ -296,9 +295,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up snapshot URL and image response
-            snapshot_url = (
-                f"{CONST.CAMERA_INTEGRATIONS_URL}{device.device_uuid}/snapshot"
-            )
+            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.device_uuid}/snapshot"
             image_response = b"this is a beautiful jpeg image"
             b64_image = str(base64.b64encode(image_response), "utf-8")
             m.post(snapshot_url, json=dict(base64Image=b64_image))
@@ -327,9 +324,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up snapshot URL and image response
-            snapshot_url = (
-                f"{CONST.CAMERA_INTEGRATIONS_URL}{device.device_uuid}/snapshot"
-            )
+            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.device_uuid}/snapshot"
             image_response = b"this is a beautiful jpeg image"
             b64_image = str(base64.b64encode(image_response), "utf-8")
             m.post(snapshot_url, json=dict(base64Image=b64_image))
@@ -356,13 +351,13 @@ class TestCamera:
         assert device.status == CONST.STATUS_ONLINE
 
         # Set up params URL response for privacy mode on
-        m.put(CONST.PARAMS_URL + device.device_id, json=IPCAM.device(privacy=1))
+        m.put(urls.PARAMS + device.device_id, json=IPCAM.device(privacy=1))
 
         # Set privacy mode on
         assert device.privacy_mode(True)
 
         # Set up params URL response for privacy mode off
-        m.put(CONST.PARAMS_URL + device.device_id, json=IPCAM.device(privacy=0))
+        m.put(urls.PARAMS + device.device_id, json=IPCAM.device(privacy=0))
 
         # Set privacy mode off
         assert device.privacy_mode(False)

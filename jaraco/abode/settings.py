@@ -1,7 +1,7 @@
 import types
 
 import jaraco.abode
-from .helpers import constants as CONST
+from .helpers import urls
 from .helpers import errors as ERROR
 
 
@@ -189,7 +189,7 @@ class Setting(types.SimpleNamespace):
 
 class Panel(Setting):
     names = PANEL_SETTINGS
-    path = CONST.SETTINGS_URL
+    path = urls.SETTINGS
 
     def validate(self):
         if self.name == CAMERA_RESOLUTION and self.value not in ALL_CAMERA_RES:
@@ -207,7 +207,7 @@ class Panel(Setting):
 
 class Area(Setting):
     names = AREA_SETTINGS
-    path = CONST.AREAS_URL
+    path = urls.AREAS
 
     def validate(self):
         # Exit delay has some specific limitations
@@ -227,7 +227,7 @@ class Area(Setting):
 
 class Sound(Setting):
     names = SOUND_SETTINGS
-    path = CONST.SOUNDS_URL
+    path = urls.SOUNDS
 
     def validate(self):
         if self.name in VALID_SOUND_SETTINGS and self.value not in ALL_SOUND:
@@ -244,7 +244,7 @@ class Sound(Setting):
 
 class Siren(Setting):
     names = SIREN_SETTINGS
-    path = CONST.SIREN_URL
+    path = urls.SIREN
 
     def validate(self):
         if self.value not in DISABLE_ENABLE:

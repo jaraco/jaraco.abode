@@ -4,6 +4,7 @@ from unittest.mock import call, Mock
 import pytest
 
 import jaraco.abode
+from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
 import jaraco.abode.helpers.timeline as TIMELINE
 from jaraco.abode.devices.binary_sensor import BinarySensor
@@ -23,12 +24,12 @@ class TestEventController:
     def tests_device_id_registration(self, m):
         """Tests that we can register for device events with a device id."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -57,12 +58,12 @@ class TestEventController:
     def tests_device_registration(self, m):
         """Tests that we can register for device events with a device."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -88,12 +89,12 @@ class TestEventController:
     def tests_device_all_unregistration(self, m):
         """Tests that we can unregister for all device events."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -122,12 +123,12 @@ class TestEventController:
     def tests_invalid_device(self, m):
         """Tests that invalid devices are not registered."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -162,12 +163,12 @@ class TestEventController:
     def tests_invalid_all_device_unregister(self, m):
         """Tests that invalid devices are not all unregistered."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -241,12 +242,12 @@ class TestEventController:
     def tests_device_callback(self, m):
         """Tests that device updates callback correctly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -272,7 +273,7 @@ class TestEventController:
         assert events.add_device_callback(device.device_id, callback)
 
         # Set up device update URL
-        device_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
+        device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
         m.get(
             device_url,
             json=COVER.device(
@@ -358,12 +359,12 @@ class TestEventController:
     def tests_alarm_callback(self, m):
         """Tests that alarm device updates callback correctly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -423,12 +424,12 @@ class TestEventController:
     def tests_multi_device_callback(self, m):
         """Tests that multiple device updates callback correctly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=[
                 COVER.device(
                     devid=COVER.DEVICE_ID,
@@ -462,7 +463,7 @@ class TestEventController:
         assert events.add_device_callback([cover, doorcontact], callback)
 
         # Set up device update URLs
-        cover_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
+        cover_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
         m.get(
             cover_url,
             json=COVER.device(
@@ -473,7 +474,7 @@ class TestEventController:
             ),
         )
 
-        door_url = CONST.DEVICE_URL.format(device_id=DOORCONTACT.DEVICE_ID)
+        door_url = urls.DEVICE.format(device_id=DOORCONTACT.DEVICE_ID)
         m.get(
             door_url,
             json=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN),

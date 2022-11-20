@@ -2,6 +2,7 @@
 import functools
 import itertools
 
+from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
 
 from .mock import login as LOGIN
@@ -23,10 +24,10 @@ class TestBinarySensors:
     def tests_binary_sensor_properties(self, m):
         """Tests that binary sensor device properties work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up all Binary Sensor Devices in "off states"
         all_devices = [
@@ -74,7 +75,7 @@ class TestBinarySensors:
             ),
         ]
 
-        m.get(CONST.DEVICES_URL, json=all_devices)
+        m.get(urls.DEVICES, json=all_devices)
 
         # Logout to reset everything
         self.client.logout()
@@ -131,7 +132,7 @@ class TestBinarySensors:
             ),
         ]
 
-        m.get(CONST.DEVICES_URL, json=all_devices)
+        m.get(urls.DEVICES, json=all_devices)
 
         # Refesh devices and test changes
         for device in skip_alarms(self.client.get_devices(refresh=True)):

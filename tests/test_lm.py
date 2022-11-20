@@ -1,5 +1,6 @@
 """Test the Abode device classes."""
 
+from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
 
 from .mock import login as LOGIN
@@ -15,12 +16,12 @@ class TestLM:
     def tests_cover_lm_properties(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=LM.device(
                 devid=LM.DEVICE_ID,
                 status='72 °F',
@@ -54,7 +55,7 @@ class TestLM:
         assert device.lux_unit == 'lux'
 
         # Set up our direct device get url
-        device_url = CONST.DEVICE_URL.format(device_id=LM.DEVICE_ID)
+        device_url = urls.DEVICE.format(device_id=LM.DEVICE_ID)
 
         # Change device properties
         m.get(
@@ -89,12 +90,12 @@ class TestLM:
     def tests_lm_float_units(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=LM.device(
                 devid=LM.DEVICE_ID,
                 status='72.23 °F',
@@ -130,12 +131,12 @@ class TestLM:
     def tests_lm_temp_only(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=LM.device(
                 devid=LM.DEVICE_ID, status='72 °F', temp='72 °F', lux='', humidity=''
             ),

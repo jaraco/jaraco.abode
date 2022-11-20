@@ -5,6 +5,7 @@ import math
 import jaraco
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
+from ..helpers import urls
 from .control import needs_control_url
 from .switch import Switch
 
@@ -20,7 +21,7 @@ class Light(Switch):
     @needs_control_url
     def set_color_temp(self, color_temp):
         """Set device color."""
-        url = CONST.INTEGRATIONS_URL + self._device_uuid
+        url = urls.INTEGRATIONS + self._device_uuid
 
         color_data = {
             'action': 'setcolortemperature',
@@ -55,7 +56,7 @@ class Light(Switch):
     @needs_control_url
     def set_color(self, color):
         """Set device color."""
-        url = CONST.INTEGRATIONS_URL + self._device_uuid
+        url = urls.INTEGRATIONS + self._device_uuid
 
         hue, saturation = color
         color_data = {

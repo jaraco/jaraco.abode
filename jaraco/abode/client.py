@@ -15,6 +15,7 @@ from .automation import Automation
 from .event_controller import EventController
 from .exceptions import AuthenticationException
 from .devices import alarm as ALARM
+from .helpers import urls
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from . import collections as COLLECTIONS
@@ -58,7 +59,7 @@ class Client:
         self._automations = None
 
         # Create a requests session to persist the cookies
-        self._session = sessions.BaseUrlSession(CONST.BASE_URL)
+        self._session = sessions.BaseUrlSession(urls.BASE)
 
         # Create a new cache template
         self._cache = {
@@ -108,7 +109,7 @@ class Client:
             login_data[CONST.MFA_CODE] = mfa_code
             login_data['remember_me'] = 1
 
-        response = self._session.post(CONST.LOGIN_URL, json=login_data)
+        response = self._session.post(urls.LOGIN, json=login_data)
         AuthenticationException.raise_for(response)
         response_object = response.json()
 
@@ -124,7 +125,7 @@ class Client:
             self._cache[CONST.COOKIES] = self._session.cookies
             self._save_cache()
 
-        oauth_response = self._session.get(CONST.OAUTH_TOKEN_URL)
+        oauth_response = self._session.get(urls.OAUTH_TOKEN)
         AuthenticationException.raise_for(oauth_response)
         oauth_response_object = oauth_response.json()
 
@@ -144,7 +145,7 @@ class Client:
 
         header_data = {'ABODE-API-KEY': self._token}
 
-        self._session = sessions.BaseUrlSession(CONST.BASE_URL)
+        self._session = sessions.BaseUrlSession(urls.BASE)
         self._token = None
         self._panel = None
         self._user = None
@@ -152,7 +153,7 @@ class Client:
         self._automations = None
 
         try:
-            response = self._session.post(CONST.LOGOUT_URL, headers=header_data)
+            response = self._session.post(urls.LOGOUT, headers=header_data)
         except OSError as exc:
             _LOGGER.warning("Caught exception during logout: %s", exc)
             return
@@ -184,7 +185,7 @@ class Client:
             self._devices = {}
 
         _LOGGER.info("Updating all devices...")
-        response = self.send_request("get", CONST.DEVICES_URL)
+        response = self.send_request("get", urls.DEVICES)
         response_object = response.json()
 
         if response_object and not isinstance(response_object, (tuple, list)):
@@ -210,7 +211,7 @@ class Client:
                 self._devices[device.device_id] = device
 
         # We will be treating the Abode panel itself as an armable device.
-        panel_response = self.send_request("get", CONST.PANEL_URL)
+        panel_response = self.send_request("get", urls.PANEL)
         panel_json = panel_response.json()
 
         self._panel.update(panel_json)
@@ -246,7 +247,7 @@ class Client:
                 self._automations = {}
 
             _LOGGER.info("Updating all automations...")
-            resp = self.send_request("get", CONST.AUTOMATION_URL)
+            resp = self.send_request("get", urls.AUTOMATION)
             _LOGGER.debug("Get Automations Response: %s", resp.text)
 
             for automation_ob in always_iterable(resp.json(), base_type=dict):
@@ -336,7 +337,7 @@ class Client:
 
     def _get_session(self):
         # Perform a generic update so we know we're logged in
-        self.send_request("get", CONST.PANEL_URL)
+        self.send_request("get", urls.PANEL)
 
         return self._session
 

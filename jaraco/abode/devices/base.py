@@ -7,6 +7,7 @@ from more_itertools import always_iterable
 import jaraco
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
+from ..helpers import urls
 from .control import needs_control_url
 from . import pkg
 
@@ -94,7 +95,7 @@ class Device:
         """
         return self._state.get(name.lower(), {})
 
-    def refresh(self, path=CONST.DEVICE_URL):
+    def refresh(self, path=urls.DEVICE):
         """Refresh the devices json object data.
 
         Only needed if you're not using the notification service.

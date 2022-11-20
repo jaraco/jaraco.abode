@@ -14,6 +14,7 @@ from more_itertools import always_iterable
 
 import jaraco.abode
 from . import Client
+from .helpers import urls
 from .helpers import constants as CONST
 from .helpers import timeline as TIMELINE
 
@@ -477,10 +478,10 @@ def _get_password(args):
 
 
 def _get_or_set_password(username):
-    password = keyring.get_password(CONST.BASE_URL, username)
+    password = keyring.get_password(urls.BASE, username)
     if not password:
         password = getpass.getpass(f"Password for {username}: ")
-        keyring.set_password(CONST.BASE_URL, username, password)
+        keyring.set_password(urls.BASE, username, password)
     return password
 
 

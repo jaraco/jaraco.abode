@@ -1,6 +1,6 @@
 """Test the Abode device classes."""
 import jaraco.abode
-import jaraco.abode.helpers.constants as CONST
+from jaraco.abode.helpers import urls
 import pytest
 
 from . import mock as MOCK
@@ -22,17 +22,17 @@ class TestAutomation:
     def tests_automation_init(self, m):
         """Check the Abode automation class init's properly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         automation_resp = AUTOMATION.get_response_ok(
             name='Auto Away', enabled=True, aid=AID_1
         )
 
-        m.get(CONST.AUTOMATION_URL, json=automation_resp)
+        m.get(urls.AUTOMATION, json=automation_resp)
 
         # Logout to reset everything
         self.client.logout()
@@ -52,17 +52,17 @@ class TestAutomation:
     def tests_automation_refresh(self, m):
         """Check the automation Abode class refreshes."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         resp = [
             AUTOMATION.get_response_ok(name='Test Automation', enabled=True, aid=AID_1)
         ]
 
-        m.get(CONST.AUTOMATION_URL, json=resp)
+        m.get(urls.AUTOMATION, json=resp)
 
         # Set up refreshed automation
         resp_changed = [
@@ -71,7 +71,7 @@ class TestAutomation:
             )
         ]
 
-        automation_id_url = CONST.AUTOMATION_ID_URL.format(id=resp[0]['id'])
+        automation_id_url = urls.AUTOMATION_ID.format(id=resp[0]['id'])
 
         m.get(automation_id_url, json=resp_changed)
 
@@ -122,10 +122,10 @@ class TestAutomation:
     def tests_multiple_automations(self, m):
         """Check that multiple automations work and return correctly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automations
         resp = [
@@ -140,7 +140,7 @@ class TestAutomation:
             ),
         ]
 
-        m.get(CONST.AUTOMATION_URL, json=resp)
+        m.get(urls.AUTOMATION, json=resp)
 
         # Logout to reset everything
         self.client.logout()
@@ -166,10 +166,10 @@ class TestAutomation:
     def tests_automation_class_reuse(self, m):
         """Check that automations reuse the same classes when refreshed."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automations
         resp = [
@@ -181,7 +181,7 @@ class TestAutomation:
             ),
         ]
 
-        m.get(CONST.AUTOMATION_URL, json=resp)
+        m.get(urls.AUTOMATION, json=resp)
 
         # Logout to reset everything
         self.client.logout()
@@ -213,7 +213,7 @@ class TestAutomation:
             ),
         ]
 
-        m.get(CONST.AUTOMATION_URL, json=resp)
+        m.get(urls.AUTOMATION, json=resp)
 
         # Update
         automations_changed = self.client.get_automations(refresh=True)
@@ -239,10 +239,10 @@ class TestAutomation:
     def tests_automation_enable(self, m):
         """Check that automations can change their enable state."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         resp = [
@@ -251,7 +251,7 @@ class TestAutomation:
             )
         ]
 
-        m.get(CONST.AUTOMATION_URL, json=resp)
+        m.get(urls.AUTOMATION, json=resp)
 
         # Logout to reset everything
         self.client.logout()
@@ -264,7 +264,7 @@ class TestAutomation:
         assert automation.is_enabled
 
         # Set up our active state change and URL
-        set_active_url = CONST.AUTOMATION_ID_URL.format(id=resp[0]['id'])
+        set_active_url = urls.AUTOMATION_ID.format(id=resp[0]['id'])
 
         m.patch(
             set_active_url,
@@ -320,10 +320,10 @@ class TestAutomation:
     def tests_automation_trigger(self, m):
         """Check that automations can be triggered."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         resp = [
@@ -332,7 +332,7 @@ class TestAutomation:
             ),
         ]
 
-        m.get(CONST.AUTOMATION_URL, json=resp)
+        m.get(urls.AUTOMATION, json=resp)
 
         # Logout to reset everything
         self.client.logout()
@@ -343,7 +343,7 @@ class TestAutomation:
         assert automation is not None
 
         # Set up our automation trigger reply
-        set_active_url = CONST.AUTOMATION_APPLY_URL.format(id=automation.automation_id)
+        set_active_url = urls.AUTOMATION_APPLY.format(id=automation.automation_id)
         m.post(set_active_url, json=MOCK.generic_response_ok())
 
         # Test triggering

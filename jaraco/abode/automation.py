@@ -3,7 +3,7 @@ import logging
 
 import jaraco
 
-from .helpers import constants as CONST
+from .helpers import urls
 from .helpers import errors as ERROR
 
 _LOGGER = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class Automation:
 
     def enable(self, enable):
         """Enable or disable the automation."""
-        path = CONST.AUTOMATION_ID_URL.format(id=self.automation_id)
+        path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
         self._automation['enabled'] = enable
 
@@ -44,7 +44,7 @@ class Automation:
 
     def trigger(self):
         """Trigger the automation."""
-        path = CONST.AUTOMATION_APPLY_URL.format(id=self.automation_id)
+        path = urls.AUTOMATION_APPLY.format(id=self.automation_id)
 
         self._client.send_request(method="post", path=path)
 
@@ -52,7 +52,7 @@ class Automation:
 
     def refresh(self):
         """Refresh the automation."""
-        path = CONST.AUTOMATION_ID_URL.format(id=self.automation_id)
+        path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
         response = self._client.send_request(method="get", path=path)
         response_object = response.json()

@@ -1,5 +1,6 @@
 """Test the Abode device classes."""
 
+from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
 
 from .mock import login as LOGIN
@@ -16,12 +17,12 @@ class TestSecureBarrier:
     def tests_cover_device_properties(self, m):
         """Tests that cover devices properties work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -45,7 +46,7 @@ class TestSecureBarrier:
         assert not device.is_open
 
         # Set up our direct device get url
-        device_url = CONST.DEVICE_URL.format(device_id=COVER.DEVICE_ID)
+        device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
 
         # Change device properties
         m.get(
@@ -70,12 +71,12 @@ class TestSecureBarrier:
     def tests_cover_status_changes(self, m):
         """Tests that cover device changes work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
                 status=CONST.STATUS_CLOSED,
@@ -96,7 +97,7 @@ class TestSecureBarrier:
         assert not device.is_open
 
         # Set up control url response
-        control_url = CONST.BASE_URL + COVER.CONTROL_URL
+        control_url = urls.BASE + COVER.CONTROL_URL
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(

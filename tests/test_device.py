@@ -2,6 +2,7 @@
 import pytest
 
 import jaraco.abode
+from jaraco.abode.helpers import urls
 from jaraco.abode.devices.base import Device
 import jaraco.abode.helpers.constants as CONST
 from .mock import devices as DEVICES
@@ -70,10 +71,10 @@ class TestDevice:
     def tests_device_init(self, m):
         """Check the generic Abode device class init's properly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up device
         source = [
@@ -87,7 +88,7 @@ class TestDevice:
             )
         ]
 
-        m.get(CONST.DEVICES_URL, json=source)
+        m.get(urls.DEVICES, json=source)
 
         # Logout to reset everything
         self.client.logout()
@@ -113,16 +114,16 @@ class TestDevice:
     def tests_generic_device_refresh(self, m):
         """Check the generic Abode device class init's properly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up online device
-        m.get(CONST.DEVICES_URL, json=[GLASS.device(status=CONST.STATUS_ONLINE)])
+        m.get(urls.DEVICES, json=[GLASS.device(status=CONST.STATUS_ONLINE)])
 
         # Set up offline device
-        device_url = CONST.DEVICE_URL.format(device_id=GLASS.DEVICE_ID)
+        device_url = urls.DEVICE.format(device_id=GLASS.DEVICE_ID)
         m.get(device_url, json=[GLASS.device(status=CONST.STATUS_OFFLINE)])
 
         # Logout to reset everything
@@ -139,10 +140,10 @@ class TestDevice:
     def tests_multiple_devices(self, m):
         """Tests that multiple devices are returned properly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up a list of devices
         dev_list = [
@@ -151,7 +152,7 @@ class TestDevice:
             GLASS.device(),
         ]
 
-        m.get(CONST.DEVICES_URL, json=dev_list)
+        m.get(urls.DEVICES, json=dev_list)
 
         # Logout to reset everything
         self.client.logout()
@@ -178,12 +179,12 @@ class TestDevice:
     def tests_unknown_devices(self, m):
         """Tests that multiple devices are returned properly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
-        m.get(CONST.DEVICES_URL, json=[UNKNOWN.device()])
+        m.get(urls.DEVICES, json=[UNKNOWN.device()])
 
         # Logout to reset everything
         self.client.logout()
@@ -198,10 +199,10 @@ class TestDevice:
     def tests_device_category_filter(self, m):
         """Tests that device category filter returns requested results."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Set up a list of devices
         dev_list = [
@@ -225,7 +226,7 @@ class TestDevice:
             ),
         ]
 
-        m.get(CONST.DEVICES_URL, json=dev_list)
+        m.get(urls.DEVICES, json=dev_list)
 
         # Logout to reset everything
         self.client.logout()
@@ -245,12 +246,12 @@ class TestDevice:
     def tests_no_control_url(self, m):
         """Check that devices return false without control url's."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok())
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
-        m.get(CONST.DEVICES_URL, json=GLASS.device(status=CONST.STATUS_ONLINE))
+        m.get(urls.DEVICES, json=GLASS.device(status=CONST.STATUS_ONLINE))
 
         # Logout to reset everything
         self.client.logout()
@@ -265,12 +266,12 @@ class TestDevice:
     def tests_device_status_changes(self, m):
         """Tests that device status changes work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=POWERSENSOR.device(
                 devid=POWERSENSOR.DEVICE_ID,
                 status=CONST.STATUS_OFF,
@@ -342,14 +343,14 @@ class TestDevice:
     def tests_device_level_changes(self, m):
         """Tests that device level changes work as expected."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # TODO: Test with a device that supports levels
         m.get(
-            CONST.DEVICES_URL,
+            urls.DEVICES,
             json=POWERSENSOR.device(
                 devid=POWERSENSOR.DEVICE_ID,
                 status=CONST.STATUS_OFF,
@@ -412,10 +413,10 @@ class TestDevice:
     def tests_all_devices(self, m):
         """Tests that all mocked devices are mapped correctly."""
         # Set up URLs
-        m.post(CONST.LOGIN_URL, json=LOGIN.post_response_ok())
-        m.get(CONST.OAUTH_TOKEN_URL, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(CONST.LOGOUT_URL, json=LOGOUT.post_response_ok())
-        m.get(CONST.PANEL_URL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
 
         # Create all devices
         all_devices = [
@@ -434,7 +435,7 @@ class TestDevice:
             WATER_SENSOR.device(),
         ]
 
-        m.get(CONST.DEVICES_URL, json=all_devices)
+        m.get(urls.DEVICES, json=all_devices)
 
         # Logout to reset everything
         self.client.logout()

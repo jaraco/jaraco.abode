@@ -1,10 +1,11 @@
 """Mock Abode Power Switch Sensor Device."""
 import jaraco.abode.helpers.constants as CONST
+from jaraco.abode.helpers import urls
 
 DEVICE_ID = 'ZB:00000106'
 DEVICE_UUID = 'abcd33455232fff31232'
 CONTROL_URL = 'api/v1/control/light/' + DEVICE_ID
-INTEGRATIONS_URL = CONST.INTEGRATIONS_URL + DEVICE_UUID
+INTEGRATIONS_URL = urls.INTEGRATIONS + DEVICE_UUID
 
 
 def color_temp_post_response_ok(devid, color_temp):

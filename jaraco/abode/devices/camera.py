@@ -8,6 +8,7 @@ import jaraco
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
+from ..helpers import urls
 from . import base
 
 _LOGGER = logging.getLogger(__name__)
@@ -47,7 +48,7 @@ class Camera(base.Device):
 
     def refresh_image(self):
         """Get the most recent camera image."""
-        url = CONST.TIMELINE_IMAGES_ID_URL.format(device_id=self.device_id)
+        url = urls.TIMELINE_IMAGES_ID.format(device_id=self.device_id)
         response = self._client.send_request("get", url)
 
         _LOGGER.debug("Get image response: %s", response.text)
@@ -120,7 +121,7 @@ class Camera(base.Device):
 
     def snapshot(self):
         """Request the current camera snapshot as a base64-encoded string."""
-        url = f"{CONST.CAMERA_INTEGRATIONS_URL}{self._device_uuid}/snapshot"
+        url = f"{urls.CAMERA_INTEGRATIONS}{self._device_uuid}/snapshot"
 
         try:
             response = self._client.send_request("post", url)
@@ -164,7 +165,7 @@ class Camera(base.Device):
         if self._state['privacy']:
             privacy = '1' if enable else '0'
 
-            path = CONST.PARAMS_URL + self.device_id
+            path = urls.PARAMS + self.device_id
 
             camera_data = {
                 'mac': self._state['camera_mac'],

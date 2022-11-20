@@ -6,6 +6,7 @@ import jaraco.abode
 from .switch import Switch
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
+from ..helpers import urls
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,9 +48,7 @@ class Alarm(Switch):
 
         mode = mode.lower()
 
-        response = self._client.send_request(
-            "put", CONST.get_panel_mode_url(self._area, mode)
-        )
+        response = self._client.send_request("put", urls.panel_mode(self._area, mode))
 
         _LOGGER.debug("Set Alarm Home Response: %s", response.text)
 
@@ -89,7 +88,7 @@ class Alarm(Switch):
         """Arm Abode to home mode."""
         return self.set_standby()
 
-    def refresh(self, url=CONST.PANEL_URL):
+    def refresh(self, url=urls.PANEL):
         """Refresh the alarm device."""
         response_object = super().refresh(url)
 

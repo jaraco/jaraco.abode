@@ -4,6 +4,7 @@ import logging
 
 import jaraco
 from .devices.base import Device
+from .helpers import urls
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .helpers import timeline as TIMELINE
@@ -29,7 +30,7 @@ class EventController:
         self._timeline_callbacks = collections.defaultdict(list)
 
         # Setup SocketIO
-        self._socketio = sio.SocketIO(url=url, origin=CONST.BASE_URL)
+        self._socketio = sio.SocketIO(url=url, origin=urls.BASE)
 
         # Setup SocketIO Callbacks
         self._socketio.on(sio.STARTED, self._on_socket_started)
