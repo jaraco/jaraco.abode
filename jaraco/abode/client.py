@@ -63,7 +63,7 @@ class Client:
 
         # Create a new cache template
         self._cache = {
-            CONST.UUID: str(uuid.uuid1()),
+            'uuid': str(uuid.uuid1()),
         }
 
         # Load and merge an existing cache
@@ -99,13 +99,13 @@ class Client:
             raise AuthenticationException(ERROR.PASSWORD)
 
         login_data = {
-            CONST.ID: username,
-            CONST.PASSWORD: password,
-            CONST.UUID: self._cache[CONST.UUID],
+            'id': username,
+            'password': password,
+            'uuid': self._cache['uuid'],
         }
 
         if mfa_code is not None:
-            login_data[CONST.MFA_CODE] = mfa_code
+            login_data['mfa_code'] = mfa_code
             login_data['remember_me'] = 1
 
         response = self._session.post(urls.LOGIN, json=login_data)
@@ -332,7 +332,7 @@ class Client:
     @property
     def uuid(self):
         """Get the UUID."""
-        return self._cache[CONST.UUID]
+        return self._cache['uuid']
 
     def _get_session(self):
         # Perform a generic update so we know we're logged in

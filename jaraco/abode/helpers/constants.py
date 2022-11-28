@@ -1,10 +1,5 @@
 CACHE_PATH = './abode.pickle'
 
-ID = 'id'
-PASSWORD = 'password'
-UUID = 'uuid'
-MFA_CODE = 'mfa_code'
-
 # NOTIFICATION CONSTANTS
 SOCKETIO_URL = 'wss://my.goabode.com/socket.io/'
 
