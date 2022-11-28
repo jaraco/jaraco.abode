@@ -64,7 +64,7 @@ class Client:
         # Create a new cache template
         self._cache = {
             CONST.UUID: str(uuid.uuid1()),
-            CONST.COOKIES: None,
+            'cookies': None,
         }
 
         # Load and merge an existing cache
@@ -73,8 +73,8 @@ class Client:
 
         # Load persisted cookies (which contains the UUID and the session ID)
         # if available
-        if CONST.COOKIES in self._cache and self._cache[CONST.COOKIES] is not None:
-            self._session.cookies = self._cache[CONST.COOKIES]
+        if self._cache.get('cookies'):
+            self._session.cookies = self._cache['cookies']
 
         if auto_login:
             self.login()
@@ -122,7 +122,7 @@ class Client:
 
         # Persist cookies (which contains the UUID and the session ID) to disk
         if self._session.cookies.get_dict():
-            self._cache[CONST.COOKIES] = self._session.cookies
+            self._cache['cookies'] = self._session.cookies
             self._save_cache()
 
         oauth_response = self._session.get(urls.OAUTH_TOKEN)

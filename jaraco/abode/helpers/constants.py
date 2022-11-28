@@ -1,5 +1,4 @@
 CACHE_PATH = './abode.pickle'
-COOKIES = "cookies"
 
 ID = 'id'
 PASSWORD = 'password'
