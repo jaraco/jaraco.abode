@@ -64,7 +64,6 @@ class Client:
         # Create a new cache template
         self._cache = {
             CONST.UUID: str(uuid.uuid1()),
-            'cookies': None,
         }
 
         # Load and merge an existing cache
