@@ -62,9 +62,7 @@ class Client:
         self._session = sessions.BaseUrlSession(urls.BASE)
 
         # Create a new cache template
-        self._cache = {
-            'uuid': str(uuid.uuid1()),
-        }
+        self._cache = {}
 
         # Load and merge an existing cache
         if not disable_cache:
@@ -101,7 +99,7 @@ class Client:
         login_data = {
             'id': username,
             'password': password,
-            'uuid': self._cache['uuid'],
+            'uuid': self._session.cookies.get('uuid') or str(uuid.uuid1()),
         }
 
         if mfa_code is not None:
@@ -332,7 +330,7 @@ class Client:
     @property
     def uuid(self):
         """Get the UUID."""
-        return self._cache['uuid']
+        return self._session.cookies['uuid']
 
     def _get_session(self):
         # Perform a generic update so we know we're logged in

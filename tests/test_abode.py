@@ -506,7 +506,6 @@ class TestAbode:
 
         # Test that our cookies are fully realized prior to login
 
-        assert client._cache['uuid'] is not None
         assert client._cache['cookies'] is not None
 
         # Test that we now have a cookies file
@@ -531,7 +530,8 @@ class TestAbode:
     @pytest.mark.usefixtures('cache_path')
     def test_empty_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        cookies = dict(SESSION='COOKIE')
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
@@ -551,13 +551,13 @@ class TestAbode:
         )
 
         # Test that some cache exists
-
-        assert empty_client._cache['uuid'] is not None
+        assert empty_client._cache['cookies']
 
     @pytest.mark.usefixtures('cache_path')
     def test_invalid_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        cookies = dict(SESSION='COOKIE')
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
@@ -577,5 +577,4 @@ class TestAbode:
         )
 
         # Test that some cache exists
-
-        assert empty_client._cache['uuid'] is not None
+        assert empty_client._cache['cookies']
