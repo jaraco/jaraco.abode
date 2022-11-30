@@ -485,7 +485,8 @@ class TestAbode:
     @pytest.mark.usefixtures('cache_path')
     def tests_cookies(self, m):
         """Check that cookies are saved and loaded successfully."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        cookies = dict(SESSION='COOKIE')
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
@@ -501,11 +502,6 @@ class TestAbode:
             cache_path=self.cache_path,
         )
 
-        # Mock cookie created by Abode after login
-        cookie = requests.cookies.create_cookie(name='SESSION', value='COOKIE')
-
-        client._session.cookies.set_cookie(cookie)
-
         client.login()
 
         # Test that our cookies are fully realized prior to login
@@ -516,8 +512,8 @@ class TestAbode:
         # Test that we now have a cookies file
         assert os.path.exists(self.cache_path)
 
-        # Copy our current cookies file and data
-        first_cookies_data = client._cache
+        # Copy the current cookies
+        saved_cookies = client._session.cookies
 
         # New client reads in old data
         client = jaraco.abode.Client(
@@ -530,7 +526,7 @@ class TestAbode:
         )
 
         # Test that the cookie data is the same
-        assert client._cache['uuid'] == first_cookies_data['uuid']
+        assert client._session.cookies == saved_cookies
 
     @pytest.mark.usefixtures('cache_path')
     def test_empty_cookies(self, m):
