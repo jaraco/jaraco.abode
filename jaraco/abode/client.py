@@ -3,12 +3,13 @@ An Abode alarm Python library.
 """
 
 import logging
-import os
 import uuid
 
 from more_itertools import always_iterable
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
+from jaraco.net.http import cookies
+from jaraco.functools import retry
 
 import jaraco
 from .automation import Automation
@@ -18,13 +19,21 @@ from .devices import alarm as ALARM
 from .helpers import urls
 from .helpers import constants as CONST
 from .helpers import errors as ERROR
-from . import collections as COLLECTIONS
-from . import cache as CACHE
 from .devices.base import Device
 from . import settings
+from . import config
 
 
 _LOGGER = logging.getLogger(__name__)
+
+
+@retry(
+    retries=1,
+    cleanup=lambda: config.paths.user_data.joinpath('cookies.db').unlink(),
+    trap=Exception,
+)
+def _cookies():
+    return cookies.ShelvedCookieJar.create(config.paths.user_data)
 
 
 class Client:
@@ -37,16 +46,12 @@ class Client:
         auto_login=False,
         get_devices=False,
         get_automations=False,
-        cache_path=CONST.CACHE_PATH,
-        disable_cache=False,
     ):
         """Init Abode object."""
         self._session = None
         self._token = None
         self._panel = None
         self._user = None
-        self._cache_path = cache_path
-        self._disable_cache = disable_cache
         self._username = username
         self._password = password
 
@@ -58,20 +63,8 @@ class Client:
 
         self._automations = None
 
-        # Create a requests session to persist the cookies
         self._session = sessions.BaseUrlSession(urls.BASE)
-
-        # Create a new cache template
-        self._cache = {}
-
-        # Load and merge an existing cache
-        if not disable_cache:
-            self._load_cache()
-
-        # Load persisted cookies (which contains the UUID and the session ID)
-        # if available
-        if self._cache.get('cookies'):
-            self._session.cookies = self._cache['cookies']
+        self._session.cookies = _cookies()
 
         if auto_login:
             self.login()
@@ -116,11 +109,6 @@ class Client:
                 raise AuthenticationException(ERROR.MFA_CODE_REQUIRED)
 
             raise AuthenticationException(ERROR.UNKNOWN_MFA_TYPE)
-
-        # Persist cookies (which contains the UUID and the session ID) to disk
-        if self._session.cookies.get_dict():
-            self._cache['cookies'] = self._session.cookies
-            self._save_cache()
 
         oauth_response = self._session.get(urls.OAUTH_TOKEN)
         AuthenticationException.raise_for(oauth_response)
@@ -337,22 +325,3 @@ class Client:
         self.send_request("get", urls.PANEL)
 
         return self._session
-
-    def _load_cache(self):
-        """Load existing cache and merge for updating if required."""
-        if not self._disable_cache and os.path.exists(self._cache_path):
-            _LOGGER.debug("Cache found at: %s", self._cache_path)
-            loaded_cache = CACHE.load_cache(self._cache_path)
-
-            if loaded_cache:
-                COLLECTIONS.update(self._cache, loaded_cache)
-            else:
-                _LOGGER.debug("Removing invalid cache file: %s", self._cache_path)
-                os.remove(self._cache_path)
-
-        self._save_cache()
-
-    def _save_cache(self):
-        """Trigger a cache save."""
-        if not self._disable_cache:
-            CACHE.save_cache(self._cache, self._cache_path)

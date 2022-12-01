@@ -1,5 +1,3 @@
-CACHE_PATH = './abode.pickle'
-
 # NOTIFICATION CONSTANTS
 SOCKETIO_URL = 'wss://my.goabode.com/socket.io/'
 

@@ -10,7 +10,8 @@ def instance_client(request):
         return
 
     request.instance.client = jaraco.abode.Client(
-        username='foobar', password='deadbeef', disable_cache=True
+        username='foobar',
+        password='deadbeef',
     )
 
 
