@@ -511,6 +511,8 @@ class TestAbode:
 
         assert client._session.cookies
 
+        client._session.cookies.close()
+
         # Test that we now have a cookies file
         cookies_file = config.paths.user_data / 'cookies.db'
         assert cookies_file.exists()
