@@ -1,6 +1,8 @@
 """Timeline event constants."""
 
 from jaraco.collections import RangeMap
+from more_itertools import consume
+from jaraco.context import suppress
 
 
 # Timeline event groups.
@@ -302,3 +304,16 @@ ARMING_WITH_FAULT_AWAY = {
 ARMED_WITH_FAULT_AWAY = {'event_code': '6071', 'event_type': 'Armed w/ Faults - Away'}
 
 ARMED_WITH_FAULT_HOME = {'event_code': '6077', 'event_type': 'Armed w/ Faults - Home'}
+
+
+def export_all():
+    consume(map(export, globals()))
+
+
+@suppress(TypeError, KeyError)
+def export(name):
+    item = globals()[name]
+    print(f'{item["event_code"]}, {item["event_type"]}, {name}')
+
+
+__name__ == '__main__' and export_all()
