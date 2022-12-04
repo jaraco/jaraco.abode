@@ -17,7 +17,7 @@ from .mock.devices import power_switch_sensor as POWERSENSOR
 class TestPowerSwitchSensor:
     """Test the power switch sensor."""
 
-    def tests_switch_device_properties(self, m):
+    def test_switch_device_properties(self, m):
         """Tests that switch devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -69,7 +69,7 @@ class TestPowerSwitchSensor:
         assert device.no_response
         assert device.is_on
 
-    def tests_switch_status_changes(self, m):
+    def test_switch_status_changes(self, m):
         """Tests that switch device changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

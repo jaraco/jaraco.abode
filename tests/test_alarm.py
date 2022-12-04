@@ -15,7 +15,7 @@ from .mock.devices import alarm as ALARM
 class TestAlarm:
     """Test the Alarm class."""
 
-    def tests_abode_alarm_setup(self, m):
+    def test_abode_alarm_setup(self, m):
         """Check that Abode alarm device is set up properly."""
         panel = PANEL.get_response_ok(mode=CONST.MODE_STANDBY)
         alarm = ALARM.device(area='1', panel=panel)
@@ -31,7 +31,7 @@ class TestAlarm:
 
         assert alarm_device._state == alarm
 
-    def tests_alarm_device_properties(self, m):
+    def test_alarm_device_properties(self, m):
         """Check that the abode device properties are working."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -90,7 +90,7 @@ class TestAlarm:
         assert alarm.status == CONST.MODE_HOME
         assert alarm.is_on
 
-    def tests_alarm_device_mode_changes(self, m):
+    def test_alarm_device_mode_changes(self, m):
         """Test that the abode alarm can change/report modes."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

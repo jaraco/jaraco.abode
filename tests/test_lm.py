@@ -13,7 +13,7 @@ from .mock.devices import lm as LM
 class TestLM:
     """Test the sensor class/LM."""
 
-    def tests_cover_lm_properties(self, m):
+    def test_cover_lm_properties(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -87,7 +87,7 @@ class TestLM:
         assert device.lux == 100
         assert device.lux_unit == 'lux'
 
-    def tests_lm_float_units(self, m):
+    def test_lm_float_units(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -128,7 +128,7 @@ class TestLM:
         assert device.lux == 14.11
         assert device.lux_unit == 'lux'
 
-    def tests_lm_temp_only(self, m):
+    def test_lm_temp_only(self, m):
         """Tests that sensor/LM devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

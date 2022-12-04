@@ -65,7 +65,7 @@ class TestCamera:
             if device.type_tag != CONST.DEVICE_ALARM
         )
 
-    def tests_camera_properties(self, m):
+    def test_camera_properties(self, m):
         """Tests that camera properties work as expected."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -98,7 +98,7 @@ class TestCamera:
             assert device.battery_low
             assert device.no_response
 
-    def tests_camera_capture(self, m):
+    def test_camera_capture(self, m):
         """Tests that camera devices capture new images."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -138,7 +138,7 @@ class TestCamera:
                 device.capture()
             assert (exc.value.errcode, exc.value.message) == ERROR.MISSING_CONTROL_URL
 
-    def tests_camera_image_update(self, m):
+    def test_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -201,7 +201,7 @@ class TestCamera:
             with pytest.raises(jaraco.abode.Exception):
                 device.refresh_image()
 
-    def tests_camera_no_image_update(self, m):
+    def test_camera_no_image_update(self, m):
         """Tests that camera updates correctly with no timeline events."""
         for device in self.camera_devices():
             # Test that we have our device
@@ -216,7 +216,7 @@ class TestCamera:
             assert not device.refresh_image()
             assert device.image_url is None
 
-    def tests_camera_image_write(self, m):
+    def test_camera_image_write(self, m):
         """Tests that camera images will write to a file."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -259,7 +259,7 @@ class TestCamera:
             m.get(url, json=[])
             assert not device.image_to_file(path, get_image=True)
 
-    def tests_camera_snapshot(self, m):
+    def test_camera_snapshot(self, m):
         """Tests that camera devices capture new snapshots."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -284,7 +284,7 @@ class TestCamera:
             m.post(snapshot_url, json={})
             assert not device.snapshot()
 
-    def tests_camera_snapshot_write(self, m):
+    def test_camera_snapshot_write(self, m):
         """Tests that camera snapshots will write to a file."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -313,7 +313,7 @@ class TestCamera:
             m.post(snapshot_url, json=cam_type.get_capture_timeout(), status_code=600)
             assert not device.snapshot_to_file(path, get_snapshot=True)
 
-    def tests_camera_snapshot_data_url(self, m):
+    def test_camera_snapshot_data_url(self, m):
         """Tests that camera snapshots can be converted to a data url."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
@@ -342,7 +342,7 @@ class TestCamera:
             m.post(snapshot_url, json=cam_type.get_capture_timeout(), status_code=600)
             assert device.snapshot_data_url(get_snapshot=True) == ""
 
-    def tests_camera_privacy_mode(self, m):
+    def test_camera_privacy_mode(self, m):
         """Tests camera privacy mode."""
 
         # Get the IP camera and test we have it

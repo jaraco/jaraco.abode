@@ -17,7 +17,7 @@ from .mock.devices import door_lock as DOOR_LOCK
 class TestDoorLock:
     """Test the door lock."""
 
-    def tests_lock_device_properties(self, m):
+    def test_lock_device_properties(self, m):
         """Tests that lock devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -69,7 +69,7 @@ class TestDoorLock:
         assert device.no_response
         assert not device.is_locked
 
-    def tests_lock_device_mode_changes(self, m):
+    def test_lock_device_mode_changes(self, m):
         """Tests that lock device changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

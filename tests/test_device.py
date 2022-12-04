@@ -29,7 +29,7 @@ from .mock import panel as PANEL
 class TestDevice:
     """Test the generic device class."""
 
-    def tests_device_mapping_type_tag(self):
+    def test_device_mapping_type_tag(self):
         """Check new device without type_tag raises exception."""
         device = GLASS.device(
             status=CONST.STATUS_ONLINE,
@@ -43,7 +43,7 @@ class TestDevice:
             del device['type_tag']
             Device.new(device, self.client)
 
-    def tests_device_auto_naming(self):
+    def test_device_auto_naming(self):
         """Check the generic Abode device creates a name."""
         source = GLASS.device(
             status=CONST.STATUS_ONLINE,
@@ -68,7 +68,7 @@ class TestDevice:
         generated_name = device.type + ' ' + device.device_id
         assert device.name == generated_name
 
-    def tests_device_init(self, m):
+    def test_device_init(self, m):
         """Check the generic Abode device class init's properly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -111,7 +111,7 @@ class TestDevice:
         assert device.out_of_order
         assert device.desc is not None
 
-    def tests_generic_device_refresh(self, m):
+    def test_generic_device_refresh(self, m):
         """Check the generic Abode device class init's properly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -137,7 +137,7 @@ class TestDevice:
         device = self.client.get_device(GLASS.DEVICE_ID, refresh=True)
         assert device.status == CONST.STATUS_OFFLINE
 
-    def tests_multiple_devices(self, m):
+    def test_multiple_devices(self, m):
         """Tests that multiple devices are returned properly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -176,7 +176,7 @@ class TestDevice:
         psd = self.client.get_device(GLASS.DEVICE_ID)
         assert psd is not None
 
-    def tests_unknown_devices(self, m):
+    def test_unknown_devices(self, m):
         """Tests that multiple devices are returned properly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -196,7 +196,7 @@ class TestDevice:
         assert devices is not None
         assert len(devices) == 1
 
-    def tests_device_category_filter(self, m):
+    def test_device_category_filter(self, m):
         """Tests that device category filter returns requested results."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -243,7 +243,7 @@ class TestDevice:
         assert devices is not None
         assert len(devices) == 2
 
-    def tests_no_control_url(self, m):
+    def test_no_control_url(self, m):
         """Check that devices return false without control url's."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -263,7 +263,7 @@ class TestDevice:
         assert not device.set_status('1')
         assert not device.set_level('99')
 
-    def tests_device_status_changes(self, m):
+    def test_device_status_changes(self, m):
         """Tests that device status changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -340,7 +340,7 @@ class TestDevice:
         with pytest.raises(jaraco.abode.Exception):
             device.switch_on()
 
-    def tests_device_level_changes(self, m):
+    def test_device_level_changes(self, m):
         """Tests that device level changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -410,7 +410,7 @@ class TestDevice:
         with pytest.raises(jaraco.abode.Exception):
             device.set_level('28')
 
-    def tests_all_devices(self, m):
+    def test_all_devices(self, m):
         """Tests that all mocked devices are mapped correctly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

@@ -21,7 +21,7 @@ from .mock.devices import ir_camera as IRCAMERA
 class TestEventController:
     """Test the event controller."""
 
-    def tests_device_id_registration(self, m):
+    def test_device_id_registration(self, m):
         """Tests that we can register for device events with a device id."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -55,7 +55,7 @@ class TestEventController:
         # Register our device id
         assert events.add_device_callback(device.device_id, callback)
 
-    def tests_device_registration(self, m):
+    def test_device_registration(self, m):
         """Tests that we can register for device events with a device."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -86,7 +86,7 @@ class TestEventController:
         # Register our device
         assert events.add_device_callback(device, lambda device: None)
 
-    def tests_device_all_unregistration(self, m):
+    def test_device_all_unregistration(self, m):
         """Tests that we can unregister for all device events."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -120,7 +120,7 @@ class TestEventController:
         # Unregister all callbacks
         assert events.remove_all_device_callbacks(device)
 
-    def tests_invalid_device(self, m):
+    def test_invalid_device(self, m):
         """Tests that invalid devices are not registered."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -160,7 +160,7 @@ class TestEventController:
         with pytest.raises(jaraco.abode.Exception):
             events.add_device_callback(fake_device, callback)
 
-    def tests_invalid_all_device_unregister(self, m):
+    def test_invalid_all_device_unregister(self, m):
         """Tests that invalid devices are not all unregistered."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -197,7 +197,7 @@ class TestEventController:
         with pytest.raises(jaraco.abode.Exception):
             events.remove_all_device_callbacks(fake_device)
 
-    def tests_event_registration(self):
+    def test_event_registration(self):
         """Tests that events register correctly."""
         # Get the event controller
         events = self.client.events
@@ -216,7 +216,7 @@ class TestEventController:
         with pytest.raises(jaraco.abode.Exception):
             events.add_event_callback("lol", callback)
 
-    def tests_timeline_registration(self):
+    def test_timeline_registration(self):
         """Tests that timeline events register correctly."""
         # Get the event controller
         events = self.client.events
@@ -239,7 +239,7 @@ class TestEventController:
         with pytest.raises(jaraco.abode.Exception):
             events.add_timeline_callback({"lol": "lol"}, callback)
 
-    def tests_device_callback(self, m):
+    def test_device_callback(self, m):
         """Tests that device updates callback correctly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -298,7 +298,7 @@ class TestEventController:
         # Test that an unknown device cleanly returns
         events._on_device_update(DOORCONTACT.DEVICE_ID)
 
-    def tests_events_callback(self):
+    def test_events_callback(self):
         """Tests that event updates callback correctly."""
         # Get the event controller
         events = self.client.events
@@ -325,7 +325,7 @@ class TestEventController:
         # Test that an invalid event exits cleanly
         events._on_timeline_update({"invalid": "event"})
 
-    def tests_timeline_callback(self):
+    def test_timeline_callback(self):
         """Tests that timeline updates callback correctly."""
         # Get the event controller
         events = self.client.events
@@ -356,7 +356,7 @@ class TestEventController:
         # Test that an invalid event exits cleanly
         events._on_timeline_update({"invalid": "event"})
 
-    def tests_alarm_callback(self, m):
+    def test_alarm_callback(self, m):
         """Tests that alarm device updates callback correctly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -403,7 +403,7 @@ class TestEventController:
         # Test that an unknown mode cleanly returns
         events._on_mode_change("lol")
 
-    def tests_execute_callback(self):
+    def test_execute_callback(self):
         """Tests that callbacks that throw exceptions don't bomb."""
         # Get the event controller
         events = self.client.events
@@ -421,7 +421,7 @@ class TestEventController:
         event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
-    def tests_multi_device_callback(self, m):
+    def test_multi_device_callback(self, m):
         """Tests that multiple device updates callback correctly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -498,7 +498,7 @@ class TestEventController:
         # Test that our door updated now
         assert doorcontact.status == CONST.STATUS_OPEN
 
-    def tests_multi_events_callback(self):
+    def test_multi_events_callback(self):
         """Tests that multiple event updates callback correctly."""
         # Get the event controller
         events = self.client.events
@@ -520,7 +520,7 @@ class TestEventController:
         # Ensure our callback was called
         callback.assert_called_with(event_json)
 
-    def tests_multi_timeline_callback(self):
+    def test_multi_timeline_callback(self):
         """Tests that multiple timeline updates callback correctly."""
         # Get the event controller
         events = self.client.events
@@ -542,7 +542,7 @@ class TestEventController:
         # Ensure our callback was called
         callback.assert_called_with(event_json)
 
-    def tests_automations_callback(self):
+    def test_automations_callback(self):
         """Tests that automation updates callback correctly."""
         # Get the event controller
         events = self.client.events

@@ -17,7 +17,7 @@ from .mock.devices import hue as HUE
 class TestHue:
     """Test the light device with Hue."""
 
-    def tests_hue_device_properties(self, m):
+    def test_hue_device_properties(self, m):
         """Tests that hue light devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -92,7 +92,7 @@ class TestHue:
         assert device.no_response
         assert device.is_on
 
-    def tests_hue_status_changes(self, m):
+    def test_hue_status_changes(self, m):
         """Tests that hue device changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -163,7 +163,7 @@ class TestHue:
         with pytest.raises(jaraco.abode.Exception):
             device.switch_on()
 
-    def tests_hue_color_temp_changes(self, m):
+    def test_hue_color_temp_changes(self, m):
         """Tests that hue device color temp changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -230,7 +230,7 @@ class TestHue:
         with pytest.raises(jaraco.abode.Exception):
             device.set_color_temp(4434)
 
-    def tests_hue_color_changes(self, m):
+    def test_hue_color_changes(self, m):
         """Tests that hue device color changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

@@ -14,7 +14,7 @@ from .mock.devices import secure_barrier as COVER
 class TestSecureBarrier:
     """Test the secure barrier class."""
 
-    def tests_cover_device_properties(self, m):
+    def test_cover_device_properties(self, m):
         """Tests that cover devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -68,7 +68,7 @@ class TestSecureBarrier:
         assert device.is_on
         assert device.is_open
 
-    def tests_cover_status_changes(self, m):
+    def test_cover_status_changes(self, m):
         """Tests that cover device changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

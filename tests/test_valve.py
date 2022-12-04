@@ -17,7 +17,7 @@ from .mock.devices import valve as VALVE
 class TestValve:
     """Test the valve."""
 
-    def tests_switch_device_properties(self, m):
+    def test_switch_device_properties(self, m):
         """Tests that switch devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -70,7 +70,7 @@ class TestValve:
         assert device.no_response
         assert device.is_on
 
-    def tests_switch_status_changes(self, m):
+    def test_switch_status_changes(self, m):
         """Tests that switch device changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

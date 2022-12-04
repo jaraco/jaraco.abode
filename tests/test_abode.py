@@ -48,14 +48,14 @@ PASSWORD = 'deadbeef'
 class TestAbode:
     """Test the Abode class."""
 
-    def tests_initialization(self):
+    def test_initialization(self):
         """Verify we can initialize abode."""
 
         assert self.client._username == USERNAME
 
         assert self.client._password == PASSWORD
 
-    def tests_no_credentials(self):
+    def test_no_credentials(self):
         """Check that we throw an exception when no username/password."""
         with pytest.raises(jaraco.abode.AuthenticationException):
             self.client_no_cred.login()
@@ -64,21 +64,21 @@ class TestAbode:
         with pytest.raises(jaraco.abode.AuthenticationException):
             self.client_no_cred.login()
 
-    def tests_manual_login(self, m):
+    def test_manual_login(self, m):
         """Check that we can manually use the login() function."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
 
         self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    def tests_manual_login_with_mfa(self, m):
+    def test_manual_login_with_mfa(self, m):
         """Check that we can login with MFA code."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
 
         self.client_no_cred.login(username=USERNAME, password=PASSWORD, mfa_code=654321)
 
-    def tests_auto_login(self, m):
+    def test_auto_login(self, m):
         """Test that automatic login works."""
         auth_token = MOCK.AUTH_TOKEN
         user_json = USER.get_response_ok()
@@ -109,7 +109,7 @@ class TestAbode:
 
         client = None
 
-    def tests_auto_fetch(self, m):
+    def test_auto_fetch(self, m):
         """Test that automatic device and automation retrieval works."""
         auth_token = MOCK.AUTH_TOKEN
         user_json = USER.get_response_ok()
@@ -147,7 +147,7 @@ class TestAbode:
 
         client = None
 
-    def tests_login_failure(self, m):
+    def test_login_failure(self, m):
         """Test login failed."""
         m.post(urls.LOGIN, json=LOGIN.post_response_bad_request(), status_code=400)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -156,7 +156,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.AuthenticationException):
             self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    def tests_login_mfa_required(self, m):
+    def test_login_mfa_required(self, m):
         """Tests login with MFA code required but not supplied."""
         m.post(
             urls.LOGIN,
@@ -169,7 +169,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.AuthenticationException):
             self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    def tests_login_bad_mfa_code(self, m):
+    def test_login_bad_mfa_code(self, m):
         """Tests login with bad MFA code."""
         m.post(urls.LOGIN, json=LOGIN.post_response_bad_mfa_code(), status_code=400)
 
@@ -179,7 +179,7 @@ class TestAbode:
                 username=USERNAME, password=PASSWORD, mfa_code=123456
             )
 
-    def tests_login_unknown_mfa_type(self, m):
+    def test_login_unknown_mfa_type(self, m):
         """Tests login with unknown MFA type."""
         m.post(
             urls.LOGIN,
@@ -191,7 +191,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.AuthenticationException):
             self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
-    def tests_logout_failure(self, m):
+    def test_logout_failure(self, m):
         """Test logout failed."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -205,7 +205,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.AuthenticationException):
             self.client_no_cred.logout()
 
-    def tests_logout_exception(self, m):
+    def test_logout_exception(self, m):
         """Test logout exception."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -218,7 +218,7 @@ class TestAbode:
         # Check that we eat the exception gracefully
         assert not self.client.logout()
 
-    def tests_full_setup(self, m):
+    def test_full_setup(self, m):
         """Check that Abode is set up properly."""
         auth_token = MOCK.AUTH_TOKEN
         user_json = USER.get_response_ok()
@@ -255,7 +255,7 @@ class TestAbode:
         assert self.client._session is not None
         assert self.client._get_session() != original_session
 
-    def tests_reauthorize(self, m):
+    def test_reauthorize(self, m):
         """Check that Abode can reauthorize after token timeout."""
         new_token = "FOOBAR"
         m.post(
@@ -284,7 +284,7 @@ class TestAbode:
 
         assert self.client._token == new_token
 
-    def tests_send_request_exception(self, m):
+    def test_send_request_exception(self, m):
         """Check that send_request recovers from an exception."""
         new_token = "DEADBEEF"
         m.post(
@@ -313,7 +313,7 @@ class TestAbode:
 
         assert self.client._token == new_token
 
-    def tests_continuous_bad_auth(self, m):
+    def test_continuous_bad_auth(self, m):
         """Check that Abode won't get stuck with repeated failed retries."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -322,7 +322,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.Exception):
             self.client.get_devices()
 
-    def tests_default_mode(self):
+    def test_default_mode(self):
         """Test that the default mode fails if not of type home or away."""
         self.client.set_default_mode(CONST.MODE_HOME)
         assert self.client.default_mode == CONST.MODE_HOME
@@ -382,7 +382,7 @@ class TestAbode:
         assert dc2b['id'] == dc2b_dev.device_id
         assert dc2a_dev is dc2b_dev
 
-    def tests_settings_validation(self, m):
+    def test_settings_validation(self, m):
         """Check that device panel general settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -393,7 +393,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting("fliptrix", "foobar")
 
-    def tests_general_settings(self, m):
+    def test_general_settings(self, m):
         """Check that device panel general settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -416,7 +416,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(settings.SILENCE_SOUNDS, "foobar")
 
-    def tests_area_settings(self, m):
+    def test_area_settings(self, m):
         """Check that device panel areas settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -441,7 +441,7 @@ class TestAbode:
                 settings.EXIT_DELAY_AWAY, settings.ENTRY_EXIT_DELAY_10SEC
             )
 
-    def tests_sound_settings(self, m):
+    def test_sound_settings(self, m):
         """Check that device panel sound settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -464,7 +464,7 @@ class TestAbode:
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(settings.FINAL_BEEPS, "foobar")
 
-    def tests_siren_settings(self, m):
+    def test_siren_settings(self, m):
         """Check that device panel siren settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -488,7 +488,7 @@ class TestAbode:
             self.client.set_setting(settings.SIREN_TAMPER_SOUNDS, "foobar")
 
     @pytest.mark.usefixtures('data_path')
-    def tests_cookies(self, m):
+    def test_cookies(self, m):
         """Check that cookies are saved and loaded successfully."""
         cookies = dict(SESSION='COOKIE')
         m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)

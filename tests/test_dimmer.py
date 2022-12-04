@@ -17,7 +17,7 @@ from .mock.devices import dimmer as DIMMER
 class TestDimmer:
     """Test the light device with a dimmer."""
 
-    def tests_dimmer_device_properties(self, m):
+    def test_dimmer_device_properties(self, m):
         """Tests that dimmer light devices properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -77,7 +77,7 @@ class TestDimmer:
         assert device.no_response
         assert device.is_on
 
-    def tests_dimmer_status_changes(self, m):
+    def test_dimmer_status_changes(self, m):
         """Tests that dimmer device changes work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

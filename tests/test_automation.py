@@ -19,7 +19,7 @@ AID_3 = '47fae27488f74f55b964a81a066c3a03'
 class TestAutomation:
     """Test the automation class."""
 
-    def tests_automation_init(self, m):
+    def test_automation_init(self, m):
         """Check the Abode automation class init's properly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -49,7 +49,7 @@ class TestAutomation:
         assert automation.is_enabled == automation_resp['enabled']
         assert automation.desc is not None
 
-    def tests_automation_refresh(self, m):
+    def test_automation_refresh(self, m):
         """Check the automation Abode class refreshes."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -119,7 +119,7 @@ class TestAutomation:
         with pytest.raises(jaraco.abode.Exception):
             automation.refresh()
 
-    def tests_multiple_automations(self, m):
+    def test_multiple_automations(self, m):
         """Check that multiple automations work and return correctly."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -163,7 +163,7 @@ class TestAutomation:
         assert automation_3 is not None
         assert automation_3._automation == resp[2]
 
-    def tests_automation_class_reuse(self, m):
+    def test_automation_class_reuse(self, m):
         """Check that automations reuse the same classes when refreshed."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -236,7 +236,7 @@ class TestAutomation:
         assert automation_3 is not None
         assert automation_3._automation == resp[2]
 
-    def tests_automation_enable(self, m):
+    def test_automation_enable(self, m):
         """Check that automations can change their enable state."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -317,7 +317,7 @@ class TestAutomation:
         with pytest.raises(jaraco.abode.Exception):
             automation.enable(True)
 
-    def tests_automation_trigger(self, m):
+    def test_automation_trigger(self, m):
         """Check that automations can be triggered."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())

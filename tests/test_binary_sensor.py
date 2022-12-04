@@ -21,7 +21,7 @@ from .mock.devices import water_sensor as WATER_SENSOR
 class TestBinarySensors:
     """Test the binary sensors."""
 
-    def tests_binary_sensor_properties(self, m):
+    def test_binary_sensor_properties(self, m):
         """Tests that binary sensor device properties work as expected."""
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
