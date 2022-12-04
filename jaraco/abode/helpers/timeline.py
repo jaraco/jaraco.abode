@@ -81,9 +81,12 @@ def _read_events():
 
 @call_aside
 def _load_events():
+    def var_name(event):
+        return event['var_name'] or event['text'].replace(' ', '_').upper()
+
     all_events = list(_read_events())
     vars = {
-        event['var_name']: dict(event_code=event['code'], event_type=event['text'])
+        var_name(event): dict(event_code=event['code'], event_type=event['text'])
         for event in _read_events()
     }
     assert len(all_events) == len(vars)

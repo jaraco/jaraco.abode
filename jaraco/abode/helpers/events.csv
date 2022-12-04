@@ -1,87 +1,87 @@
 code, text, var_name
 0, All Timeline Events, ALL
-1100, Medical, MEDICAL
-1101, Personal Emergency, PERSONAL_EMERGENCY
-1110, Fire Alert, FIRE_ALERT
-1111, Smoke Detected, SMOKE_DETECTED
-1120, Panic Alert, PANIC_ALERT
-1121, Duress Alarm, DURESS_ALARM
-1122, Silent Panic Alert, SILENT_PANIC_ALERT
-1130, Alarm Triggered, ALARM_TRIGGERED
-1131, Perimeter Alarm Triggered, PERIMETER_ALARM_TRIGGERED
-1132, Interior Alarm Triggered, INTERIOR_ALARM_TRIGGERED
-1133, Burglar Alarm Triggered, BURGLAR_ALARM_TRIGGERED
-1136, Outdoor Alarm Triggered, OUTDOOR_ALARM_TRIGGERED
-1137, Panel Tamper Switch Triggered, PANEL_TAMPER_SWITCH_TRIGGERED
-1147, Not Connected to Gateway, NOT_CONNECTED_TO_GATEWAY
-1151, Gas Detected, GAS_DETECTED
-1154, Water Leak Detected, WATER_LEAK_DETECTED
-1162, CO Detected, CO_DETECTED
-1301, Power Lost, POWER_LOST
-1384, Battery Low, BATTERY_LOW
+1100, Medical
+1101, Personal Emergency
+1110, Fire Alert
+1111, Smoke Detected
+1120, Panic Alert
+1121, Duress Alarm
+1122, Silent Panic Alert
+1130, Alarm Triggered
+1131, Perimeter Alarm Triggered
+1132, Interior Alarm Triggered
+1133, Burglar Alarm Triggered
+1136, Outdoor Alarm Triggered
+1137, Panel Tamper Switch Triggered
+1147, Not Connected to Gateway
+1151, Gas Detected
+1154, Water Leak Detected
+1162, CO Detected
+1301, Power Lost
+1384, Battery Low
 1311, Battery Missing/Dead, BATTERY_MISSING_DEAD
 1344, Jam Detect/Signal Interference, JAM_DETECT
-1354, GPS Location Fail, GPS_LOCATION_FAIL
-1355, Polling Failure, POLLING_FAILURE
-1374, Armed with Fault, ARMED_WITH_FAULT
-1380, Sensor Offline, SENSOR_OFFLINE
-1381, Supervision Fail, SUPERVISION_FAIL
-1383, Tamper Switch Triggered, TAMPER_SWITCH_TRIGGERED
-1407, System Disarmed, SYSTEM_DISARMED
-1406, Event Canceled, EVENT_CANCELED
+1354, GPS Location Fail
+1355, Polling Failure
+1374, Armed with Fault
+1380, Sensor Offline
+1381, Supervision Fail
+1383, Tamper Switch Triggered
+1407, System Disarmed
+1406, Event Canceled
 1408, Set/Unset Disarm, SET_UNSET_DISARM
-1447, Offline, OFFLINE
-1454, Fail to Close, FAIL_TO_CLOSE
-1456, Partial Arm, PARTIAL_ARM
-1458, User on Premises, USER_ON_PREMISES
-1459, Recent Close, RECENT_CLOSE
-1570, Zone Bypassed, ZONE_BYPASSED
-1601, Manual Test Report, MANUAL_TEST_REPORT
-1602, Periodic Test, PERIODIC_TEST
+1447, Offline
+1454, Fail to Close
+1456, Partial Arm
+1458, User on Premises
+1459, Recent Close
+1570, Zone Bypassed
+1601, Manual Test Report
+1602, Periodic Test
 1611, Point Tested OK/Technical Alarm, POINT_TESTED_OK
-1616, Call Request, CALL_REQUEST
+1616, Call Request
 1641, Mobility Alarm/Sensor Watch Trouble, MOBILITY_ALARM
-1645, GPS Location Help, GPS_LOCATION_HELP
-1646, GPS Location Request, GPS_LOCATION_REQUEST
-1647, GPS Location Tracker, GPS_LOCATION_TRACKER
-1648, Scream, SCREAM
-1649, Mobile Unit Disconnected from Base, MOBILE_UNIT_DISCONNECTED_FROM_BASE
-1655, Test Report, TEST_REPORT
-1704, Entry, ENTRY
+1645, GPS Location Help
+1646, GPS Location Request
+1647, GPS Location Tracker
+1648, Scream
+1649, Mobile Unit Disconnected from Base
+1655, Test Report
+1704, Entry
 1750, DC Open - Mobility, DC_OPEN_MOBILITY
 1751, IR Activity - Mobility, IR_ACTIVITY_MOBILITY
-1752, Siren On, SIREN_ON
-1788, Motion Detected Area 2, MOTION_DETECTED_AREA_2
-1789, Motion Detected Area 1, MOTION_DETECTED_AREA_1
-3137, Panel Tamper Switch Restored, PANEL_TAMPER_SWITCH_RESTORED
+1752, Siren On
+1788, Motion Detected Area 2
+1789, Motion Detected Area 1
+3137, Panel Tamper Switch Restored
 3147, Re-Connected to Gateway, RECONNECTED_TO_GATEWAY
-3301, Power Restored, POWER_RESTORED
+3301, Power Restored
 3384, Battery Normal/OK, BATTERY_NORMAL
 3344, No Jam/Signal Restored, SIGNAL_RESTORED
-3354, NET Device Failure Restored, NET_DEVICE_FAILURE_RESTORED
-3355, Polling Failure Restored, POLLING_FAILURE_RESTORED
-3383, Tamper Switch Restored, TAMPER_SWITCH_RESTORED
-3407, System Armed, SYSTEM_ARMED
+3354, NET Device Failure Restored
+3355, Polling Failure Restored
+3383, Tamper Switch Restored
+3407, System Armed
 3401, System Armed - Away, SYSTEM_ARMED_AWAY
 3408, Set/Unset Arm, SET_UNSET_ARM
-3447, Online, ONLINE
+3447, Online
 3758, System Armed - Home, SYSTEM_ARMED_HOME
-3649, Mobile Unit Connected to Base, MOBILE_UNIT_CONNECTED_TO_BASE
+3649, Mobile Unit Connected to Base
 3750, DC Close - Mobility, DC_CLOSE_MOBILITY
-3752, Siren Off, SIREN_OFF
-5000, Vevent_codeeo, VEVENT_CODEEO
-5001, Capture Image, CAPTURE_IMAGE
-5002, Burglar Vevent_codeeo, BURGLAR_VEVENT_CODEEO
-5003, Burglar Capture Image, BURGLAR_CAPTURE_IMAGE
-5100, Opened, OPENED
-5101, Closed, CLOSED
-5110, Unlocked, UNLOCKED
-5111, Locked, LOCKED
-5201, Status Automation, STATUS_AUTOMATION
-5202, Scheduled Automation, SCHEDULED_AUTOMATION
-5203, Location Automation, LOCATION_AUTOMATION
-5204, Quick Action, QUICK_ACTION
-5206, Automation, AUTOMATION
+3752, Siren Off
+5000, Vevent_codeeo
+5001, Capture Image
+5002, Burglar Vevent_codeeo
+5003, Burglar Capture Image
+5100, Opened
+5101, Closed
+5110, Unlocked
+5111, Locked
+5201, Status Automation
+5202, Scheduled Automation
+5203, Location Automation
+5204, Quick Action
+5206, Automation
 6055, Exit Time Started - Arming w/ Faults - Away, ARMING_WITH_FAULT_AWAY
 6071, Armed w/ Faults - Away, ARMED_WITH_FAULT_AWAY
 6077, Armed w/ Faults - Home, ARMED_WITH_FAULT_HOME
