@@ -207,7 +207,7 @@ class TestEventController:
         callback = Mock()
 
         # Test that a valid event registers
-        assert events.add_event_callback(TIMELINE.ALARM_GROUP, callback)
+        assert events.add_event_callback(TIMELINE.Groups.ALARM, callback)
 
         # Test that no event group returns false
         assert not events.add_event_callback(None, callback)
@@ -309,9 +309,9 @@ class TestEventController:
         alarm_callback = Mock()
 
         # Register our events
-        assert events.add_event_callback(TIMELINE.CAPTURE_GROUP, capture_callback)
+        assert events.add_event_callback(TIMELINE.Groups.CAPTURE, capture_callback)
 
-        assert events.add_event_callback(TIMELINE.ALARM_GROUP, alarm_callback)
+        assert events.add_event_callback(TIMELINE.Groups.ALARM, alarm_callback)
 
         # Call our events callback method and trigger a capture group event
 
@@ -509,7 +509,7 @@ class TestEventController:
 
         # Register our events
         assert events.add_event_callback(
-            [TIMELINE.ALARM_GROUP, TIMELINE.CAPTURE_GROUP], callback
+            [TIMELINE.Groups.ALARM, TIMELINE.Groups.CAPTURE], callback
         )
 
         # Call our events callback method and trigger a capture group event
@@ -553,7 +553,7 @@ class TestEventController:
 
         # Register our events
         assert events.add_event_callback(
-            TIMELINE.AUTOMATION_EDIT_GROUP, automation_callback
+            TIMELINE.Groups.AUTOMATION_EDIT, automation_callback
         )
 
         # Call our events callback method and trigger a capture group event

@@ -132,9 +132,9 @@ class EventController:
             event_groups = [event_groups]
 
         for event_group in event_groups:
-            if event_group not in TIMELINE.ALL_EVENT_GROUPS:
+            if event_group not in TIMELINE.Groups.ALL:
                 raise jaraco.abode.Exception(
-                    ERROR.EVENT_GROUP_INVALID, TIMELINE.ALL_EVENT_GROUPS
+                    ERROR.EVENT_GROUP_INVALID, TIMELINE.Groups.ALL
                 )
 
             _LOGGER.debug("Subscribing to event group: %s", event_group)
@@ -289,7 +289,7 @@ class EventController:
 
     def _on_automation_update(self, event):
         """Automation update broadcast from Abode SocketIO server."""
-        event_group = TIMELINE.AUTOMATION_EDIT_GROUP
+        event_group = TIMELINE.Groups.AUTOMATION_EDIT
 
         if isinstance(event, (tuple, list)):
             event = event[0]
