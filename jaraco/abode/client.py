@@ -203,7 +203,7 @@ class Client:
 
         _LOGGER.debug("Get Mode Panel Response: %s", response.text)
 
-        alarm_device = self._devices.get(CONST.ALARM_DEVICE_ID + '1')
+        alarm_device = self._devices.get(ALARM.id(1))
 
         if alarm_device:
             alarm_device.update(self._panel)
@@ -263,7 +263,7 @@ class Client:
 
     def get_alarm(self, area='1', refresh=False):
         """Shortcut method to get the alarm device."""
-        return self.get_device(CONST.ALARM_DEVICE_ID + area, refresh)
+        return self.get_device(ALARM.id(area), refresh)
 
     def set_default_mode(self, default_mode):
         """Set the default mode when alarms are turned 'on'."""

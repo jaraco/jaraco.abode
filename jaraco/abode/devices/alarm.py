@@ -11,12 +11,16 @@ from ..helpers import urls
 _LOGGER = logging.getLogger(__name__)
 
 
+def id(area):
+    return f'area_{area}'
+
+
 def state_from_panel(panel_state, area='1'):
     """Adapt panel state to alarm state."""
     alarm_state = copy.deepcopy(panel_state)
-    alarm_state['name'] = CONST.ALARM_NAME
-    alarm_state['id'] = CONST.ALARM_DEVICE_ID + area
-    alarm_state['type'] = CONST.ALARM_TYPE
+    alarm_state['name'] = 'Abode Alarm'
+    alarm_state['id'] = id(area)
+    alarm_state['type'] = 'Alarm'
     alarm_state['type_tag'] = CONST.DEVICE_ALARM
     alarm_state['generic_type'] = CONST.TYPE_ALARM
     alarm_state['uuid'] = alarm_state.get('mac').replace(':', '').lower()

@@ -183,9 +183,3 @@ type_map = {
 def get_generic_type(type_tag):
     """Map type tag to generic type."""
     return type_map.get(type_tag.lower())
-
-
-# Constants to be used to fill our imaginary alarm device
-ALARM_NAME = "Abode Alarm"
-ALARM_DEVICE_ID = "area_"
-ALARM_TYPE = "Alarm"
