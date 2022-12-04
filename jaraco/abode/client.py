@@ -75,7 +75,7 @@ class Client:
         if get_automations:
             self.get_automations()
 
-    def login(self, username=None, password=None, mfa_code=None):  # noqa: C901
+    def login(self, username=None, password=None, mfa_code=None):
         """Explicit Abode login."""
 
         self._token = None
