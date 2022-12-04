@@ -82,7 +82,10 @@ def _read_events():
 @call_aside
 def _load_events():
     def var_name(event):
-        return event['var_name'] or event['text'].replace(' ', '_').upper()
+        return (
+            event['var_name']
+            or event['text'].replace(' ', '_').replace('/', '_').upper()
+        )
 
     all_events = list(_read_events())
     vars = {

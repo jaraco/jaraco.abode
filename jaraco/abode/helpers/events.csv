@@ -19,7 +19,7 @@ code, text, var_name
 1162, CO Detected
 1301, Power Lost
 1384, Battery Low
-1311, Battery Missing/Dead, BATTERY_MISSING_DEAD
+1311, Battery Missing/Dead
 1344, Jam Detect/Signal Interference, JAM_DETECT
 1354, GPS Location Fail
 1355, Polling Failure
@@ -29,7 +29,7 @@ code, text, var_name
 1383, Tamper Switch Triggered
 1407, System Disarmed
 1406, Event Canceled
-1408, Set/Unset Disarm, SET_UNSET_DISARM
+1408, Set/Unset Disarm
 1447, Offline
 1454, Fail to Close
 1456, Partial Arm
@@ -63,7 +63,7 @@ code, text, var_name
 3383, Tamper Switch Restored
 3407, System Armed
 3401, System Armed - Away, SYSTEM_ARMED_AWAY
-3408, Set/Unset Arm, SET_UNSET_ARM
+3408, Set/Unset Arm
 3447, Online
 3758, System Armed - Home, SYSTEM_ARMED_HOME
 3649, Mobile Unit Connected to Base
