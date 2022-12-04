@@ -15,7 +15,6 @@ from more_itertools import always_iterable
 import jaraco.abode
 from . import Client
 from .helpers import urls
-from .helpers import constants as CONST
 from .helpers import timeline as TIMELINE
 
 _LOGGER = logging.getLogger('abodecl')
@@ -74,13 +73,6 @@ def build_parser():
     parser.add_argument('-p', '--password', help='Password')
 
     parser.add_argument('--mfa', help='Multifactor authentication code')
-
-    parser.add_argument(
-        '--cache',
-        metavar='pickle_file',
-        help='Create/update/use a pickle cache for the username and password.',
-        default=CONST.CACHE_PATH,
-    )
 
     parser.add_argument(
         '--mode',
@@ -222,7 +214,6 @@ def _create_client_instance(args):
         username=args.username,
         password=args.password,
         get_devices=args.mfa is None,
-        cache_path=args.cache,
     )
 
 

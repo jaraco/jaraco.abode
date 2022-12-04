@@ -3,8 +3,6 @@ Test Abode system setup, shutdown, and general functionality.
 
 Tests the system initialization and attributes of the main Abode system.
 """
-import os
-
 import pytest
 import requests
 
@@ -12,6 +10,7 @@ import jaraco.abode
 import jaraco.abode.helpers.constants as CONST
 from jaraco.abode.helpers import urls
 from jaraco.abode import settings
+from jaraco.abode import config
 
 from . import mock as MOCK
 from .mock import login as LOGIN
@@ -24,14 +23,22 @@ from .mock import user as USER
 
 
 @pytest.fixture
-def cache_path(tmp_path, request):
-    request.instance.cache_path = tmp_path / 'cache.pickle'
+def data_path(tmp_path, monkeypatch):
+    class Paths:
+        user_data_path = tmp_path / 'user_data'
+
+        @property
+        def user_data(self):
+            self.user_data_path.mkdir(exist_ok=True)
+            return self.user_data_path
+
+    monkeypatch.setattr(config, 'paths', Paths())
 
 
 @pytest.fixture(autouse=True)
 def abode_objects(request):
     self = request.instance
-    self.client_no_cred = jaraco.abode.Client(disable_cache=True)
+    self.client_no_cred = jaraco.abode.Client()
 
 
 USERNAME = 'foobar'
@@ -88,7 +95,6 @@ class TestAbode:
             password='buzz',
             auto_login=True,
             get_devices=False,
-            disable_cache=True,
         )
 
         assert client._username == 'fizz'
@@ -123,7 +129,6 @@ class TestAbode:
             auto_login=False,
             get_devices=True,
             get_automations=True,
-            disable_cache=True,
         )
 
         assert client._username == 'fizz'
@@ -482,10 +487,11 @@ class TestAbode:
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(settings.SIREN_TAMPER_SOUNDS, "foobar")
 
-    @pytest.mark.usefixtures('cache_path')
+    @pytest.mark.usefixtures('data_path')
     def tests_cookies(self, m):
         """Check that cookies are saved and loaded successfully."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        cookies = dict(SESSION='COOKIE')
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
@@ -497,27 +503,20 @@ class TestAbode:
             password='buzz',
             auto_login=False,
             get_devices=False,
-            disable_cache=False,
-            cache_path=self.cache_path,
         )
-
-        # Mock cookie created by Abode after login
-        cookie = requests.cookies.create_cookie(name='SESSION', value='COOKIE')
-
-        client._session.cookies.set_cookie(cookie)
 
         client.login()
 
         # Test that our cookies are fully realized prior to login
 
-        assert client._cache['uuid'] is not None
-        assert client._cache['cookies'] is not None
+        assert client._session.cookies
 
         # Test that we now have a cookies file
-        assert os.path.exists(self.cache_path)
+        cookies_file = config.paths.user_data / 'cookies.json'
+        assert cookies_file.exists()
 
-        # Copy our current cookies file and data
-        first_cookies_data = client._cache
+        # Copy the current cookies
+        saved_cookies = client._session.cookies
 
         # New client reads in old data
         client = jaraco.abode.Client(
@@ -525,50 +524,47 @@ class TestAbode:
             password='buzz',
             auto_login=False,
             get_devices=False,
-            disable_cache=False,
-            cache_path=self.cache_path,
         )
 
         # Test that the cookie data is the same
-        assert client._cache['uuid'] == first_cookies_data['uuid']
+        assert str(client._session.cookies) == str(saved_cookies)
 
-    @pytest.mark.usefixtures('cache_path')
+    @pytest.mark.usefixtures('data_path')
     def test_empty_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        cookies = dict(SESSION='COOKIE')
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an empty file
-        self.cache_path.write_text('')
+        cookie_file = config.paths.user_data / 'cookies.json'
 
         # Cookies are created
-        empty_client = jaraco.abode.Client(
+        jaraco.abode.Client(
             username='fizz',
             password='buzz',
             auto_login=True,
             get_devices=False,
-            disable_cache=False,
-            cache_path=self.cache_path,
         )
 
-        # Test that some cache exists
+        # Test that some cookie data exists
+        assert cookie_file.read_bytes()
 
-        assert empty_client._cache['uuid'] is not None
-
-    @pytest.mark.usefixtures('cache_path')
+    @pytest.mark.usefixtures('data_path')
     def test_invalid_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
+        cookies = dict(SESSION='COOKIE')
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an invalid pickle file
-        self.cache_path.write_text('Invalid file goes here')
+        config.paths.user_data.joinpath('cookies.json').write_text('invalid cookies')
 
         # Cookies are created
         empty_client = jaraco.abode.Client(
@@ -576,10 +572,7 @@ class TestAbode:
             password='buzz',
             auto_login=True,
             get_devices=False,
-            disable_cache=False,
-            cache_path=self.cache_path,
         )
 
         # Test that some cache exists
-
-        assert empty_client._cache['uuid'] is not None
+        assert empty_client._session.cookies

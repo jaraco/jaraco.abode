@@ -1,3 +1,15 @@
+v3.0.0
+======
+
+Project no longer exposes a "cache" (or related options for cache-path).
+Instead, state from cookies from the API is stored in an "app data"
+path (platform-specific).
+
+It's no longer possible to disable the "cache". Cookies are persisted
+unconditionally.
+
+As a result, a UUID is persisted only if an API login succeeded.
+
 v2.0.0
 ======
 
