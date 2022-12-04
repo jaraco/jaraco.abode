@@ -1,5 +1,8 @@
 """Timeline event constants."""
 
+from jaraco.collections import RangeMap
+
+
 # Timeline event groups.
 
 ALARM_GROUP = 'abode_alarm'
@@ -31,44 +34,40 @@ ALL_EVENT_GROUPS = [
 ]
 
 
-def map_event_code(event_code):  # noqa: C901
+event_code_mapping = RangeMap(
+    {
+        1099: RangeMap.undefined_value,
+        1199: ALARM_GROUP,
+        1299: RangeMap.undefined_value,
+        1399: PANEL_FAULT_GROUP,
+        1499: DISARM_GROUP,
+        1599: RangeMap.undefined_value,
+        1699: TEST_GROUP,
+        3099: RangeMap.undefined_value,
+        3199: ALARM_END_GROUP,
+        3299: RangeMap.undefined_value,
+        3399: PANEL_RESTORE_GROUP,
+        3799: ARM_GROUP,
+        3999: RangeMap.undefined_value,
+        4001: ALARM_END_GROUP,
+        4003: ARM_FAULT_GROUP,
+        4999: RangeMap.undefined_value,
+        5099: CAPTURE_GROUP,
+        5199: DEVICE_GROUP,
+        5299: AUTOMATION_GROUP,
+        5999: RangeMap.undefined_value,
+        6100: ARM_FAULT_GROUP,
+    }
+)
+"""
+The best inferred code mapping based on observed events.
+Adjust as needed.
+"""
+
+
+def map_event_code(event_code):
     """Map a specific event_code to an event group."""
-    event_code = int(event_code)
-
-    # Honestly, these are just guessing based on the below event list.
-    # It could be wrong, I have no idea.
-    if 1100 <= event_code <= 1199:
-        return ALARM_GROUP
-
-    if 3100 <= event_code <= 3199 or 4000 <= event_code <= 4001:
-        return ALARM_END_GROUP
-
-    if 1300 <= event_code <= 1399:
-        return PANEL_FAULT_GROUP
-
-    if 3300 <= event_code <= 3399:
-        return PANEL_RESTORE_GROUP
-
-    if 1400 <= event_code <= 1499:
-        return DISARM_GROUP
-
-    if 3400 <= event_code <= 3799:
-        return ARM_GROUP
-
-    if 1600 <= event_code <= 1699:
-        return TEST_GROUP
-
-    if 5000 <= event_code <= 5099:
-        return CAPTURE_GROUP
-
-    if 5100 <= event_code <= 5199:
-        return DEVICE_GROUP
-
-    if 5200 <= event_code <= 5299:
-        return AUTOMATION_GROUP
-
-    if 6000 <= event_code <= 6100 or 4002 <= event_code <= 4003:
-        return ARM_FAULT_GROUP
+    return event_code_mapping.get(int(event_code))
 
 
 # Specific timeline events by event code.
