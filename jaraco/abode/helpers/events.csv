@@ -48,8 +48,8 @@ code, text, var_name
 1649, Mobile Unit Disconnected from Base
 1655, Test Report
 1704, Entry
-1750, DC Open - Mobility, DC_OPEN_MOBILITY
-1751, IR Activity - Mobility, IR_ACTIVITY_MOBILITY
+1750, DC Open - Mobility
+1751, IR Activity - Mobility
 1752, Siren On
 1788, Motion Detected Area 2
 1789, Motion Detected Area 1
@@ -62,12 +62,12 @@ code, text, var_name
 3355, Polling Failure Restored
 3383, Tamper Switch Restored
 3407, System Armed
-3401, System Armed - Away, SYSTEM_ARMED_AWAY
+3401, System Armed - Away
 3408, Set/Unset Arm
 3447, Online
-3758, System Armed - Home, SYSTEM_ARMED_HOME
+3758, System Armed - Home
 3649, Mobile Unit Connected to Base
-3750, DC Close - Mobility, DC_CLOSE_MOBILITY
+3750, DC Close - Mobility
 3752, Siren Off
 5000, Vevent_codeeo
 5001, Capture Image
