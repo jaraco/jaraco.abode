@@ -511,10 +511,8 @@ class TestAbode:
 
         assert client._session.cookies
 
-        client._session.cookies.close()
-
         # Test that we now have a cookies file
-        cookies_file = config.paths.user_data / 'cookies.db'
+        cookies_file = config.paths.user_data / 'cookies.json'
         assert cookies_file.exists()
 
         # Copy the current cookies
@@ -542,7 +540,7 @@ class TestAbode:
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an empty file
-        cookie_file = config.paths.user_data / 'cookies.db'
+        cookie_file = config.paths.user_data / 'cookies.json'
 
         # Cookies are created
         jaraco.abode.Client(
@@ -566,7 +564,7 @@ class TestAbode:
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an invalid pickle file
-        config.paths.user_data.joinpath('cookies.db').write_text('invalid cookies')
+        config.paths.user_data.joinpath('cookies.json').write_text('invalid cookies')
 
         # Cookies are created
         empty_client = jaraco.abode.Client(

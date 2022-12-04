@@ -29,7 +29,7 @@ _LOGGER = logging.getLogger(__name__)
 
 @retry(
     retries=1,
-    cleanup=lambda: config.paths.user_data.joinpath('cookies.db').unlink(),
+    cleanup=lambda: config.paths.user_data.joinpath('cookies.json').unlink(),
     trap=Exception,
 )
 def _cookies():
