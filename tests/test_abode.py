@@ -22,19 +22,6 @@ from .mock.devices import door_contact as DOOR_CONTACT
 from .mock import user as USER
 
 
-@pytest.fixture
-def data_path(tmp_path, monkeypatch):
-    class Paths:
-        user_data_path = tmp_path / 'user_data'
-
-        @property
-        def user_data(self):
-            self.user_data_path.mkdir(exist_ok=True)
-            return self.user_data_path
-
-    monkeypatch.setattr(config, 'paths', Paths())
-
-
 @pytest.fixture(autouse=True)
 def abode_objects(request):
     self = request.instance
@@ -487,7 +474,6 @@ class TestAbode:
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting(settings.SIREN_TAMPER_SOUNDS, "foobar")
 
-    @pytest.mark.usefixtures('data_path')
     def test_cookies(self, m):
         """Check that cookies are saved and loaded successfully."""
         cookies = dict(SESSION='COOKIE')
@@ -529,7 +515,6 @@ class TestAbode:
         # Test that the cookie data is the same
         assert str(client._session.cookies) == str(saved_cookies)
 
-    @pytest.mark.usefixtures('data_path')
     def test_empty_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
         cookies = dict(SESSION='COOKIE')
@@ -553,7 +538,6 @@ class TestAbode:
         # Test that some cookie data exists
         assert cookie_file.read_bytes()
 
-    @pytest.mark.usefixtures('data_path')
     def test_invalid_cookies(self, m):
         """Check that empty cookies file is loaded successfully."""
         cookies = dict(SESSION='COOKIE')

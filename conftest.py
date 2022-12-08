@@ -33,3 +33,20 @@ def wrap_mock_register_uri(mocker):
 @pytest.fixture
 def m(requests_mock):
     return wrap_mock_register_uri(requests_mock)
+
+
+@pytest.fixture(autouse=True)
+def app_paths(tmp_path, monkeypatch):
+    """
+    Redirect app dirs to temporary paths.
+    """
+
+    class Paths:
+        user_data_path = tmp_path / 'user data'
+
+        @property
+        def user_data(self):
+            self.user_data_path.mkdir(exist_ok=True)
+            return self.user_data_path
+
+    monkeypatch.setattr(jaraco.abode.config, 'paths', Paths())
