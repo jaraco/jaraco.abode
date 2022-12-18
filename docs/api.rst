@@ -16,6 +16,16 @@ API
     :undoc-members:
     :show-inheritance:
 
+.. automodule:: jaraco.abode.client
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: jaraco.abode.config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 .. automodule:: jaraco.abode.event_controller
     :members:
     :undoc-members:
@@ -26,12 +36,12 @@ API
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: jaraco.abode.socketio
+.. automodule:: jaraco.abode.settings
     :members:
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: jaraco.abode.utils
+.. automodule:: jaraco.abode.socketio
     :members:
     :undoc-members:
     :show-inheritance:
