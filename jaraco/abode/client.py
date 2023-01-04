@@ -193,21 +193,25 @@ class Client:
             self._devices[alarm_device.device_id] = alarm_device
 
     def _load_device(self, doc):
-        # Attempt to reuse an existing device
+        self._reuse_device(doc) or self._create_new_device(doc)
+
+    def _reuse_device(self, doc):
         device = self._devices.get(doc['id'])
 
-        # No existing device, create a new one
-        if device:
-            device.update(doc)
-        else:
-            device = Device.new(doc, self)
+        if not device:
+            return
 
-            if not device:
-                _LOGGER.debug("Skipping unknown device: %s", doc)
+        device.update(doc)
+        return device
 
-                return
+    def _create_new_device(self, doc):
+        device = Device.new(doc, self)
 
-            self._devices[device.device_id] = device
+        if not device:
+            _LOGGER.debug("Skipping unknown device: %s", doc)
+            return
+
+        self._devices[device.device_id] = device
 
     def get_device(self, device_id, refresh=False):
         """Get a single device."""
