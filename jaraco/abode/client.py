@@ -5,7 +5,7 @@ An Abode alarm Python library.
 import logging
 import uuid
 
-from more_itertools import always_iterable
+from more_itertools import always_iterable, consume
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
 from jaraco.net.http import cookies
@@ -170,26 +170,11 @@ class Client:
 
         _LOGGER.info("Updating all devices...")
         response = self.send_request("get", urls.DEVICES)
-        device_docs = always_iterable(response.json(), base_type=dict)
+        devices = always_iterable(response.json(), base_type=dict)
 
         _LOGGER.debug("Get Devices Response: %s", response.text)
 
-        for doc in device_docs:
-            # Attempt to reuse an existing device
-            device = self._devices.get(doc['id'])
-
-            # No existing device, create a new one
-            if device:
-                device.update(doc)
-            else:
-                device = Device.new(doc, self)
-
-                if not device:
-                    _LOGGER.debug("Skipping unknown device: %s", doc)
-
-                    continue
-
-                self._devices[device.device_id] = device
+        consume(map(self._load_device, devices))
 
         # We will be treating the Abode panel itself as an armable device.
         panel_response = self.send_request("get", urls.PANEL)
@@ -206,6 +191,23 @@ class Client:
         else:
             alarm_device = ALARM.create_alarm(self._panel, self)
             self._devices[alarm_device.device_id] = alarm_device
+
+    def _load_device(self, doc):
+        # Attempt to reuse an existing device
+        device = self._devices.get(doc['id'])
+
+        # No existing device, create a new one
+        if device:
+            device.update(doc)
+        else:
+            device = Device.new(doc, self)
+
+            if not device:
+                _LOGGER.debug("Skipping unknown device: %s", doc)
+
+                return
+
+            self._devices[device.device_id] = device
 
     def get_device(self, device_id, refresh=False):
         """Get a single device."""
