@@ -158,7 +158,7 @@ class SocketIO:
 
             self._thread.join()
 
-    def _run_socketio_thread(self):  # noqa: C901
+    def _run_socketio_thread(self):
         self._running = True
 
         intervals = BackoffIntervals()
@@ -167,30 +167,7 @@ class SocketIO:
             _LOGGER.info("Attempting to connect to SocketIO server...")
 
             try:
-                self._handle_event(STARTED, None)
-
-                self._websocket = WebSocket(self._url)
-                self._exit_event = threading.Event()
-
-                if self._cookie:
-                    self._websocket.add_header(COOKIE_HEADER, self._cookie)
-
-                if self._origin:
-                    self._websocket.add_header(ORIGIN_HEADER, self._origin)
-
-                for event in persist(
-                    self._websocket, ping_rate=0, poll=5.0, exit_event=self._exit_event
-                ):
-                    if isinstance(event, events.Connected):
-                        intervals.reset()
-
-                    name = event.__class__.__name__.lower()
-                    method = getattr(self, f'_on_websocket_{name}')
-                    method(event)
-
-                    if self._running is False:
-                        self._websocket.close()
-
+                self._step(intervals)
             except SocketIOException as exc:
                 _LOGGER.warning("SocketIO Error: %s", exc.details)
 
@@ -206,6 +183,31 @@ class SocketIO:
                     break
 
         self._handle_event(STOPPED, None)
+
+    def _step(self, intervals):
+        self._handle_event(STARTED, None)
+
+        self._websocket = WebSocket(self._url)
+        self._exit_event = threading.Event()
+
+        if self._cookie:
+            self._websocket.add_header(COOKIE_HEADER, self._cookie)
+
+        if self._origin:
+            self._websocket.add_header(ORIGIN_HEADER, self._origin)
+
+        for event in persist(
+            self._websocket, ping_rate=0, poll=5.0, exit_event=self._exit_event
+        ):
+            if isinstance(event, events.Connected):
+                intervals.reset()
+
+            name = event.__class__.__name__.lower()
+            method = getattr(self, f'_on_websocket_{name}')
+            method(event)
+
+            if self._running is False:
+                self._websocket.close()
 
     def _on_websocket_connected(self, _event):
         self._websocket_connected = True
