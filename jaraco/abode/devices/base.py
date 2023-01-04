@@ -103,17 +103,14 @@ class Device:
         path = path.format(device_id=self.device_id)
 
         response = self._client.send_request(method="get", path=path)
-        response_object = response.json()
+        state = list(always_iterable(response.json(), base_type=dict))
 
         _LOGGER.debug("Device Refresh Response: %s", response.text)
 
-        if response_object and not isinstance(response_object, (tuple, list)):
-            response_object = [response_object]
-
-        for device in response_object:
+        for device in state:
             self.update(device)
 
-        return response_object
+        return state
 
     def update(self, json_state):
         """Update the json data from a dictionary.
