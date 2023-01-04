@@ -1,7 +1,9 @@
 v3.1.0
 ======
 
-Substantial refactoring and cleanup. No expected external changes.
+Substantial refactoring and cleanup.
+
+Switched to ``platformdirs`` dependency from ``app_paths``.
 
 v3.0.0
 ======
