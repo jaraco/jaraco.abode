@@ -2,7 +2,9 @@
 import base64
 import logging
 from shutil import copyfileobj
+
 import requests
+from more_itertools import first, always_iterable
 
 import jaraco
 from ..helpers import constants as CONST
@@ -60,19 +62,18 @@ class Camera(base.Device):
         if not timeline_json:
             return False
 
-        # If we get a list of objects back (likely)
-        # then we just want the first one as it should be the "newest"
-        if isinstance(timeline_json, (tuple, list)):
-            timeline_json = timeline_json[0]
+        # If timeline_json contains a list of objects (likely), use
+        # the first as it should be the "newest".
+        timeline = first(always_iterable(timeline_json, base_type=dict))
 
         # Verify that the event code is of the "CAPTURE IMAGE" event
-        event_code = timeline_json.get('event_code')
+        event_code = timeline.get('event_code')
         if event_code != TIMELINE.CAPTURE_IMAGE['event_code']:
             raise jaraco.abode.Exception(ERROR.CAM_TIMELINE_EVENT_INVALID)
 
         # The timeline response has an entry for "file_path" that acts as the
         # location of the image within the Abode servers.
-        file_path = timeline_json.get('file_path')
+        file_path = timeline.get('file_path')
         if not file_path:
             raise jaraco.abode.Exception(ERROR.CAM_IMAGE_REFRESH_NO_FILE)
 

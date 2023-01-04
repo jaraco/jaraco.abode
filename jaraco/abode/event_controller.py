@@ -2,6 +2,8 @@
 import collections
 import logging
 
+from more_itertools import first, always_iterable
+
 import jaraco
 from .devices.base import Device
 from .helpers import urls
@@ -76,10 +78,7 @@ class EventController:
         if not devices:
             return False
 
-        if not isinstance(devices, (tuple, list)):
-            devices = [devices]
-
-        for device in devices:
+        for device in always_iterable(devices, base_type=(dict, str)):
             # Device may be a device_id
             device_id = device
 
@@ -102,10 +101,7 @@ class EventController:
         if not devices:
             return False
 
-        if not isinstance(devices, (tuple, list)):
-            devices = [devices]
-
-        for device in devices:
+        for device in always_iterable(devices, base_type=dict):
             device_id = device
 
             if isinstance(device, Device):
@@ -128,10 +124,7 @@ class EventController:
         if not event_groups:
             return False
 
-        if not isinstance(event_groups, (tuple, list)):
-            event_groups = [event_groups]
-
-        for event_group in event_groups:
+        for event_group in always_iterable(event_groups, base_type=(dict, str)):
             if event_group not in TIMELINE.Groups.ALL:
                 raise jaraco.abode.Exception(
                     ERROR.EVENT_GROUP_INVALID, TIMELINE.Groups.ALL
@@ -148,10 +141,7 @@ class EventController:
         if not timeline_events:
             return False
 
-        if not isinstance(timeline_events, (tuple, list)):
-            timeline_events = [timeline_events]
-
-        for timeline_event in timeline_events:
+        for timeline_event in always_iterable(timeline_events, base_type=dict):
             if not isinstance(timeline_event, dict):
                 raise jaraco.abode.Exception(ERROR.EVENT_CODE_MISSING)
 
@@ -209,8 +199,7 @@ class EventController:
 
     def _on_device_update(self, devid):
         """Device callback from Abode SocketIO server."""
-        if isinstance(devid, (tuple, list)):
-            devid = devid[0]
+        devid = first(always_iterable(devid), None)
 
         if devid is None:
             _LOGGER.warning("Device update with no device id.")
@@ -229,8 +218,7 @@ class EventController:
 
     def _on_mode_change(self, mode):
         """Mode change broadcast from Abode SocketIO server."""
-        if isinstance(mode, (tuple, list)):
-            mode = mode[0]
+        mode = first(always_iterable(mode, base_type=(dict, str)), None)
 
         if mode is None:
             _LOGGER.warning("Mode change event with no mode.")
@@ -255,8 +243,7 @@ class EventController:
 
     def _on_timeline_update(self, event):
         """Timeline update broadcast from Abode SocketIO server."""
-        if isinstance(event, (tuple, list)):
-            event = event[0]
+        event = first(always_iterable(event, base_type=dict))
 
         event_type = event.get('event_type')
         event_code = event.get('event_code')
@@ -291,8 +278,7 @@ class EventController:
         """Automation update broadcast from Abode SocketIO server."""
         event_group = TIMELINE.Groups.AUTOMATION_EDIT
 
-        if isinstance(event, (tuple, list)):
-            event = event[0]
+        event = first(always_iterable(event, base_type=(dict, str)))
 
         for callback in self._event_callbacks[event_group]:
             _execute_callback(callback, event)
