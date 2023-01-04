@@ -161,15 +161,9 @@ class SocketIO:
                 ):
                     if isinstance(event, events.Connected):
                         retries = 0
-                        self._on_websocket_connected(event)
-                    elif isinstance(event, events.Disconnected):
-                        self._on_websocket_disconnected(event)
-                    elif isinstance(event, events.Text):
-                        self._on_websocket_text(event)
-                    elif isinstance(event, events.Poll):
-                        self._on_websocket_poll(event)
-                    elif isinstance(event, events.BackOff):
-                        self._on_websocket_backoff(event)
+                    name = event.__class__.__name__.lower()
+                    method = getattr(self, f'_on_websocket_{name}')
+                    method(event)
 
                     if self._running is False:
                         self._websocket.close()
