@@ -5,11 +5,12 @@ An Abode alarm Python library.
 import logging
 import uuid
 
-from more_itertools import always_iterable, consume
+from more_itertools import consume
 from requests_toolbelt import sessions
 from requests.exceptions import RequestException
 from jaraco.net.http import cookies
 from jaraco.functools import retry
+from jaraco.itertools import always_iterable
 
 import jaraco
 from .automation import Automation
@@ -170,7 +171,7 @@ class Client:
 
         _LOGGER.info("Updating all devices...")
         response = self.send_request("get", urls.DEVICES)
-        devices = always_iterable(response.json(), base_type=dict)
+        devices = always_iterable(response.json())
 
         _LOGGER.debug("Get Devices Response: %s", response.text)
 
@@ -237,7 +238,7 @@ class Client:
             resp = self.send_request("get", urls.AUTOMATION)
             _LOGGER.debug("Get Automations Response: %s", resp.text)
 
-            for automation_ob in always_iterable(resp.json(), base_type=dict):
+            for automation_ob in always_iterable(resp.json()):
                 # Attempt to reuse an existing automation object
                 automation = self._automations.get(str(automation_ob['id']))
 

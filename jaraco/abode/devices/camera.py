@@ -4,9 +4,9 @@ import logging
 from shutil import copyfileobj
 
 import requests
-from more_itertools import first, always_iterable
 
 import jaraco
+from .._itertools import single
 from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
@@ -64,7 +64,7 @@ class Camera(base.Device):
 
         # If timeline_json contains a list of objects (likely), use
         # the first as it should be the "newest".
-        timeline = first(always_iterable(timeline_json, base_type=dict))
+        timeline = single(timeline_json)
 
         # Verify that the event code is of the "CAPTURE IMAGE" event
         event_code = timeline.get('event_code')
