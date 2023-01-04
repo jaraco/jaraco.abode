@@ -13,7 +13,6 @@ class Automation:
     """Class for viewing and controlling automations."""
 
     def __init__(self, abode, automation):
-        """Init Automation class."""
         self._client = abode
         self._automation = automation
 

@@ -51,7 +51,6 @@ class SocketIO:
     """Class for using websockets to talk to a SocketIO server."""
 
     def __init__(self, url, cookie=None, origin=None):
-        """Init SocketIO class."""
         self._url = url + URL_PARAMS
 
         if origin:

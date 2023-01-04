@@ -6,7 +6,6 @@ class Exception(builtins.Exception):
     """Class to throw general abode exception."""
 
     def __init__(self, error, details=None):
-        """Initialize Exception."""
         # Call the base class constructor with the parameters it needs
         super().__init__(error[1])
 

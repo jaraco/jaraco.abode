@@ -47,7 +47,6 @@ class Client:
         get_devices=False,
         get_automations=False,
     ):
-        """Init Abode object."""
         self._session = None
         self._token = None
         self._panel = None
