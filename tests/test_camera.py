@@ -20,13 +20,10 @@ from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
 
 
-def set_cam_type(device_type):
-    """Return camera type_tag."""
-    if device_type == CONST.DEVICE_IP_CAM:
-        return IPCAM
-
-    if device_type == CONST.DEVICE_MOTION_CAMERA:
-        return IRCAMERA
+cam_types = {
+    CONST.DEVICE_IP_CAM: IPCAM,
+    CONST.DEVICE_MOTION_CAMERA: IRCAMERA,
+}
 
 
 def all_devices():
@@ -70,7 +67,7 @@ class TestCamera:
         """Tests that camera properties work as expected."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test our device
             assert device is not None
@@ -103,7 +100,7 @@ class TestCamera:
         """Tests that camera devices capture new images."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test that we have the camera devices
             assert device is not None
@@ -143,7 +140,7 @@ class TestCamera:
         """Tests that camera devices update correctly via timeline request."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test that we have our device
             assert device is not None
@@ -221,7 +218,7 @@ class TestCamera:
         """Tests that camera images will write to a file."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test that we have our device
             assert device is not None
@@ -264,7 +261,7 @@ class TestCamera:
         """Tests that camera devices capture new snapshots."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test that we have our device
             assert device is not None
@@ -289,7 +286,7 @@ class TestCamera:
         """Tests that camera snapshots will write to a file."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test that we have our device
             assert device is not None
@@ -318,7 +315,7 @@ class TestCamera:
         """Tests that camera snapshots can be converted to a data url."""
         for device in self.camera_devices():
             # Specify which device module to use based on type_tag
-            cam_type = set_cam_type(device.type_tag)
+            cam_type = cam_types[device.type_tag]
 
             # Test that we have our device
             assert device is not None
