@@ -67,16 +67,6 @@ class BackoffIntervals:
         self.attempts = itertools.count(*args)
 
 
-def backoff_intervals():
-    min_wait = 5
-    max_wait = 30
-
-    diff = max_wait - min_wait
-
-    for attempt in itertools.count(1):
-        yield min_wait + random.random() * min(diff, 2**attempt)
-
-
 class SocketIO:
     """Class for using websockets to talk to a SocketIO server."""
 
