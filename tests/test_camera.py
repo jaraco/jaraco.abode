@@ -1,6 +1,7 @@
 """Test the Abode camera class."""
 import base64
 import os
+import pathlib
 
 import pytest
 
@@ -246,7 +247,7 @@ class TestCamera:
             assert device.image_to_file(path, get_image=True)
 
             # Test the file written and cleanup
-            image_data = open(path).read()
+            image_data = pathlib.Path(path).read_text()
             assert image_response, image_data
             os.remove(path)
 
@@ -305,7 +306,7 @@ class TestCamera:
             assert device.snapshot_to_file(path, get_snapshot=True)
 
             # Test the file written and cleanup
-            image_data = open(path, "rb").read()
+            image_data = pathlib.Path(path).read_bytes()
             assert image_response == image_data
             os.remove(path)
 
