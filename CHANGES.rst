@@ -1,3 +1,8 @@
+v3.1.0
+======
+
+Substantial refactoring and cleanup. No expected external changes.
+
 v3.0.0
 ======
 
