@@ -170,25 +170,22 @@ class Client:
 
         _LOGGER.info("Updating all devices...")
         response = self.send_request("get", urls.DEVICES)
-        response_object = response.json()
-
-        if response_object and not isinstance(response_object, (tuple, list)):
-            response_object = [response_object]
+        device_docs = always_iterable(response.json(), base_type=dict)
 
         _LOGGER.debug("Get Devices Response: %s", response.text)
 
-        for device_json in response_object:
+        for doc in device_docs:
             # Attempt to reuse an existing device
-            device = self._devices.get(device_json['id'])
+            device = self._devices.get(doc['id'])
 
             # No existing device, create a new one
             if device:
-                device.update(device_json)
+                device.update(doc)
             else:
-                device = Device.new(device_json, self)
+                device = Device.new(doc, self)
 
                 if not device:
-                    _LOGGER.debug("Skipping unknown device: %s", device_json)
+                    _LOGGER.debug("Skipping unknown device: %s", doc)
 
                     continue
 
