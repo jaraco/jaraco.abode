@@ -49,6 +49,15 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class BackoffIntervals:
+    """
+    >>> bi = BackoffIntervals()
+    >>> intervals = list(itertools.islice(bi, 10))
+    >>> all(
+    ...     BackoffIntervals.min_wait <= interval <= BackoffIntervals.max_wait
+    ...     for interval in intervals)
+    True
+    """
+
     min_wait = 5
     max_wait = 30
     diff = max_wait - min_wait
