@@ -4,6 +4,7 @@ import json
 import logging
 import threading
 import random
+import itertools
 
 from datetime import datetime
 
@@ -45,6 +46,35 @@ ORIGIN_HEADER = str.encode("Origin")
 URL_PARAMS = "?EIO=3&transport=websocket"
 
 _LOGGER = logging.getLogger(__name__)
+
+
+class BackoffIntervals:
+    min_wait = 5
+    max_wait = 30
+    diff = max_wait - min_wait
+
+    def __init__(self):
+        self.reset(1)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        attempt = next(self.attempts)
+        return self.min_wait + random.random() * min(self.diff, 2**attempt)
+
+    def reset(self, *args):
+        self.attempts = itertools.count(*args)
+
+
+def backoff_intervals():
+    min_wait = 5
+    max_wait = 30
+
+    diff = max_wait - min_wait
+
+    for attempt in itertools.count(1):
+        yield min_wait + random.random() * min(diff, 2**attempt)
 
 
 class SocketIO:
@@ -131,20 +161,12 @@ class SocketIO:
     def _run_socketio_thread(self):  # noqa: C901
         self._running = True
 
-        # Back off for Error restarting
-        min_wait = 5
-        max_wait = 30
-
-        retries = 0
-
-        random_wait = max_wait - min_wait
+        intervals = BackoffIntervals()
 
         while self._running is True:
             _LOGGER.info("Attempting to connect to SocketIO server...")
 
             try:
-                retries += 1
-
                 self._handle_event(STARTED, None)
 
                 self._websocket = WebSocket(self._url)
@@ -160,7 +182,8 @@ class SocketIO:
                     self._websocket, ping_rate=0, poll=5.0, exit_event=self._exit_event
                 ):
                     if isinstance(event, events.Connected):
-                        retries = 0
+                        intervals.reset()
+
                     name = event.__class__.__name__.lower()
                     method = getattr(self, f'_on_websocket_{name}')
                     method(event)
@@ -175,11 +198,11 @@ class SocketIO:
                 _LOGGER.warning("Websocket Error: %s", exc)
 
             if self._running:
-                wait_for = min_wait + random.random() * min(random_wait, 2**retries)
+                interval = next(intervals)
 
-                _LOGGER.info("Waiting %f seconds before reconnecting...", wait_for)
+                _LOGGER.info("Waiting %f seconds before reconnecting...", interval)
 
-                if self._exit_event.wait(wait_for):
+                if self._exit_event.wait(interval):
                     break
 
         self._handle_event(STOPPED, None)
