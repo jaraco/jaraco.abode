@@ -427,3 +427,15 @@ class TestDevice:
         all = self.client.get_devices()
         assert selected
         assert len(selected) < len(all)
+
+    @pytest.mark.xfail(reason="#12")
+    def test_get_devices_generic_type_list(self, all_devices):
+        """
+        Test that a generic_type can select a list of types.
+        """
+        types = 'door', 'connectivity'
+        selected = self.client.get_devices(generic_type=types)
+        assert selected
+        door_devs = self.client.get_devices(generic_type='door')
+        cnct_devs = self.client.get_devices(generic_type='connectivity')
+        assert set(selected) == set(door_devs) | set(cnct_devs)
