@@ -419,6 +419,12 @@ class TestDevice:
         """
         assert not self.client.get_devices(generic_type='nect')
 
+    def test_get_devices_generic_type_superstring(self, all_devices):
+        """
+        Test that a generic_type superstring does not match in get_devices.
+        """
+        assert not self.client.get_devices(generic_type='connectivity-king')
+
     def test_get_devices_generic_type_simple_string(self, all_devices):
         """
         Test that a generic_type selects on a simple string.
@@ -428,7 +434,6 @@ class TestDevice:
         assert selected
         assert len(selected) < len(all)
 
-    @pytest.mark.xfail(reason="#12")
     def test_get_devices_generic_type_list(self, all_devices):
         """
         Test that a generic_type can select a list of types.
