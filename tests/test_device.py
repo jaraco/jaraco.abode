@@ -418,3 +418,12 @@ class TestDevice:
         Test that a generic_type substring does not match in get_devices.
         """
         assert not self.client.get_devices(generic_type='nect')
+
+    def test_get_devices_generic_type_simple_string(self, all_devices):
+        """
+        Test that a generic_type selects on a simple string.
+        """
+        selected = self.client.get_devices(generic_type='connectivity')
+        all = self.client.get_devices()
+        assert selected
+        assert len(selected) < len(all)
