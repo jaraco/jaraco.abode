@@ -22,8 +22,8 @@ def _cookie_string(cookies: http.cookiejar.CookieJar):
     >>> jar = http.cookiejar.CookieJar()
     >>> from test.test_http_cookiejar import interact_netscape
     >>> _ = interact_netscape(jar, 'http://any/', 'foo=bar', 'bing=baz')
-    >>> _cookie_string(jar)
-    'foo=bar; bing=baz'
+    >>> _cookie_string(jar) in ['foo=bar; bing=baz', 'bing=baz; foo=bar']
+    True
     """
     return "; ".join(f"{cookie.name}={cookie.value}" for cookie in cookies)
 
