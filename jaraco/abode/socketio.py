@@ -8,6 +8,7 @@ import itertools
 
 from datetime import datetime
 
+from contextlib import suppress
 from lomond import WebSocket
 from lomond import events
 from lomond.persist import persist
@@ -202,8 +203,9 @@ class SocketIO:
                 intervals.reset()
 
             name = event.__class__.__name__.lower()
-            method = getattr(self, f'_on_websocket_{name}')
-            method(event)
+            with suppress(AttributeError):
+                method = getattr(self, f'_on_websocket_{name}')
+                method(event)
 
             if self._running is False:
                 self._websocket.close()

@@ -1,6 +1,7 @@
 """Abode cloud push events."""
 import collections
 import logging
+import http.cookiejar
 
 from jaraco.itertools import always_iterable
 
@@ -14,6 +15,17 @@ from . import socketio as sio
 from ._itertools import single, opt_single
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _cookie_string(cookies: http.cookiejar.CookieJar):
+    """
+    >>> jar = http.cookiejar.CookieJar()
+    >>> from test.test_http_cookiejar import interact_netscape
+    >>> _ = interact_netscape(jar, 'http://any/', 'foo=bar', 'bing=baz')
+    >>> _cookie_string(jar) in ['foo=bar; bing=baz', 'bing=baz; foo=bar']
+    True
+    """
+    return "; ".join(f"{cookie.name}={cookie.value}" for cookie in cookies)
 
 
 class EventController:
@@ -169,10 +181,7 @@ class EventController:
 
     def _on_socket_started(self):
         """Socket IO startup callback."""
-        cookies = self._client._get_session().cookies.get_dict()
-        cookie_string = "; ".join([str(x) + "=" + str(y) for x, y in cookies.items()])
-
-        self._socketio.set_cookie(cookie_string)
+        self._socketio.set_cookie(_cookie_string(self._client._get_session().cookies))
 
     def _on_socket_connected(self):
         """Socket IO connected callback."""
@@ -186,7 +195,7 @@ class EventController:
             # Callbacks should still execute even if refresh fails (Abode
             # server issues) so that the entity availability in Home Assistant
             # is updated since we are in fact connected to the web socket.
-            for callbacks in self._connection_status_callbacks.values:
+            for callbacks in self._connection_status_callbacks.values():
                 for callback in callbacks:
                     _execute_callback(callback)
 
