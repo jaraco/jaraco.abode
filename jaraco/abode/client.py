@@ -11,6 +11,7 @@ from requests.exceptions import RequestException
 from jaraco.net.http import cookies
 from jaraco.functools import retry
 from jaraco.itertools import always_iterable
+from jaraco.collections import Everything
 
 import jaraco
 from .automation import Automation
@@ -159,10 +160,14 @@ class Client:
         if refresh or self._devices is None:
             self._load_devices()
 
+        spec_types = (
+            Everything() if generic_type is None else set(always_iterable(generic_type))
+        )
+
         return [
             device
             for device in self._devices.values()
-            if not generic_type or device.generic_type in generic_type
+            if device.generic_type in spec_types
         ]
 
     def _load_devices(self):

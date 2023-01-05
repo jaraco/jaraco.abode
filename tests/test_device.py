@@ -419,7 +419,6 @@ class TestDevice:
         """
         assert not self.client.get_devices(generic_type='nect')
 
-    @pytest.mark.xfail(reason="#12")
     def test_get_devices_generic_type_superstring(self, all_devices):
         """
         Test that a generic_type superstring does not match in get_devices.
