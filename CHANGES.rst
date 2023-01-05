@@ -1,3 +1,8 @@
+v3.1.2
+======
+
+#14: Fixed three minor issues with sockets/events.
+
 v3.1.1
 ======
 
