@@ -412,3 +412,9 @@ class TestDevice:
 
             assert class_type is not None, device.type + ' is not mapped.'
             assert isinstance(device, class_type)
+
+    def test_get_devices_generic_type_substring(self, all_devices):
+        """
+        Test that a generic_type substring does not match in get_devices.
+        """
+        assert not self.client.get_devices(generic_type='nect')
