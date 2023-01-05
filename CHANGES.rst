@@ -1,3 +1,9 @@
+v3.1.1
+======
+
+#12: Restore support for ``Client.get_devices(generic_type)`` as an
+iterable.
+
 v3.1.0
 ======
 
