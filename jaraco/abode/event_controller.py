@@ -2,6 +2,7 @@
 import collections
 import logging
 
+import copy
 from jaraco.itertools import always_iterable
 
 import jaraco
@@ -169,7 +170,7 @@ class EventController:
 
     def _on_socket_started(self):
         """Socket IO startup callback."""
-        cookies = self._client._get_session().cookies.get_dict()
+        cookies = copy.copy(self._client._get_session().cookies.shelf.store)
         cookie_string = "; ".join([str(x) + "=" + str(y) for x, y in cookies.items()])
 
         self._socketio.set_cookie(cookie_string)
@@ -186,7 +187,7 @@ class EventController:
             # Callbacks should still execute even if refresh fails (Abode
             # server issues) so that the entity availability in Home Assistant
             # is updated since we are in fact connected to the web socket.
-            for callbacks in self._connection_status_callbacks.values:
+            for callbacks in self._connection_status_callbacks.values():
                 for callback in callbacks:
                     _execute_callback(callback)
 
