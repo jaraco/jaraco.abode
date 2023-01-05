@@ -428,7 +428,6 @@ class TestDevice:
         assert selected
         assert len(selected) < len(all)
 
-    @pytest.mark.xfail(reason="#12")
     def test_get_devices_generic_type_list(self, all_devices):
         """
         Test that a generic_type can select a list of types.
