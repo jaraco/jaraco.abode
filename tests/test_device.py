@@ -7,18 +7,8 @@ from jaraco.abode.devices.base import Device
 import jaraco.abode.helpers.constants as CONST
 from .mock import devices as DEVICES
 from .mock.devices import door_contact as DOOR_CONTACT
-from .mock.devices import door_lock as DOOR_LOCK
 from .mock.devices import glass as GLASS
-from .mock.devices import ir_camera as IR_CAMERA
-from .mock.devices import keypad as KEYPAD
-from .mock.devices import pir as PIR
-from .mock.devices import power_switch_meter as POWERMETER
 from .mock.devices import power_switch_sensor as POWERSENSOR
-from .mock.devices import remote_controller as REMOTE_CONTROLLER
-from .mock.devices import secure_barrier as SECUREBARRIER
-from .mock.devices import siren as SIREN
-from .mock.devices import status_display as STATUS_DISPLAY
-from .mock.devices import water_sensor as WATER_SENSOR
 from .mock.devices import unknown as UNKNOWN
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -410,32 +400,8 @@ class TestDevice:
         with pytest.raises(jaraco.abode.Exception):
             device.set_level('28')
 
-    def test_all_devices(self, m):
+    def test_all_devices(self, all_devices):
         """Tests that all mocked devices are mapped correctly."""
-        # Set up URLs
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
-        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
-
-        # Create all devices
-        all_devices = [
-            DOOR_CONTACT.device(),
-            DOOR_LOCK.device(),
-            GLASS.device(),
-            IR_CAMERA.device(),
-            KEYPAD.device(),
-            PIR.device(),
-            POWERMETER.device(),
-            POWERSENSOR.device(),
-            REMOTE_CONTROLLER.device(),
-            SECUREBARRIER.device(),
-            SIREN.device(),
-            STATUS_DISPLAY.device(),
-            WATER_SENSOR.device(),
-        ]
-
-        m.get(urls.DEVICES, json=all_devices)
 
         # Logout to reset everything
         self.client.logout()
@@ -446,3 +412,30 @@ class TestDevice:
 
             assert class_type is not None, device.type + ' is not mapped.'
             assert isinstance(device, class_type)
+
+    def test_get_devices_generic_type_substring(self, all_devices):
+        """
+        Test that a generic_type substring does not match in get_devices.
+        """
+        assert not self.client.get_devices(generic_type='nect')
+
+    def test_get_devices_generic_type_simple_string(self, all_devices):
+        """
+        Test that a generic_type selects on a simple string.
+        """
+        selected = self.client.get_devices(generic_type='connectivity')
+        all = self.client.get_devices()
+        assert selected
+        assert len(selected) < len(all)
+
+    @pytest.mark.xfail(reason="#12")
+    def test_get_devices_generic_type_list(self, all_devices):
+        """
+        Test that a generic_type can select a list of types.
+        """
+        types = 'door', 'connectivity'
+        selected = self.client.get_devices(generic_type=types)
+        assert selected
+        door_devs = self.client.get_devices(generic_type='door')
+        cnct_devs = self.client.get_devices(generic_type='connectivity')
+        assert set(selected) == set(door_devs) | set(cnct_devs)

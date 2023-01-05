@@ -2,7 +2,7 @@ import logging
 
 from jaraco.collections import DictAdapter, Projection
 from jaraco.classes.ancestry import iter_subclasses
-from more_itertools import always_iterable
+from jaraco.itertools import always_iterable
 
 import jaraco
 from ..helpers import constants as CONST
@@ -103,7 +103,7 @@ class Device:
         path = path.format(device_id=self.device_id)
 
         response = self._client.send_request(method="get", path=path)
-        state = list(always_iterable(response.json(), base_type=dict))
+        state = list(always_iterable(response.json()))
 
         _LOGGER.debug("Device Refresh Response: %s", response.text)
 

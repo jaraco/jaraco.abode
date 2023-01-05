@@ -2,7 +2,7 @@
 import collections
 import logging
 
-from more_itertools import first, always_iterable
+from jaraco.itertools import always_iterable
 
 import jaraco
 from .devices.base import Device
@@ -11,6 +11,7 @@ from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .helpers import timeline as TIMELINE
 from . import socketio as sio
+from ._itertools import single, opt_single
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class EventController:
         if not devices:
             return False
 
-        for device in always_iterable(devices, base_type=(dict, str)):
+        for device in always_iterable(devices):
             # Device may be a device_id
             device_id = device
 
@@ -101,7 +102,7 @@ class EventController:
         if not devices:
             return False
 
-        for device in always_iterable(devices, base_type=dict):
+        for device in always_iterable(devices):
             device_id = device
 
             if isinstance(device, Device):
@@ -124,7 +125,7 @@ class EventController:
         if not event_groups:
             return False
 
-        for event_group in always_iterable(event_groups, base_type=(dict, str)):
+        for event_group in always_iterable(event_groups):
             if event_group not in TIMELINE.Groups.ALL:
                 raise jaraco.abode.Exception(
                     ERROR.EVENT_GROUP_INVALID, TIMELINE.Groups.ALL
@@ -141,7 +142,7 @@ class EventController:
         if not timeline_events:
             return False
 
-        for timeline_event in always_iterable(timeline_events, base_type=dict):
+        for timeline_event in always_iterable(timeline_events):
             if not isinstance(timeline_event, dict):
                 raise jaraco.abode.Exception(ERROR.EVENT_CODE_MISSING)
 
@@ -199,7 +200,7 @@ class EventController:
 
     def _on_device_update(self, devid):
         """Device callback from Abode SocketIO server."""
-        devid = first(always_iterable(devid), None)
+        devid = opt_single(devid)
 
         if devid is None:
             _LOGGER.warning("Device update with no device id.")
@@ -218,7 +219,7 @@ class EventController:
 
     def _on_mode_change(self, mode):
         """Mode change broadcast from Abode SocketIO server."""
-        mode = first(always_iterable(mode, base_type=(dict, str)), None)
+        mode = opt_single(mode)
 
         if mode is None:
             _LOGGER.warning("Mode change event with no mode.")
@@ -243,7 +244,7 @@ class EventController:
 
     def _on_timeline_update(self, event):
         """Timeline update broadcast from Abode SocketIO server."""
-        event = first(always_iterable(event, base_type=dict))
+        event = single(event)
 
         event_type = event.get('event_type')
         event_code = event.get('event_code')
@@ -278,7 +279,7 @@ class EventController:
         """Automation update broadcast from Abode SocketIO server."""
         event_group = TIMELINE.Groups.AUTOMATION_EDIT
 
-        event = first(always_iterable(event, base_type=(dict, str)))
+        event = single(event)
 
         for callback in self._event_callbacks[event_group]:
             _execute_callback(callback, event)

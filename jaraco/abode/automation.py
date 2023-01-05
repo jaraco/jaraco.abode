@@ -2,8 +2,8 @@
 import logging
 
 import jaraco
-from more_itertools import first, always_iterable
 
+from ._itertools import single
 from .helpers import urls
 from .helpers import errors as ERROR
 
@@ -27,7 +27,7 @@ class Automation:
             method="patch", path=path, data={'enabled': enable}
         )
 
-        response_object = first(always_iterable(response.json(), base_type=dict))
+        response_object = single(response.json())
 
         if str(response_object['id']) != str(self._automation['id']) or str(
             response_object['enabled']
@@ -52,7 +52,7 @@ class Automation:
         path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
         response = self._client.send_request(method="get", path=path)
-        response_object = first(always_iterable(response.json(), base_type=dict))
+        response_object = single(response.json())
 
         if str(response_object['id']) != self.automation_id:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
