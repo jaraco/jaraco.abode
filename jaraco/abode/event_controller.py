@@ -1,8 +1,8 @@
 """Abode cloud push events."""
 import collections
 import logging
+import http.cookiejar
 
-import copy
 from jaraco.itertools import always_iterable
 
 import jaraco
@@ -15,6 +15,17 @@ from . import socketio as sio
 from ._itertools import single, opt_single
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _cookie_string(cookies: http.cookiejar.CookieJar):
+    """
+    >>> jar = http.cookiejar.CookieJar()
+    >>> from test.test_http_cookiejar import interact_netscape
+    >>> _ = interact_netscape(jar, 'http://any/', 'foo=bar', 'bing=baz')
+    >>> _cookie_string(jar)
+    'foo=bar; bing=baz'
+    """
+    return "; ".join(f"{cookie.name}={cookie.value}" for cookie in cookies)
 
 
 class EventController:
@@ -170,10 +181,7 @@ class EventController:
 
     def _on_socket_started(self):
         """Socket IO startup callback."""
-        cookies = copy.copy(self._client._get_session().cookies.shelf.store)
-        cookie_string = "; ".join([str(x) + "=" + str(y) for x, y in cookies.items()])
-
-        self._socketio.set_cookie(cookie_string)
+        self._socketio.set_cookie(_cookie_string(self._client._get_session().cookies))
 
     def _on_socket_connected(self):
         """Socket IO connected callback."""
