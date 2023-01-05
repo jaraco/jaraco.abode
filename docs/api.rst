@@ -21,11 +21,6 @@ API
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: jaraco.abode.config
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: jaraco.abode.event_controller
     :members:
     :undoc-members:
