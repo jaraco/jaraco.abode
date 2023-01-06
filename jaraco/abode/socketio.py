@@ -76,6 +76,26 @@ class BackoffIntervals:
         self.attempts = itertools.count(*args)
 
 
+def find_json_list(text):
+    r"""
+    >>> find_json_list('["foo",\n\t"bar"]')
+    ['foo', 'bar']
+    >>> find_json_list('{"abc": ["123"]}')
+    ['123']
+    >>> find_json_list('{"abc": null}')
+    >>> find_json_list('some text string')
+    """
+    l_bracket = text.find("[")
+    r_bracket = text.rfind("]")
+
+    if l_bracket == -1 or r_bracket == -1:
+        _LOGGER.warning("Unable to find event [data]: %s", text)
+        return
+
+    json_str = text[l_bracket : r_bracket + 1]
+    return json.loads(json_str)
+
+
 class SocketIO:
     """Class for using websockets to talk to a SocketIO server."""
 
@@ -324,16 +344,7 @@ class SocketIO:
         raise SocketIOException(ERRORS.SOCKETIO_ERROR, details=_message_data)
 
     def _on_socketio_event(self, _message_data):
-        l_bracket = _message_data.find("[")
-        r_bracket = _message_data.rfind("]")
-
-        if l_bracket == -1 or r_bracket == -1:
-            _LOGGER.warning("Unable to find event [data]: %s", _message_data)
-            return
-
-        json_str = _message_data[l_bracket : r_bracket + 1]
-        json_data = json.loads(json_str)
-
+        json_data = find_json_list(_message_data)
         self._handle_event(EVENT, _message_data)
         self._handle_event(json_data[0], json_data[1:])
 
