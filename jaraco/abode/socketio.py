@@ -83,14 +83,19 @@ def find_json_list(text):
     >>> find_json_list('{"abc": ["123"]}')
     ['123']
     >>> find_json_list('{"abc": null}')
+    Traceback (most recent call last):
+    ...
+    ValueError: ...
     >>> find_json_list('some text string')
+    Traceback (most recent call last):
+    ...
+    ValueError: ...
     """
     l_bracket = text.find("[")
     r_bracket = text.rfind("]")
 
     if l_bracket == -1 or r_bracket == -1:
-        _LOGGER.warning("Unable to find event [data]: %s", text)
-        return
+        raise ValueError("No list found", text)
 
     json_str = text[l_bracket : r_bracket + 1]
     return json.loads(json_str)
@@ -344,7 +349,11 @@ class SocketIO:
         raise SocketIOException(ERRORS.SOCKETIO_ERROR, details=_message_data)
 
     def _on_socketio_event(self, _message_data):
-        json_data = find_json_list(_message_data)
+        try:
+            json_data = find_json_list(_message_data)
+        except ValueError:
+            _LOGGER.warning("Unable to find event [data]: %s", _message_data)
+            return
         self._handle_event(EVENT, _message_data)
         self._handle_event(json_data[0], json_data[1:])
 
