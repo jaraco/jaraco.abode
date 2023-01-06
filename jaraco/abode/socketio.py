@@ -5,10 +5,9 @@ import logging
 import threading
 import random
 import itertools
+import contextlib
+import datetime
 
-from datetime import datetime
-
-from contextlib import suppress
 from lomond import WebSocket
 from lomond import events
 from lomond.persist import persist
@@ -105,8 +104,8 @@ class SocketIO:
         self._ping_interval_ms = 25000
         self._ping_timeout_ms = 60000
 
-        self._last_ping_time = datetime.min
-        self._last_packet_time = datetime.min
+        self._last_ping_time = datetime.datetime.min
+        self._last_packet_time = datetime.datetime.min
 
         self._callbacks = collections.defaultdict(list)
 
@@ -203,7 +202,7 @@ class SocketIO:
                 intervals.reset()
 
             name = event.__class__.__name__.lower()
-            with suppress(AttributeError):
+            with contextlib.suppress(AttributeError):
                 method = getattr(self, f'_on_websocket_{name}')
                 method(event)
 
@@ -227,7 +226,7 @@ class SocketIO:
         self._handle_event(DISCONNECTED, None)
 
     def _on_websocket_poll(self, _event):
-        last_packet_delta = datetime.now() - self._last_packet_time
+        last_packet_delta = datetime.datetime.now() - self._last_packet_time
         last_packet_ms = int(last_packet_delta.total_seconds() * 1000)
 
         if self._engineio_connected and last_packet_ms > self._ping_timeout_ms:
@@ -235,19 +234,19 @@ class SocketIO:
             self._websocket.close()
             return
 
-        last_ping_delta = datetime.now() - self._last_ping_time
+        last_ping_delta = datetime.datetime.now() - self._last_ping_time
         last_ping_ms = int(last_ping_delta.total_seconds() * 1000)
 
         if self._engineio_connected and last_ping_ms >= self._ping_interval_ms:
             self._websocket.send_text(PACKET_PING)
-            self._last_ping_time = datetime.now()
+            self._last_ping_time = datetime.datetime.now()
             _LOGGER.debug("Client Ping")
             self._handle_event(PING, None)
 
         self._handle_event(POLL, None)
 
     def _on_websocket_text(self, _event):
-        self._last_packet_time = datetime.now()
+        self._last_packet_time = datetime.datetime.now()
 
         packet_type = _event.text[:1]
         packet_data = _event.text[1:]
