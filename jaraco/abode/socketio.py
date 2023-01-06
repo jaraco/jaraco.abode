@@ -97,8 +97,7 @@ def find_json_list(text):
     if l_bracket == -1 or r_bracket == -1:
         raise ValueError("No list found", text)
 
-    json_str = text[l_bracket : r_bracket + 1]
-    return json.loads(json_str)
+    return json.loads(text[l_bracket : r_bracket + 1])
 
 
 class SocketIO:
