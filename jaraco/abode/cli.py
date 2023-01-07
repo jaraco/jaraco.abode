@@ -55,7 +55,7 @@ def setup_logging(log_level=logging.INFO):
     logging.getLogger('aiohttp.access').setLevel(logging.WARNING)
 
     enable_color()
-    logging.getLogger('').setLevel(log_level)
+    logging.getLogger().setLevel(log_level)
 
 
 def build_parser():
