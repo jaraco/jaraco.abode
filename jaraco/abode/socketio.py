@@ -7,6 +7,7 @@ import random
 import itertools
 import contextlib
 import datetime
+import urllib.parse
 
 from lomond import WebSocket
 from lomond import events
@@ -42,8 +43,6 @@ PING_TIMEOUT = "pingTimeout"
 
 COOKIE_HEADER = str.encode("Cookie")
 ORIGIN_HEADER = str.encode("Origin")
-
-URL_PARAMS = "?EIO=3&transport=websocket"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -104,7 +103,8 @@ class SocketIO:
     """Class for using websockets to talk to a SocketIO server."""
 
     def __init__(self, url, cookie=None, origin=None):
-        self._url = url + URL_PARAMS
+        params = dict(EIO=3, transport='websocket')
+        self._url = url + '?' + urllib.parse.urlencode(params)
 
         if origin:
             self._origin = origin.encode()
