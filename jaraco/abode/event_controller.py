@@ -29,11 +29,10 @@ def _cookie_string(cookies: http.cookiejar.CookieJar):
 
 
 class EventController:
-    """Class for subscribing to abode events."""
+    """Subscribes to events."""
 
-    def __init__(self, abode, url=CONST.SOCKETIO_URL):
-        """Init event subscription class."""
-        self._client = abode
+    def __init__(self, client, url=CONST.SOCKETIO_URL):
+        self._client = client
         self._thread = None
         self._running = False
         self._connected = False
