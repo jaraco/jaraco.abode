@@ -272,6 +272,8 @@ class SocketIO:
     def _on_websocket_text(self, _event):
         self._last_packet_time = datetime.datetime.now()
 
+        _LOGGER.debug("Received: %s", _event.text)
+
         packet_type = _event.text[:1]
         packet_data = _event.text[1:]
 
@@ -284,7 +286,7 @@ class SocketIO:
         elif packet_type == PACKET_MESSAGE:
             self._on_engineio_message(packet_data)
         else:
-            _LOGGER.debug("Ignoring EngineIO packet: %s", _event.text)
+            _LOGGER.debug("Ignoring unrecognized EngineIO packet")
 
     def _on_websocket_backoff(self, _event):
         return
