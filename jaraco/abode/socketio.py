@@ -38,9 +38,6 @@ MESSAGE_DISCONNECT = "1"
 MESSAGE_EVENT = "2"
 MESSAGE_ERROR = "4"
 
-PING_INTERVAL = "pingInterval"
-PING_TIMEOUT = "pingTimeout"
-
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -280,12 +277,12 @@ class SocketIO:
     def _on_engineio_opened(self, _packet_data):
         json_data = json.loads(_packet_data)
 
-        if json_data and json_data[PING_INTERVAL]:
-            ping_interval_ms = json_data[PING_INTERVAL]
+        if json_data and json_data['pingInterval']:
+            ping_interval_ms = json_data['pingInterval']
             _LOGGER.debug("Set ping interval to: %d", ping_interval_ms)
 
-        if json_data and json_data[PING_TIMEOUT]:
-            ping_timeout_ms = json_data[PING_TIMEOUT]
+        if json_data and json_data['pingTimeout']:
+            ping_timeout_ms = json_data['pingTimeout']
             _LOGGER.debug("Set ping timeout to: %d", ping_timeout_ms)
 
         self._engineio_connected = True
