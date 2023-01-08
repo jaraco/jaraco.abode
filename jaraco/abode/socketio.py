@@ -205,8 +205,8 @@ class SocketIO:
 
             name = event.__class__.__name__.lower()
             with contextlib.suppress(AttributeError):
-                method = getattr(self, f'_on_websocket_{name}')
-                method(event)
+                handler = getattr(self, f'_on_websocket_{name}')
+                handler(event)
 
             if self._running is False:
                 self._websocket.close()
@@ -251,20 +251,20 @@ class SocketIO:
         _LOGGER.debug("Received: %s", _event.text)
 
         code = int(_event.text[:1])
-        data = _event.text[1:]
+        message = _event.text[1:]
 
         try:
             name = EngineIO.codes[code]
             handler = getattr(self, f'_on_engineio_{name}')
-            handler(data)
+            handler(message)
         except KeyError:
             _LOGGER.debug("Ignoring unrecognized EngineIO packet")
 
     def _on_websocket_backoff(self, _event):
         return
 
-    def _on_engineio_open(self, _packet_data):
-        packet = json.loads(_packet_data)
+    def _on_engineio_open(self, message):
+        packet = json.loads(message)
 
         self._ping_interval = datetime.timedelta(milliseconds=packet['pingInterval'])
         _LOGGER.debug("Set ping interval to %s", self._ping_interval)
@@ -276,27 +276,27 @@ class SocketIO:
 
         _LOGGER.debug("EngineIO Connected")
 
-    def _on_engineio_close(self, data):
+    def _on_engineio_close(self, message):
         self._engineio_connected = False
 
         _LOGGER.debug("EngineIO Disconnected")
 
         self._websocket.close()
 
-    def _on_engineio_pong(self, data):
+    def _on_engineio_pong(self, message):
         _LOGGER.debug("Server Pong")
         self._handle_event('pong', None)
 
-    def _on_engineio_message(self, _packet_data):
-        code = int(_packet_data[:1])
-        data = _packet_data[1:]
+    def _on_engineio_message(self, message):
+        code = int(message[:1])
+        data = message[1:]
 
         try:
             name = SocketIO.codes[code]
             handler = getattr(self, f'_on_socketio_{name}')
             handler(data)
         except KeyError:
-            _LOGGER.debug("Ignoring SocketIO message: %s", _packet_data)
+            _LOGGER.debug("Ignoring SocketIO message: %s", message)
 
     def _on_socketio_connected(self):
         self._socketio_connected = True
