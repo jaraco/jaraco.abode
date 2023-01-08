@@ -28,21 +28,16 @@ POLL = "poll"
 EVENT = "event"
 ERROR = "error"
 
-PACKET_OPEN = "0"
-PACKET_CLOSE = "1"
-PACKET_PING = "2"
-PACKET_PONG = "3"
-PACKET_MESSAGE = "4"
-
 _LOGGER = logging.getLogger(__name__)
 
 
 class EngineIO:
-    messages = jaraco.collections.BijectiveMap(
-        connect=0,
-        disconnect=1,
-        event=2,
-        error=4,
+    codes = jaraco.collections.BijectiveMap(
+        open=0,
+        close=1,
+        ping=2,
+        pong=3,
+        message=4,
     )
 
 
@@ -100,6 +95,13 @@ def find_json_list(text):
 
 class SocketIO:
     """Class for using websockets to talk to a SocketIO server."""
+
+    codes = jaraco.collections.BijectiveMap(
+        connect=0,
+        disconnect=1,
+        event=2,
+        error=4,
+    )
 
     def __init__(self, url, cookie=None, origin=None):
         params = dict(EIO=3, transport='websocket')
@@ -245,7 +247,7 @@ class SocketIO:
         last_ping_delta = datetime.datetime.now() - self._last_ping_time
 
         if self._engineio_connected and last_ping_delta >= self._ping_interval:
-            self._websocket.send_text(PACKET_PING)
+            self._websocket.send_text(str(EngineIO.codes['ping']))
             self._last_ping_time = datetime.datetime.now()
             _LOGGER.debug("Client Ping")
             self._handle_event(PING, None)
@@ -257,24 +259,20 @@ class SocketIO:
 
         _LOGGER.debug("Received: %s", _event.text)
 
-        packet_type = _event.text[:1]
-        packet_data = _event.text[1:]
+        code = int(_event.text[:1])
+        data = _event.text[1:]
 
-        if packet_type == PACKET_OPEN:
-            self._on_engineio_opened(packet_data)
-        elif packet_type == PACKET_CLOSE:
-            self._on_engineio_closed()
-        elif packet_type == PACKET_PONG:
-            self._on_engineio_pong()
-        elif packet_type == PACKET_MESSAGE:
-            self._on_engineio_message(packet_data)
-        else:
+        try:
+            name = EngineIO.codes[code]
+            handler = getattr(self, f'_on_engineio_{name}')
+            handler(data)
+        except KeyError:
             _LOGGER.debug("Ignoring unrecognized EngineIO packet")
 
     def _on_websocket_backoff(self, _event):
         return
 
-    def _on_engineio_opened(self, _packet_data):
+    def _on_engineio_open(self, _packet_data):
         packet = json.loads(_packet_data)
 
         self._ping_interval = datetime.timedelta(milliseconds=packet['pingInterval'])
@@ -287,14 +285,14 @@ class SocketIO:
 
         _LOGGER.debug("EngineIO Connected")
 
-    def _on_engineio_closed(self):
+    def _on_engineio_close(self, data):
         self._engineio_connected = False
 
         _LOGGER.debug("EngineIO Disconnected")
 
         self._websocket.close()
 
-    def _on_engineio_pong(self):
+    def _on_engineio_pong(self, data):
         _LOGGER.debug("Server Pong")
         self._handle_event(PONG, None)
 
@@ -303,9 +301,9 @@ class SocketIO:
         data = _packet_data[1:]
 
         try:
-            name = EngineIO.messages[code]
-            method = getattr(self, f'_on_socketio_{name}')
-            method(data)
+            name = SocketIO.codes[code]
+            handler = getattr(self, f'_on_socketio_{name}')
+            handler(data)
         except KeyError:
             _LOGGER.debug("Ignoring SocketIO message: %s", _packet_data)
 
