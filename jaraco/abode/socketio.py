@@ -41,9 +41,6 @@ MESSAGE_ERROR = "4"
 PING_INTERVAL = "pingInterval"
 PING_TIMEOUT = "pingTimeout"
 
-COOKIE_HEADER = str.encode("Cookie")
-ORIGIN_HEADER = str.encode("Origin")
-
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -106,15 +103,8 @@ class SocketIO:
         params = dict(EIO=3, transport='websocket')
         self._url = url + '?' + urllib.parse.urlencode(params)
 
-        if origin:
-            self._origin = origin.encode()
-        else:
-            self._origin = None
-
-        if cookie:
-            self._cookie = cookie.encode()
-        else:
-            self._cookie = None
+        self._cookie = cookie
+        self._origin = origin
 
         self._thread = None
         self._websocket = None
@@ -135,17 +125,11 @@ class SocketIO:
 
     def set_origin(self, origin=None):
         """Set the Origin header."""
-        if origin:
-            self._origin = origin.encode()
-        else:
-            self._origin = None
+        self._origin = origin
 
     def set_cookie(self, cookie=None):
         """Set the Cookie header."""
-        if cookie:
-            self._cookie = cookie.encode()
-        else:
-            self._cookie = None
+        self._cookie = cookie
 
     def on(self, event_name, callback):
         """Register callback for a SocketIO event."""
@@ -207,17 +191,19 @@ class SocketIO:
 
         self._handle_event(STOPPED, None)
 
+    def _add_header(self, name, value):
+        if value is None:
+            return
+        self._websocket.add_header(name.encode(), value.encode())
+
     def _step(self, intervals):
         self._handle_event(STARTED, None)
 
         self._websocket = WebSocket(self._url)
         self._exit_event = threading.Event()
 
-        if self._cookie:
-            self._websocket.add_header(COOKIE_HEADER, self._cookie)
-
-        if self._origin:
-            self._websocket.add_header(ORIGIN_HEADER, self._origin)
+        self._add_header('Cookie', self._cookie)
+        self._add_header('Origin', self._origin)
 
         for event in persist(
             self._websocket, ping_rate=0, poll=5.0, exit_event=self._exit_event
