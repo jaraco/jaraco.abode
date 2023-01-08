@@ -112,9 +112,6 @@ class SocketIO:
         self._engineio_connected = False
         self._socketio_connected = False
 
-        self._ping_interval_ms = 25000
-        self._ping_timeout_ms = 60000
-
         self._last_ping_time = datetime.datetime.min
         self._last_packet_time = datetime.datetime.min
 
@@ -234,17 +231,15 @@ class SocketIO:
 
     def _on_websocket_poll(self, _event):
         last_packet_delta = datetime.datetime.now() - self._last_packet_time
-        last_packet_ms = int(last_packet_delta.total_seconds() * 1000)
 
-        if self._engineio_connected and last_packet_ms > self._ping_timeout_ms:
+        if self._engineio_connected and last_packet_delta > self._ping_timeout:
             _LOGGER.warning("SocketIO Server Ping Timeout")
             self._websocket.close()
             return
 
         last_ping_delta = datetime.datetime.now() - self._last_ping_time
-        last_ping_ms = int(last_ping_delta.total_seconds() * 1000)
 
-        if self._engineio_connected and last_ping_ms >= self._ping_interval_ms:
+        if self._engineio_connected and last_ping_delta >= self._ping_interval:
             self._websocket.send_text(PACKET_PING)
             self._last_ping_time = datetime.datetime.now()
             _LOGGER.debug("Client Ping")
@@ -275,15 +270,13 @@ class SocketIO:
         return
 
     def _on_engineio_opened(self, _packet_data):
-        json_data = json.loads(_packet_data)
+        packet = json.loads(_packet_data)
 
-        if json_data and json_data['pingInterval']:
-            ping_interval_ms = json_data['pingInterval']
-            _LOGGER.debug("Set ping interval to: %d", ping_interval_ms)
+        self._ping_interval = datetime.timedelta(milliseconds=packet['pingInterval'])
+        _LOGGER.debug("Set ping interval to %s", self._ping_interval)
 
-        if json_data and json_data['pingTimeout']:
-            ping_timeout_ms = json_data['pingTimeout']
-            _LOGGER.debug("Set ping timeout to: %d", ping_timeout_ms)
+        self._ping_timeout = datetime.timedelta(milliseconds=packet['pingTimeout'])
+        _LOGGER.debug("Set ping timeout to %s", self._ping_timeout)
 
         self._engineio_connected = True
 
