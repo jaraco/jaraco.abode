@@ -562,3 +562,43 @@ class TestEventController:
 
         # Our capture callback should get one, but our alarm should not
         automation_callback.assert_called_with('{}')
+
+
+@pytest.fixture
+def mock_ws():
+    import asyncio
+    import websockets
+    import threading
+
+    async def hello(websocket, path):
+        name = await websocket.recv()
+        print("< {}".format(name))
+
+        greeting = "Hello {}!".format(name)
+        await websocket.send(greeting)
+        print("> {}".format(greeting))
+
+    loop = asyncio.get_event_loop()
+    server = websockets.serve(hello, 'localhost', 8765)
+    loop.run_until_complete(server)
+
+    thread = threading.Thread(target=loop.run_forever, daemon=True)
+    thread.start()
+
+    try:
+        yield 'ws://localhost:8765/socket.io/'
+    finally:
+        loop.stop()
+
+
+def test_websocket(mock_ws):
+    from lomond import WebSocket
+
+    websocket = WebSocket(mock_ws)
+    for event in websocket:
+        if event.name == 'poll':
+            websocket.send_text('foo')
+        if event.name == 'text':
+            assert event.text == 'Hello foo!'
+            break
+    websocket.close()
