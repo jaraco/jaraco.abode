@@ -18,15 +18,6 @@ import jaraco.collections
 from .exceptions import SocketIOException
 from .helpers import errors as ERRORS
 
-STARTED = "started"
-STOPPED = "stopped"
-CONNECTED = "connected"
-DISCONNECTED = "disconnected"
-PING = "ping"
-PONG = "pong"
-POLL = "poll"
-EVENT = "event"
-ERROR = "error"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -190,7 +181,7 @@ class SocketIO:
                 if self._exit_event.wait(interval):
                     break
 
-        self._handle_event(STOPPED, None)
+        self._handle_event('stopped', None)
 
     def _add_header(self, name, value):
         if value is None:
@@ -198,7 +189,7 @@ class SocketIO:
         self._websocket.add_header(name.encode(), value.encode())
 
     def _step(self, intervals):
-        self._handle_event(STARTED, None)
+        self._handle_event('started', None)
 
         self._websocket = WebSocket(self._url)
         self._exit_event = threading.Event()
@@ -225,7 +216,7 @@ class SocketIO:
 
         _LOGGER.info("Websocket Connected")
 
-        self._handle_event(CONNECTED, None)
+        self._handle_event('connected', None)
 
     def _on_websocket_disconnected(self, _event):
         self._websocket_connected = False
@@ -234,7 +225,7 @@ class SocketIO:
 
         _LOGGER.info("Websocket Disconnected")
 
-        self._handle_event(DISCONNECTED, None)
+        self._handle_event('disconnected', None)
 
     def _on_websocket_poll(self, _event):
         last_packet_delta = datetime.datetime.now() - self._last_packet_time
@@ -250,9 +241,9 @@ class SocketIO:
             self._websocket.send_text(str(EngineIO.codes['ping']))
             self._last_ping_time = datetime.datetime.now()
             _LOGGER.debug("Client Ping")
-            self._handle_event(PING, None)
+            self._handle_event('ping', None)
 
-        self._handle_event(POLL, None)
+        self._handle_event('poll', None)
 
     def _on_websocket_text(self, _event):
         self._last_packet_time = datetime.datetime.now()
@@ -294,7 +285,7 @@ class SocketIO:
 
     def _on_engineio_pong(self, data):
         _LOGGER.debug("Server Pong")
-        self._handle_event(PONG, None)
+        self._handle_event('pong', None)
 
     def _on_engineio_message(self, _packet_data):
         code = int(_packet_data[:1])
@@ -320,7 +311,7 @@ class SocketIO:
         self._websocket.close()
 
     def _on_socketio_error(self, _message_data):
-        self._handle_event(ERROR, _message_data)
+        self._handle_event('error', _message_data)
 
         raise SocketIOException(ERRORS.SOCKETIO_ERROR, details=_message_data)
 
@@ -330,7 +321,7 @@ class SocketIO:
         except ValueError:
             _LOGGER.warning("Unable to find event [data]: %s", _message_data)
             return
-        self._handle_event(EVENT, _message_data)
+        self._handle_event('event', _message_data)
         self._handle_event(json_data[0], json_data[1:])
 
     def _handle_event(self, event_name, event_data):

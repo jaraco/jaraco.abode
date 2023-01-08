@@ -47,9 +47,9 @@ class EventController:
         self._socketio = sio.SocketIO(url=url, origin=urls.BASE)
 
         # Setup SocketIO Callbacks
-        self._socketio.on(sio.STARTED, self._on_socket_started)
-        self._socketio.on(sio.CONNECTED, self._on_socket_connected)
-        self._socketio.on(sio.DISCONNECTED, self._on_socket_disconnected)
+        self._socketio.on('started', self._on_socket_started)
+        self._socketio.on('connected', self._on_socket_connected)
+        self._socketio.on('disconnected', self._on_socket_disconnected)
         self._socketio.on('com.goabode.device.update', self._on_device_update)
         self._socketio.on('com.goabode.gateway.mode', self._on_mode_change)
         self._socketio.on('com.goabode.gateway.timeline', self._on_timeline_update)
