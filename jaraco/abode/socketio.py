@@ -13,6 +13,7 @@ from lomond import WebSocket
 from lomond import events
 from lomond.persist import persist
 from lomond.errors import WebSocketError
+import jaraco.collections
 
 from .exceptions import SocketIOException
 from .helpers import errors as ERRORS
@@ -33,12 +34,16 @@ PACKET_PING = "2"
 PACKET_PONG = "3"
 PACKET_MESSAGE = "4"
 
-MESSAGE_CONNECT = "0"
-MESSAGE_DISCONNECT = "1"
-MESSAGE_EVENT = "2"
-MESSAGE_ERROR = "4"
-
 _LOGGER = logging.getLogger(__name__)
+
+
+class EngineIO:
+    messages = jaraco.collections.BijectiveMap(
+        connect=0,
+        disconnect=1,
+        event=2,
+        error=4,
+    )
 
 
 class BackoffIntervals:
@@ -294,18 +299,14 @@ class SocketIO:
         self._handle_event(PONG, None)
 
     def _on_engineio_message(self, _packet_data):
-        message_type = _packet_data[:1]
-        message_data = _packet_data[1:]
+        code = int(_packet_data[:1])
+        data = _packet_data[1:]
 
-        if message_type == MESSAGE_CONNECT:
-            self._on_socketio_connected()
-        elif message_type == MESSAGE_DISCONNECT:
-            self._on_socketio_disconnected()
-        elif message_type == MESSAGE_ERROR:
-            self._on_socketio_error(message_data)
-        elif message_type == MESSAGE_EVENT:
-            self._on_socketio_event(message_data)
-        else:
+        try:
+            name = EngineIO.messages[code]
+            method = getattr(self, f'_on_socketio_{name}')
+            method(data)
+        except KeyError:
             _LOGGER.debug("Ignoring SocketIO message: %s", _packet_data)
 
     def _on_socketio_connected(self):
