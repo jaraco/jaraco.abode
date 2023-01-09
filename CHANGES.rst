@@ -1,3 +1,8 @@
+v3.2.0
+======
+
+Substantial refactoring in socketio logic.
+
 v3.1.2
 ======
 
