@@ -1,3 +1,9 @@
+v3.2.1
+======
+
+#16: Ensure that parent directories are created for
+``config.paths.user_data``.
+
 v3.2.0
 ======
 
