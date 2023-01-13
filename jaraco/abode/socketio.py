@@ -141,9 +141,7 @@ class SocketIO:
 
         _LOGGER.info("Starting SocketIO thread...")
 
-        self._thread = threading.Thread(
-            target=self._run_socketio_thread, name='SocketIOThread'
-        )
+        self._thread = threading.Thread(target=self._run, name='SocketIOThread')
         self._thread.deamon = True
         self._thread.start()
 
@@ -161,7 +159,7 @@ class SocketIO:
 
         self._thread.join()
 
-    def _run_socketio_thread(self):
+    def _run(self):
         self._running = True
 
         intervals = BackoffIntervals()
