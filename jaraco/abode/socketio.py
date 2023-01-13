@@ -327,7 +327,7 @@ class SocketIO:
         self._handle_event(json_data[0], json_data[1:])
 
     def _handle_event(self, event_name, event_data):
-        for callback in self._callbacks.get(event_name, ()):
+        for callback in self._callbacks[event_name]:
             try:
                 if event_data:
                     callback(event_data)
