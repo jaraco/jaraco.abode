@@ -209,9 +209,7 @@ class SocketIO:
 
     def _on_websocket_connected(self, _event):
         self._websocket_connected = True
-
         _LOGGER.info("Websocket Connected")
-
         self._handle_event('connected')
 
     def _on_websocket_disconnected(self, _event):
@@ -220,7 +218,6 @@ class SocketIO:
         self._socketio_connected = False
 
         _LOGGER.info("Websocket Disconnected")
-
         self._handle_event('disconnected')
 
     def _on_websocket_poll(self, _event):
@@ -269,14 +266,11 @@ class SocketIO:
         _LOGGER.debug("Set ping timeout to %s", self._ping_timeout)
 
         self._engineio_connected = True
-
         _LOGGER.debug("EngineIO Connected")
 
     def _on_engineio_close(self, message):
         self._engineio_connected = False
-
         _LOGGER.debug("EngineIO Disconnected")
-
         self._websocket.close()
 
     def _on_engineio_pong(self, message):
@@ -296,19 +290,15 @@ class SocketIO:
 
     def _on_socketio_connected(self):
         self._socketio_connected = True
-
         _LOGGER.debug("SocketIO Connected")
 
     def _on_socketio_disconnected(self):
         self._socketio_connected = False
-
         _LOGGER.debug("SocketIO Disconnected")
-
         self._websocket.close()
 
     def _on_socketio_error(self, _message_data):
         self._handle_event('error', _message_data)
-
         raise SocketIOException(ERRORS.SOCKETIO_ERROR, details=_message_data)
 
     def _on_socketio_event(self, _message_data):
