@@ -165,24 +165,23 @@ class SocketIO:
 
         intervals = BackoffIntervals()
 
-        while self._running is True:
+        while self._running:
             _LOGGER.info("Attempting to connect to SocketIO server...")
 
             try:
                 self._step(intervals)
             except SocketIOException as exc:
                 _LOGGER.warning("SocketIO Error: %s", exc.details)
-
             except WebSocketError as exc:
                 _LOGGER.warning("Websocket Error: %s", exc)
 
-            if self._running:
-                interval = next(intervals)
+            if not self._running:
+                break
 
-                _LOGGER.info("Waiting %f seconds before reconnecting...", interval)
-
-                if self._exit_event.wait(interval):
-                    break
+            interval = next(intervals)
+            _LOGGER.info("Waiting %f seconds before reconnecting...", interval)
+            if self._exit_event.wait(interval):
+                break
 
         self._handle_event('stopped', None)
 
