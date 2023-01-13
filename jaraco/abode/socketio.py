@@ -141,8 +141,9 @@ class SocketIO:
 
         _LOGGER.info("Starting SocketIO thread...")
 
-        self._thread = threading.Thread(target=self._run, name='SocketIOThread')
-        self._thread.deamon = True
+        self._thread = threading.Thread(
+            target=self._run, name='SocketIOThread', daemon=True
+        )
         self._thread.start()
 
     def stop(self):
