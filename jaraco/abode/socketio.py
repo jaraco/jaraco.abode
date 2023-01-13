@@ -125,14 +125,8 @@ class SocketIO:
 
     def on(self, event_name, callback):
         """Register callback for a SocketIO event."""
-        if not event_name:
-            return False
-
         _LOGGER.debug("Adding callback for event name: %s", event_name)
-
         self._callbacks[event_name].append(callback)
-
-        return True
 
     def start(self):
         """Start a thread to handle SocketIO notifications."""
