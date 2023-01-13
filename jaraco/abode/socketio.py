@@ -136,26 +136,30 @@ class SocketIO:
 
     def start(self):
         """Start a thread to handle SocketIO notifications."""
-        if not self._thread:
-            _LOGGER.info("Starting SocketIO thread...")
+        if self._thread:
+            return
 
-            self._thread = threading.Thread(
-                target=self._run_socketio_thread, name='SocketIOThread'
-            )
-            self._thread.deamon = True
-            self._thread.start()
+        _LOGGER.info("Starting SocketIO thread...")
+
+        self._thread = threading.Thread(
+            target=self._run_socketio_thread, name='SocketIOThread'
+        )
+        self._thread.deamon = True
+        self._thread.start()
 
     def stop(self):
         """Tell the SocketIO thread to terminate."""
-        if self._thread:
-            _LOGGER.info("Stopping SocketIO thread...")
+        if not self._thread:
+            return
 
-            self._running = False
+        _LOGGER.info("Stopping SocketIO thread...")
 
-            if self._exit_event:
-                self._exit_event.set()
+        self._running = False
 
-            self._thread.join()
+        if self._exit_event:
+            self._exit_event.set()
+
+        self._thread.join()
 
     def _run_socketio_thread(self):
         self._running = True
