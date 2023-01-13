@@ -191,7 +191,7 @@ class SocketIO:
         self._websocket.add_header(name.encode(), value.encode())
 
     def _step(self, intervals):
-        self._handle_event('started', None)
+        self._handle_event('started')
 
         self._websocket = WebSocket(self._url)
         self._exit_event = threading.Event()
@@ -218,7 +218,7 @@ class SocketIO:
 
         _LOGGER.info("Websocket Connected")
 
-        self._handle_event('connected', None)
+        self._handle_event('connected')
 
     def _on_websocket_disconnected(self, _event):
         self._websocket_connected = False
@@ -227,7 +227,7 @@ class SocketIO:
 
         _LOGGER.info("Websocket Disconnected")
 
-        self._handle_event('disconnected', None)
+        self._handle_event('disconnected')
 
     def _on_websocket_poll(self, _event):
         last_packet_delta = datetime.datetime.now() - self._last_packet_time
@@ -243,9 +243,9 @@ class SocketIO:
             self._websocket.send_text(str(EngineIO.codes['ping']))
             self._last_ping_time = datetime.datetime.now()
             _LOGGER.debug("Client Ping")
-            self._handle_event('ping', None)
+            self._handle_event('ping')
 
-        self._handle_event('poll', None)
+        self._handle_event('poll')
 
     def _on_websocket_text(self, _event):
         self._last_packet_time = datetime.datetime.now()
@@ -287,7 +287,7 @@ class SocketIO:
 
     def _on_engineio_pong(self, message):
         _LOGGER.debug("Server Pong")
-        self._handle_event('pong', None)
+        self._handle_event('pong')
 
     def _on_engineio_message(self, message):
         code = int(message[:1])
@@ -326,13 +326,10 @@ class SocketIO:
         self._handle_event('event', _message_data)
         self._handle_event(json_data[0], json_data[1:])
 
-    def _handle_event(self, event_name, event_data):
+    def _handle_event(self, event_name, *args):
         for callback in self._callbacks[event_name]:
             try:
-                if event_data:
-                    callback(event_data)
-                else:
-                    callback()
+                callback(*args)
             except Exception as exc:
                 _LOGGER.exception(
                     "Captured exception during SocketIO event callback: %s", exc
