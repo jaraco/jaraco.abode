@@ -62,7 +62,7 @@ class Automation:
     def update(self, automation):
         """Update the internal automation json."""
         self._automation.update(
-            {k: automation[k] for k in automation if self._automation.get(k)}
+            (k, automation[k]) for k in automation if self._automation.get(k)
         )
 
     @property
