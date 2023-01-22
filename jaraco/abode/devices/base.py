@@ -12,7 +12,7 @@ from .control import needs_control_url
 from . import pkg
 
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class Device:
@@ -50,7 +50,7 @@ class Device:
         response = self._client.send_request(method="put", path=path, data=status_data)
         response_object = response.json()
 
-        _LOGGER.debug("Set Status Response: %s", response.text)
+        log.debug("Set Status Response: %s", response.text)
 
         if response_object['id'] != self.device_id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
@@ -62,7 +62,7 @@ class Device:
         # Seriously, why would you do that?
         # So, can't set status here must be done at device level.
 
-        _LOGGER.info("Set device %s status to: %s", self.device_id, status)
+        log.info("Set device %s status to: %s", self.device_id, status)
 
     @needs_control_url
     def set_level(self, level):
@@ -74,7 +74,7 @@ class Device:
         response = self._client.send_request("put", url, data=level_data)
         response_object = response.json()
 
-        _LOGGER.debug("Set Level Response: %s", response.text)
+        log.debug("Set Level Response: %s", response.text)
 
         if response_object['id'] != self.device_id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
@@ -84,7 +84,7 @@ class Device:
 
         self.update(response_object)
 
-        _LOGGER.info("Set device %s level to: %s", self.device_id, level)
+        log.info("Set device %s level to: %s", self.device_id, level)
 
     def get_value(self, name):
         """Get a value from the json object.
@@ -105,7 +105,7 @@ class Device:
         response = self._client.send_request(method="get", path=path)
         state = list(always_iterable(response.json()))
 
-        _LOGGER.debug("Device Refresh Response: %s", response.text)
+        log.debug("Device Refresh Response: %s", response.text)
 
         for device in state:
             self.update(device)

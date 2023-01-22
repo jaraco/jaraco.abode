@@ -7,7 +7,7 @@ from ._itertools import single
 from .helpers import urls
 from .helpers import errors as ERROR
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class Automation:
@@ -36,8 +36,8 @@ class Automation:
 
         self.update(response_object)
 
-        _LOGGER.info("Set automation %s enable to: %s", self.name, self.is_enabled)
-        _LOGGER.debug("Automation response: %s", response.text)
+        log.info("Set automation %s enable to: %s", self.name, self.is_enabled)
+        log.debug("Automation response: %s", response.text)
 
     def trigger(self):
         """Trigger the automation."""
@@ -45,7 +45,7 @@ class Automation:
 
         self._client.send_request(method="post", path=path)
 
-        _LOGGER.info("Automation triggered: %s", self.name)
+        log.info("Automation triggered: %s", self.name)
 
     def refresh(self):
         """Refresh the automation."""

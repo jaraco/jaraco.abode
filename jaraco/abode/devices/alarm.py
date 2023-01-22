@@ -8,7 +8,7 @@ from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import urls
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def id(area):
@@ -54,7 +54,7 @@ class Alarm(Switch):
 
         response = self._client.send_request("put", urls.panel_mode(self._area, mode))
 
-        _LOGGER.debug("Set Alarm Home Response: %s", response.text)
+        log.debug("Set Alarm Home Response: %s", response.text)
 
         response_object = response.json()
 
@@ -66,9 +66,7 @@ class Alarm(Switch):
 
         self._state['mode'][(self.device_id)] = response_object['mode']
 
-        _LOGGER.info(
-            "Set alarm %s mode to: %s", self._device_id, response_object['mode']
-        )
+        log.info("Set alarm %s mode to: %s", self._device_id, response_object['mode'])
 
         return True
 

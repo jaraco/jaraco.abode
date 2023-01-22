@@ -26,7 +26,7 @@ from . import settings
 from . import config
 
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 @retry(
@@ -115,14 +115,14 @@ class Client:
         AuthenticationException.raise_for(oauth_response)
         oauth_response_object = oauth_response.json()
 
-        _LOGGER.debug("Login Response: %s", response.text)
+        log.debug("Login Response: %s", response.text)
 
         self._token = response_object['token']
         self._panel = response_object['panel']
         self._user = response_object['user']
         self._oauth_token = oauth_response_object['access_token']
 
-        _LOGGER.info("Login successful")
+        log.info("Login successful")
 
     def logout(self):
         """Explicit Abode logout."""
@@ -141,14 +141,14 @@ class Client:
         try:
             response = self._session.post(urls.LOGOUT, headers=header_data)
         except OSError as exc:
-            _LOGGER.warning("Caught exception during logout: %s", exc)
+            log.warning("Caught exception during logout: %s", exc)
             return
 
         AuthenticationException.raise_for(response)
 
-        _LOGGER.debug("Logout Response: %s", response.text)
+        log.debug("Logout Response: %s", response.text)
 
-        _LOGGER.info("Logout successful")
+        log.info("Logout successful")
 
     def refresh(self):
         """Do a full refresh of all devices and automations."""
@@ -174,11 +174,11 @@ class Client:
         if self._devices is None:
             self._devices = {}
 
-        _LOGGER.info("Updating all devices...")
+        log.info("Updating all devices...")
         response = self.send_request("get", urls.DEVICES)
         devices = always_iterable(response.json())
 
-        _LOGGER.debug("Get Devices Response: %s", response.text)
+        log.debug("Get Devices Response: %s", response.text)
 
         consume(map(self._load_device, devices))
 
@@ -188,7 +188,7 @@ class Client:
 
         self._panel.update(panel_json)
 
-        _LOGGER.debug("Get Mode Panel Response: %s", response.text)
+        log.debug("Get Mode Panel Response: %s", response.text)
 
         alarm_device = self._devices.get(ALARM.id(1))
 
@@ -214,7 +214,7 @@ class Client:
         device = Device.new(doc, self)
 
         if not device:
-            _LOGGER.debug("Skipping unknown device: %s", doc)
+            log.debug("Skipping unknown device: %s", doc)
             return
 
         self._devices[device.device_id] = device
@@ -239,9 +239,9 @@ class Client:
                 # Set up the device libraries
                 self._automations = {}
 
-            _LOGGER.info("Updating all automations...")
+            log.info("Updating all automations...")
             resp = self.send_request("get", urls.AUTOMATION)
-            _LOGGER.debug("Get Automations Response: %s", resp.text)
+            log.debug("Get Automations Response: %s", resp.text)
 
             for automation_ob in always_iterable(resp.json()):
                 # Attempt to reuse an existing automation object
@@ -302,7 +302,7 @@ class Client:
             if response and response.status_code < 400:
                 return response
         except RequestException:
-            _LOGGER.info("Abode connection reset...")
+            log.info("Abode connection reset...")
 
         if not is_retry:
             # Delete our current token and try again -- will force a login

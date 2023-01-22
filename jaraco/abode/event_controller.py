@@ -14,7 +14,7 @@ from .helpers import timeline as TIMELINE
 from . import socketio as sio
 from ._itertools import single, opt_single
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def _cookie_string(cookies: http.cookiejar.CookieJar):
@@ -68,7 +68,7 @@ class EventController:
         if not unique_id:
             return False
 
-        _LOGGER.debug("Subscribing to Abode connection updates for: %s", unique_id)
+        log.debug("Subscribing to Abode connection updates for: %s", unique_id)
 
         self._connection_status_callbacks[unique_id].append(callback)
 
@@ -79,7 +79,7 @@ class EventController:
         if not unique_id:
             return False
 
-        _LOGGER.debug("Unsubscribing from Abode connection updates for : %s", unique_id)
+        log.debug("Unsubscribing from Abode connection updates for : %s", unique_id)
 
         self._connection_status_callbacks[unique_id].clear()
 
@@ -102,7 +102,7 @@ class EventController:
             if not self._client.get_device(device_id):
                 raise jaraco.abode.Exception(ERROR.EVENT_DEVICE_INVALID)
 
-            _LOGGER.debug("Subscribing to updates for device_id: %s", device_id)
+            log.debug("Subscribing to updates for device_id: %s", device_id)
 
             self._device_callbacks[device_id].append(callback)
 
@@ -125,7 +125,7 @@ class EventController:
             if device_id not in self._device_callbacks:
                 return False
 
-            _LOGGER.debug("Unsubscribing from all updates for device_id: %s", device_id)
+            log.debug("Unsubscribing from all updates for device_id: %s", device_id)
 
             self._device_callbacks[device_id].clear()
 
@@ -142,7 +142,7 @@ class EventController:
                     ERROR.EVENT_GROUP_INVALID, TIMELINE.Groups.ALL
                 )
 
-            _LOGGER.debug("Subscribing to event group: %s", event_group)
+            log.debug("Subscribing to event group: %s", event_group)
 
             self._event_callbacks[event_group].append(callback)
 
@@ -162,7 +162,7 @@ class EventController:
             if not event_code:
                 raise jaraco.abode.Exception(ERROR.EVENT_CODE_MISSING)
 
-            _LOGGER.debug("Subscribing to timeline event: %s", timeline_event)
+            log.debug("Subscribing to timeline event: %s", timeline_event)
 
             self._timeline_callbacks[event_code].append(callback)
 
@@ -189,7 +189,7 @@ class EventController:
         try:
             self._client.refresh()
         except Exception as exc:
-            _LOGGER.warning("Captured exception during Abode refresh: %s", exc)
+            log.warning("Captured exception during Abode refresh: %s", exc)
         finally:
             # Callbacks should still execute even if refresh fails (Abode
             # server issues) so that the entity availability in Home Assistant
@@ -211,15 +211,15 @@ class EventController:
         devid = opt_single(devid)
 
         if devid is None:
-            _LOGGER.warning("Device update with no device id.")
+            log.warning("Device update with no device id.")
             return
 
-        _LOGGER.debug("Device update event for device ID: %s", devid)
+        log.debug("Device update event for device ID: %s", devid)
 
         device = self._client.get_device(devid, True)
 
         if not device:
-            _LOGGER.debug("Got device update for unknown device: %s", devid)
+            log.debug("Got device update for unknown device: %s", devid)
             return
 
         for callback in self._device_callbacks[device.device_id]:
@@ -230,14 +230,14 @@ class EventController:
         mode = opt_single(mode)
 
         if mode is None:
-            _LOGGER.warning("Mode change event with no mode.")
+            log.warning("Mode change event with no mode.")
             return
 
         if not mode or mode.lower() not in CONST.ALL_MODES:
-            _LOGGER.warning("Mode change event with unknown mode: %s", mode)
+            log.warning("Mode change event with unknown mode: %s", mode)
             return
 
-        _LOGGER.debug("Alarm mode change event to: %s", mode)
+        log.debug("Alarm mode change event to: %s", mode)
 
         # We're just going to convert it to an Alarm device
         alarm_device = self._client.get_alarm(refresh=True)
@@ -258,10 +258,10 @@ class EventController:
         event_code = event.get('event_code')
 
         if not event_type or not event_code:
-            _LOGGER.warning("Invalid timeline update event: %s", event)
+            log.warning("Invalid timeline update event: %s", event)
             return
 
-        _LOGGER.debug(
+        log.debug(
             "Timeline event received: %s - %s (%s)",
             event.get('event_name'),
             event_type,
@@ -298,4 +298,4 @@ def _execute_callback(callback, *args, **kwargs):
     try:
         callback(*args, **kwargs)
     except Exception as exc:
-        _LOGGER.warning("Captured exception during callback: %s", exc)
+        log.warning("Captured exception during callback: %s", exc)

@@ -19,7 +19,7 @@ from .exceptions import SocketIOException
 from .helpers import errors as ERRORS
 
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class EngineIO:
@@ -125,7 +125,7 @@ class SocketIO:
 
     def on(self, event_name, callback):
         """Register callback for a SocketIO event."""
-        _LOGGER.debug("Adding callback for event name: %s", event_name)
+        log.debug("Adding callback for event name: %s", event_name)
         self._callbacks[event_name].append(callback)
 
     def start(self):
@@ -133,7 +133,7 @@ class SocketIO:
         if self._thread:
             return
 
-        _LOGGER.info("Starting SocketIO thread...")
+        log.info("Starting SocketIO thread...")
 
         self._thread = threading.Thread(
             target=self._run, name='SocketIOThread', daemon=True
@@ -145,7 +145,7 @@ class SocketIO:
         if not self._thread:
             return
 
-        _LOGGER.info("Stopping SocketIO thread...")
+        log.info("Stopping SocketIO thread...")
 
         self._running = False
 
@@ -160,20 +160,20 @@ class SocketIO:
         intervals = BackoffIntervals()
 
         while self._running:
-            _LOGGER.info("Attempting to connect to SocketIO server...")
+            log.info("Attempting to connect to SocketIO server...")
 
             try:
                 self._step(intervals)
             except SocketIOException as exc:
-                _LOGGER.warning("SocketIO Error: %s", exc.details)
+                log.warning("SocketIO Error: %s", exc.details)
             except WebSocketError as exc:
-                _LOGGER.warning("Websocket Error: %s", exc)
+                log.warning("Websocket Error: %s", exc)
 
             if not self._running:
                 break
 
             interval = next(intervals)
-            _LOGGER.info("Waiting %f seconds before reconnecting...", interval)
+            log.info("Waiting %f seconds before reconnecting...", interval)
             if self._exit_event.wait(interval):
                 break
 
@@ -209,7 +209,7 @@ class SocketIO:
 
     def _on_websocket_connected(self, _event):
         self._websocket_connected = True
-        _LOGGER.info("Websocket Connected")
+        log.info("Websocket Connected")
         self._handle_event('connected')
 
     def _on_websocket_disconnected(self, _event):
@@ -217,14 +217,14 @@ class SocketIO:
         self._engineio_connected = False
         self._socketio_connected = False
 
-        _LOGGER.info("Websocket Disconnected")
+        log.info("Websocket Disconnected")
         self._handle_event('disconnected')
 
     def _on_websocket_poll(self, _event):
         last_packet_delta = datetime.datetime.now() - self._last_packet_time
 
         if self._engineio_connected and last_packet_delta > self._ping_timeout:
-            _LOGGER.warning("SocketIO Server Ping Timeout")
+            log.warning("SocketIO Server Ping Timeout")
             self._websocket.close()
             return
 
@@ -233,7 +233,7 @@ class SocketIO:
         if self._engineio_connected and last_ping_delta >= self._ping_interval:
             self._websocket.send_text(str(EngineIO.codes['ping']))
             self._last_ping_time = datetime.datetime.now()
-            _LOGGER.debug("Client Ping")
+            log.debug("Client Ping")
             self._handle_event('ping')
 
         self._handle_event('poll')
@@ -241,7 +241,7 @@ class SocketIO:
     def _on_websocket_text(self, _event):
         self._last_packet_time = datetime.datetime.now()
 
-        _LOGGER.debug("Received: %s", _event.text)
+        log.debug("Received: %s", _event.text)
 
         code = int(_event.text[:1])
         message = _event.text[1:]
@@ -251,7 +251,7 @@ class SocketIO:
             handler = getattr(self, f'_on_engineio_{name}')
             handler(message)
         except KeyError:
-            _LOGGER.debug("Ignoring unrecognized EngineIO packet")
+            log.debug("Ignoring unrecognized EngineIO packet")
 
     def _on_websocket_backoff(self, _event):
         return
@@ -260,21 +260,21 @@ class SocketIO:
         packet = json.loads(message)
 
         self._ping_interval = datetime.timedelta(milliseconds=packet['pingInterval'])
-        _LOGGER.debug("Set ping interval to %s", self._ping_interval)
+        log.debug("Set ping interval to %s", self._ping_interval)
 
         self._ping_timeout = datetime.timedelta(milliseconds=packet['pingTimeout'])
-        _LOGGER.debug("Set ping timeout to %s", self._ping_timeout)
+        log.debug("Set ping timeout to %s", self._ping_timeout)
 
         self._engineio_connected = True
-        _LOGGER.debug("EngineIO Connected")
+        log.debug("EngineIO Connected")
 
     def _on_engineio_close(self, message):
         self._engineio_connected = False
-        _LOGGER.debug("EngineIO Disconnected")
+        log.debug("EngineIO Disconnected")
         self._websocket.close()
 
     def _on_engineio_pong(self, message):
-        _LOGGER.debug("Server Pong")
+        log.debug("Server Pong")
         self._handle_event('pong')
 
     def _on_engineio_message(self, message):
@@ -286,15 +286,15 @@ class SocketIO:
             handler = getattr(self, f'_on_socketio_{name}')
             handler(data)
         except KeyError:
-            _LOGGER.debug("Ignoring SocketIO message: %s", message)
+            log.debug("Ignoring SocketIO message: %s", message)
 
     def _on_socketio_connected(self):
         self._socketio_connected = True
-        _LOGGER.debug("SocketIO Connected")
+        log.debug("SocketIO Connected")
 
     def _on_socketio_disconnected(self):
         self._socketio_connected = False
-        _LOGGER.debug("SocketIO Disconnected")
+        log.debug("SocketIO Disconnected")
         self._websocket.close()
 
     def _on_socketio_error(self, _message_data):
@@ -305,7 +305,7 @@ class SocketIO:
         try:
             json_data = find_json_list(_message_data)
         except ValueError:
-            _LOGGER.warning("Unable to find event [data]: %s", _message_data)
+            log.warning("Unable to find event [data]: %s", _message_data)
             return
         self._handle_event('event', _message_data)
         self._handle_event(json_data[0], json_data[1:])
@@ -315,6 +315,6 @@ class SocketIO:
             try:
                 callback(*args)
             except Exception as exc:
-                _LOGGER.exception(
+                log.exception(
                     "Captured exception during SocketIO event callback: %s", exc
                 )

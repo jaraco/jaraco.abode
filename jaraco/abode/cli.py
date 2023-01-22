@@ -17,7 +17,7 @@ from . import Client
 from .helpers import urls
 from .helpers import timeline as TIMELINE
 
-_LOGGER = logging.getLogger('abodecl')
+log = logging.getLogger('abodecl')
 
 
 @suppress(ImportError)
@@ -222,13 +222,13 @@ def _log_errors_and_logout(client):
     try:
         yield client
     except jaraco.abode.Exception as exc:
-        _LOGGER.error(exc)
+        log.error(exc)
     finally:
         client.logout()
 
 
 def _device_print(dev, append=''):
-    _LOGGER.info("%s%s", dev.desc, append)
+    log.info("%s%s", dev.desc, append)
 
 
 def _device_callback(dev):
@@ -242,7 +242,7 @@ def _timeline_callback(resp):
         return
 
     tmpl = '{event_name} - {event_type} at {date} {time}'
-    _LOGGER.info(tmpl.format_map(resp))
+    log.info(tmpl.format_map(resp))
 
 
 class Dispatcher:
@@ -280,21 +280,21 @@ class Dispatcher:
     def output_current_mode(self):
         if not self.args.mode:
             return
-        _LOGGER.info("Current alarm mode: %s", self.client.get_alarm().mode)
+        log.info("Current alarm mode: %s", self.client.get_alarm().mode)
 
     def change_system_mode(self):
         if not self.args.arm:
             return
         if self.client.get_alarm().set_mode(self.args.arm):
-            _LOGGER.info("Alarm mode changed to: %s", self.args.arm)
+            log.info("Alarm mode changed to: %s", self.args.arm)
         else:
-            _LOGGER.warning("Failed to change alarm mode to: %s", self.args.arm)
+            log.warning("Failed to change alarm mode to: %s", self.args.arm)
 
     def set_setting(self):
         for setting in always_iterable(self.args.set):
             keyval = setting.split("=")
             if self.client.set_setting(keyval[0], keyval[1]):
-                _LOGGER.info("Setting %s changed to %s", keyval[0], keyval[1])
+                log.info("Setting %s changed to %s", keyval[0], keyval[1])
 
     def switch_on(self):
         for device_id in always_iterable(self.args.on):
@@ -302,9 +302,9 @@ class Dispatcher:
 
             if device:
                 if device.switch_on():
-                    _LOGGER.info("Switched on device with id: %s", device_id)
+                    log.info("Switched on device with id: %s", device_id)
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def switch_off(self):
         for device_id in always_iterable(self.args.off):
@@ -312,9 +312,9 @@ class Dispatcher:
 
             if device:
                 if device.switch_off():
-                    _LOGGER.info("Switched off device with id: %s", device_id)
+                    log.info("Switched off device with id: %s", device_id)
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def lock(self):
         for device_id in always_iterable(self.args.lock):
@@ -322,9 +322,9 @@ class Dispatcher:
 
             if device:
                 if device.lock():
-                    _LOGGER.info("Locked device with id: %s", device_id)
+                    log.info("Locked device with id: %s", device_id)
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def unlock(self):
         for device_id in always_iterable(self.args.unlock):
@@ -332,9 +332,9 @@ class Dispatcher:
 
             if device:
                 if device.unlock():
-                    _LOGGER.info("Unlocked device with id: %s", device_id)
+                    log.info("Unlocked device with id: %s", device_id)
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def output_json(self):
         for device_id in always_iterable(self.args.json):
@@ -350,7 +350,7 @@ class Dispatcher:
                     )
                 )
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def print_all_automations(self):
         if not self.args.automations:
@@ -364,9 +364,9 @@ class Dispatcher:
 
             if automation:
                 if automation.enable(True):
-                    _LOGGER.info("Activated automation with id: %s", automation_id)
+                    log.info("Activated automation with id: %s", automation_id)
             else:
-                _LOGGER.warning("Could not find automation with id: %s", automation_id)
+                log.warning("Could not find automation with id: %s", automation_id)
 
     def disable_automation(self):
         for automation_id in always_iterable(self.args.deactivate):
@@ -374,9 +374,9 @@ class Dispatcher:
 
             if automation:
                 if automation.enable(False):
-                    _LOGGER.info("Deactivated automation with id: %s", automation_id)
+                    log.info("Deactivated automation with id: %s", automation_id)
             else:
-                _LOGGER.warning("Could not find automation with id: %s", automation_id)
+                log.warning("Could not find automation with id: %s", automation_id)
 
     def trigger_automation(self):
         for automation_id in always_iterable(self.args.trigger):
@@ -384,9 +384,9 @@ class Dispatcher:
 
             if automation:
                 if automation.trigger():
-                    _LOGGER.info("Triggered automation with id: %s", automation_id)
+                    log.info("Triggered automation with id: %s", automation_id)
             else:
-                _LOGGER.warning("Could not find automation with id: %s", automation_id)
+                log.warning("Could not find automation with id: %s", automation_id)
 
     def trigger_image_capture(self):
         for device_id in always_iterable(self.args.capture):
@@ -394,13 +394,13 @@ class Dispatcher:
 
             if device:
                 if device.capture():
-                    _LOGGER.info("Image requested from device with id: %s", device_id)
+                    log.info("Image requested from device with id: %s", device_id)
                 else:
-                    _LOGGER.warning(
+                    log.warning(
                         "Failed to request image from device with id: %s", device_id
                     )
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def save_camera_image(self):
         for keyval in always_iterable(self.args.image):
@@ -410,13 +410,13 @@ class Dispatcher:
             if device:
                 try:
                     if device.refresh_image() and device.image_to_file(devloc[1]):
-                        _LOGGER.info(
+                        log.info(
                             "Saved image to %s for device id: %s", devloc[1], devloc[0]
                         )
                 except jaraco.abode.Exception as exc:
-                    _LOGGER.warning("Unable to save image: %s", exc)
+                    log.warning("Unable to save image: %s", exc)
             else:
-                _LOGGER.warning("Could not find device with id: %s", devloc[0])
+                log.warning("Could not find device with id: %s", devloc[0])
 
     def print_all_devices(self):
         if not self.args.devices:
@@ -436,14 +436,14 @@ class Dispatcher:
                 # Register the specific devices if we decide to listen.
                 self.client.events.add_device_callback(device_id, _device_callback)
             else:
-                _LOGGER.warning("Could not find device with id: %s", device_id)
+                log.warning("Could not find device with id: %s", device_id)
 
     def start_device_change_listener(self):
         if not self.args.listen:
             return
         # If no devices were specified then listen to all devices.
         if self.args.device is None:
-            _LOGGER.info("Adding all devices to listener...")
+            log.info("Adding all devices to listener...")
 
             for device in self.client.get_devices():
                 self.client.events.add_device_callback(
@@ -452,14 +452,14 @@ class Dispatcher:
 
         self.client.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
 
-        _LOGGER.info("Listening for device and timeline updates...")
+        log.info("Listening for device and timeline updates...")
         self.client.events.start()
         try:
             while True:
                 time.sleep(1)
         except KeyboardInterrupt:
             self.client.events.stop()
-            _LOGGER.info("Device update listening stopped.")
+            log.info("Device update listening stopped.")
 
 
 def _get_password(args):

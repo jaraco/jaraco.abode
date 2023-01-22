@@ -13,7 +13,7 @@ from ..helpers import timeline as TIMELINE
 from ..helpers import urls
 from . import base
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class Camera(base.Device):
@@ -39,12 +39,12 @@ class Camera(base.Device):
         try:
             response = self._client.send_request("put", url)
 
-            _LOGGER.debug("Capture image response: %s", response.text)
+            log.debug("Capture image response: %s", response.text)
 
             return True
 
         except jaraco.abode.Exception as exc:
-            _LOGGER.warning("Failed to capture image: %s", exc)
+            log.warning("Failed to capture image: %s", exc)
 
         return False
 
@@ -53,7 +53,7 @@ class Camera(base.Device):
         url = urls.TIMELINE_IMAGES_ID.format(device_id=self.device_id)
         response = self._client.send_request("get", url)
 
-        _LOGGER.debug("Get image response: %s", response.text)
+        log.debug("Get image response: %s", response.text)
 
         return self.update_image_location(response.json())
 
@@ -82,7 +82,7 @@ class Camera(base.Device):
         response = self._client.send_request("head", file_path)
 
         if response.status_code != 302:
-            _LOGGER.warning(
+            log.warning(
                 "Unexected response code %s with body: %s",
                 str(response.status_code),
                 response.text,
@@ -108,7 +108,7 @@ class Camera(base.Device):
         response = requests.get(self.image_url, stream=True)
 
         if response.status_code != 200:
-            _LOGGER.warning(
+            log.warning(
                 "Unexpected response code %s when requesting image: %s",
                 str(response.status_code),
                 response.text,
@@ -126,14 +126,14 @@ class Camera(base.Device):
 
         try:
             response = self._client.send_request("post", url)
-            _LOGGER.debug("Camera snapshot response: %s", response.text)
+            log.debug("Camera snapshot response: %s", response.text)
         except jaraco.abode.Exception as exc:
-            _LOGGER.warning("Failed to get camera snapshot image: %s", exc)
+            log.warning("Failed to get camera snapshot image: %s", exc)
             return False
 
         self._snapshot_base64 = response.json().get("base64Image")
         if self._snapshot_base64 is None:
-            _LOGGER.warning("Camera snapshot data missing")
+            log.warning("Camera snapshot data missing")
             return False
 
         return True
@@ -148,7 +148,7 @@ class Camera(base.Device):
             with open(path, "wb") as imgfile:
                 imgfile.write(base64.b64decode(self._snapshot_base64))
         except OSError as exc:
-            _LOGGER.warning("Failed to write snapshot image to file: %s", exc)
+            log.warning("Failed to write snapshot image to file: %s", exc)
             return False
 
         return True
@@ -180,7 +180,7 @@ class Camera(base.Device):
             )
             response_object = response.json()
 
-            _LOGGER.debug("Camera Privacy Mode Response: %s", response.text)
+            log.debug("Camera Privacy Mode Response: %s", response.text)
 
             if response_object['id'] != self.device_id:
                 raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
@@ -188,7 +188,7 @@ class Camera(base.Device):
             if response_object['privacy'] != str(privacy):
                 raise jaraco.abode.Exception(ERROR.SET_PRIVACY_MODE)
 
-            _LOGGER.info("Set camera %s privacy mode to: %s", self.device_id, privacy)
+            log.info("Set camera %s privacy mode to: %s", self.device_id, privacy)
 
             return True
 

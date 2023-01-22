@@ -10,7 +10,7 @@ from .control import needs_control_url
 from .switch import Switch
 
 
-_LOGGER = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class Light(Switch):
@@ -31,13 +31,13 @@ class Light(Switch):
         response = self._client.send_request("post", url, data=color_data)
         response_object = response.json()
 
-        _LOGGER.debug("Set Color Temp Response: %s", response.text)
+        log.debug("Set Color Temp Response: %s", response.text)
 
         if response_object['idForPanel'] != self.device_id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['colorTemperature'] != int(color_temp):
-            _LOGGER.warning(
+            log.warning(
                 (
                     "Set color temp mismatch for device %s. "
                     "Request val: %s, Response val: %s "
@@ -51,7 +51,7 @@ class Light(Switch):
 
         self.update({'statuses': {'color_temp': color_temp}})
 
-        _LOGGER.info("Set device %s color_temp to: %s", self.device_id, color_temp)
+        log.info("Set device %s color_temp to: %s", self.device_id, color_temp)
 
     @needs_control_url
     def set_color(self, color):
@@ -68,7 +68,7 @@ class Light(Switch):
         response = self._client.send_request("post", url, data=color_data)
         response_object = response.json()
 
-        _LOGGER.debug("Set Color Response: %s", response.text)
+        log.debug("Set Color Response: %s", response.text)
 
         if response_object['idForPanel'] != self.device_id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
@@ -76,7 +76,7 @@ class Light(Switch):
         # Abode will sometimes return hue value off by 1 (rounding error)
         hue_comparison = math.isclose(response_object["hue"], int(hue), abs_tol=1)
         if not hue_comparison or (response_object["saturation"] != int(saturation)):
-            _LOGGER.warning(
+            log.warning(
                 (
                     "Set color mismatch for device %s. "
                     "Request val: %s, Response val: %s "
@@ -91,7 +91,7 @@ class Light(Switch):
 
         self.update({'statuses': {'hue': hue, 'saturation': saturation}})
 
-        _LOGGER.info("Set device %s color to: %s", self.device_id, (hue, saturation))
+        log.info("Set device %s color to: %s", self.device_id, (hue, saturation))
 
     @property
     def brightness(self):
