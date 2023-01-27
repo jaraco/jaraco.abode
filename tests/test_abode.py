@@ -548,7 +548,9 @@ class TestAbode:
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an invalid pickle file
-        config.paths.user_data.joinpath('cookies.json').write_text('invalid cookies')
+        config.paths.user_data.joinpath('cookies.json').write_text(
+            'invalid cookies', encoding='utf-8'
+        )
 
         # Cookies are created
         empty_client = jaraco.abode.Client(

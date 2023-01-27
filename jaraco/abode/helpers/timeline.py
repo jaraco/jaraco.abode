@@ -62,7 +62,7 @@ def map_event_code(event_code):
 
 
 def _read_events():
-    with files().joinpath('events.csv').open() as strm:
+    with files().joinpath('events.csv').open(encoding='utf-8') as strm:
         yield from csv.DictReader(strm, quoting=csv.QUOTE_NONE, skipinitialspace=True)
 
 

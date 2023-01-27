@@ -244,7 +244,7 @@ class TestCamera:
             assert device.image_to_file(path, get_image=True)
 
             # Test the file written and cleanup
-            image_data = pathlib.Path(path).read_text()
+            image_data = pathlib.Path(path).read_text(encoding='utf-8')
             assert image_response, image_data
             os.remove(path)
 
