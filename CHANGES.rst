@@ -1,3 +1,8 @@
+v3.2.2
+======
+
+#21: Derive UUID from MAC address late and only for Alarm objects.
+
 v3.2.1
 ======
 

@@ -23,7 +23,6 @@ def state_from_panel(panel_state, area='1'):
     alarm_state['type'] = 'Alarm'
     alarm_state['type_tag'] = CONST.DEVICE_ALARM
     alarm_state['generic_type'] = CONST.TYPE_ALARM
-    alarm_state['uuid'] = alarm_state.get('mac').replace(':', '').lower()
     return alarm_state
 
 
@@ -147,3 +146,7 @@ class Alarm(Switch):
     def mac_address(self):
         """Get the hub mac address."""
         return self._state.get('mac')
+
+    @property
+    def uuid(self):
+        return self.mac.replace(':', '').lower()
