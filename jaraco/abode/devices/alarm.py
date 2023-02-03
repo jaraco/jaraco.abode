@@ -145,7 +145,7 @@ class Alarm(Switch):
     @property
     def mac_address(self):
         """Get the hub mac address."""
-        return self._state.get('mac')
+        return self.mac
 
     @property
     def uuid(self):
