@@ -128,9 +128,9 @@ class Light(Switch):
     @property
     def is_color_capable(self):
         """Device is color compatible."""
-        return 'RGB' in self._type
+        return 'RGB' in self.type
 
     @property
     def is_dimmable(self):
         """Device is dimmable."""
-        return 'Dimmer' in self._type
+        return 'Dimmer' in self.type

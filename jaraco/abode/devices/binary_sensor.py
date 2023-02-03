@@ -18,7 +18,7 @@ class BinarySensor(base.Device):
 
         Assume offline or open (worst case).
         """
-        if self._type == 'Occupancy':
+        if self.type == 'Occupancy':
             return self.status not in CONST.STATUS_ONLINE
         return self.status not in (
             CONST.STATUS_OFF,

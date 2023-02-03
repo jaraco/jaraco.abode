@@ -25,9 +25,6 @@ class Device:
         self._client = client
 
     def __getattr__(self, name):
-        if name in '_name _type _type_tag _generic_type'.split():
-            name = name.lstrip('_')
-
         try:
             return self._state[name]
         except KeyError as exc:
@@ -143,21 +140,6 @@ class Device:
         """Get the name of this device."""
         fallback = f'{self.type} {self.id}'
         return self._state.get('name') or fallback
-
-    @property
-    def generic_type(self):
-        """Get the generic type of this device."""
-        return self._generic_type
-
-    @property
-    def type(self):
-        """Get the type of this device."""
-        return self._type
-
-    @property
-    def type_tag(self):
-        """Get the type tag of this device."""
-        return self._type_tag
 
     @property
     def device_id(self):
