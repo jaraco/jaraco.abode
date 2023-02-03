@@ -23,7 +23,10 @@ def state_from_panel(panel_state, area='1'):
     alarm_state['type'] = 'Alarm'
     alarm_state['type_tag'] = CONST.DEVICE_ALARM
     alarm_state['generic_type'] = CONST.TYPE_ALARM
-    alarm_state['uuid'] = alarm_state.get('mac').replace(':', '').lower()
+    if alarm_state.get('mac'):
+        # On refresh the 'mac' key isn't sent down, just leave the existing UUID if it's
+        # not present
+        alarm_state['uuid'] = alarm_state.get('mac').replace(':', '').lower()
     return alarm_state
 
 

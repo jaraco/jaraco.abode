@@ -67,7 +67,7 @@ class TestAlarm:
         m.get(
             urls.PANEL,
             json=PANEL.get_response_ok(
-                mode=CONST.MODE_AWAY, battery=False, is_cellular=False
+                mode=CONST.MODE_AWAY, battery=False, is_cellular=False, mac=None
             ),
         )
 
@@ -80,15 +80,21 @@ class TestAlarm:
         assert not alarm.battery
         assert not alarm.is_cellular
         assert alarm.is_on
+        # assert alarm device id didn't change after refresh, even though we didn't send
+        # mac
+        assert alarm.device_uuid == '01aab3c4d566'
 
         # Change alarm state to final on state and test
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_HOME))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_HOME, mac=None))
 
         # Refresh alarm and test
         alarm.refresh()
         assert alarm.mode == CONST.MODE_HOME
         assert alarm.status == CONST.MODE_HOME
         assert alarm.is_on
+        assert alarm.device_uuid == '01aab3c4d566'
+        # assert alarm device id didn't change after refresh, even though we didn't send
+        # mac
 
     def test_alarm_device_mode_changes(self, m):
         """Test that the abode alarm can change/report modes."""
