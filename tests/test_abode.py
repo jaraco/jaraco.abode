@@ -343,10 +343,10 @@ class TestAbode:
         # Get and check devices
 
         dc1a_dev = self.client.get_device(dc1_devid)
-        assert dc1a['id'] == dc1a_dev.device_id
+        assert dc1a['id'] == dc1a_dev.id
 
         dc2a_dev = self.client.get_device(dc2_devid)
-        assert dc2a['id'] == dc2a_dev.device_id
+        assert dc2a['id'] == dc2a_dev.id
 
         # Change device states
         dc1b = DOOR_CONTACT.device(devid=dc1_devid, status=CONST.STATUS_OFF)
@@ -362,11 +362,11 @@ class TestAbode:
         # Future note: "if a is b" tests that the object is the same
         # Thus asserting dc1a_dev is dc1b_dev tests if they are the same object
         dc1b_dev = self.client.get_device(dc1_devid)
-        assert dc1b['id'] == dc1b_dev.device_id
+        assert dc1b['id'] == dc1b_dev.id
         assert dc1a_dev is dc1b_dev
 
         dc2b_dev = self.client.get_device(dc2_devid)
-        assert dc2b['id'] == dc2b_dev.device_id
+        assert dc2b['id'] == dc2b_dev.id
         assert dc2a_dev is dc2b_dev
 
     def test_settings_validation(self, m):

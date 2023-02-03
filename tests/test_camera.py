@@ -76,7 +76,7 @@ class TestCamera:
             assert not device.no_response
 
             # Set up our direct device get url
-            device_url = urls.DEVICE.format(device_id=device.device_id)
+            device_url = urls.DEVICE.format(device_id=device.id)
 
             # Change device properties
             m.get(
@@ -147,9 +147,9 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
 
-            m.get(url, json=[cam_type.timeline_event(device.device_id)])
+            m.get(url, json=[cam_type.timeline_event(device.id)])
             # Set up our file path response
             m.head(
                 cam_type.FILE_PATH,
@@ -180,20 +180,20 @@ class TestCamera:
                 device.refresh_image()
 
             # Test that an an empty timeline event throws exception
-            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
             m.get(
                 url,
-                json=[cam_type.timeline_event(device.device_id, file_path="")],
+                json=[cam_type.timeline_event(device.id, file_path="")],
             )
 
             with pytest.raises(jaraco.abode.Exception):
                 device.refresh_image()
 
             # Test that an unexpected timeline event throws exception
-            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
             m.get(
                 url,
-                json=[cam_type.timeline_event(device.device_id, event_code="1234")],
+                json=[cam_type.timeline_event(device.id, event_code="1234")],
             )
 
             with pytest.raises(jaraco.abode.Exception):
@@ -207,7 +207,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
             m.get(url, json=[])
 
             # Refresh the image
@@ -225,8 +225,8 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up timeline response
-            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.device_id)
-            m.get(url, json=[cam_type.timeline_event(device.device_id)])
+            url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
+            m.get(url, json=[cam_type.timeline_event(device.id)])
 
             # Set up our file path response
             m.head(
@@ -268,7 +268,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up snapshot URL response
-            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.device_uuid}/snapshot"
+            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/snapshot"
             m.post(snapshot_url, json=dict(base64Image='test'))
 
             # Retrieve a snapshot
@@ -293,7 +293,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up snapshot URL and image response
-            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.device_uuid}/snapshot"
+            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/snapshot"
             image_response = b"this is a beautiful jpeg image"
             b64_image = str(base64.b64encode(image_response), "utf-8")
             m.post(snapshot_url, json=dict(base64Image=b64_image))
@@ -322,7 +322,7 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Set up snapshot URL and image response
-            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.device_uuid}/snapshot"
+            snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/snapshot"
             image_response = b"this is a beautiful jpeg image"
             b64_image = str(base64.b64encode(image_response), "utf-8")
             m.post(snapshot_url, json=dict(base64Image=b64_image))
@@ -349,13 +349,13 @@ class TestCamera:
         assert device.status == CONST.STATUS_ONLINE
 
         # Set up params URL response for privacy mode on
-        m.put(urls.PARAMS + device.device_id, json=IPCAM.device(privacy=1))
+        m.put(urls.PARAMS + device.id, json=IPCAM.device(privacy=1))
 
         # Set privacy mode on
         assert device.privacy_mode(True)
 
         # Set up params URL response for privacy mode off
-        m.put(urls.PARAMS + device.device_id, json=IPCAM.device(privacy=0))
+        m.put(urls.PARAMS + device.id, json=IPCAM.device(privacy=0))
 
         # Set privacy mode off
         assert device.privacy_mode(False)

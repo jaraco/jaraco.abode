@@ -196,7 +196,7 @@ class Client:
             alarm_device.update(self._panel)
         else:
             alarm_device = ALARM.create_alarm(self._panel, self)
-            self._devices[alarm_device.device_id] = alarm_device
+            self._devices[alarm_device.id] = alarm_device
 
     def _load_device(self, doc):
         self._reuse_device(doc) or self._create_new_device(doc)
@@ -217,7 +217,7 @@ class Client:
             log.debug("Skipping unknown device: %s", doc)
             return
 
-        self._devices[device.device_id] = device
+        self._devices[device.id] = device
 
     def get_device(self, device_id, refresh=False):
         """Get a single device."""

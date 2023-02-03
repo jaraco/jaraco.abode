@@ -446,9 +446,7 @@ class Dispatcher:
             log.info("Adding all devices to listener...")
 
             for device in self.client.get_devices():
-                self.client.events.add_device_callback(
-                    device.device_id, _device_callback
-                )
+                self.client.events.add_device_callback(device.id, _device_callback)
 
         self.client.events.add_timeline_callback(TIMELINE.ALL, _timeline_callback)
 

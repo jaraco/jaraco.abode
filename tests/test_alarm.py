@@ -53,14 +53,14 @@ class TestAlarm:
 
         # Get alarm and test
         alarm = self.client.get_alarm()
-        assert alarm.device_id == 'area_1'
+        assert alarm.id == 'area_1'
         assert alarm is not None
         assert alarm.mode == CONST.MODE_STANDBY
         assert alarm.status == CONST.MODE_STANDBY
         assert alarm.battery
         assert alarm.is_cellular
         assert not alarm.is_on
-        assert alarm.device_uuid == '01aab3c4d566'
+        assert alarm.uuid == '01aab3c4d566'
         assert alarm.mac_address == '01:AA:b3:C4:d5:66'
 
         # Change alarm properties and state to away and test
@@ -74,7 +74,7 @@ class TestAlarm:
         # Refresh alarm and test
         alarm.refresh()
 
-        assert alarm.device_id == 'area_1'
+        assert alarm.id == 'area_1'
         assert alarm.mode == CONST.MODE_AWAY
         assert alarm.status == CONST.MODE_AWAY
         assert not alarm.battery

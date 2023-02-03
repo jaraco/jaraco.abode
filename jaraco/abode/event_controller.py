@@ -96,7 +96,7 @@ class EventController:
 
             # If they gave us an actual device, get that devices ID
             if isinstance(device, Device):
-                device_id = device.device_id
+                device_id = device.id
 
             # Validate the device is valid
             if not self._client.get_device(device_id):
@@ -117,7 +117,7 @@ class EventController:
             device_id = device
 
             if isinstance(device, Device):
-                device_id = device.device_id
+                device_id = device.id
 
             if not self._client.get_device(device_id):
                 raise jaraco.abode.Exception(ERROR.EVENT_DEVICE_INVALID)
@@ -222,7 +222,7 @@ class EventController:
             log.debug("Got device update for unknown device: %s", devid)
             return
 
-        for callback in self._device_callbacks[device.device_id]:
+        for callback in self._device_callbacks[device.id]:
             _execute_callback(callback, device)
 
     def _on_mode_change(self, mode):
@@ -247,7 +247,7 @@ class EventController:
         # force the mode status now to match the notification.
         alarm_device._state['mode']['area_1'] = mode
 
-        for callback in self._device_callbacks[alarm_device.device_id]:
+        for callback in self._device_callbacks[alarm_device.id]:
             _execute_callback(callback, alarm_device)
 
     def _on_timeline_update(self, event):

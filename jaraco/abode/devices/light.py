@@ -21,7 +21,7 @@ class Light(Switch):
     @needs_control_url
     def set_color_temp(self, color_temp):
         """Set device color."""
-        url = urls.INTEGRATIONS + self._device_uuid
+        url = urls.INTEGRATIONS + self.uuid
 
         color_data = {
             'action': 'setcolortemperature',
@@ -33,7 +33,7 @@ class Light(Switch):
 
         log.debug("Set Color Temp Response: %s", response.text)
 
-        if response_object['idForPanel'] != self.device_id:
+        if response_object['idForPanel'] != self.id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['colorTemperature'] != int(color_temp):
@@ -42,7 +42,7 @@ class Light(Switch):
                     "Set color temp mismatch for device %s. "
                     "Request val: %s, Response val: %s "
                 ),
-                self.device_id,
+                self.id,
                 color_temp,
                 response_object['colorTemperature'],
             )
@@ -51,12 +51,12 @@ class Light(Switch):
 
         self.update({'statuses': {'color_temp': color_temp}})
 
-        log.info("Set device %s color_temp to: %s", self.device_id, color_temp)
+        log.info("Set device %s color_temp to: %s", self.id, color_temp)
 
     @needs_control_url
     def set_color(self, color):
         """Set device color."""
-        url = urls.INTEGRATIONS + self._device_uuid
+        url = urls.INTEGRATIONS + self.uuid
 
         hue, saturation = color
         color_data = {
@@ -70,7 +70,7 @@ class Light(Switch):
 
         log.debug("Set Color Response: %s", response.text)
 
-        if response_object['idForPanel'] != self.device_id:
+        if response_object['idForPanel'] != self.id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         # Abode will sometimes return hue value off by 1 (rounding error)
@@ -81,7 +81,7 @@ class Light(Switch):
                     "Set color mismatch for device %s. "
                     "Request val: %s, Response val: %s "
                 ),
-                self.device_id,
+                self.id,
                 (hue, saturation),
                 (response_object['hue'], response_object['saturation']),
             )
@@ -91,7 +91,7 @@ class Light(Switch):
 
         self.update({'statuses': {'hue': hue, 'saturation': saturation}})
 
-        log.info("Set device %s color to: %s", self.device_id, (hue, saturation))
+        log.info("Set device %s color to: %s", self.id, (hue, saturation))
 
     @property
     def brightness(self):

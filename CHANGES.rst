@@ -1,3 +1,10 @@
+v3.3.0
+======
+
+Removed unnecessary ``_device_id`` and ``_device_uuid`` accessors
+and deprecated ``device_id`` and ``device_uuid`` accessors in
+favor of simply ``Device.id`` and ``Device.uuid`` accessors.
+
 v3.2.2
 ======
 

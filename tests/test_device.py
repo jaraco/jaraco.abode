@@ -45,17 +45,17 @@ class TestDevice:
 
         source['name'] = ""
         device = Device.new(source, self.client)
-        generated_name = device.type + ' ' + device.device_id
+        generated_name = device.type + ' ' + device.id
         assert device.name == generated_name
 
         source['name'] = None
         device = Device.new(source, self.client)
-        generated_name = device.type + ' ' + device.device_id
+        generated_name = device.type + ' ' + device.id
         assert device.name == generated_name
 
         del source['name']
         device = Device.new(source, self.client)
-        generated_name = device.type + ' ' + device.device_id
+        generated_name = device.type + ' ' + device.id
         assert device.name == generated_name
 
     def test_device_init(self, m):
@@ -92,8 +92,8 @@ class TestDevice:
         assert device.name == source[0]['name']
         assert device.type == source[0]['type']
         assert device.type_tag == source[0]['type_tag']
-        assert device.device_id == source[0]['id']
-        assert device.device_uuid == source[0]['uuid']
+        assert device.id == source[0]['id']
+        assert device.uuid == source[0]['uuid']
         assert device.status == CONST.STATUS_ONLINE
         assert device.battery_low
         assert device.no_response

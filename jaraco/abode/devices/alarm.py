@@ -63,9 +63,9 @@ class Alarm(Switch):
         if response_object['mode'] != mode:
             raise jaraco.abode.Exception(ERROR.SET_MODE_MODE)
 
-        self._state['mode'][(self.device_id)] = response_object['mode']
+        self._state['mode'][(self.id)] = response_object['mode']
 
-        log.info("Set alarm %s mode to: %s", self._device_id, response_object['mode'])
+        log.info("Set alarm %s mode to: %s", self.id, response_object['mode'])
 
         return True
 
@@ -123,7 +123,7 @@ class Alarm(Switch):
     @property
     def mode(self):
         """Get alarm mode."""
-        mode = self.get_value('mode').get(self.device_id, None)
+        mode = self.get_value('mode').get(self.id, None)
 
         return mode.lower()
 

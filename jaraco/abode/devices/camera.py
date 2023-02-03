@@ -50,7 +50,7 @@ class Camera(base.Device):
 
     def refresh_image(self):
         """Get the most recent camera image."""
-        url = urls.TIMELINE_IMAGES_ID.format(device_id=self.device_id)
+        url = urls.TIMELINE_IMAGES_ID.format(device_id=self.id)
         response = self._client.send_request("get", url)
 
         log.debug("Get image response: %s", response.text)
@@ -122,7 +122,7 @@ class Camera(base.Device):
 
     def snapshot(self):
         """Request the current camera snapshot as a base64-encoded string."""
-        url = f"{urls.CAMERA_INTEGRATIONS}{self._device_uuid}/snapshot"
+        url = f"{urls.CAMERA_INTEGRATIONS}{self.uuid}/snapshot"
 
         try:
             response = self._client.send_request("post", url)
@@ -166,13 +166,13 @@ class Camera(base.Device):
         if self._state['privacy']:
             privacy = '1' if enable else '0'
 
-            path = urls.PARAMS + self.device_id
+            path = urls.PARAMS + self.id
 
             camera_data = {
                 'mac': self._state['camera_mac'],
                 'privacy': privacy,
                 'action': 'setParam',
-                'id': self.device_id,
+                'id': self.id,
             }
 
             response = self._client.send_request(
@@ -182,13 +182,13 @@ class Camera(base.Device):
 
             log.debug("Camera Privacy Mode Response: %s", response.text)
 
-            if response_object['id'] != self.device_id:
+            if response_object['id'] != self.id:
                 raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
             if response_object['privacy'] != str(privacy):
                 raise jaraco.abode.Exception(ERROR.SET_PRIVACY_MODE)
 
-            log.info("Set camera %s privacy mode to: %s", self.device_id, privacy)
+            log.info("Set camera %s privacy mode to: %s", self.id, privacy)
 
             return True
 

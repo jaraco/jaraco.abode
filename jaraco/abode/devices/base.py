@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 from jaraco.collections import DictAdapter, Projection
 from jaraco.classes.ancestry import iter_subclasses
@@ -32,14 +33,6 @@ class Device:
         except KeyError as exc:
             raise AttributeError(name) from exc
 
-    @property
-    def _device_id(self):
-        return self.id
-
-    @property
-    def _device_uuid(self):
-        return self.uuid
-
     @needs_control_url
     def set_status(self, status):
         """Set device status."""
@@ -52,7 +45,7 @@ class Device:
 
         log.debug("Set Status Response: %s", response.text)
 
-        if response_object['id'] != self.device_id:
+        if response_object['id'] != self.id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['status'] != str(status):
@@ -62,7 +55,7 @@ class Device:
         # Seriously, why would you do that?
         # So, can't set status here must be done at device level.
 
-        log.info("Set device %s status to: %s", self.device_id, status)
+        log.info("Set device %s status to: %s", self.id, status)
 
     @needs_control_url
     def set_level(self, level):
@@ -76,7 +69,7 @@ class Device:
 
         log.debug("Set Level Response: %s", response.text)
 
-        if response_object['id'] != self.device_id:
+        if response_object['id'] != self.id:
             raise jaraco.abode.Exception(ERROR.SET_STATUS_DEV_ID)
 
         if response_object['level'] != str(level):
@@ -84,7 +77,7 @@ class Device:
 
         self.update(response_object)
 
-        log.info("Set device %s level to: %s", self.device_id, level)
+        log.info("Set device %s level to: %s", self.id, level)
 
     def get_value(self, name):
         """Get a value from the json object.
@@ -100,7 +93,7 @@ class Device:
 
         Only needed if you're not using the notification service.
         """
-        path = path.format(device_id=self.device_id)
+        path = path.format(device_id=self.id)
 
         response = self._client.send_request(method="get", path=path)
         state = list(always_iterable(response.json()))
@@ -148,7 +141,7 @@ class Device:
     @property
     def name(self):
         """Get the name of this device."""
-        fallback = f'{self.type} {self.device_id}'
+        fallback = f'{self.type} {self.id}'
         return self._state.get('name') or fallback
 
     @property
@@ -169,17 +162,21 @@ class Device:
     @property
     def device_id(self):
         """Get the device id."""
-        return self._device_id
+        warnings.warn("Device.device_id is deprecated. Use .id.", DeprecationWarning)
+        return self.id
 
     @property
     def device_uuid(self):
         """Get the device uuid."""
-        return self._device_uuid
+        warnings.warn(
+            "Device.device_uuid is deprecated. Use .uuid.", DeprecationWarning
+        )
+        return self.uuid
 
     @property
     def desc(self):
         """Get a short description of the device."""
-        tmpl = '{name} (ID: {device_id}, UUID: {device_uuid}) - {type} - {status}'
+        tmpl = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
         return tmpl.format_map(DictAdapter(self))
 
     @staticmethod

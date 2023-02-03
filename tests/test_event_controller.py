@@ -53,7 +53,7 @@ class TestEventController:
         callback = Mock()
 
         # Register our device id
-        assert events.add_device_callback(device.device_id, callback)
+        assert events.add_device_callback(device.id, callback)
 
     def test_device_registration(self, m):
         """Tests that we can register for device events with a device."""
@@ -270,7 +270,7 @@ class TestEventController:
         callback = Mock()
 
         # Register our device id
-        assert events.add_device_callback(device.device_id, callback)
+        assert events.add_device_callback(device.id, callback)
 
         # Set up device update URL
         device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
@@ -286,7 +286,7 @@ class TestEventController:
 
         # Call our device callback method
 
-        events._on_device_update(device.device_id)
+        events._on_device_update(device.id)
         callback.assert_called_with(device)
 
         # Test that our device updated
@@ -387,7 +387,7 @@ class TestEventController:
         callback = Mock()
 
         # Register our alarm for callback
-        assert events.add_device_callback(alarm.device_id, callback)
+        assert events.add_device_callback(alarm.id, callback)
 
         # Call our mode changed callback method
 
@@ -482,7 +482,7 @@ class TestEventController:
 
         # Call our device callback method for our cover
 
-        events._on_device_update(cover.device_id)
+        events._on_device_update(cover.id)
         callback.assert_called_with(cover)
 
         # Test that our device updated
@@ -492,7 +492,7 @@ class TestEventController:
         assert doorcontact.status == CONST.STATUS_CLOSED
 
         # Call our device callback method for our door contact
-        events._on_device_update(doorcontact.device_id)
+        events._on_device_update(doorcontact.id)
         callback.assert_has_calls([call(cover), call(doorcontact)])
 
         # Test that our door updated now
