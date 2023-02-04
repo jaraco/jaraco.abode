@@ -47,7 +47,7 @@ class Alarm(Switch):
             raise jaraco.abode.Exception(ERROR.MISSING_ALARM_MODE)
 
         if mode.lower() not in CONST.ALL_MODES:
-            raise jaraco.abode.Exception(ERROR.INVALID_ALARM_MODE, CONST.ALL_MODES)
+            raise jaraco.abode.Exception(ERROR.INVALID_ALARM_MODE)
 
         mode = mode.lower()
 

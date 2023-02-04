@@ -138,9 +138,7 @@ class EventController:
 
         for event_group in always_iterable(event_groups):
             if event_group not in TIMELINE.Groups.ALL:
-                raise jaraco.abode.Exception(
-                    ERROR.EVENT_GROUP_INVALID, TIMELINE.Groups.ALL
-                )
+                raise jaraco.abode.Exception(ERROR.EVENT_GROUP_INVALID)
 
             log.debug("Subscribing to event group: %s", event_group)
 

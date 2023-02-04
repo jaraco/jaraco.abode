@@ -5,9 +5,8 @@ import requests
 class Exception(builtins.Exception):
     """Class to throw general abode exception."""
 
-    def __init__(self, error, details=None):
+    def __init__(self, error):
         super().__init__(*error)
-        self.details = details
 
     @property
     def errcode(self):

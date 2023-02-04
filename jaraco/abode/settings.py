@@ -193,12 +193,12 @@ class Panel(Setting):
 
     def validate(self):
         if self.name == CAMERA_RESOLUTION and self.value not in ALL_CAMERA_RES:
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE, ALL_CAMERA_RES)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
         if (
             self.name in [CAMERA_GRAYSCALE, SILENCE_SOUNDS]
             and self.value not in DISABLE_ENABLE
         ):
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE, DISABLE_ENABLE)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
 
     @property
     def data(self):
@@ -212,13 +212,9 @@ class Area(Setting):
     def validate(self):
         # Exit delay has some specific limitations
         if self.name == EXIT_DELAY_AWAY and self.value not in VALID_SETTING_EXIT_AWAY:
-            raise jaraco.abode.Exception(
-                ERROR.INVALID_SETTING_VALUE, VALID_SETTING_EXIT_AWAY
-            )
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
         if self.value not in ALL_ENTRY_EXIT_DELAY:
-            raise jaraco.abode.Exception(
-                ERROR.INVALID_SETTING_VALUE, ALL_ENTRY_EXIT_DELAY
-            )
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
 
     @property
     def data(self):
@@ -231,11 +227,11 @@ class Sound(Setting):
 
     def validate(self):
         if self.name in VALID_SOUND_SETTINGS and self.value not in ALL_SOUND:
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE, ALL_SOUND)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
         if self.name == ALARM_LENGTH and self.value not in ALL_ALARM_LENGTH:
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE, ALL_ALARM_LENGTH)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
         if self.name == FINAL_BEEPS and self.value not in ALL_FINAL_BEEPS:
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE, ALL_FINAL_BEEPS)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
 
     @property
     def data(self):
@@ -248,7 +244,7 @@ class Siren(Setting):
 
     def validate(self):
         if self.value not in DISABLE_ENABLE:
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE, DISABLE_ENABLE)
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING_VALUE)
 
     @property
     def data(self):
