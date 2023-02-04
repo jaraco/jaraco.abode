@@ -6,11 +6,13 @@ class Exception(builtins.Exception):
     """Class to throw general abode exception."""
 
     def __init__(self, error, details=None):
-        # Call the base class constructor with the parameters it needs
-        super().__init__(error[1])
+        code, message = error
 
-        self.errcode = error[0]
-        self.message = error[1]
+        # Call the base class constructor with the parameters it needs
+        super().__init__(message)
+
+        self.errcode = code
+        self.message = message
         self.details = details
 
 
