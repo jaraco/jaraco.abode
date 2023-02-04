@@ -10,7 +10,6 @@ from jaraco.collections import DictFilter
 import jaraco.abode
 from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
-import jaraco.abode.helpers.errors as ERROR
 from . import mock as MOCK
 from .mock.devices import ipcam as IPCAM
 from .mock.devices import ir_camera as IRCAMERA
@@ -134,7 +133,7 @@ class TestCamera:
             # Test that jaraco.abode.Exception is raised with no control URLs
             with pytest.raises(jaraco.abode.Exception) as exc:
                 device.capture()
-            assert (exc.value.errcode, exc.value.message) == ERROR.MISSING_CONTROL_URL
+            assert exc.value.message == "Control URL does not exist in device JSON."
 
     def test_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
