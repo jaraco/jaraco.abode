@@ -7,8 +7,6 @@ from .switch import Switch
 class Cover(Switch):
     """Class to add cover functionality."""
 
-    implements = CONST.TYPE_COVER
-
     def switch_on(self):
         """Turn the switch on."""
         success = self.set_status(CONST.STATUS_OPEN_INT)

@@ -7,8 +7,6 @@ from . import base
 class Switch(base.Device):
     """Class to add switch functionality."""
 
-    implements = CONST.TYPE_SWITCH
-
     def switch_on(self):
         """Turn the switch on."""
         success = self.set_status(CONST.STATUS_ON_INT)

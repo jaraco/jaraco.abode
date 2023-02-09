@@ -192,5 +192,7 @@ class Device:
         return {
             impl: sub_cls
             for sub_cls in iter_subclasses(cls)
-            for impl in always_iterable(sub_cls.implements)
+            for impl in always_iterable(
+                getattr(sub_cls, 'implements', sub_cls.__name__.lower())
+            )
         }

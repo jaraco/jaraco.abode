@@ -8,7 +8,7 @@ from .binary_sensor import BinarySensor
 class Sensor(BinarySensor):
     """Class to represent a sensor device."""
 
-    implements = CONST.TYPE_SENSOR
+    implements = 'sensor'
 
     def _get_status(self, key):
         return self._state.get(CONST.STATUSES_KEY, {}).get(key)

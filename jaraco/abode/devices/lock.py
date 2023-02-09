@@ -7,8 +7,6 @@ from . import base
 class Lock(base.Device):
     """Class to represent a door lock."""
 
-    implements = CONST.TYPE_LOCK
-
     def lock(self):
         """Lock the device."""
         success = self.set_status(CONST.STATUS_LOCKCLOSED_INT)
