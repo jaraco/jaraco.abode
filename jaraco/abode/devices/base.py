@@ -77,18 +77,13 @@ class Device:
         log.info("Set device %s level to: %s", self.id, level)
 
     def get_value(self, name):
-        """Get a value from the json object.
-
-        This is the common data and is the best place to get state
-        from if it has the data you require.
-        This data is updated by the subscription service.
-        """
+        """Get a value from the device state."""
         return self._state.get(name.lower(), {})
 
     def refresh(self, path=urls.DEVICE):
-        """Refresh the devices json object data.
+        """Refresh the device state.
 
-        Only needed if you're not using the notification service.
+        Useful when not using the notification service.
         """
         path = path.format(device_id=self.id)
 
