@@ -37,60 +37,6 @@ STATUS_OFF_INT = 0
 COLOR_MODE_ON = 0
 COLOR_MODE_OFF = 2
 
-# DEVICE TYPE_TAGS
-# Alarm
-DEVICE_ALARM = 'device_type.alarm'
-
-# Binary Sensors - Connectivity
-DEVICE_GLASS_BREAK = 'device_type.glass'
-DEVICE_KEYPAD = 'device_type.keypad'
-DEVICE_REMOTE_CONTROLLER = 'device_type.remote_controller'
-DEVICE_SIREN = 'device_type.siren'
-DEVICE_STATUS_DISPLAY = 'device_type.bx'
-
-# Binary Sensors - Opening
-DEVICE_DOOR_CONTACT = 'device_type.door_contact'
-
-# Cameras
-DEVICE_MOTION_CAMERA = 'device_type.ir_camera'
-DEVICE_MOTION_VIDEO_CAMERA = 'device_type.ir_camcoder'
-DEVICE_IP_CAM = 'device_type.ipcam'
-DEVICE_OUTDOOR_MOTION_CAMERA = 'device_type.out_view'
-DEVICE_OUTDOOR_SMART_CAMERA = 'device_type.vdp'
-DEVICE_MINI_CAM = 'device_type.mini_cam'
-
-# Covers
-DEVICE_SECURE_BARRIER = 'device_type.secure_barrier'
-
-# Dimmers
-DEVICE_DIMMER = 'device_type.dimmer'
-DEVICE_DIMMER_METER = 'device_type.dimmer_meter'
-DEVICE_HUE = 'device_type.hue'
-
-# Locks
-DEVICE_DOOR_LOCK = 'device_type.door_lock'
-
-# Moisture
-DEVICE_WATER_SENSOR = 'device_type.water_sensor'
-
-# Switches
-DEVICE_SWITCH = 'device_type.switch'
-DEVICE_NIGHT_SWITCH = 'device_type.night_switch'
-DEVICE_POWER_SWITCH_SENSOR = 'device_type.power_switch_sensor'
-DEVICE_POWER_SWITCH_METER = 'device_type.power_switch_meter'
-
-# Water Valve
-DEVICE_VALVE = 'device_type.valve'
-
-# Unknown Sensor
-# These device types are all considered 'occupancy' but could apparently
-# also be multi-sensors based on their json.
-DEVICE_ROOM_SENSOR = 'device_type.room_sensor'
-DEVICE_TEMPERATURE_SENSOR = 'device_type.temperature_sensor'
-DEVICE_MULTI_SENSOR = 'device_type.lm'  # LM = LIGHT MOTION?
-DEVICE_PIR = 'device_type.pir'  # Passive Infrared Occupancy?
-DEVICE_POVS = 'device_type.povs'
-
 STATUSES_KEY = 'statuses'
 TEMP_STATUS_KEY = 'temperature'
 LUX_STATUS_KEY = 'lux'
@@ -107,46 +53,53 @@ BRIGHTNESS_KEY = 'statusEx'
 
 type_map = {
     # Alarm
-    DEVICE_ALARM: 'alarm',
+    'device_type.alarm': 'alarm',
     # Binary Sensors - Connectivity
-    DEVICE_GLASS_BREAK: 'connectivity',
-    DEVICE_KEYPAD: 'connectivity',
-    DEVICE_REMOTE_CONTROLLER: 'connectivity',
-    DEVICE_SIREN: 'connectivity',
-    DEVICE_STATUS_DISPLAY: 'connectivity',
+    'device_type.glass': 'connectivity',
+    'device_type.keypad': 'connectivity',
+    'device_type.remote_controller': 'connectivity',
+    'device_type.siren': 'connectivity',
+    # status display
+    'device_type.bx': 'connectivity',
     # Binary Sensors - Opening
-    DEVICE_DOOR_CONTACT: 'door',
+    'device_type.door_contact': 'door',
     # Cameras
-    DEVICE_MOTION_CAMERA: 'camera',
-    DEVICE_MOTION_VIDEO_CAMERA: 'camera',
-    DEVICE_IP_CAM: 'camera',
-    DEVICE_OUTDOOR_MOTION_CAMERA: 'camera',
-    DEVICE_OUTDOOR_SMART_CAMERA: 'camera',
-    DEVICE_MINI_CAM: 'camera',
+    # motion camera
+    'device_type.ir_camera': 'camera',
+    # motion video camera
+    'device_type.ir_camcoder': 'camera',
+    'device_type.ipcam': 'camera',
+    # outdoor motion camera
+    'device_type.out_view': 'camera',
+    # outdoor smart camera
+    'device_type.vdp': 'camera',
+    'device_type.mini_cam': 'camera',
     # Covers
-    DEVICE_SECURE_BARRIER: 'cover',
+    'device_type.secure_barrier': 'cover',
     # Lights (Dimmers)
-    DEVICE_DIMMER: 'light',
-    DEVICE_DIMMER_METER: 'light',
-    DEVICE_HUE: 'light',
+    'device_type.dimmer': 'light',
+    'device_type.dimmer_meter': 'light',
+    'device_type.hue': 'light',
     # Locks
-    DEVICE_DOOR_LOCK: 'lock',
+    'device_type.door_lock': 'lock',
     # Moisture
-    DEVICE_WATER_SENSOR: 'connectivity',
+    'device_type.water_sensor': 'connectivity',
     # Switches
-    DEVICE_SWITCH: 'switch',
-    DEVICE_NIGHT_SWITCH: 'switch',
-    DEVICE_POWER_SWITCH_SENSOR: 'switch',
-    DEVICE_POWER_SWITCH_METER: 'switch',
+    'device_type.switch': 'switch',
+    'device_type.night_switch': 'switch',
+    'device_type.power_switch_sensor': 'switch',
+    'device_type.power_switch_meter': 'switch',
     # Water Valve
-    DEVICE_VALVE: 'valve',
+    'device_type.valve': 'valve',
     # Unknown Sensors
-    # More data needed to determine type
-    DEVICE_ROOM_SENSOR: 'unknown',
-    DEVICE_TEMPERATURE_SENSOR: 'unknown',
-    DEVICE_MULTI_SENSOR: 'unknown',
-    DEVICE_PIR: 'unknown',
-    DEVICE_POVS: 'unknown',
+    # These device types are all considered 'occupancy' but could apparently
+    # also be multi-sensors based on their state.
+    'device_type.room_sensor': 'unknown',
+    'device_type.temperature_sensor': 'unknown',
+    # LM = LIGHT MOTION?
+    'device_type.lm': 'unknown',
+    'device_type.pir': 'unknown',
+    'device_type.povs': 'unknown',
 }
 
 

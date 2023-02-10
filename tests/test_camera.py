@@ -20,8 +20,8 @@ from .mock import panel as PANEL
 
 
 cam_types = {
-    CONST.DEVICE_IP_CAM: IPCAM,
-    CONST.DEVICE_MOTION_CAMERA: IRCAMERA,
+    'device_type.ipcam': IPCAM,
+    'device_type.ir_camera': IRCAMERA,
 }
 
 
@@ -59,7 +59,7 @@ class TestCamera:
         return (
             device
             for device in self.client.get_devices()
-            if device.type_tag != CONST.DEVICE_ALARM
+            if device.type_tag != 'device_type.alarm'
         )
 
     def test_camera_properties(self, m):
@@ -106,10 +106,10 @@ class TestCamera:
             assert device.status == CONST.STATUS_ONLINE
 
             # Determine URL based on device type
-            if device.type_tag == CONST.DEVICE_IP_CAM:
+            if device.type_tag == 'device_type.ipcam':
                 url = cam_type.CONTROL_URL_SNAPSHOT
 
-            elif device.type_tag == CONST.DEVICE_MOTION_CAMERA:
+            elif device.type_tag == 'device_type.ir_camera':
                 url = cam_type.CONTROL_URL
 
             # Set up capture URL response

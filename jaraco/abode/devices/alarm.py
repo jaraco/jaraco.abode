@@ -21,7 +21,7 @@ def state_from_panel(panel_state, area='1'):
     alarm_state['name'] = 'Abode Alarm'
     alarm_state['id'] = id(area)
     alarm_state['type'] = 'Alarm'
-    alarm_state['type_tag'] = CONST.DEVICE_ALARM
+    alarm_state['type_tag'] = 'device_type.alarm'
     alarm_state['generic_type'] = 'alarm'
     return alarm_state
 

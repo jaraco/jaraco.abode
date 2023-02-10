@@ -142,7 +142,7 @@ class TestBinarySensors:
 
 
 def is_alarm(device):
-    return device.type_tag == CONST.DEVICE_ALARM
+    return device.type_tag == 'device_type.alarm'
 
 
 skip_alarms = functools.partial(itertools.filterfalse, is_alarm)
