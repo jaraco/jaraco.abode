@@ -7,7 +7,13 @@ from . import base
 class BinarySensor(base.Device):
     """Class to represent an on / off, online/offline sensor."""
 
-    _BinarySensor_types = CONST.BINARY_SENSOR_TYPES
+    _BinarySensor_types = [
+        'connectivity',
+        'moisture',
+        'motion',
+        'occupancy',
+        'door',
+    ]
 
     @property
     def is_on(self):

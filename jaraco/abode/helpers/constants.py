@@ -54,14 +54,6 @@ TYPE_VALVE = "valve"
 
 TYPE_UNKNOWN_SENSOR = "unknown_sensor"
 
-BINARY_SENSOR_TYPES = [
-    TYPE_CONNECTIVITY,
-    TYPE_MOISTURE,
-    TYPE_MOTION,
-    TYPE_OCCUPANCY,
-    TYPE_OPENING,
-]
-
 # DEVICE TYPE_TAGS
 # Alarm
 DEVICE_ALARM = 'device_type.alarm'
