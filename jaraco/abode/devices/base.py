@@ -158,19 +158,19 @@ class Device:
 
     @staticmethod
     def resolve_type_unknown(state):
-        if state['generic_type'] != CONST.TYPE_UNKNOWN_SENSOR:
+        if state['generic_type'] != 'unknown':
             return
 
         statuses = state.get(CONST.STATUSES_KEY, {})
 
         if any(key in statuses for key in CONST.SENSOR_KEYS):
-            state['generic_type'] = CONST.TYPE_SENSOR
+            state['generic_type'] = 'sensor'
             return
 
         version = state.get('version', '')
 
         state['generic_type'] = (
-            CONST.TYPE_OCCUPANCY if version.startswith('MINIPIR') else CONST.TYPE_MOTION
+            'occupancy' if version.startswith('MINIPIR') else 'motion'
         )
 
     @classmethod
