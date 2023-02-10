@@ -1,5 +1,6 @@
 import logging
 import warnings
+from typing import Tuple
 
 from jaraco.collections import DictAdapter, Projection
 from jaraco.classes.ancestry import iter_subclasses
@@ -18,6 +19,8 @@ log = logging.getLogger(__name__)
 
 class Device:
     """Class to represent each Abode device."""
+
+    tags: Tuple[str, ...] = ()
 
     def __init__(self, state, client):
         """Set up Abode device."""
@@ -182,7 +185,7 @@ class Device:
         except KeyError as exc:
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
-        state['generic_type'] = CONST.get_generic_type(type_tag.lower())
+        state['generic_type'] = cls.get_generic_type(type_tag)
         cls.resolve_type_unknown(state)
         sensor = cls.by_type().get(state['generic_type'], lambda *args: None)
         return sensor(state, client)
@@ -190,3 +193,23 @@ class Device:
     @classmethod
     def by_type(cls):
         return {sub_cls.__name__.lower(): sub_cls for sub_cls in iter_subclasses(cls)}
+
+    @classmethod
+    def get_generic_type(cls, type_tag):
+        lookup = {
+            f'device_type.{tag}': sub_cls.__name__.lower()
+            for sub_cls in iter_subclasses(cls)
+            for tag in sub_cls.tags
+        }
+        # These device types are all considered 'occupancy' but could apparently
+        # also be multi-sensors based on their state.
+        unknowns = (
+            'room_sensor',
+            'temperature_sensor',
+            # LM = LIGHT MOTION?
+            'lm',
+            'pir',
+            'povs',
+        )
+        lookup.update((f'device_type.{unknown}', 'unknown') for unknown in unknowns)
+        return lookup.get(type_tag.lower())

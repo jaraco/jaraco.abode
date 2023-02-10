@@ -19,6 +19,18 @@ log = logging.getLogger(__name__)
 class Camera(base.Device):
     """Class to represent a camera device."""
 
+    tags = (
+        # motion camera
+        'ir_camera',
+        # motion video camera
+        'ir_camcoder',
+        'ipcam',
+        # outdoor motion camera
+        'out_view',
+        # outdoor smart camera
+        'vdp',
+        'mini_cam',
+    )
     _image_url = None
     _snapshot_base64 = None
 

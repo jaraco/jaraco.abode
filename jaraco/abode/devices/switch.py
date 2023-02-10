@@ -1,11 +1,20 @@
 """Abode switch device."""
 
+from typing import Tuple
+
 from ..helpers import constants as CONST
 from . import base
 
 
 class Switch(base.Device):
     """Class to add switch functionality."""
+
+    tags: Tuple[str, ...] = (
+        'switch',
+        'night_switch',
+        'power_switch_sensor',
+        'power_switch_meter',
+    )
 
     def switch_on(self):
         """Turn the switch on."""

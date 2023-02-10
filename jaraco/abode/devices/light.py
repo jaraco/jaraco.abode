@@ -16,6 +16,8 @@ log = logging.getLogger(__name__)
 class Light(Switch):
     """Class for lights (dimmers)."""
 
+    tags = ('dimmer', 'dimmer_meter', 'hue')
+
     @needs_control_url
     def set_color_temp(self, color_temp):
         """Set device color."""

@@ -22,7 +22,16 @@ class BinarySensor(base.Device):
 
 
 class Connectivity(BinarySensor):
-    pass
+    tags = (
+        'glass',
+        'keypad',
+        'remote_controller',
+        'siren',
+        # status display
+        'bx',
+        # moisture
+        'water_sensor',
+    )
 
 
 class Moisture(BinarySensor):
@@ -40,4 +49,4 @@ class Occupancy(BinarySensor):
 
 
 class Door(BinarySensor):
-    pass
+    tags = ('door_contact',)
