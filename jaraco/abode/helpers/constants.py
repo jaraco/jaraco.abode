@@ -1,5 +1,3 @@
-ARMED = dict(home=True, away=True, standby=False)
-
 STATUS_ONLINE = 'Online'
 STATUS_OFFLINE = 'Offline'
 
