@@ -119,9 +119,7 @@ class Light(Switch):
     @property
     def has_color(self):
         """Device is using color mode."""
-        if self.get_value('statuses').get('color_mode') == str(CONST.COLOR_MODE_ON):
-            return True
-        return False
+        return self.get_value('statuses').get('color_mode') == str(CONST.COLOR_MODE_ON)
 
     @property
     def is_color_capable(self):
