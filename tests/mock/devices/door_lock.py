@@ -7,7 +7,7 @@ CONTROL_URL = 'api/v1/control/lock/' + DEVICE_ID
 
 def device(
     devid=DEVICE_ID,
-    status=STATUS.LOCKCLOSED,
+    status=STATUS.Lock.CLOSED,
     low_battery=False,
     no_response=False,
 ):

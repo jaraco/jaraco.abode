@@ -28,7 +28,7 @@ class TestDoorLock:
             urls.DEVICES,
             json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
-                status=STATUS.LOCKCLOSED,
+                status=STATUS.Lock.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -42,7 +42,7 @@ class TestDoorLock:
 
         # Test our device
         assert device is not None
-        assert device.status == STATUS.LOCKCLOSED
+        assert device.status == STATUS.Lock.CLOSED
         assert not device.battery_low
         assert not device.no_response
         assert device.is_locked
@@ -55,7 +55,7 @@ class TestDoorLock:
             device_url,
             json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
-                status=STATUS.LOCKOPEN,
+                status=STATUS.Lock.OPEN,
                 low_battery=True,
                 no_response=True,
             ),
@@ -64,7 +64,7 @@ class TestDoorLock:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == STATUS.LOCKOPEN
+        assert device.status == STATUS.Lock.OPEN
         assert device.battery_low
         assert device.no_response
         assert not device.is_locked
@@ -80,7 +80,7 @@ class TestDoorLock:
             urls.DEVICES,
             json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
-                status=STATUS.LOCKCLOSED,
+                status=STATUS.Lock.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -94,7 +94,7 @@ class TestDoorLock:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == STATUS.LOCKCLOSED
+        assert device.status == STATUS.Lock.CLOSED
         assert device.is_locked
 
         # Set up control url response
@@ -102,33 +102,33 @@ class TestDoorLock:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.LOCKOPEN)
+                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.Lock.OPEN)
             ),
         )
 
         # Change the mode to "on"
         assert device.unlock()
-        assert device.status == STATUS.LOCKOPEN
+        assert device.status == STATUS.Lock.OPEN
         assert not device.is_locked
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.LOCKCLOSED)
+                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.Lock.CLOSED)
             ),
         )
 
         # Change the mode to "off"
         assert device.lock()
-        assert device.status == STATUS.LOCKCLOSED
+        assert device.status == STATUS.Lock.CLOSED
         assert device.is_locked
 
         # Test that an invalid status response throws exception
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.LOCKCLOSED)
+                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.Lock.CLOSED)
             ),
         )
 

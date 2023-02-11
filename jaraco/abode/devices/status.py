@@ -24,8 +24,11 @@ OFFLINE = 'Offline'
 OPEN = Numeric('Open', 1)
 CLOSED = Numeric('Closed', 0)
 
-LOCKOPEN = Numeric('LockOpen', 0)
-LOCKCLOSED = Numeric('LockClosed', 1)
+
+class Lock:
+    OPEN = Numeric('LockOpen', 0)
+    CLOSED = Numeric('LockClosed', 1)
+
 
 ON = Numeric('On', 1)
 OFF = Numeric('Off', 0)
