@@ -101,7 +101,7 @@ class TestSecureBarrier:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=COVER.DEVICE_ID, status=STATUS.OPEN_INT
+                devid=COVER.DEVICE_ID, status=int(STATUS.OPEN)
             ),
         )
 
@@ -114,7 +114,7 @@ class TestSecureBarrier:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=COVER.DEVICE_ID, status=STATUS.CLOSED_INT
+                devid=COVER.DEVICE_ID, status=int(STATUS.CLOSED)
             ),
         )
 

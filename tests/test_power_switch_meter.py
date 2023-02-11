@@ -102,7 +102,7 @@ class TestPowerSwitchMeter:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERMETER.DEVICE_ID, status=STATUS.ON_INT
+                devid=POWERMETER.DEVICE_ID, status=int(STATUS.ON)
             ),
         )
 
@@ -115,7 +115,7 @@ class TestPowerSwitchMeter:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERMETER.DEVICE_ID, status=STATUS.OFF_INT
+                devid=POWERMETER.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 
@@ -128,7 +128,7 @@ class TestPowerSwitchMeter:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERMETER.DEVICE_ID, status=STATUS.OFF_INT
+                devid=POWERMETER.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 

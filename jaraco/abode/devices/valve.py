@@ -11,7 +11,7 @@ class Valve(Switch):
 
     def switch_on(self):
         """Open the valve."""
-        success = self.set_status(STATUS.ON_INT)
+        success = self.set_status(int(STATUS.ON))
 
         if success:
             self._state['status'] = STATUS.OPEN
@@ -20,7 +20,7 @@ class Valve(Switch):
 
     def switch_off(self):
         """Close the valve."""
-        success = self.set_status(STATUS.OFF_INT)
+        success = self.set_status(int(STATUS.OFF))
 
         if success:
             self._state['status'] = STATUS.CLOSED

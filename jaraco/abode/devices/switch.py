@@ -18,7 +18,7 @@ class Switch(base.Device):
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(STATUS.ON_INT)
+        success = self.set_status(int(STATUS.ON))
 
         if success:
             self._state['status'] = STATUS.ON
@@ -27,7 +27,7 @@ class Switch(base.Device):
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(STATUS.OFF_INT)
+        success = self.set_status(int(STATUS.OFF))
 
         if success:
             self._state['status'] = STATUS.OFF

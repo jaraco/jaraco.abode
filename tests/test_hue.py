@@ -131,7 +131,7 @@ class TestHue:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=STATUS.ON_INT
+                devid=HUE.DEVICE_ID, status=int(STATUS.ON)
             ),
         )
 
@@ -144,7 +144,7 @@ class TestHue:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=STATUS.OFF_INT
+                devid=HUE.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 
@@ -157,7 +157,7 @@ class TestHue:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=STATUS.OFF_INT
+                devid=HUE.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 

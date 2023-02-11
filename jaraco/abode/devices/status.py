@@ -1,17 +1,31 @@
+class Numeric(str):
+    """
+    >>> val = Numeric('item', 3)
+    >>> val
+    'item'
+    >>> int(val)
+    3
+    """
+
+    def __new__(cls, text, val):
+        return super().__new__(cls, text)
+
+    def __init__(self, text, val):
+        assert isinstance(val, int)
+        self.val = val
+
+    def __int__(self):
+        return self.val
+
+
 ONLINE = 'Online'
 OFFLINE = 'Offline'
 
-OPEN = 'Open'
-OPEN_INT = 1
-CLOSED = 'Closed'
-CLOSED_INT = 0
+OPEN = Numeric('Open', 1)
+CLOSED = Numeric('Closed', 0)
 
-LOCKOPEN = 'LockOpen'
-LOCKOPEN_INT = 0
-LOCKCLOSED = 'LockClosed'
-LOCKCLOSED_INT = 1
+LOCKOPEN = Numeric('LockOpen', 0)
+LOCKCLOSED = Numeric('LockClosed', 1)
 
-ON = 'On'
-ON_INT = 1
-OFF = 'Off'
-OFF_INT = 0
+ON = Numeric('On', 1)
+OFF = Numeric('Off', 0)

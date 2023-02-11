@@ -11,7 +11,7 @@ class Lock(base.Device):
 
     def lock(self):
         """Lock the device."""
-        success = self.set_status(STATUS.LOCKCLOSED_INT)
+        success = self.set_status(int(STATUS.LOCKCLOSED))
 
         if success:
             self._state['status'] = STATUS.LOCKCLOSED
@@ -20,7 +20,7 @@ class Lock(base.Device):
 
     def unlock(self):
         """Unlock the device."""
-        success = self.set_status(STATUS.LOCKOPEN_INT)
+        success = self.set_status(int(STATUS.LOCKOPEN))
 
         if success:
             self._state['status'] = STATUS.LOCKOPEN

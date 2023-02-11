@@ -250,7 +250,7 @@ class TestDevice:
         device = self.client.get_device(GLASS.DEVICE_ID)
 
         assert device is not None
-        assert not device.set_status('1')
+        assert not device.set_status(1)
         assert not device.set_level('99')
 
     def test_device_status_changes(self, m):
@@ -286,7 +286,7 @@ class TestDevice:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERSENSOR.DEVICE_ID, status=STATUS.ON_INT
+                devid=POWERSENSOR.DEVICE_ID, status=int(STATUS.ON)
             ),
         )
 
@@ -299,7 +299,7 @@ class TestDevice:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERSENSOR.DEVICE_ID, status=STATUS.OFF_INT
+                devid=POWERSENSOR.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 
@@ -312,7 +312,7 @@ class TestDevice:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid='ZW:deadbeef', status=STATUS.OFF_INT
+                devid='ZW:deadbeef', status=int(STATUS.OFF)
             ),
         )
 
@@ -323,7 +323,7 @@ class TestDevice:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERSENSOR.DEVICE_ID, status=STATUS.OFF_INT
+                devid=POWERSENSOR.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 

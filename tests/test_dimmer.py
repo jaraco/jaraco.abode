@@ -111,7 +111,7 @@ class TestDimmer:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DIMMER.DEVICE_ID, status=STATUS.ON_INT
+                devid=DIMMER.DEVICE_ID, status=int(STATUS.ON)
             ),
         )
 
@@ -124,7 +124,7 @@ class TestDimmer:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DIMMER.DEVICE_ID, status=STATUS.OFF_INT
+                devid=DIMMER.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 
@@ -137,7 +137,7 @@ class TestDimmer:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DIMMER.DEVICE_ID, status=STATUS.OFF_INT
+                devid=DIMMER.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 

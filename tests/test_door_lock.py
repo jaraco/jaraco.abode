@@ -102,7 +102,7 @@ class TestDoorLock:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=STATUS.LOCKOPEN_INT
+                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.LOCKOPEN)
             ),
         )
 
@@ -115,7 +115,7 @@ class TestDoorLock:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=STATUS.LOCKCLOSED_INT
+                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.LOCKCLOSED)
             ),
         )
 
@@ -128,7 +128,7 @@ class TestDoorLock:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=STATUS.LOCKCLOSED_INT
+                devid=DOOR_LOCK.DEVICE_ID, status=int(STATUS.LOCKCLOSED)
             ),
         )
 

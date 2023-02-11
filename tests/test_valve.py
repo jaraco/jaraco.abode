@@ -103,7 +103,7 @@ class TestValve:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=VALVE.DEVICE_ID, status=STATUS.OPEN_INT
+                devid=VALVE.DEVICE_ID, status=int(STATUS.OPEN)
             ),
         )
 
@@ -116,7 +116,7 @@ class TestValve:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=VALVE.DEVICE_ID, status=STATUS.CLOSED_INT
+                devid=VALVE.DEVICE_ID, status=int(STATUS.CLOSED)
             ),
         )
 
@@ -129,7 +129,7 @@ class TestValve:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=VALVE.DEVICE_ID, status=STATUS.CLOSED_INT
+                devid=VALVE.DEVICE_ID, status=int(STATUS.CLOSED)
             ),
         )
 

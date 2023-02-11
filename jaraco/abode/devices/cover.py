@@ -11,7 +11,7 @@ class Cover(Switch):
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(STATUS.OPEN_INT)
+        success = self.set_status(int(STATUS.OPEN))
 
         if success:
             self._state['status'] = STATUS.OPEN
@@ -20,7 +20,7 @@ class Cover(Switch):
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(STATUS.CLOSED_INT)
+        success = self.set_status(int(STATUS.CLOSED))
 
         if success:
             self._state['status'] = STATUS.CLOSED
