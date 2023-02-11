@@ -27,7 +27,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -61,7 +61,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -92,7 +92,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -126,7 +126,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -166,7 +166,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -245,7 +245,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -362,7 +362,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
@@ -391,11 +391,11 @@ class TestEventController:
 
         # Call our mode changed callback method
 
-        events._on_mode_change(CONST.MODE_HOME)
+        events._on_mode_change('home')
         callback.assert_called_with(alarm)
 
         # Test that our alarm state is set properly
-        assert alarm.mode == CONST.MODE_HOME
+        assert alarm.mode == 'home'
 
         # Test that no mode cleanly returns
         events._on_mode_change(None)
@@ -427,7 +427,7 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=[

@@ -1,7 +1,6 @@
 """Test the Abode device classes."""
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
 import pytest
 
 from .mock import login as LOGIN
@@ -17,7 +16,7 @@ class TestAlarm:
 
     def test_abode_alarm_setup(self, m):
         """Check that Abode alarm device is set up properly."""
-        panel = PANEL.get_response_ok(mode=CONST.MODE_STANDBY)
+        panel = PANEL.get_response_ok(mode='standby')
         alarm = ALARM.device(area='1', panel=panel)
 
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
@@ -40,7 +39,7 @@ class TestAlarm:
         m.get(
             urls.PANEL,
             json=PANEL.get_response_ok(
-                mode=CONST.MODE_STANDBY,
+                mode='standby',
                 battery=True,
                 is_cellular=True,
                 mac='01:AA:b3:C4:d5:66',
@@ -55,8 +54,8 @@ class TestAlarm:
         alarm = self.client.get_alarm()
         assert alarm.id == 'area_1'
         assert alarm is not None
-        assert alarm.mode == CONST.MODE_STANDBY
-        assert alarm.status == CONST.MODE_STANDBY
+        assert alarm.mode == 'standby'
+        assert alarm.status == 'standby'
         assert alarm.battery
         assert alarm.is_cellular
         assert not alarm.is_on
@@ -66,28 +65,26 @@ class TestAlarm:
         # Change alarm properties and state to away and test
         m.get(
             urls.PANEL,
-            json=PANEL.get_response_ok(
-                mode=CONST.MODE_AWAY, battery=False, is_cellular=False
-            ),
+            json=PANEL.get_response_ok(mode='away', battery=False, is_cellular=False),
         )
 
         # Refresh alarm and test
         alarm.refresh()
 
         assert alarm.id == 'area_1'
-        assert alarm.mode == CONST.MODE_AWAY
-        assert alarm.status == CONST.MODE_AWAY
+        assert alarm.mode == 'away'
+        assert alarm.status == 'away'
         assert not alarm.battery
         assert not alarm.is_cellular
         assert alarm.is_on
 
         # Change alarm state to final on state and test
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_HOME))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='home'))
 
         # Refresh alarm and test
         alarm.refresh()
-        assert alarm.mode == CONST.MODE_HOME
-        assert alarm.status == CONST.MODE_HOME
+        assert alarm.mode == 'home'
+        assert alarm.status == 'home'
         assert alarm.is_on
 
     def test_alarm_device_mode_changes(self, m):
@@ -96,7 +93,7 @@ class TestAlarm:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
 
         # Logout to reset everything
@@ -106,83 +103,83 @@ class TestAlarm:
         alarm = self.client.get_alarm()
 
         assert alarm is not None
-        assert alarm.status == CONST.MODE_STANDBY
+        assert alarm.status == 'standby'
 
         # Set mode URLs
         m.put(
-            urls.panel_mode('1', CONST.MODE_STANDBY),
-            json=PANEL.put_response_ok(mode=CONST.MODE_STANDBY),
+            urls.panel_mode('1', 'standby'),
+            json=PANEL.put_response_ok(mode='standby'),
         )
         m.put(
-            urls.panel_mode('1', CONST.MODE_AWAY),
-            json=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
+            urls.panel_mode('1', 'away'),
+            json=PANEL.put_response_ok(mode='away'),
         )
         m.put(
-            urls.panel_mode('1', CONST.MODE_HOME),
-            json=PANEL.put_response_ok(mode=CONST.MODE_HOME),
+            urls.panel_mode('1', 'home'),
+            json=PANEL.put_response_ok(mode='home'),
         )
 
         # Set and test text based mode changes
-        assert alarm.set_mode(CONST.MODE_HOME)
-        assert alarm.mode == CONST.MODE_HOME
+        assert alarm.set_mode('home')
+        assert alarm.mode == 'home'
         assert not alarm.is_standby
         assert alarm.is_home
         assert not alarm.is_away
 
-        assert alarm.set_mode(CONST.MODE_AWAY)
-        assert alarm.mode == CONST.MODE_AWAY
+        assert alarm.set_mode('away')
+        assert alarm.mode == 'away'
         assert not alarm.is_standby
         assert not alarm.is_home
         assert alarm.is_away
 
-        assert alarm.set_mode(CONST.MODE_STANDBY)
-        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.set_mode('standby')
+        assert alarm.mode == 'standby'
         assert alarm.is_standby
         assert not alarm.is_home
         assert not alarm.is_away
 
         # Set and test direct mode changes
         assert alarm.set_home()
-        assert alarm.mode == CONST.MODE_HOME
+        assert alarm.mode == 'home'
         assert not alarm.is_standby
         assert alarm.is_home
         assert not alarm.is_away
 
         assert alarm.set_away()
-        assert alarm.mode == CONST.MODE_AWAY
+        assert alarm.mode == 'away'
         assert not alarm.is_standby
         assert not alarm.is_home
         assert alarm.is_away
 
         assert alarm.set_standby()
-        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.mode == 'standby'
         assert alarm.is_standby
         assert not alarm.is_home
         assert not alarm.is_away
 
         # Set and test default mode changes
         assert alarm.switch_off()
-        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.mode == 'standby'
         assert alarm.is_standby
         assert not alarm.is_home
         assert not alarm.is_away
 
-        self.client.set_default_mode(CONST.MODE_HOME)
+        self.client.set_default_mode('home')
         assert alarm.switch_on()
-        assert alarm.mode == CONST.MODE_HOME
+        assert alarm.mode == 'home'
         assert not alarm.is_standby
         assert alarm.is_home
         assert not alarm.is_away
 
         assert alarm.switch_off()
-        assert alarm.mode == CONST.MODE_STANDBY
+        assert alarm.mode == 'standby'
         assert alarm.is_standby
         assert not alarm.is_home
         assert not alarm.is_away
 
-        self.client.set_default_mode(CONST.MODE_AWAY)
+        self.client.set_default_mode('away')
         assert alarm.switch_on()
-        assert alarm.mode == CONST.MODE_AWAY
+        assert alarm.mode == 'away'
         assert not alarm.is_standby
         assert not alarm.is_home
         assert alarm.is_away
@@ -197,18 +194,18 @@ class TestAlarm:
 
         # Test that an invalid mode change response throws exception
         m.put(
-            urls.panel_mode('1', CONST.MODE_HOME),
-            json=PANEL.put_response_ok(mode=CONST.MODE_AWAY),
+            urls.panel_mode('1', 'home'),
+            json=PANEL.put_response_ok(mode='away'),
         )
 
         with pytest.raises(jaraco.abode.Exception):
-            alarm.set_mode(CONST.MODE_HOME)
+            alarm.set_mode('home')
 
         # Test that an invalid area in mode change response throws exception
         m.put(
-            urls.panel_mode('1', CONST.MODE_HOME),
-            json=PANEL.put_response_ok(area='2', mode=CONST.MODE_HOME),
+            urls.panel_mode('1', 'home'),
+            json=PANEL.put_response_ok(area='2', mode='home'),
         )
 
         with pytest.raises(jaraco.abode.Exception):
-            alarm.set_mode(CONST.MODE_HOME)
+            alarm.set_mode('home')

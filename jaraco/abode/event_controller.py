@@ -7,8 +7,8 @@ from jaraco.itertools import always_iterable
 
 import jaraco
 from .devices.base import Device
+from .devices.alarm import Alarm
 from .helpers import urls
-from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .helpers import timeline as TIMELINE
 from . import socketio as sio
@@ -233,7 +233,7 @@ class EventController:
             log.warning("Mode change event with no mode.")
             return
 
-        if not mode or mode.lower() not in CONST.ALL_MODES:
+        if not mode or mode.lower() not in Alarm.all_modes:
             log.warning("Mode change event with unknown mode: %s", mode)
             return
 

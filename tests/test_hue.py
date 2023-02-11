@@ -23,7 +23,7 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
@@ -98,7 +98,7 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
@@ -169,7 +169,7 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
@@ -236,7 +236,7 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(

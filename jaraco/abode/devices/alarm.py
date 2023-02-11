@@ -4,7 +4,6 @@ import copy
 
 import jaraco.abode
 from .switch import Switch
-from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import urls
 
@@ -35,6 +34,7 @@ class Alarm(Switch):
     """Class to represent the Abode alarm as a device."""
 
     tags = ('alarm',)
+    all_modes = 'away', 'standby', 'home'
 
     def __init__(self, json_obj, abode, area='1'):
         """Set up Abode alarm device."""
@@ -46,7 +46,7 @@ class Alarm(Switch):
         if not mode:
             raise jaraco.abode.Exception(ERROR.MISSING_ALARM_MODE)
 
-        if mode.lower() not in CONST.ALL_MODES:
+        if mode.lower() not in self.all_modes:
             raise jaraco.abode.Exception(ERROR.INVALID_ALARM_MODE)
 
         mode = mode.lower()
@@ -71,15 +71,15 @@ class Alarm(Switch):
 
     def set_home(self):
         """Arm Abode to home mode."""
-        return self.set_mode(CONST.MODE_HOME)
+        return self.set_mode('home')
 
     def set_away(self):
         """Arm Abode to home mode."""
-        return self.set_mode(CONST.MODE_AWAY)
+        return self.set_mode('away')
 
     def set_standby(self):
         """Arm Abode to stay mode."""
-        return self.set_mode(CONST.MODE_STANDBY)
+        return self.set_mode('standby')
 
     def switch_on(self):
         """Arm Abode to default mode."""
@@ -103,22 +103,22 @@ class Alarm(Switch):
     @property
     def is_on(self):
         """Is alarm armed."""
-        return self.mode in (CONST.MODE_HOME, CONST.MODE_AWAY)
+        return self.mode in ('home', 'away')
 
     @property
     def is_standby(self):
         """Is alarm in standby mode."""
-        return self.mode == CONST.MODE_STANDBY
+        return self.mode == 'standby'
 
     @property
     def is_home(self):
         """Is alarm in home mode."""
-        return self.mode == CONST.MODE_HOME
+        return self.mode == 'home'
 
     @property
     def is_away(self):
         """Is alarm in away mode."""
-        return self.mode == CONST.MODE_AWAY
+        return self.mode == 'away'
 
     @property
     def mode(self):

@@ -311,11 +311,11 @@ class TestAbode:
 
     def test_default_mode(self):
         """Test that the default mode fails if not of type home or away."""
-        self.client.set_default_mode(CONST.MODE_HOME)
-        assert self.client.default_mode == CONST.MODE_HOME
+        self.client.set_default_mode('home')
+        assert self.client.default_mode == 'home'
 
-        self.client.set_default_mode(CONST.MODE_AWAY)
-        assert self.client.default_mode == CONST.MODE_AWAY
+        self.client.set_default_mode('away')
+        assert self.client.default_mode == 'away'
 
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_default_mode('foobar')

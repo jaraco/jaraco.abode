@@ -1,12 +1,3 @@
-# DICTIONARIES
-MODE_STANDBY = 'standby'
-MODE_HOME = 'home'
-MODE_AWAY = 'away'
-
-ALL_MODES = [MODE_STANDBY, MODE_HOME, MODE_AWAY]
-
-ALL_MODES_STR = ", ".join(ALL_MODES)
-
 ARMED = dict(home=True, away=True, standby=False)
 
 STATUS_ONLINE = 'Online'

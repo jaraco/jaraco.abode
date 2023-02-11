@@ -19,7 +19,6 @@ from .event_controller import EventController
 from .exceptions import AuthenticationException
 from .devices import alarm as ALARM
 from .helpers import urls
-from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .devices.base import Device
 from . import settings
@@ -58,7 +57,7 @@ class Client:
 
         self._event_controller = EventController(self)
 
-        self._default_alarm_mode = CONST.MODE_AWAY
+        self._default_alarm_mode = 'away'
 
         self._devices = None
 
@@ -275,7 +274,7 @@ class Client:
 
     def set_default_mode(self, default_mode):
         """Set the default mode when alarms are turned 'on'."""
-        if default_mode.lower() not in (CONST.MODE_AWAY, CONST.MODE_HOME):
+        if default_mode.lower() not in ('away', 'home'):
             raise jaraco.abode.Exception(ERROR.INVALID_DEFAULT_ALARM_MODE)
 
         self._default_alarm_mode = default_mode.lower()

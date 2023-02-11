@@ -27,7 +27,7 @@ class TestBinarySensors:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
 
         # Set up all Binary Sensor Devices in "off states"
         all_devices = [

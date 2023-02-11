@@ -7,11 +7,10 @@ the panel/alarm itself into a Home Assistant device.
 """
 
 from jaraco.abode.devices import alarm
-import jaraco.abode.helpers.constants as CONST
 
 from .. import panel as PANEL
 
 
-def device(area='1', panel=PANEL.get_response_ok(mode=CONST.MODE_STANDBY)):
+def device(area='1', panel=PANEL.get_response_ok(mode='standby')):
     """Alarm mock device."""
     return alarm.state_from_panel(panel)
