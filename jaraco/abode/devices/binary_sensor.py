@@ -1,6 +1,6 @@
 """Abode binary sensor device."""
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from . import base
 
 
@@ -15,9 +15,9 @@ class BinarySensor(base.Device):
         Assume offline or open (worst case).
         """
         return self.status not in (
-            CONST.STATUS_OFF,
-            CONST.STATUS_OFFLINE,
-            CONST.STATUS_CLOSED,
+            STATUS.OFF,
+            STATUS.OFFLINE,
+            STATUS.CLOSED,
         )
 
 
@@ -45,7 +45,7 @@ class Motion(BinarySensor):
 class Occupancy(BinarySensor):
     @property
     def is_on(self):
-        return self.status not in CONST.STATUS_ONLINE
+        return self.status not in STATUS.ONLINE
 
 
 class Door(BinarySensor):

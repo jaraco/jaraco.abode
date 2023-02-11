@@ -1,7 +1,7 @@
 """Test the Abode device classes."""
 
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -25,7 +25,7 @@ class TestSecureBarrier:
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -39,7 +39,7 @@ class TestSecureBarrier:
 
         # Test our device
         assert device is not None
-        assert device.status == CONST.STATUS_CLOSED
+        assert device.status == STATUS.CLOSED
         assert not device.battery_low
         assert not device.no_response
         assert not device.is_on
@@ -53,7 +53,7 @@ class TestSecureBarrier:
             device_url,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_OPEN,
+                status=STATUS.OPEN,
                 low_battery=True,
                 no_response=True,
             ),
@@ -62,7 +62,7 @@ class TestSecureBarrier:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == CONST.STATUS_OPEN
+        assert device.status == STATUS.OPEN
         assert device.battery_low
         assert device.no_response
         assert device.is_on
@@ -79,7 +79,7 @@ class TestSecureBarrier:
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -93,7 +93,7 @@ class TestSecureBarrier:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_CLOSED
+        assert device.status == STATUS.CLOSED
         assert not device.is_open
 
         # Set up control url response
@@ -101,24 +101,24 @@ class TestSecureBarrier:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN_INT
+                devid=COVER.DEVICE_ID, status=STATUS.OPEN_INT
             ),
         )
 
         # Change the cover to open
         assert device.open_cover()
-        assert device.status == CONST.STATUS_OPEN
+        assert device.status == STATUS.OPEN
         assert device.is_open
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=COVER.DEVICE_ID, status=CONST.STATUS_CLOSED_INT
+                devid=COVER.DEVICE_ID, status=STATUS.CLOSED_INT
             ),
         )
 
         # Change the mode to "off"
         assert device.close_cover()
-        assert device.status == CONST.STATUS_CLOSED
+        assert device.status == STATUS.CLOSED
         assert not device.is_open

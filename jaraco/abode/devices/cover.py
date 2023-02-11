@@ -1,6 +1,6 @@
 """Abode cover device."""
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from .switch import Switch
 
 
@@ -11,19 +11,19 @@ class Cover(Switch):
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(CONST.STATUS_OPEN_INT)
+        success = self.set_status(STATUS.OPEN_INT)
 
         if success:
-            self._state['status'] = CONST.STATUS_OPEN
+            self._state['status'] = STATUS.OPEN
 
         return success
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(CONST.STATUS_CLOSED_INT)
+        success = self.set_status(STATUS.CLOSED_INT)
 
         if success:
-            self._state['status'] = CONST.STATUS_CLOSED
+            self._state['status'] = STATUS.CLOSED
 
         return success
 
@@ -47,4 +47,4 @@ class Cover(Switch):
 
         Assume cover is open.
         """
-        return self.status not in CONST.STATUS_CLOSED
+        return self.status not in STATUS.CLOSED

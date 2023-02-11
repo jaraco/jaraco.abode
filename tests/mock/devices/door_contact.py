@@ -1,5 +1,5 @@
 """Mock Abode Door Contact Device."""
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 
 DEVICE_ID = 'RF:00000003'
@@ -7,7 +7,7 @@ DEVICE_ID = 'RF:00000003'
 
 def device(
     devid=DEVICE_ID,
-    status=CONST.STATUS_CLOSED,
+    status=STATUS.CLOSED,
     low_battery=False,
     no_response=False,
     window=False,

@@ -1,5 +1,5 @@
 """Mock Abode IP Camera Device."""
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'ZB:00000305'
 CONTROL_URL = 'api/v1/cams/' + DEVICE_ID + '/record'
@@ -8,7 +8,7 @@ CONTROL_URL_SNAPSHOT = 'api/v1/cams/' + DEVICE_ID + '/capture'
 
 def device(
     devid=DEVICE_ID,
-    status=CONST.STATUS_ONLINE,
+    status=STATUS.ONLINE,
     low_battery=False,
     no_response=False,
     privacy=1,

@@ -7,7 +7,7 @@ import requests
 
 import jaraco
 from .._itertools import single
-from ..helpers import constants as CONST
+from . import status as STATUS
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
 from ..helpers import urls
@@ -212,4 +212,4 @@ class Camera(base.Device):
     @property
     def is_on(self):
         """Get camera state (assumed on)."""
-        return self.status not in (CONST.STATUS_OFF, CONST.STATUS_OFFLINE)
+        return self.status not in (STATUS.OFF, STATUS.OFFLINE)

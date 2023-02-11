@@ -1,6 +1,6 @@
 """Abode lock device."""
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from . import base
 
 
@@ -11,19 +11,19 @@ class Lock(base.Device):
 
     def lock(self):
         """Lock the device."""
-        success = self.set_status(CONST.STATUS_LOCKCLOSED_INT)
+        success = self.set_status(STATUS.LOCKCLOSED_INT)
 
         if success:
-            self._state['status'] = CONST.STATUS_LOCKCLOSED
+            self._state['status'] = STATUS.LOCKCLOSED
 
         return success
 
     def unlock(self):
         """Unlock the device."""
-        success = self.set_status(CONST.STATUS_LOCKOPEN_INT)
+        success = self.set_status(STATUS.LOCKOPEN_INT)
 
         if success:
-            self._state['status'] = CONST.STATUS_LOCKOPEN
+            self._state['status'] = STATUS.LOCKOPEN
 
         return success
 
@@ -34,4 +34,4 @@ class Lock(base.Device):
 
         Err on side of caution, assume if lock isn't closed then it's open.
         """
-        return self.status in CONST.STATUS_LOCKCLOSED
+        return self.status in STATUS.LOCKCLOSED

@@ -2,7 +2,7 @@
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 import pytest
 
@@ -28,7 +28,7 @@ class TestDimmer:
             urls.DEVICES,
             json=DIMMER.device(
                 devid=DIMMER.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 low_battery=False,
                 no_response=False,
@@ -43,7 +43,7 @@ class TestDimmer:
 
         # Test our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert device.brightness == "0"
         assert device.has_brightness
         assert device.is_dimmable
@@ -61,7 +61,7 @@ class TestDimmer:
             device_url,
             json=DIMMER.device(
                 devid=DIMMER.DEVICE_ID,
-                status=CONST.STATUS_ON,
+                status=STATUS.ON,
                 level=87,
                 low_battery=True,
                 no_response=True,
@@ -71,7 +71,7 @@ class TestDimmer:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == CONST.STATUS_ON
+        assert device.status == STATUS.ON
         assert device.brightness == "87"
         assert device.battery_low
         assert device.no_response
@@ -88,7 +88,7 @@ class TestDimmer:
             urls.DEVICES,
             json=DIMMER.device(
                 devid=DIMMER.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 low_battery=False,
                 no_response=False,
@@ -103,7 +103,7 @@ class TestDimmer:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Set up control url response
@@ -111,33 +111,33 @@ class TestDimmer:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DIMMER.DEVICE_ID, status=CONST.STATUS_ON_INT
+                devid=DIMMER.DEVICE_ID, status=STATUS.ON_INT
             ),
         )
 
         # Change the mode to "on"
         assert device.switch_on()
-        assert device.status == CONST.STATUS_ON
+        assert device.status == STATUS.ON
         assert device.is_on
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DIMMER.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=DIMMER.DEVICE_ID, status=STATUS.OFF_INT
             ),
         )
 
         # Change the mode to "off"
         assert device.switch_off()
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Test that an invalid status response throws exception
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DIMMER.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=DIMMER.DEVICE_ID, status=STATUS.OFF_INT
             ),
         )
 

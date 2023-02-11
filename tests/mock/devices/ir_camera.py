@@ -1,13 +1,11 @@
 """Mock Abode IR Camera Device."""
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'ZB:00000005'
 CONTROL_URL = 'api/v1/cams/' + DEVICE_ID + '/capture'
 
 
-def device(
-    devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
-):
+def device(devid=DEVICE_ID, status=STATUS.ONLINE, low_battery=False, no_response=False):
     """IR camera mock device."""
     return dict(
         id=devid,

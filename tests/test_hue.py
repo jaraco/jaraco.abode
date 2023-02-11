@@ -4,7 +4,7 @@ import pytest
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 from jaraco.abode.devices.light import ColorMode
 
 from .mock import login as LOGIN
@@ -29,7 +29,7 @@ class TestHue:
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
@@ -48,7 +48,7 @@ class TestHue:
 
         # Test our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert device.brightness == "0"
         assert device.color == (60, 57)  # (hue, saturation)
         assert device.color_temp == 6536
@@ -68,7 +68,7 @@ class TestHue:
             device_url,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_ON,
+                status=STATUS.ON,
                 level=45,
                 saturation=22,
                 hue=104,
@@ -82,7 +82,7 @@ class TestHue:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == CONST.STATUS_ON
+        assert device.status == STATUS.ON
         assert device.color == (104, 22)  # (hue, saturation)
         assert device.color_temp == 4000
         assert device.has_brightness
@@ -104,7 +104,7 @@ class TestHue:
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
@@ -123,7 +123,7 @@ class TestHue:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Set up control url response
@@ -131,33 +131,33 @@ class TestHue:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=CONST.STATUS_ON_INT
+                devid=HUE.DEVICE_ID, status=STATUS.ON_INT
             ),
         )
 
         # Change the mode to "on"
         assert device.switch_on()
-        assert device.status == CONST.STATUS_ON
+        assert device.status == STATUS.ON
         assert device.is_on
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=HUE.DEVICE_ID, status=STATUS.OFF_INT
             ),
         )
 
         # Change the mode to "off"
         assert device.switch_off()
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Test that an invalid status response throws exception
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=HUE.DEVICE_ID, status=STATUS.OFF_INT
             ),
         )
 
@@ -175,7 +175,7 @@ class TestHue:
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
@@ -194,7 +194,7 @@ class TestHue:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
         assert device.color_temp == 6536
 
@@ -242,7 +242,7 @@ class TestHue:
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
@@ -261,7 +261,7 @@ class TestHue:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
         assert device.color == (60, 57)  # (hue, saturation)
 

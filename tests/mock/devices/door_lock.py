@@ -1,5 +1,5 @@
 """Mock Abode Door Lock Device."""
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'ZW:0000006'
 CONTROL_URL = 'api/v1/control/lock/' + DEVICE_ID
@@ -7,7 +7,7 @@ CONTROL_URL = 'api/v1/control/lock/' + DEVICE_ID
 
 def device(
     devid=DEVICE_ID,
-    status=CONST.STATUS_LOCKCLOSED,
+    status=STATUS.LOCKCLOSED,
     low_battery=False,
     no_response=False,
 ):

@@ -2,7 +2,7 @@
 
 from typing import Tuple
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from . import base
 
 
@@ -18,19 +18,19 @@ class Switch(base.Device):
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(CONST.STATUS_ON_INT)
+        success = self.set_status(STATUS.ON_INT)
 
         if success:
-            self._state['status'] = CONST.STATUS_ON
+            self._state['status'] = STATUS.ON
 
         return success
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(CONST.STATUS_OFF_INT)
+        success = self.set_status(STATUS.OFF_INT)
 
         if success:
-            self._state['status'] = CONST.STATUS_OFF
+            self._state['status'] = STATUS.OFF
 
         return success
 
@@ -41,7 +41,7 @@ class Switch(base.Device):
 
         Assume switch is on.
         """
-        return self.status not in (CONST.STATUS_OFF, CONST.STATUS_OFFLINE)
+        return self.status not in (STATUS.OFF, STATUS.OFFLINE)
 
     @property
     def is_dimmable(self):

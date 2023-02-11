@@ -2,7 +2,7 @@
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 import pytest
 
@@ -28,7 +28,7 @@ class TestDoorLock:
             urls.DEVICES,
             json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
-                status=CONST.STATUS_LOCKCLOSED,
+                status=STATUS.LOCKCLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -42,7 +42,7 @@ class TestDoorLock:
 
         # Test our device
         assert device is not None
-        assert device.status == CONST.STATUS_LOCKCLOSED
+        assert device.status == STATUS.LOCKCLOSED
         assert not device.battery_low
         assert not device.no_response
         assert device.is_locked
@@ -55,7 +55,7 @@ class TestDoorLock:
             device_url,
             json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
-                status=CONST.STATUS_LOCKOPEN,
+                status=STATUS.LOCKOPEN,
                 low_battery=True,
                 no_response=True,
             ),
@@ -64,7 +64,7 @@ class TestDoorLock:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == CONST.STATUS_LOCKOPEN
+        assert device.status == STATUS.LOCKOPEN
         assert device.battery_low
         assert device.no_response
         assert not device.is_locked
@@ -80,7 +80,7 @@ class TestDoorLock:
             urls.DEVICES,
             json=DOOR_LOCK.device(
                 devid=DOOR_LOCK.DEVICE_ID,
-                status=CONST.STATUS_LOCKCLOSED,
+                status=STATUS.LOCKCLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -94,7 +94,7 @@ class TestDoorLock:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_LOCKCLOSED
+        assert device.status == STATUS.LOCKCLOSED
         assert device.is_locked
 
         # Set up control url response
@@ -102,33 +102,33 @@ class TestDoorLock:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=CONST.STATUS_LOCKOPEN_INT
+                devid=DOOR_LOCK.DEVICE_ID, status=STATUS.LOCKOPEN_INT
             ),
         )
 
         # Change the mode to "on"
         assert device.unlock()
-        assert device.status == CONST.STATUS_LOCKOPEN
+        assert device.status == STATUS.LOCKOPEN
         assert not device.is_locked
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=CONST.STATUS_LOCKCLOSED_INT
+                devid=DOOR_LOCK.DEVICE_ID, status=STATUS.LOCKCLOSED_INT
             ),
         )
 
         # Change the mode to "off"
         assert device.lock()
-        assert device.status == CONST.STATUS_LOCKCLOSED
+        assert device.status == STATUS.LOCKCLOSED
         assert device.is_locked
 
         # Test that an invalid status response throws exception
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=DOOR_LOCK.DEVICE_ID, status=CONST.STATUS_LOCKCLOSED_INT
+                devid=DOOR_LOCK.DEVICE_ID, status=STATUS.LOCKCLOSED_INT
             ),
         )
 

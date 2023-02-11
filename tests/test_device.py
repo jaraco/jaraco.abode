@@ -4,7 +4,7 @@ import pytest
 import jaraco.abode
 from jaraco.abode.helpers import urls
 from jaraco.abode.devices.base import Device
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 from .mock import devices as DEVICES
 from .mock.devices import door_contact as DOOR_CONTACT
 from .mock.devices import glass as GLASS
@@ -22,7 +22,7 @@ class TestDevice:
     def test_device_mapping_type_tag(self):
         """Check new device without type_tag raises exception."""
         device = GLASS.device(
-            status=CONST.STATUS_ONLINE,
+            status=STATUS.ONLINE,
             low_battery=True,
             no_response=True,
             tampered=True,
@@ -36,7 +36,7 @@ class TestDevice:
     def test_device_auto_naming(self):
         """Check the generic Abode device creates a name."""
         source = GLASS.device(
-            status=CONST.STATUS_ONLINE,
+            status=STATUS.ONLINE,
             low_battery=True,
             no_response=True,
             tampered=True,
@@ -69,7 +69,7 @@ class TestDevice:
         # Set up device
         source = [
             GLASS.device(
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
                 tampered=True,
@@ -94,7 +94,7 @@ class TestDevice:
         assert device.type_tag == source[0]['type_tag']
         assert device.id == source[0]['id']
         assert device.uuid == source[0]['uuid']
-        assert device.status == CONST.STATUS_ONLINE
+        assert device.status == STATUS.ONLINE
         assert device.battery_low
         assert device.no_response
         assert device.tampered
@@ -110,22 +110,22 @@ class TestDevice:
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up online device
-        m.get(urls.DEVICES, json=[GLASS.device(status=CONST.STATUS_ONLINE)])
+        m.get(urls.DEVICES, json=[GLASS.device(status=STATUS.ONLINE)])
 
         # Set up offline device
         device_url = urls.DEVICE.format(device_id=GLASS.DEVICE_ID)
-        m.get(device_url, json=[GLASS.device(status=CONST.STATUS_OFFLINE)])
+        m.get(device_url, json=[GLASS.device(status=STATUS.OFFLINE)])
 
         # Logout to reset everything
         self.client.logout()
 
         # Get the first device and test
         device = self.client.get_device(GLASS.DEVICE_ID)
-        assert device.status == CONST.STATUS_ONLINE
+        assert device.status == STATUS.ONLINE
 
         # Refresh the device and test
         device = self.client.get_device(GLASS.DEVICE_ID, refresh=True)
-        assert device.status == CONST.STATUS_OFFLINE
+        assert device.status == STATUS.OFFLINE
 
     def test_multiple_devices(self, m):
         """Tests that multiple devices are returned properly."""
@@ -198,19 +198,19 @@ class TestDevice:
         dev_list = [
             POWERSENSOR.device(
                 devid='ps1',
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 low_battery=False,
                 no_response=False,
             ),
             POWERSENSOR.device(
                 devid='ps2',
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 low_battery=False,
                 no_response=False,
             ),
             GLASS.device(
                 devid='gb1',
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 low_battery=False,
                 no_response=False,
             ),
@@ -241,7 +241,7 @@ class TestDevice:
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
-        m.get(urls.DEVICES, json=GLASS.device(status=CONST.STATUS_ONLINE))
+        m.get(urls.DEVICES, json=GLASS.device(status=STATUS.ONLINE))
 
         # Logout to reset everything
         self.client.logout()
@@ -264,7 +264,7 @@ class TestDevice:
             urls.DEVICES,
             json=POWERSENSOR.device(
                 devid=POWERSENSOR.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 low_battery=False,
                 no_response=False,
             ),
@@ -278,7 +278,7 @@ class TestDevice:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Set up control url response
@@ -286,33 +286,33 @@ class TestDevice:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERSENSOR.DEVICE_ID, status=CONST.STATUS_ON_INT
+                devid=POWERSENSOR.DEVICE_ID, status=STATUS.ON_INT
             ),
         )
 
         # Change the mode to "on"
         assert device.switch_on()
-        assert device.status == CONST.STATUS_ON
+        assert device.status == STATUS.ON
         assert device.is_on
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERSENSOR.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=POWERSENSOR.DEVICE_ID, status=STATUS.OFF_INT
             ),
         )
 
         # Change the mode to "off"
         assert device.switch_off()
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Test that an invalid device ID in response throws exception
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid='ZW:deadbeef', status=CONST.STATUS_OFF_INT
+                devid='ZW:deadbeef', status=STATUS.OFF_INT
             ),
         )
 
@@ -323,7 +323,7 @@ class TestDevice:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=POWERSENSOR.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=POWERSENSOR.DEVICE_ID, status=STATUS.OFF_INT
             ),
         )
 
@@ -343,7 +343,7 @@ class TestDevice:
             urls.DEVICES,
             json=POWERSENSOR.device(
                 devid=POWERSENSOR.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 low_battery=False,
                 no_response=False,
             ),
@@ -357,7 +357,7 @@ class TestDevice:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Set up control url response
