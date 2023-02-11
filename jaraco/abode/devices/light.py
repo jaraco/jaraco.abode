@@ -3,7 +3,6 @@ import logging
 import math
 
 import jaraco
-from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from .control import needs_control_url
@@ -11,6 +10,11 @@ from .switch import Switch
 
 
 log = logging.getLogger(__name__)
+
+
+class ColorMode:
+    on = 0
+    off = 2
 
 
 class Light(Switch):
@@ -119,7 +123,7 @@ class Light(Switch):
     @property
     def has_color(self):
         """Device is using color mode."""
-        return self.get_value('statuses').get('color_mode') == str(CONST.COLOR_MODE_ON)
+        return self.get_value('statuses').get('color_mode') == str(ColorMode.on)
 
     @property
     def is_color_capable(self):

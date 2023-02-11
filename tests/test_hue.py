@@ -5,6 +5,7 @@ import pytest
 import jaraco.abode
 from jaraco.abode.helpers import urls
 import jaraco.abode.helpers.constants as CONST
+from jaraco.abode.devices.light import ColorMode
 
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -33,7 +34,7 @@ class TestHue:
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -72,7 +73,7 @@ class TestHue:
                 saturation=22,
                 hue=104,
                 color_temp=4000,
-                color_mode=CONST.COLOR_MODE_OFF,
+                color_mode=ColorMode.off,
                 low_battery=True,
                 no_response=True,
             ),
@@ -108,7 +109,7 @@ class TestHue:
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -179,7 +180,7 @@ class TestHue:
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -246,7 +247,7 @@ class TestHue:
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
