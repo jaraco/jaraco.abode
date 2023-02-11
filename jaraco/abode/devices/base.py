@@ -7,7 +7,6 @@ from jaraco.classes.ancestry import iter_subclasses
 from jaraco.itertools import always_iterable
 
 import jaraco
-from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from .control import needs_control_url
@@ -164,9 +163,9 @@ class Device:
         if state['generic_type'] != 'unknown':
             return
 
-        statuses = state.get(CONST.STATUSES_KEY, {})
+        from .sensor import Sensor
 
-        if any(key in statuses for key in CONST.SENSOR_KEYS):
+        if Sensor.is_sensor(state):
             state['generic_type'] = 'sensor'
             return
 
