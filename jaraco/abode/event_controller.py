@@ -16,6 +16,8 @@ from ._itertools import single, opt_single
 
 log = logging.getLogger(__name__)
 
+SOCKETIO_URL = 'wss://my.goabode.com/socket.io/'
+
 
 def _cookie_string(cookies: http.cookiejar.CookieJar):
     """
@@ -31,7 +33,7 @@ def _cookie_string(cookies: http.cookiejar.CookieJar):
 class EventController:
     """Subscribes to events."""
 
-    def __init__(self, client, url=CONST.SOCKETIO_URL):
+    def __init__(self, client, url=SOCKETIO_URL):
         self._client = client
         self._thread = None
         self._running = False

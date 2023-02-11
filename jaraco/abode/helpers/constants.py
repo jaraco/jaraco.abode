@@ -1,10 +1,3 @@
-# NOTIFICATION CONSTANTS
-SOCKETIO_URL = 'wss://my.goabode.com/socket.io/'
-
-SOCKETIO_HEADERS = {
-    'Origin': 'https://my.goabode.com/',
-}
-
 # DICTIONARIES
 MODE_STANDBY = 'standby'
 MODE_HOME = 'home'

@@ -56,7 +56,7 @@ class Client:
         self._username = username
         self._password = password
 
-        self._event_controller = EventController(self, url=CONST.SOCKETIO_URL)
+        self._event_controller = EventController(self)
 
         self._default_alarm_mode = CONST.MODE_AWAY
 
