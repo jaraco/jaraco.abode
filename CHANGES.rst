@@ -1,3 +1,13 @@
+v4.0.0
+======
+
+Substantial refactoring of "constants". All constants have been
+removed from ``jaraco.abode.helpers.constants`` and either
+inlined, replaced by constants in the relevant modules, or
+replaced by other factors already present. These changes should
+be backward-compatible except for libraries reliant on the
+constants.
+
 v3.3.0
 ======
 
