@@ -27,14 +27,14 @@ class Automation:
             method="patch", path=path, data={'enabled': enable}
         )
 
-        response_object = single(response.json())
+        state = single(response.json())
 
-        if str(response_object['id']) != str(self._state['id']) or str(
-            response_object['enabled']
-        ) != str(self._state['enabled']):
+        if str(state['id']) != str(self._state['id']) or str(state['enabled']) != str(
+            self._state['enabled']
+        ):
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_EDIT_RESPONSE)
 
-        self.update(response_object)
+        self.update(state)
 
         log.info("Set automation %s enable to: %s", self.name, self.is_enabled)
         log.debug("Automation response: %s", response.text)
