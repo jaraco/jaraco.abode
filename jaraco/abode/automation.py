@@ -13,15 +13,15 @@ log = logging.getLogger(__name__)
 class Automation:
     """Class for viewing and controlling automations."""
 
-    def __init__(self, abode, automation):
+    def __init__(self, abode, state):
         self._client = abode
-        self._automation = automation
+        self._state = state
 
     def enable(self, enable):
         """Enable or disable the automation."""
         path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
-        self._automation['enabled'] = enable
+        self._state['enabled'] = enable
 
         response = self._client.send_request(
             method="patch", path=path, data={'enabled': enable}
@@ -29,9 +29,9 @@ class Automation:
 
         response_object = single(response.json())
 
-        if str(response_object['id']) != str(self._automation['id']) or str(
+        if str(response_object['id']) != str(self._state['id']) or str(
             response_object['enabled']
-        ) != str(self._automation['enabled']):
+        ) != str(self._state['enabled']):
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_EDIT_RESPONSE)
 
         self.update(response_object)
@@ -61,24 +61,22 @@ class Automation:
 
     def update(self, automation):
         """Update the internal automation json."""
-        self._automation.update(
-            (k, automation[k]) for k in automation if self._automation.get(k)
-        )
+        self._state.update((k, automation[k]) for k in automation if self._state.get(k))
 
     @property
     def automation_id(self):
         """Get the id of the automation."""
-        return str(self._automation['id'])
+        return str(self._state['id'])
 
     @property
     def name(self):
         """Get the name of the automation."""
-        return self._automation['name']
+        return self._state['name']
 
     @property
     def is_enabled(self):
         """Return True if the automation is enabled."""
-        return self._automation['enabled']
+        return self._state['enabled']
 
     @property
     def desc(self):

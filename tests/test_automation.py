@@ -43,7 +43,7 @@ class TestAutomation:
         # Check automation states match
         assert automation is not None
 
-        assert automation._automation == automation_resp
+        assert automation._state == automation_resp
         assert automation.automation_id == str(automation_resp['id'])
         assert automation.name == automation_resp['name']
         assert automation.is_enabled == automation_resp['enabled']
@@ -84,11 +84,11 @@ class TestAutomation:
         # Check automation states match
 
         assert automation is not None
-        assert automation._automation == resp[0]
+        assert automation._state == resp[0]
 
         # Refresh and retest
         automation.refresh()
-        assert automation._automation == resp_changed[0]
+        assert automation._state == resp_changed[0]
 
         # Refresh with get_automation() and test
         resp_changed = [
@@ -102,7 +102,7 @@ class TestAutomation:
         # Refresh and retest
         automation = self.client.get_automation(AID_1, refresh=True)
 
-        assert automation._automation == resp_changed[0]
+        assert automation._state == resp_changed[0]
 
         # Test refresh returning an incorrect ID throws exception
         # Set up refreshed automation
@@ -153,15 +153,15 @@ class TestAutomation:
 
         automation_1 = self.client.get_automation(AID_1)
         assert automation_1 is not None
-        assert automation_1._automation == resp[0]
+        assert automation_1._state == resp[0]
 
         automation_2 = self.client.get_automation(AID_2)
         assert automation_2 is not None
-        assert automation_2._automation == resp[1]
+        assert automation_2._state == resp[1]
 
         automation_3 = self.client.get_automation(AID_3)
         assert automation_3 is not None
-        assert automation_3._automation == resp[2]
+        assert automation_3._state == resp[2]
 
     def test_automation_class_reuse(self, m):
         """Check that automations reuse the same classes when refreshed."""
@@ -194,11 +194,11 @@ class TestAutomation:
 
         automation_1 = self.client.get_automation(AID_1)
         assert automation_1 is not None
-        assert automation_1._automation == resp[0]
+        assert automation_1._state == resp[0]
 
         automation_2 = self.client.get_automation(AID_2)
         assert automation_2 is not None
-        assert automation_2._automation == resp[1]
+        assert automation_2._state == resp[1]
 
         # Update the automations
         resp = [
@@ -223,18 +223,18 @@ class TestAutomation:
         # and are using the same class
         automation_1_changed = self.client.get_automation(AID_1)
         assert automation_1_changed is not None
-        assert automation_1_changed._automation == resp[0]
+        assert automation_1_changed._state == resp[0]
         assert automation_1 is automation_1_changed
 
         automation_2_changed = self.client.get_automation(AID_2)
         assert automation_2_changed is not None
-        assert automation_2_changed._automation == resp[1]
+        assert automation_2_changed._state == resp[1]
         assert automation_2 is automation_2_changed
 
         # Check that the third new automation is correct
         automation_3 = self.client.get_automation(AID_3)
         assert automation_3 is not None
-        assert automation_3._automation == resp[2]
+        assert automation_3._state == resp[2]
 
     def test_automation_enable(self, m):
         """Check that automations can change their enable state."""
@@ -260,7 +260,7 @@ class TestAutomation:
 
         automation = self.client.get_automation(AID_1)
         assert automation is not None
-        assert automation._automation == resp[0]
+        assert automation._state == resp[0]
         assert automation.is_enabled
 
         # Set up our active state change and URL
