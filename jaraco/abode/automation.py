@@ -15,6 +15,8 @@ log = logging.getLogger(__name__)
 class Automation(Stateful):
     """Class for viewing and controlling automations."""
 
+    _desc_t = '{name} (ID: {id}, Enabled: {enabled})'
+
     def __init__(self, abode, state):
         self._client = abode
         self._state = state
@@ -72,8 +74,3 @@ class Automation(Stateful):
             "Automation.is_enabled is deprecated. Use .enabled.", DeprecationWarning
         )
         return self.enabled
-
-    @property
-    def desc(self):
-        """Get a short description of the automation."""
-        return '{} (ID: {}, Enabled: {})'.format(self.name, self.id, self.enabled)

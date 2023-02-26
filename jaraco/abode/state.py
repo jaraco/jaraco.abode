@@ -1,4 +1,4 @@
-from jaraco.collections import Projection
+from jaraco.collections import DictAdapter, Projection
 
 
 class Stateful:
@@ -14,3 +14,8 @@ class Stateful:
         Only updates keys already present.
         """
         self._state.update(Projection(self._state, json_state))
+
+    @property
+    def desc(self):
+        """Return a short description of self."""
+        return self._desc_t.format_map(DictAdapter(self))

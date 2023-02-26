@@ -2,7 +2,6 @@ import logging
 import warnings
 from typing import Tuple
 
-from jaraco.collections import DictAdapter
 from jaraco.classes.ancestry import iter_subclasses
 from jaraco.itertools import always_iterable
 
@@ -21,6 +20,7 @@ class Device(Stateful):
     """Class to represent each Abode device."""
 
     tags: Tuple[str, ...] = ()
+    _desc_t = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
 
     def __init__(self, state, client):
         """Set up Abode device."""
@@ -139,12 +139,6 @@ class Device(Stateful):
             "Device.device_uuid is deprecated. Use .uuid.", DeprecationWarning
         )
         return self.uuid
-
-    @property
-    def desc(self):
-        """Get a short description of the device."""
-        tmpl = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
-        return tmpl.format_map(DictAdapter(self))
 
     @staticmethod
     def resolve_type_unknown(state):
