@@ -5,7 +5,7 @@ def get_response_ok(name, enabled, aid):
     """Return automation json."""
     return dict(
         name=name,
-        enabled=str(enabled),
+        enabled=enabled,
         version=2,
         id=aid,
         subType='',

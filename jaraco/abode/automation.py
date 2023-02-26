@@ -6,6 +6,7 @@ import jaraco
 from ._itertools import single
 from .helpers import urls
 from .helpers import errors as ERROR
+from .devices.base import Device
 
 log = logging.getLogger(__name__)
 
@@ -61,7 +62,7 @@ class Automation:
 
     def update(self, automation):
         """Update the internal automation json."""
-        self._state.update((k, automation[k]) for k in automation if self._state.get(k))
+        Device.update(self, automation)
 
     @property
     def automation_id(self):
