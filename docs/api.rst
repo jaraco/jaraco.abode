@@ -40,3 +40,8 @@ API
     :members:
     :undoc-members:
     :show-inheritance:
+
+.. automodule:: jaraco.abode.state
+    :members:
+    :undoc-members:
+    :show-inheritance:
