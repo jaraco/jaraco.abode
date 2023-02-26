@@ -22,8 +22,6 @@ class Automation:
         """Enable or disable the automation."""
         path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
-        self._state['enabled'] = enable
-
         response = self._client.send_request(
             method="patch", path=path, data={'enabled': enable}
         )
@@ -32,10 +30,7 @@ class Automation:
 
         assert isinstance(state['enabled'], bool)
 
-        if (
-            state['id'] != self._state['id']
-            or state['enabled'] != self._state['enabled']
-        ):
+        if state['id'] != self._state['id'] or state['enabled'] != enable:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_EDIT_RESPONSE)
 
         self.update(state)
