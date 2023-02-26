@@ -6,12 +6,12 @@ import jaraco.abode
 from ._itertools import single
 from .helpers import urls
 from .helpers import errors as ERROR
-from .devices.base import Device
+from .state import Stateful
 
 log = logging.getLogger(__name__)
 
 
-class Automation:
+class Automation(Stateful):
     """Class for viewing and controlling automations."""
 
     def __init__(self, abode, state):
@@ -55,10 +55,6 @@ class Automation:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
 
         self.update(state)
-
-    def update(self, automation):
-        """Update the internal automation json."""
-        Device.update(self, automation)
 
     @property
     def automation_id(self):
