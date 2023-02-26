@@ -30,8 +30,11 @@ class Automation:
 
         state = single(response.json())
 
-        if str(state['id']) != str(self._state['id']) or str(state['enabled']) != str(
-            self._state['enabled']
+        assert isinstance(state['enabled'], bool)
+
+        if (
+            state['id'] != self._state['id']
+            or state['enabled'] != self._state['enabled']
         ):
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_EDIT_RESPONSE)
 
