@@ -2,13 +2,14 @@ import logging
 import warnings
 from typing import Tuple
 
-from jaraco.collections import DictAdapter, Projection
+from jaraco.collections import DictAdapter
 from jaraco.classes.ancestry import iter_subclasses
 from jaraco.itertools import always_iterable
 
 import jaraco
 from ..helpers import errors as ERROR
 from ..helpers import urls
+from ..state import Stateful
 from .control import needs_control_url
 from . import pkg
 
@@ -16,7 +17,7 @@ from . import pkg
 log = logging.getLogger(__name__)
 
 
-class Device:
+class Device(Stateful):
     """Class to represent each Abode device."""
 
     tags: Tuple[str, ...] = ()
@@ -25,12 +26,6 @@ class Device:
         """Set up Abode device."""
         self._state = state
         self._client = client
-
-    def __getattr__(self, name):
-        try:
-            return self._state[name]
-        except KeyError as exc:
-            raise AttributeError(name) from exc
 
     @needs_control_url
     def set_status(self, status):
@@ -98,13 +93,6 @@ class Device:
             self.update(device)
 
         return state
-
-    def update(self, json_state):
-        """Update the json data from a dictionary.
-
-        Only updates keys already present.
-        """
-        self._state.update(Projection(self._state, json_state))
 
     @property
     def status(self):
