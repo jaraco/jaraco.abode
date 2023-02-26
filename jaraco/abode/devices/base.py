@@ -89,7 +89,7 @@ class Device(Stateful):
         response = self._client.send_request(method="get", path=path)
         state = single(response.json())
 
-        log.debug("Device Refresh Response: %s", response.text)
+        log.debug(f"{self.__class__.__name__} Refresh Response: %s", response.text)
 
         self.update(state)
 
