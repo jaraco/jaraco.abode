@@ -1,8 +1,8 @@
 v4.1.0
 ======
 
-Deprecated unnecessary ``Automation.automation_id`` property.
-Use ``.id`` instead.
+Deprecated unnecessary ``Automation.automation_id`` and ``.is_enabled``
+properties. Use ``.id`` or ``.enabled`` instead.
 
 v4.0.0
 ======

@@ -48,7 +48,7 @@ class TestAutomation:
         assert automation._state == automation_resp
         assert automation.id == str(automation_resp['id'])
         assert automation.name == automation_resp['name']
-        assert automation.is_enabled == automation_resp['enabled']
+        assert automation.enabled == automation_resp['enabled']
         assert automation.desc is not None
 
     def test_automation_refresh(self, m):
@@ -285,7 +285,7 @@ class TestAutomation:
         automation = self.client.get_automation(AID_1)
         assert automation is not None
         assert automation._state == resp[0]
-        assert automation.is_enabled
+        assert automation.enabled
 
         # Set up our active state change and URL
         set_active_url = urls.AUTOMATION_ID.format(id=resp[0]['id'])
@@ -301,7 +301,7 @@ class TestAutomation:
 
         # Test the changed state
         automation.enable(False)
-        assert not automation.is_enabled
+        assert not automation.enabled
 
         # Change the state back, this time with an array response
         m.patch(
@@ -317,7 +317,7 @@ class TestAutomation:
 
         # Test the changed state
         automation.enable(True)
-        assert automation.is_enabled
+        assert automation.enabled
 
         # Test that the response returns the wrong state
         m.patch(

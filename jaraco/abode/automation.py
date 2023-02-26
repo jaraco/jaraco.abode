@@ -34,7 +34,7 @@ class Automation(Stateful):
 
         self.update(state)
 
-        log.info("Set automation %s enable to: %s", self.name, self.is_enabled)
+        log.info("Set automation %s enable to: %s", self.name, self.enabled)
         log.debug("Automation response: %s", response.text)
 
     def trigger(self):
@@ -63,15 +63,17 @@ class Automation(Stateful):
         warnings.warn(
             "Automation.automation_id is deprecated. Use .id.", DeprecationWarning
         )
-
         return self.id
 
     @property
     def is_enabled(self):
         """Return True if the automation is enabled."""
-        return self._state['enabled']
+        warnings.warn(
+            "Automation.is_enabled is deprecated. Use .enabled.", DeprecationWarning
+        )
+        return self.enabled
 
     @property
     def desc(self):
         """Get a short description of the automation."""
-        return '{} (ID: {}, Enabled: {})'.format(self.name, self.id, self.is_enabled)
+        return '{} (ID: {}, Enabled: {})'.format(self.name, self.id, self.enabled)
