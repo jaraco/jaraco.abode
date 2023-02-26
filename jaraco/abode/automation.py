@@ -59,7 +59,7 @@ class Automation(Stateful):
     @property
     def automation_id(self):
         """Get the id of the automation."""
-        return str(self._state['id'])
+        return self._state['id']
 
     @property
     def name(self):
