@@ -46,7 +46,7 @@ class TestAutomation:
         assert automation is not None
 
         assert automation._state == automation_resp
-        assert automation.automation_id == str(automation_resp['id'])
+        assert automation.id == str(automation_resp['id'])
         assert automation.name == automation_resp['name']
         assert automation.is_enabled == automation_resp['enabled']
         assert automation.desc is not None
@@ -377,7 +377,7 @@ class TestAutomation:
         assert automation is not None
 
         # Set up our automation trigger reply
-        set_active_url = urls.AUTOMATION_APPLY.format(id=automation.automation_id)
+        set_active_url = urls.AUTOMATION_APPLY.format(id=automation.id)
         m.post(set_active_url, json=MOCK.generic_response_ok())
 
         # Test triggering

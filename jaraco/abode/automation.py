@@ -1,5 +1,6 @@
 """Representation of an automation configured in Abode."""
 import logging
+import warnings
 
 import jaraco.abode
 
@@ -20,7 +21,7 @@ class Automation(Stateful):
 
     def enable(self, enable: bool):
         """Enable or disable the automation."""
-        path = urls.AUTOMATION_ID.format(id=self.automation_id)
+        path = urls.AUTOMATION_ID.format(id=self.id)
 
         response = self._client.send_request(
             method="patch", path=path, data={'enabled': enable}
@@ -38,7 +39,7 @@ class Automation(Stateful):
 
     def trigger(self):
         """Trigger the automation."""
-        path = urls.AUTOMATION_APPLY.format(id=self.automation_id)
+        path = urls.AUTOMATION_APPLY.format(id=self.id)
 
         self._client.send_request(method="post", path=path)
 
@@ -46,12 +47,12 @@ class Automation(Stateful):
 
     def refresh(self):
         """Refresh the automation."""
-        path = urls.AUTOMATION_ID.format(id=self.automation_id)
+        path = urls.AUTOMATION_ID.format(id=self.id)
 
         response = self._client.send_request(method="get", path=path)
         state = single(response.json())
 
-        if state['id'] != self.automation_id:
+        if state['id'] != self.id:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
 
         self.update(state)
@@ -59,12 +60,11 @@ class Automation(Stateful):
     @property
     def automation_id(self):
         """Get the id of the automation."""
-        return self._state['id']
+        warnings.warn(
+            "Automation.automation_id is deprecated. Use .id.", DeprecationWarning
+        )
 
-    @property
-    def name(self):
-        """Get the name of the automation."""
-        return self._state['name']
+        return self.id
 
     @property
     def is_enabled(self):
@@ -74,6 +74,4 @@ class Automation(Stateful):
     @property
     def desc(self):
         """Get a short description of the automation."""
-        return '{} (ID: {}, Enabled: {})'.format(
-            self.name, self.automation_id, self.is_enabled
-        )
+        return '{} (ID: {}, Enabled: {})'.format(self.name, self.id, self.is_enabled)
