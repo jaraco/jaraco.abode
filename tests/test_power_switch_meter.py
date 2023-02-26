@@ -48,7 +48,7 @@ class TestPowerSwitchMeter:
         assert not device.is_on
 
         # Set up our direct device get url
-        device_url = urls.DEVICE.format(device_id=POWERMETER.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=POWERMETER.DEVICE_ID)
 
         # Change device properties
         m.get(

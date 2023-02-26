@@ -46,7 +46,7 @@ class TestSecureBarrier:
         assert not device.is_open
 
         # Set up our direct device get url
-        device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
 
         # Change device properties
         m.get(

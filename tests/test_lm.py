@@ -54,7 +54,7 @@ class TestLM:
         assert device.lux_unit == 'lux'
 
         # Set up our direct device get url
-        device_url = urls.DEVICE.format(device_id=LM.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=LM.DEVICE_ID)
 
         # Change device properties
         m.get(

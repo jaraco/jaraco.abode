@@ -75,7 +75,7 @@ class TestCamera:
             assert not device.no_response
 
             # Set up our direct device get url
-            device_url = urls.DEVICE.format(device_id=device.id)
+            device_url = urls.DEVICE.format(id=device.id)
 
             # Change device properties
             m.get(

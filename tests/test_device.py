@@ -113,7 +113,7 @@ class TestDevice:
         m.get(urls.DEVICES, json=[GLASS.device(status=STATUS.ONLINE)])
 
         # Set up offline device
-        device_url = urls.DEVICE.format(device_id=GLASS.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=GLASS.DEVICE_ID)
         m.get(device_url, json=[GLASS.device(status=STATUS.OFFLINE)])
 
         # Logout to reset everything

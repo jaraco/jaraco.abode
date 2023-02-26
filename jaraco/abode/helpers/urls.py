@@ -19,7 +19,7 @@ def panel_mode(area, mode):
 
 
 DEVICES = '/api/v1/devices'
-DEVICE = '/api/v1/devices/{device_id}'
+DEVICE = '/api/v1/devices/{id}'
 
 AREAS = '/api/v1/areas'
 

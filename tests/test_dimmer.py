@@ -54,7 +54,7 @@ class TestDimmer:
         assert not device.is_on
 
         # Set up our direct device get url
-        device_url = urls.DEVICE.format(device_id=DIMMER.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=DIMMER.DEVICE_ID)
 
         # Change device properties
         m.get(

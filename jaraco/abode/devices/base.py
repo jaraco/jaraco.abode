@@ -21,6 +21,7 @@ class Device(Stateful):
 
     tags: Tuple[str, ...] = ()
     _desc_t = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
+    _url_t = urls.DEVICE
 
     def __init__(self, state, client):
         """Set up Abode device."""
@@ -77,12 +78,13 @@ class Device(Stateful):
         """Get a value from the device state."""
         return self._state.get(name.lower(), {})
 
-    def refresh(self, path=urls.DEVICE):
+    def refresh(self, path=None):
         """Refresh the device state.
 
         Useful when not using the notification service.
         """
-        path = path.format(device_id=self.id)
+        tmpl = path or self._url_t
+        path = tmpl.format(id=self.id)
 
         response = self._client.send_request(method="get", path=path)
         state = list(always_iterable(response.json()))

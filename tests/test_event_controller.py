@@ -273,7 +273,7 @@ class TestEventController:
         assert events.add_device_callback(device.id, callback)
 
         # Set up device update URL
-        device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
         m.get(
             device_url,
             json=COVER.device(
@@ -461,7 +461,7 @@ class TestEventController:
         assert events.add_device_callback([cover, doorcontact], callback)
 
         # Set up device update URLs
-        cover_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
+        cover_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
         m.get(
             cover_url,
             json=COVER.device(
@@ -472,7 +472,7 @@ class TestEventController:
             ),
         )
 
-        door_url = urls.DEVICE.format(device_id=DOORCONTACT.DEVICE_ID)
+        door_url = urls.DEVICE.format(id=DOORCONTACT.DEVICE_ID)
         m.get(
             door_url,
             json=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=STATUS.OPEN),
