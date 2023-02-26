@@ -1,4 +1,11 @@
+import logging
+
 from jaraco.collections import DictAdapter, Projection
+
+from ._itertools import single
+
+
+log = logging.getLogger(__name__)
 
 
 class Stateful:
@@ -19,3 +26,20 @@ class Stateful:
     def desc(self):
         """Return a short description of self."""
         return self._desc_t.format_map(DictAdapter(self))
+
+    def refresh(self, path=None):
+        """Refresh the device state.
+
+        Useful when not using the notification service.
+        """
+        tmpl = path or self._url_t
+        path = tmpl.format(id=self.id)
+
+        response = self._client.send_request(method="get", path=path)
+        state = single(response.json())
+
+        log.debug(f"{self.__class__.__name__} Refresh Response: %s", response.text)
+
+        self.update(state)
+
+        return state

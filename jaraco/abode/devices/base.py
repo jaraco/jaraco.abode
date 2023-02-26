@@ -8,7 +8,6 @@ import jaraco
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from ..state import Stateful
-from .._itertools import single
 from .control import needs_control_url
 from . import pkg
 
@@ -77,23 +76,6 @@ class Device(Stateful):
     def get_value(self, name):
         """Get a value from the device state."""
         return self._state.get(name.lower(), {})
-
-    def refresh(self, path=None):
-        """Refresh the device state.
-
-        Useful when not using the notification service.
-        """
-        tmpl = path or self._url_t
-        path = tmpl.format(id=self.id)
-
-        response = self._client.send_request(method="get", path=path)
-        state = single(response.json())
-
-        log.debug(f"{self.__class__.__name__} Refresh Response: %s", response.text)
-
-        self.update(state)
-
-        return state
 
     @property
     def status(self):
