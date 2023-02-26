@@ -16,6 +16,7 @@ class Automation(Stateful):
     """Class for viewing and controlling automations."""
 
     _desc_t = '{name} (ID: {id}, Enabled: {enabled})'
+    _url_t = urls.AUTOMATION_ID
 
     def __init__(self, abode, state):
         self._client = abode
@@ -47,17 +48,9 @@ class Automation(Stateful):
 
         log.info("Automation triggered: %s", self.name)
 
-    def refresh(self):
-        """Refresh the automation."""
-        path = urls.AUTOMATION_ID.format(id=self.id)
-
-        response = self._client.send_request(method="get", path=path)
-        state = single(response.json())
-
+    def _validate(self, state):
         if state['id'] != self.id:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
-
-        self.update(state)
 
     @property
     def automation_id(self):

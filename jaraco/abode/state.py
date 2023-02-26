@@ -40,6 +40,10 @@ class Stateful:
 
         log.debug(f"{self.__class__.__name__} Refresh Response: %s", response.text)
 
+        self._validate(state)
         self.update(state)
 
         return state
+
+    def _validate(self, state):
+        pass
