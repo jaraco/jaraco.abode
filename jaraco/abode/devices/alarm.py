@@ -91,11 +91,11 @@ class Alarm(Switch):
 
     def refresh(self, url=urls.PANEL):
         """Refresh the alarm device."""
-        response_object = super().refresh(url)
+        state = super().refresh(url)
 
-        self._client._panel.update(response_object[0])
+        self._client._panel.update(state)
 
-        return response_object
+        return state
 
     def update(self, state):
         super().update(state_from_panel(state, area=self._area))

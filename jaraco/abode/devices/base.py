@@ -3,12 +3,12 @@ import warnings
 from typing import Tuple
 
 from jaraco.classes.ancestry import iter_subclasses
-from jaraco.itertools import always_iterable
 
 import jaraco
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from ..state import Stateful
+from .._itertools import single
 from .control import needs_control_url
 from . import pkg
 
@@ -87,12 +87,11 @@ class Device(Stateful):
         path = tmpl.format(id=self.id)
 
         response = self._client.send_request(method="get", path=path)
-        state = list(always_iterable(response.json()))
+        state = single(response.json())
 
         log.debug("Device Refresh Response: %s", response.text)
 
-        for device in state:
-            self.update(device)
+        self.update(state)
 
         return state
 
