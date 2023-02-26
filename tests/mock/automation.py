@@ -1,13 +1,14 @@
 """Mock Abode Automation."""
 
 
-def get_response_ok(name, enabled, aid):
+def get_response_ok(name: str, enabled: bool, id: str):
     """Return automation json."""
+    assert isinstance(enabled, bool)
     return dict(
         name=name,
         enabled=enabled,
+        id=id,
         version=2,
-        id=aid,
         subType='',
         actions=[
             dict(

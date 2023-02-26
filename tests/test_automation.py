@@ -29,7 +29,9 @@ class TestAutomation:
 
         # Set up automation
         automation_resp = AUTOMATION.get_response_ok(
-            name='Auto Away', enabled=True, aid=AID_1
+            name='Auto Away',
+            enabled=True,
+            id=AID_1,
         )
 
         m.get(urls.AUTOMATION, json=automation_resp)
@@ -59,7 +61,7 @@ class TestAutomation:
 
         # Set up automation
         resp = [
-            AUTOMATION.get_response_ok(name='Test Automation', enabled=True, aid=AID_1)
+            AUTOMATION.get_response_ok(name='Test Automation', enabled=True, id=AID_1)
         ]
 
         m.get(urls.AUTOMATION, json=resp)
@@ -67,7 +69,9 @@ class TestAutomation:
         # Set up refreshed automation
         resp_changed = [
             AUTOMATION.get_response_ok(
-                name='Test Automation Changed', enabled=False, aid=AID_1
+                name='Test Automation Changed',
+                enabled=False,
+                id=AID_1,
             )
         ]
 
@@ -93,7 +97,9 @@ class TestAutomation:
         # Refresh with get_automation() and test
         resp_changed = [
             AUTOMATION.get_response_ok(
-                name='Test Automation Changed Again', enabled=True, aid=AID_1
+                name='Test Automation Changed Again',
+                enabled=True,
+                id=AID_1,
             )
         ]
 
@@ -110,7 +116,7 @@ class TestAutomation:
             AUTOMATION.get_response_ok(
                 name='Test Automation Changed',
                 enabled=False,
-                aid='47fae27488f74f55b964a81a066c3a11',
+                id='47fae27488f74f55b964a81a066c3a11',
             )
         ]
 
@@ -130,13 +136,19 @@ class TestAutomation:
         # Set up automations
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Two', enabled=True, aid=AID_2
+                name='Test Automation Two',
+                enabled=True,
+                id=AID_2,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Three', enabled=True, aid=AID_3
+                name='Test Automation Three',
+                enabled=True,
+                id=AID_3,
             ),
         ]
 
@@ -174,10 +186,14 @@ class TestAutomation:
         # Set up automations
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Two', enabled=True, aid=AID_2
+                name='Test Automation Two',
+                enabled=True,
+                id=AID_2,
             ),
         ]
 
@@ -203,13 +219,19 @@ class TestAutomation:
         # Update the automations
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One Changed', enabled=False, aid=AID_1
+                name='Test Automation One Changed',
+                enabled=False,
+                id=AID_1,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Two Changed', enabled=False, aid=AID_2
+                name='Test Automation Two Changed',
+                enabled=False,
+                id=AID_2,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Three New', enabled=True, aid=AID_3
+                name='Test Automation Three New',
+                enabled=True,
+                id=AID_3,
             ),
         ]
 
@@ -247,7 +269,9 @@ class TestAutomation:
         # Set up automation
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             )
         ]
 
@@ -269,7 +293,9 @@ class TestAutomation:
         m.patch(
             set_active_url,
             json=AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=False, aid=AID_1
+                name='Test Automation One',
+                enabled=False,
+                id=AID_1,
             ),
         )
 
@@ -282,7 +308,9 @@ class TestAutomation:
             set_active_url,
             json=[
                 AUTOMATION.get_response_ok(
-                    name='Test Automation One', enabled=True, aid=AID_1
+                    name='Test Automation One',
+                    enabled=True,
+                    id=AID_1,
                 )
             ],
         )
@@ -296,7 +324,9 @@ class TestAutomation:
             set_active_url,
             json=[
                 AUTOMATION.get_response_ok(
-                    name='Test Automation One', enabled=True, aid=AID_1
+                    name='Test Automation One',
+                    enabled=True,
+                    id=AID_1,
                 )
             ],
         )
@@ -309,7 +339,9 @@ class TestAutomation:
             set_active_url,
             json=[
                 AUTOMATION.get_response_ok(
-                    name='Test Automation One', enabled=True, aid=AID_2
+                    name='Test Automation One',
+                    enabled=True,
+                    id=AID_2,
                 )
             ],
         )
@@ -328,7 +360,9 @@ class TestAutomation:
         # Set up automation
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             ),
         ]
 
