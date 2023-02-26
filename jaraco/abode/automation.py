@@ -51,7 +51,7 @@ class Automation:
         response = self._client.send_request(method="get", path=path)
         state = single(response.json())
 
-        if str(state['id']) != self.automation_id:
+        if state['id'] != self.automation_id:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
 
         self.update(state)
