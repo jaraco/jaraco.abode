@@ -1,7 +1,7 @@
 """Representation of an automation configured in Abode."""
 import logging
 
-import jaraco
+import jaraco.abode
 
 from ._itertools import single
 from .helpers import urls
@@ -18,7 +18,7 @@ class Automation:
         self._client = abode
         self._state = state
 
-    def enable(self, enable):
+    def enable(self, enable: bool):
         """Enable or disable the automation."""
         path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
