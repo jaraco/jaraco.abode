@@ -49,12 +49,12 @@ class Automation:
         path = urls.AUTOMATION_ID.format(id=self.automation_id)
 
         response = self._client.send_request(method="get", path=path)
-        response_object = single(response.json())
+        state = single(response.json())
 
-        if str(response_object['id']) != self.automation_id:
+        if str(state['id']) != self.automation_id:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_REFRESH_RESPONSE)
 
-        self.update(response_object)
+        self.update(state)
 
     def update(self, automation):
         """Update the internal automation json."""
