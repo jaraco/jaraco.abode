@@ -242,15 +242,15 @@ class Client:
             resp = self.send_request("get", urls.AUTOMATION)
             log.debug("Get Automations Response: %s", resp.text)
 
-            for automation_ob in always_iterable(resp.json()):
+            for state in always_iterable(resp.json()):
                 # Attempt to reuse an existing automation object
-                automation = self._automations.get(str(automation_ob['id']))
+                automation = self._automations.get(str(state['id']))
 
                 # No existing automation, create a new one
                 if automation:
-                    automation.update(automation_ob)
+                    automation.update(state)
                 else:
-                    automation = Automation(automation_ob, self)
+                    automation = Automation(state, self)
                     self._automations[automation.id] = automation
 
         return list(self._automations.values())
