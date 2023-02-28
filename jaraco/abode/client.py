@@ -234,26 +234,29 @@ class Client:
     def get_automations(self, refresh=False):
         """Get all automations."""
         if refresh or self._automations is None:
-            if self._automations is None:
-                # Set up the device libraries
-                self._automations = {}
-
-            log.info("Updating all automations...")
-            resp = self.send_request("get", urls.AUTOMATION)
-            log.debug("Get Automations Response: %s", resp.text)
-
-            for state in always_iterable(resp.json()):
-                # Attempt to reuse an existing automation object
-                automation = self._automations.get(str(state['id']))
-
-                # No existing automation, create a new one
-                if automation:
-                    automation.update(state)
-                else:
-                    automation = Automation(state, self)
-                    self._automations[automation.id] = automation
+            self._update_all()
 
         return list(self._automations.values())
+
+    def _update_all(self):
+        if self._automations is None:
+            # Set up the device libraries
+            self._automations = {}
+
+        log.info("Updating all automations...")
+        resp = self.send_request("get", urls.AUTOMATION)
+        log.debug("Get Automations Response: %s", resp.text)
+
+        for state in always_iterable(resp.json()):
+            # Attempt to reuse an existing automation object
+            automation = self._automations.get(str(state['id']))
+
+            # No existing automation, create a new one
+            if automation:
+                automation.update(state)
+            else:
+                automation = Automation(state, self)
+                self._automations[automation.id] = automation
 
     def get_automation(self, automation_id, refresh=False):
         """Get a single automation."""
