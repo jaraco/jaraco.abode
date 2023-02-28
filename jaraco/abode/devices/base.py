@@ -22,11 +22,6 @@ class Device(Stateful):
     _desc_t = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
     _url_t = urls.DEVICE
 
-    def __init__(self, state, client):
-        """Set up Abode device."""
-        self._state = state
-        self._client = client
-
     @needs_control_url
     def set_status(self, status):
         """Set device status."""

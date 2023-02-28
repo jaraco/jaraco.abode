@@ -9,6 +9,11 @@ log = logging.getLogger(__name__)
 
 
 class Stateful:
+    def __init__(self, state, client):
+        """Set up Abode device."""
+        self._state = state
+        self._client = client
+
     def __getattr__(self, name):
         try:
             return self._state[name]

@@ -250,7 +250,7 @@ class Client:
                 if automation:
                     automation.update(automation_ob)
                 else:
-                    automation = Automation(self, automation_ob)
+                    automation = Automation(automation_ob, self)
                     self._automations[automation.id] = automation
 
         return list(self._automations.values())

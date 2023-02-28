@@ -18,10 +18,6 @@ class Automation(Stateful):
     _desc_t = '{name} (ID: {id}, Enabled: {enabled})'
     _url_t = urls.AUTOMATION_ID
 
-    def __init__(self, abode, state):
-        self._client = abode
-        self._state = state
-
     def enable(self, enable: bool):
         """Enable or disable the automation."""
         path = urls.AUTOMATION_ID.format(id=self.id)
