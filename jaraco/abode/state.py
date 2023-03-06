@@ -20,12 +20,12 @@ class Stateful:
         except KeyError as exc:
             raise AttributeError(name) from exc
 
-    def update(self, json_state):
-        """Update the json data from a dictionary.
+    def update(self, state):
+        """Update the local state from a new state.
 
         Only updates keys already present.
         """
-        self._state.update(Projection(self._state, json_state))
+        self._state.update(Projection(self._state, state))
 
     @property
     def desc(self):
