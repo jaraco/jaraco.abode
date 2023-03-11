@@ -24,7 +24,7 @@ log = logging.getLogger('abodecl')
 def enable_color():
     import colorlog
 
-    fmt = "%(asctime)s %(levelname)s (%(threadName)s) " "[%(name)s] %(message)s"
+    fmt = "%(asctime)s %(levelname)s (%(threadName)s) [%(name)s] %(message)s"
     colorfmt = f"%(log_color)s{fmt}%(reset)s"
     datefmt = '%Y-%m-%d %H:%M:%S'
 
