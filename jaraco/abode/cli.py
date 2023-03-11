@@ -430,9 +430,7 @@ class Dispatcher:
             _device_print(device)
 
     def print_specific_devices(self):
-        if not self.args.device:
-            return
-        for device_id in self.args.device:
+        for device_id in always_iterable(self.args.device):
             device = self._get_device(device_id)
             device and self._print_specific_device(device)
 
