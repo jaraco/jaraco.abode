@@ -361,35 +361,41 @@ class Dispatcher:
         for automation in self.client.get_automations():
             _device_print(automation)
 
+    def _get_automation(self, id):
+        automation = self.client.get_automation(id)
+        if not automation:
+            log.warning("Could not find automation with id: %s", id)
+        return automation
+
     def enable_automation(self):
         for automation_id in always_iterable(self.args.activate):
-            automation = self.client.get_automation(automation_id)
+            automation = self._get_automation(automation_id)
+            automation and self._enable_automation(automation)
 
-            if automation:
-                if automation.enable(True):
-                    log.info("Activated automation with id: %s", automation_id)
-            else:
-                log.warning("Could not find automation with id: %s", automation_id)
+    @staticmethod
+    def _enable_automation(automation):
+        if automation.enable(True):
+            log.info("Activated automation with id: %s", automation.id)
 
     def disable_automation(self):
         for automation_id in always_iterable(self.args.deactivate):
-            automation = self.client.get_automation(automation_id)
+            automation = self._get_automation(automation_id)
+            automation and self._disable_automation(automation)
 
-            if automation:
-                if automation.enable(False):
-                    log.info("Deactivated automation with id: %s", automation_id)
-            else:
-                log.warning("Could not find automation with id: %s", automation_id)
+    @staticmethod
+    def _disable_automation(automation):
+        if automation.enable(False):
+            log.info("Deactivated automation with id: %s", automation.id)
 
     def trigger_automation(self):
         for automation_id in always_iterable(self.args.trigger):
-            automation = self.client.get_automation(automation_id)
+            automation = self._get_automation(automation_id)
+            automation and self._trigger_automation(automation)
 
-            if automation:
-                if automation.trigger():
-                    log.info("Triggered automation with id: %s", automation_id)
-            else:
-                log.warning("Could not find automation with id: %s", automation_id)
+    @staticmethod
+    def _trigger_automation(automation):
+        if automation.trigger():
+            log.info("Triggered automation with id: %s", automation.id)
 
     def trigger_image_capture(self):
         for device_id in always_iterable(self.args.capture):
