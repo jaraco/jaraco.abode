@@ -405,16 +405,19 @@ class Dispatcher:
     def save_camera_image(self):
         for keyval in always_iterable(self.args.image):
             dev, _, loc = keyval.partition("=")
-            device = self.client.get_device(dev)
+            self._save_camera_image(dev, loc)
 
-            if device:
-                try:
-                    if device.refresh_image() and device.image_to_file(loc):
-                        log.info("Saved image to %s for device id: %s", loc, dev)
-                except jaraco.abode.Exception as exc:
-                    log.warning("Unable to save image: %s", exc)
-            else:
-                log.warning("Could not find device with id: %s", dev)
+    def _save_camera_image(self, device_id, path):
+        device = self.client.get_device(device_id)
+        if not device:
+            log.warning("Could not find device with id: %s", device_id)
+            return
+
+        try:
+            if device.refresh_image() and device.image_to_file(path):
+                log.info("Saved image to %s for device id: %s", path, device.id)
+        except jaraco.abode.Exception as exc:
+            log.warning("Unable to save image: %s", exc)
 
     def print_all_devices(self):
         if not self.args.devices:
