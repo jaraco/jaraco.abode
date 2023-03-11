@@ -296,61 +296,64 @@ class Dispatcher:
             if self.client.set_setting(keyval[0], keyval[1]):
                 log.info("Setting %s changed to %s", keyval[0], keyval[1])
 
+    def _get_device(self, id):
+        device = self.client.get_device(id)
+        if not device:
+            log.warning("Could not find device with id: %s", id)
+        return device
+
     def switch_on(self):
         for device_id in always_iterable(self.args.on):
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
+            device and self._switch_on(device)
 
-            if device:
-                if device.switch_on():
-                    log.info("Switched on device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    def _switch_on(device):
+        if device.switch_on():
+            log.info("Switched on device with id: %s", device.id)
 
     def switch_off(self):
         for device_id in always_iterable(self.args.off):
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
+            device and self._switch_off(device)
 
-            if device:
-                if device.switch_off():
-                    log.info("Switched off device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    def _switch_off(device):
+        if device.switch_off():
+            log.info("Switched off device with id: %s", device.id)
 
     def lock(self):
         for device_id in always_iterable(self.args.lock):
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
+            device and self._lock(device)
 
-            if device:
-                if device.lock():
-                    log.info("Locked device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    def _lock(device):
+        if device.lock():
+            log.info("Locked device with id: %s", device.id)
 
     def unlock(self):
         for device_id in always_iterable(self.args.unlock):
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
+            device and self._unlock(device)
 
-            if device:
-                if device.unlock():
-                    log.info("Unlocked device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    def _unlock(device):
+        if device.unlock():
+            log.info("Unlocked device with id: %s", device.id)
 
     def output_json(self):
         for device_id in always_iterable(self.args.json):
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
 
-            if device:
-                print(
-                    json.dumps(
-                        device._state,
-                        sort_keys=True,
-                        indent=4,
-                        separators=(',', ': '),
-                    )
+            device and print(
+                json.dumps(
+                    device._state,
+                    sort_keys=True,
+                    indent=4,
+                    separators=(',', ': '),
                 )
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+            )
 
     def print_all_automations(self):
         if not self.args.automations:
@@ -390,29 +393,24 @@ class Dispatcher:
 
     def trigger_image_capture(self):
         for device_id in always_iterable(self.args.capture):
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
+            device and self._trigger_image_capture(device)
 
-            if device:
-                if device.capture():
-                    log.info("Image requested from device with id: %s", device_id)
-                else:
-                    log.warning(
-                        "Failed to request image from device with id: %s", device_id
-                    )
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    def _trigger_image_capture(device):
+        if device.capture():
+            log.info("Image requested from device with id: %s", device.id)
+        else:
+            log.warning("Failed to request image from device with id: %s", device.id)
 
     def save_camera_image(self):
         for keyval in always_iterable(self.args.image):
             dev, _, loc = keyval.partition("=")
-            self._save_camera_image(dev, loc)
+            device = self._get_device(dev)
+            device and self._save_camera_image(device, loc)
 
-    def _save_camera_image(self, device_id, path):
-        device = self.client.get_device(device_id)
-        if not device:
-            log.warning("Could not find device with id: %s", device_id)
-            return
-
+    @staticmethod
+    def _save_camera_image(device, path):
         try:
             if device.refresh_image() and device.image_to_file(path):
                 log.info("Saved image to %s for device id: %s", path, device.id)
@@ -429,15 +427,14 @@ class Dispatcher:
         if not self.args.device:
             return
         for device_id in self.args.device:
-            device = self.client.get_device(device_id)
+            device = self._get_device(device_id)
+            device and self._print_specific_device(device)
 
-            if device:
-                _device_print(device)
+    def _print_specific_device(self, device):
+        _device_print(device)
 
-                # Register the specific devices if we decide to listen.
-                self.client.events.add_device_callback(device_id, _device_callback)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+        # Register the specific devices if we decide to listen.
+        self.client.events.add_device_callback(device.id, _device_callback)
 
     def start_device_change_listener(self):
         if not self.args.listen:
