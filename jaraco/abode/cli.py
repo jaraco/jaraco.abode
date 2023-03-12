@@ -292,9 +292,9 @@ class Dispatcher:
 
     def set_setting(self):
         for setting in always_iterable(self.args.set):
-            keyval = setting.split("=")
-            if self.client.set_setting(keyval[0], keyval[1]):
-                log.info("Setting %s changed to %s", keyval[0], keyval[1])
+            key, _, val = setting.partition("=")
+            if self.client.set_setting(key, val):
+                log.info("Setting %s changed to %s", key, val)
 
     def _get_device(self, id):
         device = self.client.get_device(id)
