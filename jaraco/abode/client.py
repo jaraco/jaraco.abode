@@ -4,6 +4,7 @@ An Abode alarm Python library.
 
 import logging
 import uuid
+import functools
 
 from more_itertools import consume
 from requests_toolbelt import sessions
@@ -287,8 +288,17 @@ class Client:
         setting = settings.Setting.load(name.lower(), value, area)
         return self.send_request(method="put", path=setting.path, data=setting.data)
 
-    def send_request(self, method, path, headers=None, data=None, is_retry=False):
+    def send_request(self, method, path, headers=None, data=None):
         """Send requests to Abode."""
+        attempt = functools.partial(self._send_request, method, path, headers, data)
+        return jaraco.functools.retry_call(
+            attempt,
+            retries=1,
+            cleanup=self.login,
+            trap=(jaraco.abode.Exception),
+        )
+
+    def _send_request(self, method, path, headers, data):
         if not self._token:
             self.login()
 
@@ -305,13 +315,6 @@ class Client:
                 return response
         except RequestException:
             log.info("Abode connection reset...")
-
-        if not is_retry:
-            # Delete our current token and try again -- will force a login
-            # attempt.
-            self._token = None
-
-            return self.send_request(method, path, headers, data, True)
 
         raise jaraco.abode.Exception(ERROR.REQUEST)
 
