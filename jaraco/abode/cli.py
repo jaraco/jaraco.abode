@@ -17,7 +17,7 @@ from . import Client
 from .helpers import urls
 from .helpers import timeline as TIMELINE
 
-log = logging.getLogger('abodecl')
+log = logging.getLogger(__name__)
 
 
 @suppress(ImportError)
