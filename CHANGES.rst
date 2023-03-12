@@ -1,3 +1,8 @@
+v4.2.0
+======
+
+More internal refactoring.
+
 v4.1.0
 ======
 
