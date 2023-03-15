@@ -10,6 +10,7 @@ import getpass
 
 import keyring
 from jaraco.context import suppress
+from jaraco.functools import pass_none
 from more_itertools import always_iterable
 
 import jaraco.abode
@@ -304,56 +305,59 @@ class Dispatcher:
 
     def switch_on(self):
         for device_id in always_iterable(self.args.on):
-            device = self._get_device(device_id)
-            device and self._switch_on(device)
+            self._switch_on(self._get_device(device_id))
 
     @staticmethod
+    @pass_none
     def _switch_on(device):
         if device.switch_on():
             log.info("Switched on device with id: %s", device.id)
 
     def switch_off(self):
         for device_id in always_iterable(self.args.off):
-            device = self._get_device(device_id)
-            device and self._switch_off(device)
+            self._switch_off(self._get_device(device_id))
 
     @staticmethod
+    @pass_none
     def _switch_off(device):
         if device.switch_off():
             log.info("Switched off device with id: %s", device.id)
 
     def lock(self):
         for device_id in always_iterable(self.args.lock):
-            device = self._get_device(device_id)
-            device and self._lock(device)
+            self._lock(self._get_device(device_id))
 
     @staticmethod
+    @pass_none
     def _lock(device):
         if device.lock():
             log.info("Locked device with id: %s", device.id)
 
     def unlock(self):
         for device_id in always_iterable(self.args.unlock):
-            device = self._get_device(device_id)
-            device and self._unlock(device)
+            self._unlock(self._get_device(device_id))
 
     @staticmethod
+    @pass_none
     def _unlock(device):
         if device.unlock():
             log.info("Unlocked device with id: %s", device.id)
 
     def output_json(self):
         for device_id in always_iterable(self.args.json):
-            device = self._get_device(device_id)
+            self._output_json(self._get_device(device_id))
 
-            device and print(
-                json.dumps(
-                    device._state,
-                    sort_keys=True,
-                    indent=4,
-                    separators=(',', ': '),
-                )
+    @staticmethod
+    @pass_none
+    def _output_json(device):
+        print(
+            json.dumps(
+                device._state,
+                sort_keys=True,
+                indent=4,
+                separators=(',', ': '),
             )
+        )
 
     def print_all_automations(self):
         if not self.args.automations:
@@ -369,40 +373,40 @@ class Dispatcher:
 
     def enable_automation(self):
         for automation_id in always_iterable(self.args.activate):
-            automation = self._get_automation(automation_id)
-            automation and self._enable_automation(automation)
+            self._enable_automation(self._get_automation(automation_id))
 
     @staticmethod
+    @pass_none
     def _enable_automation(automation):
         if automation.enable(True):
             log.info("Activated automation with id: %s", automation.id)
 
     def disable_automation(self):
         for automation_id in always_iterable(self.args.deactivate):
-            automation = self._get_automation(automation_id)
-            automation and self._disable_automation(automation)
+            self._disable_automation(self._get_automation(automation_id))
 
     @staticmethod
+    @pass_none
     def _disable_automation(automation):
         if automation.enable(False):
             log.info("Deactivated automation with id: %s", automation.id)
 
     def trigger_automation(self):
         for automation_id in always_iterable(self.args.trigger):
-            automation = self._get_automation(automation_id)
-            automation and self._trigger_automation(automation)
+            self._trigger_automation(self._get_automation(automation_id))
 
     @staticmethod
+    @pass_none
     def _trigger_automation(automation):
         if automation.trigger():
             log.info("Triggered automation with id: %s", automation.id)
 
     def trigger_image_capture(self):
         for device_id in always_iterable(self.args.capture):
-            device = self._get_device(device_id)
-            device and self._trigger_image_capture(device)
+            self._trigger_image_capture(self._get_device(device_id))
 
     @staticmethod
+    @pass_none
     def _trigger_image_capture(device):
         if device.capture():
             log.info("Image requested from device with id: %s", device.id)
@@ -412,10 +416,10 @@ class Dispatcher:
     def save_camera_image(self):
         for keyval in always_iterable(self.args.image):
             dev, _, loc = keyval.partition("=")
-            device = self._get_device(dev)
-            device and self._save_camera_image(device, loc)
+            self._save_camera_image(self._get_device(dev), loc)
 
     @staticmethod
+    @pass_none
     def _save_camera_image(device, path):
         try:
             if device.refresh_image() and device.image_to_file(path):
