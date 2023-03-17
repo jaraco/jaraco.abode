@@ -40,9 +40,9 @@ class Device(Stateful):
         if response_object['status'] != str(status):
             raise jaraco.abode.Exception(ERROR.SET_STATUS_STATE)
 
-        # Note: Status result is of int type, not of new status of device.
-        # Seriously, why would you do that?
-        # So, can't set status here must be done at device level.
+        # Note: Status returned is a string of int (e.g. "0") and not
+        # the string indication normally passed for the status (e.g.
+        # "LockClosed"), so can't be used to update self._state.
 
         log.info("Set device %s status to: %s", self.id, status)
 
