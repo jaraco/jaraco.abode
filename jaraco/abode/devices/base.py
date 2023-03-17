@@ -80,23 +80,23 @@ class Device(Stateful):
     @property
     def battery_low(self):
         """Is battery level low."""
-        return bool(int(self.get_value('faults').get('low_battery', '0')))
+        return bool(self.get_value('faults').get('low_battery', 0))
 
     @property
     def no_response(self):
         """Is the device responding."""
-        return bool(int(self.get_value('faults').get('no_response', '0')))
+        return bool(self.get_value('faults').get('no_response', 0))
 
     @property
     def out_of_order(self):
         """Is the device out of order."""
-        return bool(int(self.get_value('faults').get('out_of_order', '0')))
+        return bool(self.get_value('faults').get('out_of_order', 0))
 
     @property
     def tampered(self):
         """Has the device been tampered with."""
         # 'tempered' - Typo in API?
-        return bool(int(self.get_value('faults').get('tempered', '0')))
+        return bool(self.get_value('faults').get('tempered', 0))
 
     @property
     def name(self):
