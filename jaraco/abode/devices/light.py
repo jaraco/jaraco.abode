@@ -2,7 +2,7 @@
 import logging
 import math
 
-import jaraco
+import jaraco.abode
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from .control import needs_control_url

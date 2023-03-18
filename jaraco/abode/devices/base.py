@@ -4,7 +4,7 @@ from typing import Tuple
 
 from jaraco.classes.ancestry import iter_subclasses
 
-import jaraco
+import jaraco.abode
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from ..state import Stateful
