@@ -26,4 +26,4 @@ class Lock(base.Device):
 
         Err on side of caution, assume if lock isn't closed then it's open.
         """
-        return self.status in STATUS.Lock.CLOSED
+        return self.status == STATUS.Lock.CLOSED
