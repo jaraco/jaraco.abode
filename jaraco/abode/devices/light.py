@@ -5,7 +5,6 @@ import math
 import jaraco.abode
 from ..helpers import errors as ERROR
 from ..helpers import urls
-from .control import needs_control_url
 from .switch import Switch
 
 
@@ -22,8 +21,7 @@ class Light(Switch):
 
     tags = ('dimmer', 'dimmer_meter', 'hue')
 
-    @needs_control_url
-    def set_color_temp(self, color_temp):
+    def set_color_temp(self, color_temp) -> None:
         """Set device color."""
         url = urls.INTEGRATIONS + self.uuid
 
@@ -57,8 +55,7 @@ class Light(Switch):
 
         log.info("Set device %s color_temp to: %s", self.id, color_temp)
 
-    @needs_control_url
-    def set_color(self, color):
+    def set_color(self, color) -> None:
         """Set device color."""
         url = urls.INTEGRATIONS + self.uuid
 

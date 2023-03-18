@@ -18,21 +18,13 @@ class Switch(base.Device):
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(int(STATUS.ON))
-
-        if success:
-            self._state['status'] = STATUS.ON
-
-        return success
+        self.set_status(int(STATUS.ON))
+        self._state['status'] = STATUS.ON
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(int(STATUS.OFF))
-
-        if success:
-            self._state['status'] = STATUS.OFF
-
-        return success
+        self.set_status(int(STATUS.OFF))
+        self._state['status'] = STATUS.OFF
 
     @property
     def is_on(self):

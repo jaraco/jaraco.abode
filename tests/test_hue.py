@@ -136,7 +136,7 @@ class TestHue:
         )
 
         # Change the mode to "on"
-        assert device.switch_on()
+        device.switch_on()
         assert device.status == STATUS.ON
         assert device.is_on
 
@@ -149,7 +149,7 @@ class TestHue:
         )
 
         # Change the mode to "off"
-        assert device.switch_off()
+        device.switch_off()
         assert device.status == STATUS.OFF
         assert not device.is_on
 
@@ -205,7 +205,7 @@ class TestHue:
         )
 
         # Change the color temp
-        assert device.set_color_temp(5554)
+        device.set_color_temp(5554)
         assert device.color_temp == 5554
 
         # Change response
@@ -215,7 +215,7 @@ class TestHue:
         )
 
         # Change the color to something that mismatches
-        assert device.set_color_temp(4436)
+        device.set_color_temp(4436)
 
         # Assert that the color is set to the response color
         assert device.color_temp == 4434
@@ -272,7 +272,7 @@ class TestHue:
         )
 
         # Change the color temp
-        assert device.set_color((70, 80))
+        device.set_color((70, 80))
         assert device.color == (70, 80)  # (hue, saturation)
 
         # Change response
@@ -282,7 +282,7 @@ class TestHue:
         )
 
         # Change the color to something that mismatches
-        assert device.set_color((44, 44))
+        device.set_color((44, 44))
 
         # Assert that the color is set to the response color
         assert device.color == (55, 85)  # (hue, saturation)

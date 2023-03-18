@@ -107,7 +107,7 @@ class TestDoorLock:
         )
 
         # Change the mode to "on"
-        assert device.unlock()
+        device.unlock()
         assert device.status == STATUS.Lock.OPEN
         assert not device.is_locked
 
@@ -120,7 +120,7 @@ class TestDoorLock:
         )
 
         # Change the mode to "off"
-        assert device.lock()
+        device.lock()
         assert device.status == STATUS.Lock.CLOSED
         assert device.is_locked
 

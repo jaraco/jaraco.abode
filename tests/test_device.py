@@ -250,8 +250,10 @@ class TestDevice:
         device = self.client.get_device(GLASS.DEVICE_ID)
 
         assert device is not None
-        assert not device.set_status(1)
-        assert not device.set_level('99')
+        with pytest.raises(jaraco.abode.Exception):
+            device.set_status(1)
+        with pytest.raises(jaraco.abode.Exception):
+            device.set_level('99')
 
     def test_device_status_changes(self, m):
         """Tests that device status changes work as expected."""
@@ -291,7 +293,7 @@ class TestDevice:
         )
 
         # Change the mode to "on"
-        assert device.switch_on()
+        device.switch_on()
         assert device.status == STATUS.ON
         assert device.is_on
 
@@ -304,7 +306,7 @@ class TestDevice:
         )
 
         # Change the mode to "off"
-        assert device.switch_off()
+        device.switch_off()
         assert device.status == STATUS.OFF
         assert not device.is_on
 
@@ -369,7 +371,7 @@ class TestDevice:
         )
 
         # Change the level to int 100
-        assert device.set_level(100)
+        device.set_level(100)
         # self.assertEqual(device.level, '100')
 
         # Change response
@@ -379,7 +381,7 @@ class TestDevice:
         )
 
         # Change the level to str '25'
-        assert device.set_level('25')
+        device.set_level('25')
         # self.assertEqual(device.level, '25')
 
         # Test that an invalid device ID in response throws exception

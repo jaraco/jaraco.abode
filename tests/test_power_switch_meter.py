@@ -107,7 +107,7 @@ class TestPowerSwitchMeter:
         )
 
         # Change the mode to "on"
-        assert device.switch_on()
+        device.switch_on()
         assert device.status == STATUS.ON
         assert device.is_on
 
@@ -120,7 +120,7 @@ class TestPowerSwitchMeter:
         )
 
         # Change the mode to "off"
-        assert device.switch_off()
+        device.switch_off()
         assert device.status == STATUS.OFF
         assert not device.is_on
 

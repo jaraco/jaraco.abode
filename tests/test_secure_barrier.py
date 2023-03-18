@@ -106,7 +106,7 @@ class TestSecureBarrier:
         )
 
         # Change the cover to open
-        assert device.open_cover()
+        device.open_cover()
         assert device.status == STATUS.OPEN
         assert device.is_open
 
@@ -119,6 +119,6 @@ class TestSecureBarrier:
         )
 
         # Change the mode to "off"
-        assert device.close_cover()
+        device.close_cover()
         assert device.status == STATUS.CLOSED
         assert not device.is_open

@@ -9,23 +9,15 @@ class Valve(Switch):
 
     tags = ('valve',)
 
-    def switch_on(self):
+    def switch_on(self) -> None:
         """Open the valve."""
-        success = self.set_status(int(STATUS.ON))
+        self.set_status(int(STATUS.ON))
+        self._state['status'] = STATUS.OPEN
 
-        if success:
-            self._state['status'] = STATUS.OPEN
-
-        return success
-
-    def switch_off(self):
+    def switch_off(self) -> None:
         """Close the valve."""
-        success = self.set_status(int(STATUS.OFF))
-
-        if success:
-            self._state['status'] = STATUS.CLOSED
-
-        return success
+        self.set_status(int(STATUS.OFF))
+        self._state['status'] = STATUS.CLOSED
 
     @property
     def is_on(self):

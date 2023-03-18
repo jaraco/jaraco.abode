@@ -9,23 +9,15 @@ class Lock(base.Device):
 
     tags = ('door_lock',)
 
-    def lock(self):
+    def lock(self) -> None:
         """Lock the device."""
-        success = self.set_status(int(STATUS.Lock.CLOSED))
+        self.set_status(int(STATUS.Lock.CLOSED))
+        self._state['status'] = STATUS.Lock.CLOSED
 
-        if success:
-            self._state['status'] = STATUS.Lock.CLOSED
-
-        return success
-
-    def unlock(self):
+    def unlock(self) -> None:
         """Unlock the device."""
-        success = self.set_status(int(STATUS.Lock.OPEN))
-
-        if success:
-            self._state['status'] = STATUS.Lock.OPEN
-
-        return success
+        self.set_status(int(STATUS.Lock.OPEN))
+        self._state['status'] = STATUS.Lock.OPEN
 
     @property
     def is_locked(self):

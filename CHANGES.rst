@@ -1,3 +1,13 @@
+v5.0.0
+======
+
+Device methods that change state (``.set_status``, ``.set_level``,
+``.switch_on``, ``.switch_off``, ``.set_color``, ``.set_color_temp``,
+``.lock``, ``.unlock``) no longer return ``True`` on success or
+``False`` if no ``control_url`` is set. Instead, these methods now
+return ``None`` and an exception is raised if no ``control_url`` is set
+(where required).
+
 v4.2.0
 ======
 

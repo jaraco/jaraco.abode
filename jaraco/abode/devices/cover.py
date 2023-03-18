@@ -11,21 +11,13 @@ class Cover(Switch):
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(int(STATUS.OPEN))
-
-        if success:
-            self._state['status'] = STATUS.OPEN
-
-        return success
+        self.set_status(int(STATUS.OPEN))
+        self._state['status'] = STATUS.OPEN
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(int(STATUS.CLOSED))
-
-        if success:
-            self._state['status'] = STATUS.CLOSED
-
-        return success
+        self.set_status(int(STATUS.CLOSED))
+        self._state['status'] = STATUS.CLOSED
 
     def open_cover(self):
         """Open the cover."""

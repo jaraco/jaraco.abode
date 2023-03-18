@@ -108,7 +108,7 @@ class TestValve:
         )
 
         # Change the mode to "on"
-        assert device.switch_on()
+        device.switch_on()
         assert device.status == STATUS.OPEN
         assert device.is_on
 
@@ -121,7 +121,7 @@ class TestValve:
         )
 
         # Change the mode to "off"
-        assert device.switch_off()
+        device.switch_off()
         assert device.status == STATUS.CLOSED
         assert not device.is_on
 

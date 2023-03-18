@@ -8,7 +8,6 @@ import jaraco.abode
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from ..state import Stateful
-from .control import needs_control_url
 from . import pkg
 
 
@@ -22,14 +21,19 @@ class Device(Stateful):
     _desc_t = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
     _url_t = urls.DEVICE
 
-    @needs_control_url
-    def set_status(self, status):
+    @property
+    def _control_url(self):
+        if not self._state['control_url']:
+            raise jaraco.abode.Exception("Control URL required")
+        return self._state['control_url']
+
+    def set_status(self, status) -> None:
         """Set device status."""
-        path = self._state['control_url']
-
-        status_data = {'status': str(status)}
-
-        response = self._client.send_request(method="put", path=path, data=status_data)
+        response = self._client.send_request(
+            method="put",
+            path=self._control_url,
+            data={'status': str(status)},
+        )
         response_object = response.json()
 
         log.debug("Set Status Response: %s", response.text)
@@ -46,14 +50,13 @@ class Device(Stateful):
 
         log.info("Set device %s status to: %s", self.id, status)
 
-    @needs_control_url
-    def set_level(self, level):
+    def set_level(self, level) -> None:
         """Set device level."""
-        url = self._state['control_url']
-
-        level_data = {'level': str(level)}
-
-        response = self._client.send_request("put", url, data=level_data)
+        response = self._client.send_request(
+            "put",
+            self._control_url,
+            data={'level': str(level)},
+        )
         response_object = response.json()
 
         log.debug("Set Level Response: %s", response.text)
