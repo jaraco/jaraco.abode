@@ -128,7 +128,7 @@ class TestCamera:
     def test_camera_capture_no_control_URLs(self, m):
         """Tests that camera devices capture new images."""
         for device in self.camera_devices():
-            # Remove control URLs from JSON
+            # Hide any control URLs from the device state
             device._state = Projection(re.compile('(?!control_url).*'), device._state)
 
             # Test that jaraco.abode.Exception is raised with no control URLs
