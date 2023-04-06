@@ -2,10 +2,11 @@
 import base64
 import os
 import pathlib
+import re
 
 import pytest
 
-from jaraco.collections import DictFilter
+from jaraco.collections import Projection
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
@@ -128,7 +129,7 @@ class TestCamera:
         """Tests that camera devices capture new images."""
         for device in self.camera_devices():
             # Remove control URLs from JSON
-            device._state = DictFilter(device._state, include_pattern='(?!control_url)')
+            device._state = Projection(re.compile('(?!control_url).*'), device._state)
 
             # Test that jaraco.abode.Exception is raised with no control URLs
             with pytest.raises(jaraco.abode.Exception) as exc:
