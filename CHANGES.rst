@@ -1,3 +1,8 @@
+v5.0.1
+======
+
+Minor bugfixes and test updates.
+
 v5.0.0
 ======
 
