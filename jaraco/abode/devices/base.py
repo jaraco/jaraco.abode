@@ -24,7 +24,7 @@ class Device(Stateful):
     @property
     def _control_url(self):
         if not self._state['control_url']:
-            raise jaraco.abode.Exception("Control URL required")
+            raise jaraco.abode.Exception(("Control URL required",))
         return self._state['control_url']
 
     def set_status(self, status) -> None:
