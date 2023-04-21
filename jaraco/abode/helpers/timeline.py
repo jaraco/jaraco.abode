@@ -3,7 +3,7 @@
 import csv
 
 from importlib_resources import files
-from jaraco.functools import call_aside
+from jaraco.functools import invoke
 from jaraco.collections import RangeMap
 
 
@@ -66,7 +66,7 @@ def _read_events():
         yield from csv.DictReader(strm, quoting=csv.QUOTE_NONE, skipinitialspace=True)
 
 
-@call_aside
+@invoke
 def _load_events():
     def var_name(event):
         default = (
