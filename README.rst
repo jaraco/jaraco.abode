@@ -14,7 +14,7 @@
 .. image:: https://readthedocs.org/projects/jaracoabode/badge/?version=latest
    :target: https://jaracoabode.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/badge/skeleton-2023-informational
+.. image:: https://img.shields.io/badge/skeleton-2024-informational
    :target: https://blog.jaraco.com/skeleton
 
 A thin Python library for the Abode alarm API.
