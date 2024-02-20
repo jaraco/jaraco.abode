@@ -1,4 +1,5 @@
 """Test the Abode device classes."""
+
 import pytest
 
 import jaraco.abode

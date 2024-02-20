@@ -1,4 +1,5 @@
 """Abode camera device."""
+
 import base64
 import logging
 from shutil import copyfileobj

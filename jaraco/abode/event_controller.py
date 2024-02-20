@@ -1,4 +1,5 @@
 """Abode cloud push events."""
+
 import collections
 import logging
 import http.cookiejar

@@ -1,4 +1,5 @@
 """Mock Abode IP Camera Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'ZB:00000305'

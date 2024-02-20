@@ -1,4 +1,5 @@
 """Mock Non-Existent Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 

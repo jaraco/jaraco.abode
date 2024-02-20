@@ -1,4 +1,5 @@
 """Abode sensor device."""
+
 import re
 
 from .binary_sensor import BinarySensor

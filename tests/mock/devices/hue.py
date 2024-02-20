@@ -1,4 +1,5 @@
 """Mock Abode Power Switch Sensor Device."""
+
 import jaraco.abode.devices.status as STATUS
 from jaraco.abode.helpers import urls
 from jaraco.abode.devices.light import ColorMode

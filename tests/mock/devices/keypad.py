@@ -1,4 +1,5 @@
 """Mock Abode Key Pad Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 

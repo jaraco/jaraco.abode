@@ -1,4 +1,5 @@
 """Abode light device."""
+
 import logging
 import math
 

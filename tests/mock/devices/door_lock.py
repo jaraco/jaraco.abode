@@ -1,4 +1,5 @@
 """Mock Abode Door Lock Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'ZW:0000006'

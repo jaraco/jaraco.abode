@@ -3,6 +3,7 @@ Test Abode system setup, shutdown, and general functionality.
 
 Tests the system initialization and attributes of the main Abode system.
 """
+
 import pytest
 import requests
 

@@ -1,4 +1,5 @@
 """Test the Abode event controller class."""
+
 from unittest.mock import call, Mock
 
 import pytest

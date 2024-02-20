@@ -1,4 +1,5 @@
 """Representation of an automation configured in Abode."""
+
 import logging
 import warnings
 

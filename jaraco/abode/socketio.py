@@ -1,4 +1,5 @@
 """Small SocketIO client via Websockets."""
+
 import collections
 import json
 import logging

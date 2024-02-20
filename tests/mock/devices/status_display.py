@@ -1,4 +1,5 @@
 """Mock Abode Status Display Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 

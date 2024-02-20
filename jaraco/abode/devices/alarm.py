@@ -1,4 +1,5 @@
 """Abode alarm device."""
+
 import logging
 import copy
 

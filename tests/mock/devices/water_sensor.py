@@ -1,4 +1,5 @@
 """Mock Abode Power Switch Sensor Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 

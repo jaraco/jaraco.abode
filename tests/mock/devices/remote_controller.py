@@ -1,4 +1,5 @@
 """Mock Abode Remote Controller (Keyfob) Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 

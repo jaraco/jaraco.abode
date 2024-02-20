@@ -1,4 +1,5 @@
 """Mock Abode PIR Device."""
+
 import jaraco.abode.devices.status as STATUS
 
 

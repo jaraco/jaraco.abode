@@ -1,4 +1,5 @@
 """Test the Abode binary sensors."""
+
 import functools
 import itertools
 

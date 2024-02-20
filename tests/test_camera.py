@@ -1,4 +1,5 @@
 """Test the Abode camera class."""
+
 import base64
 import os
 import pathlib
