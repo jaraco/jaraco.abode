@@ -1,7 +1,7 @@
 """Test the Abode device classes."""
 
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -20,12 +20,12 @@ class TestSecureBarrier:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -39,21 +39,21 @@ class TestSecureBarrier:
 
         # Test our device
         assert device is not None
-        assert device.status == CONST.STATUS_CLOSED
+        assert device.status == STATUS.CLOSED
         assert not device.battery_low
         assert not device.no_response
         assert not device.is_on
         assert not device.is_open
 
         # Set up our direct device get url
-        device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
 
         # Change device properties
         m.get(
             device_url,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_OPEN,
+                status=STATUS.OPEN,
                 low_battery=True,
                 no_response=True,
             ),
@@ -62,7 +62,7 @@ class TestSecureBarrier:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == CONST.STATUS_OPEN
+        assert device.status == STATUS.OPEN
         assert device.battery_low
         assert device.no_response
         assert device.is_on
@@ -74,12 +74,12 @@ class TestSecureBarrier:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -93,7 +93,7 @@ class TestSecureBarrier:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_CLOSED
+        assert device.status == STATUS.CLOSED
         assert not device.is_open
 
         # Set up control url response
@@ -101,24 +101,24 @@ class TestSecureBarrier:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN_INT
+                devid=COVER.DEVICE_ID, status=int(STATUS.OPEN)
             ),
         )
 
         # Change the cover to open
-        assert device.open_cover()
-        assert device.status == CONST.STATUS_OPEN
+        device.open_cover()
+        assert device.status == STATUS.OPEN
         assert device.is_open
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=COVER.DEVICE_ID, status=CONST.STATUS_CLOSED_INT
+                devid=COVER.DEVICE_ID, status=int(STATUS.CLOSED)
             ),
         )
 
         # Change the mode to "off"
-        assert device.close_cover()
-        assert device.status == CONST.STATUS_CLOSED
+        device.close_cover()
+        assert device.status == STATUS.CLOSED
         assert not device.is_open

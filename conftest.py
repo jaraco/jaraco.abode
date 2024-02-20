@@ -81,9 +81,7 @@ def all_devices(m):
     m.post(jaraco.abode.helpers.urls.LOGOUT, json=tests.mock.logout.post_response_ok())
     m.get(
         jaraco.abode.helpers.urls.PANEL,
-        json=tests.mock.panel.get_response_ok(
-            mode=jaraco.abode.helpers.constants.MODE_STANDBY
-        ),
+        json=tests.mock.panel.get_response_ok(mode='standby'),
     )
 
     # Create all devices

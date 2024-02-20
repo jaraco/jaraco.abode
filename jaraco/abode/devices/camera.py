@@ -1,4 +1,5 @@
 """Abode camera device."""
+
 import base64
 import logging
 from shutil import copyfileobj
@@ -7,7 +8,7 @@ import requests
 
 import jaraco
 from .._itertools import single
-from ..helpers import constants as CONST
+from . import status as STATUS
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
 from ..helpers import urls
@@ -19,8 +20,18 @@ log = logging.getLogger(__name__)
 class Camera(base.Device):
     """Class to represent a camera device."""
 
-    implements = CONST.TYPE_CAMERA
-
+    tags = (
+        # motion camera
+        'ir_camera',
+        # motion video camera
+        'ir_camcoder',
+        'ipcam',
+        # outdoor motion camera
+        'out_view',
+        # outdoor smart camera
+        'vdp',
+        'mini_cam',
+    )
     _image_url = None
     _snapshot_base64 = None
 
@@ -202,4 +213,4 @@ class Camera(base.Device):
     @property
     def is_on(self):
         """Get camera state (assumed on)."""
-        return self.status not in (CONST.STATUS_OFF, CONST.STATUS_OFFLINE)
+        return self.status not in (STATUS.OFF, STATUS.OFFLINE)

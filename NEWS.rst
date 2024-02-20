@@ -1,3 +1,48 @@
+v5.1.0
+======
+
+Features
+--------
+
+- Require Python 3.8 or later.
+
+
+v5.0.1
+======
+
+Minor bugfixes and test updates.
+
+v5.0.0
+======
+
+Device methods that change state (``.set_status``, ``.set_level``,
+``.switch_on``, ``.switch_off``, ``.set_color``, ``.set_color_temp``,
+``.lock``, ``.unlock``) no longer return ``True`` on success or
+``False`` if no ``control_url`` is set. Instead, these methods now
+return ``None`` and an exception is raised if no ``control_url`` is set
+(where required).
+
+v4.2.0
+======
+
+More internal refactoring.
+
+v4.1.0
+======
+
+Deprecated unnecessary ``Automation.automation_id`` and ``.is_enabled``
+properties. Use ``.id`` or ``.enabled`` instead.
+
+v4.0.0
+======
+
+Substantial refactoring of "constants". All constants have been
+removed from ``jaraco.abode.helpers.constants`` and either
+inlined, replaced by constants in the relevant modules, or
+replaced by other factors already present. These changes should
+be backward-compatible except for libraries reliant on the
+constants.
+
 v3.3.0
 ======
 

@@ -1,10 +1,10 @@
 """Abode alarm device."""
+
 import logging
 import copy
 
 import jaraco.abode
 from .switch import Switch
-from ..helpers import constants as CONST
 from ..helpers import errors as ERROR
 from ..helpers import urls
 
@@ -21,8 +21,8 @@ def state_from_panel(panel_state, area='1'):
     alarm_state['name'] = 'Abode Alarm'
     alarm_state['id'] = id(area)
     alarm_state['type'] = 'Alarm'
-    alarm_state['type_tag'] = CONST.DEVICE_ALARM
-    alarm_state['generic_type'] = CONST.TYPE_ALARM
+    alarm_state['type_tag'] = 'device_type.alarm'
+    alarm_state['generic_type'] = 'alarm'
     return alarm_state
 
 
@@ -34,7 +34,8 @@ def create_alarm(panel_json, abode, area='1'):
 class Alarm(Switch):
     """Class to represent the Abode alarm as a device."""
 
-    implements = CONST.TYPE_ALARM
+    tags = ('alarm',)
+    all_modes = 'away', 'standby', 'home'
 
     def __init__(self, json_obj, abode, area='1'):
         """Set up Abode alarm device."""
@@ -46,8 +47,8 @@ class Alarm(Switch):
         if not mode:
             raise jaraco.abode.Exception(ERROR.MISSING_ALARM_MODE)
 
-        if mode.lower() not in CONST.ALL_MODES:
-            raise jaraco.abode.Exception(ERROR.INVALID_ALARM_MODE, CONST.ALL_MODES)
+        if mode.lower() not in self.all_modes:
+            raise jaraco.abode.Exception(ERROR.INVALID_ALARM_MODE)
 
         mode = mode.lower()
 
@@ -71,15 +72,15 @@ class Alarm(Switch):
 
     def set_home(self):
         """Arm Abode to home mode."""
-        return self.set_mode(CONST.MODE_HOME)
+        return self.set_mode('home')
 
     def set_away(self):
         """Arm Abode to home mode."""
-        return self.set_mode(CONST.MODE_AWAY)
+        return self.set_mode('away')
 
     def set_standby(self):
         """Arm Abode to stay mode."""
-        return self.set_mode(CONST.MODE_STANDBY)
+        return self.set_mode('standby')
 
     def switch_on(self):
         """Arm Abode to default mode."""
@@ -91,11 +92,11 @@ class Alarm(Switch):
 
     def refresh(self, url=urls.PANEL):
         """Refresh the alarm device."""
-        response_object = super().refresh(url)
+        state = super().refresh(url)
 
-        self._client._panel.update(response_object[0])
+        self._client._panel.update(state)
 
-        return response_object
+        return state
 
     def update(self, state):
         super().update(state_from_panel(state, area=self._area))
@@ -103,22 +104,22 @@ class Alarm(Switch):
     @property
     def is_on(self):
         """Is alarm armed."""
-        return self.mode in (CONST.MODE_HOME, CONST.MODE_AWAY)
+        return self.mode in ('home', 'away')
 
     @property
     def is_standby(self):
         """Is alarm in standby mode."""
-        return self.mode == CONST.MODE_STANDBY
+        return self.mode == 'standby'
 
     @property
     def is_home(self):
         """Is alarm in home mode."""
-        return self.mode == CONST.MODE_HOME
+        return self.mode == 'home'
 
     @property
     def is_away(self):
         """Is alarm in away mode."""
-        return self.mode == CONST.MODE_AWAY
+        return self.mode == 'away'
 
     @property
     def mode(self):

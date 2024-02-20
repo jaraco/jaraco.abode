@@ -1,17 +1,22 @@
 """Abode sensor device."""
+
 import re
 
-from ..helpers import constants as CONST
 from .binary_sensor import BinarySensor
 
 
 class Sensor(BinarySensor):
     """Class to represent a sensor device."""
 
-    implements = CONST.TYPE_SENSOR
+    keys = {'temperature', 'humidity', 'lux'}
+
+    @classmethod
+    def is_sensor(cls, state):
+        statuses = state.get('statuses', {})
+        return any(key in statuses for key in cls.keys)
 
     def _get_status(self, key):
-        return self._state.get(CONST.STATUSES_KEY, {}).get(key)
+        return self._state.get('statuses', {}).get(key)
 
     def _get_numeric_status(self, key):
         """Extract the numeric value from the statuses object."""
@@ -23,38 +28,38 @@ class Sensor(BinarySensor):
     @property
     def temp(self):
         """Get device temp."""
-        return self._get_numeric_status(CONST.TEMP_STATUS_KEY)
+        return self._get_numeric_status('temperature')
 
     @property
     def temp_unit(self):
         """Get unit of temp."""
-        if CONST.UNIT_FAHRENHEIT in self._get_status(CONST.TEMP_STATUS_KEY):
-            return CONST.UNIT_FAHRENHEIT
+        if '°F' in self._get_status('temperature'):
+            return '°F'
 
-        if CONST.UNIT_CELSIUS in self._get_status(CONST.TEMP_STATUS_KEY):
-            return CONST.UNIT_CELSIUS
+        if '°C' in self._get_status('temperature'):
+            return '°C'
 
     @property
     def humidity(self):
         """Get device humdity."""
-        return self._get_numeric_status(CONST.HUMI_STATUS_KEY)
+        return self._get_numeric_status('humidity')
 
     @property
     def humidity_unit(self):
         """Get unit of humidity."""
-        if CONST.UNIT_PERCENT in self._get_status(CONST.HUMI_STATUS_KEY):
-            return CONST.UNIT_PERCENT
+        if '%' in self._get_status('humidity'):
+            return '%'
 
     @property
     def lux(self):
         """Get device lux."""
-        return self._get_numeric_status(CONST.LUX_STATUS_KEY)
+        return self._get_numeric_status('lux')
 
     @property
     def lux_unit(self):
         """Get unit of lux."""
-        if CONST.UNIT_LUX in self._get_status(CONST.LUX_STATUS_KEY):
-            return CONST.LUX
+        if 'lx' in self._get_status('lux'):
+            return 'lux'
 
     @property
     def has_temp(self):

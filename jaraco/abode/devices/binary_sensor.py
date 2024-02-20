@@ -1,15 +1,11 @@
 """Abode binary sensor device."""
 
-from typing import Optional, Union, Iterable
-
-from ..helpers import constants as CONST
+from . import status as STATUS
 from . import base
 
 
 class BinarySensor(base.Device):
     """Class to represent an on / off, online/offline sensor."""
-
-    implements: Optional[Union[str, Iterable[str]]] = CONST.BINARY_SENSOR_TYPES
 
     @property
     def is_on(self):
@@ -18,10 +14,39 @@ class BinarySensor(base.Device):
 
         Assume offline or open (worst case).
         """
-        if self.type == 'Occupancy':
-            return self.status not in CONST.STATUS_ONLINE
         return self.status not in (
-            CONST.STATUS_OFF,
-            CONST.STATUS_OFFLINE,
-            CONST.STATUS_CLOSED,
+            STATUS.OFF,
+            STATUS.OFFLINE,
+            STATUS.CLOSED,
         )
+
+
+class Connectivity(BinarySensor):
+    tags = (
+        'glass',
+        'keypad',
+        'remote_controller',
+        'siren',
+        # status display
+        'bx',
+        # moisture
+        'water_sensor',
+    )
+
+
+class Moisture(BinarySensor):
+    pass
+
+
+class Motion(BinarySensor):
+    pass
+
+
+class Occupancy(BinarySensor):
+    @property
+    def is_on(self):
+        return self.status not in STATUS.ONLINE
+
+
+class Door(BinarySensor):
+    tags = ('door_contact',)

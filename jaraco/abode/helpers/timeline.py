@@ -3,7 +3,7 @@
 import csv
 
 from importlib_resources import files
-from jaraco.functools import call_aside
+from jaraco.functools import invoke
 from jaraco.collections import RangeMap
 
 
@@ -25,31 +25,29 @@ class Groups:
     ALL = list(locals().values())
 
 
-event_code_mapping = RangeMap(
-    {
-        1099: RangeMap.undefined_value,
-        1199: Groups.ALARM,
-        1299: RangeMap.undefined_value,
-        1399: Groups.PANEL_FAULT,
-        1499: Groups.DISARM,
-        1599: RangeMap.undefined_value,
-        1699: Groups.TEST,
-        3099: RangeMap.undefined_value,
-        3199: Groups.ALARM_END,
-        3299: RangeMap.undefined_value,
-        3399: Groups.PANEL_RESTORE,
-        3799: Groups.ARM,
-        3999: RangeMap.undefined_value,
-        4001: Groups.ALARM_END,
-        4003: Groups.ARM_FAULT,
-        4999: RangeMap.undefined_value,
-        5099: Groups.CAPTURE,
-        5199: Groups.DEVICE,
-        5299: Groups.AUTOMATION,
-        5999: RangeMap.undefined_value,
-        6100: Groups.ARM_FAULT,
-    }
-)
+event_code_mapping = RangeMap({
+    1099: RangeMap.undefined_value,
+    1199: Groups.ALARM,
+    1299: RangeMap.undefined_value,
+    1399: Groups.PANEL_FAULT,
+    1499: Groups.DISARM,
+    1599: RangeMap.undefined_value,
+    1699: Groups.TEST,
+    3099: RangeMap.undefined_value,
+    3199: Groups.ALARM_END,
+    3299: RangeMap.undefined_value,
+    3399: Groups.PANEL_RESTORE,
+    3799: Groups.ARM,
+    3999: RangeMap.undefined_value,
+    4001: Groups.ALARM_END,
+    4003: Groups.ARM_FAULT,
+    4999: RangeMap.undefined_value,
+    5099: Groups.CAPTURE,
+    5199: Groups.DEVICE,
+    5299: Groups.AUTOMATION,
+    5999: RangeMap.undefined_value,
+    6100: Groups.ARM_FAULT,
+})
 """
 The best inferred code mapping based on observed events.
 Adjust as needed.
@@ -66,7 +64,7 @@ def _read_events():
         yield from csv.DictReader(strm, quoting=csv.QUOTE_NONE, skipinitialspace=True)
 
 
-@call_aside
+@invoke
 def _load_events():
     def var_name(event):
         default = (

@@ -1,14 +1,13 @@
 """Mock Abode Power Switch Sensor Device."""
-import jaraco.abode.helpers.constants as CONST
+
+import jaraco.abode.devices.status as STATUS
 
 
 DEVICE_ID = 'ZW:00000007'
 CONTROL_URL = 'api/v1/control/power_switch/' + DEVICE_ID
 
 
-def device(
-    devid=DEVICE_ID, status=CONST.STATUS_OFF, low_battery=False, no_response=False
-):
+def device(devid=DEVICE_ID, status=STATUS.OFF, low_battery=False, no_response=False):
     """Power switch mock device."""
     return dict(
         id=devid,

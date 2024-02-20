@@ -1,16 +1,17 @@
 """Test the Abode camera class."""
+
 import base64
 import os
 import pathlib
+import re
 
 import pytest
 
-from jaraco.collections import DictFilter
+from jaraco.collections import Projection
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
-import jaraco.abode.helpers.errors as ERROR
+import jaraco.abode.devices.status as STATUS
 from . import mock as MOCK
 from .mock.devices import ipcam as IPCAM
 from .mock.devices import ir_camera as IRCAMERA
@@ -21,8 +22,8 @@ from .mock import panel as PANEL
 
 
 cam_types = {
-    CONST.DEVICE_IP_CAM: IPCAM,
-    CONST.DEVICE_MOTION_CAMERA: IRCAMERA,
+    'device_type.ipcam': IPCAM,
+    'device_type.ir_camera': IRCAMERA,
 }
 
 
@@ -30,13 +31,13 @@ def all_devices():
     return [
         IRCAMERA.device(
             devid=IRCAMERA.DEVICE_ID,
-            status=CONST.STATUS_ONLINE,
+            status=STATUS.ONLINE,
             low_battery=False,
             no_response=False,
         ),
         IPCAM.device(
             devid=IPCAM.DEVICE_ID,
-            status=CONST.STATUS_ONLINE,
+            status=STATUS.ONLINE,
             low_battery=False,
             no_response=False,
         ),
@@ -49,7 +50,7 @@ def setup_URLs(m):
     m.post(urls.LOGIN, json=LOGIN.post_response_ok())
     m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
     m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-    m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+    m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
     m.get(urls.DEVICES, json=all_devices())
 
 
@@ -60,7 +61,7 @@ class TestCamera:
         return (
             device
             for device in self.client.get_devices()
-            if device.type_tag != CONST.DEVICE_ALARM
+            if device.type_tag != 'device_type.alarm'
         )
 
     def test_camera_properties(self, m):
@@ -71,19 +72,19 @@ class TestCamera:
 
             # Test our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
             assert not device.battery_low
             assert not device.no_response
 
             # Set up our direct device get url
-            device_url = urls.DEVICE.format(device_id=device.id)
+            device_url = urls.DEVICE.format(id=device.id)
 
             # Change device properties
             m.get(
                 device_url,
                 json=cam_type.device(
                     devid=cam_type.DEVICE_ID,
-                    status=CONST.STATUS_OFFLINE,
+                    status=STATUS.OFFLINE,
                     low_battery=True,
                     no_response=True,
                 ),
@@ -92,7 +93,7 @@ class TestCamera:
             # Refesh device and test changes
             device.refresh()
 
-            assert device.status == CONST.STATUS_OFFLINE
+            assert device.status == STATUS.OFFLINE
             assert device.battery_low
             assert device.no_response
 
@@ -104,13 +105,13 @@ class TestCamera:
 
             # Test that we have the camera devices
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Determine URL based on device type
-            if device.type_tag == CONST.DEVICE_IP_CAM:
+            if device.type_tag == 'device_type.ipcam':
                 url = cam_type.CONTROL_URL_SNAPSHOT
 
-            elif device.type_tag == CONST.DEVICE_MOTION_CAMERA:
+            elif device.type_tag == 'device_type.ir_camera':
                 url = cam_type.CONTROL_URL
 
             # Set up capture URL response
@@ -128,13 +129,13 @@ class TestCamera:
     def test_camera_capture_no_control_URLs(self, m):
         """Tests that camera devices capture new images."""
         for device in self.camera_devices():
-            # Remove control URLs from JSON
-            device._state = DictFilter(device._state, include_pattern='(?!control_url)')
+            # Hide any control URLs from the device state
+            device._state = Projection(re.compile('(?!control_url).*'), device._state)
 
             # Test that jaraco.abode.Exception is raised with no control URLs
             with pytest.raises(jaraco.abode.Exception) as exc:
                 device.capture()
-            assert (exc.value.errcode, exc.value.message) == ERROR.MISSING_CONTROL_URL
+            assert exc.value.message == "Control URL does not exist in device JSON."
 
     def test_camera_image_update(self, m):
         """Tests that camera devices update correctly via timeline request."""
@@ -144,7 +145,7 @@ class TestCamera:
 
             # Test that we have our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Set up timeline response
             url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
@@ -204,7 +205,7 @@ class TestCamera:
         for device in self.camera_devices():
             # Test that we have our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Set up timeline response
             url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
@@ -222,7 +223,7 @@ class TestCamera:
 
             # Test that we have our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Set up timeline response
             url = urls.TIMELINE_IMAGES_ID.format(device_id=device.id)
@@ -265,7 +266,7 @@ class TestCamera:
 
             # Test that we have our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Set up snapshot URL response
             snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/snapshot"
@@ -290,7 +291,7 @@ class TestCamera:
 
             # Test that we have our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Set up snapshot URL and image response
             snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/snapshot"
@@ -319,7 +320,7 @@ class TestCamera:
 
             # Test that we have our device
             assert device is not None
-            assert device.status == CONST.STATUS_ONLINE
+            assert device.status == STATUS.ONLINE
 
             # Set up snapshot URL and image response
             snapshot_url = f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/snapshot"
@@ -346,7 +347,7 @@ class TestCamera:
         # Get the IP camera and test we have it
         device = self.client.get_device(IPCAM.DEVICE_ID)
         assert device is not None
-        assert device.status == CONST.STATUS_ONLINE
+        assert device.status == STATUS.ONLINE
 
         # Set up params URL response for privacy mode on
         m.put(urls.PARAMS + device.id, json=IPCAM.device(privacy=1))

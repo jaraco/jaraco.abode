@@ -1,13 +1,12 @@
 """Mock Abode PIR Device."""
-import jaraco.abode.helpers.constants as CONST
+
+import jaraco.abode.devices.status as STATUS
 
 
 DEVICE_ID = 'ZB:00000055'
 
 
-def device(
-    devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
-):
+def device(devid=DEVICE_ID, status=STATUS.ONLINE, low_battery=False, no_response=False):
     """PIR mock device."""
     return dict(
         id=devid,

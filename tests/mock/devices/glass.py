@@ -1,12 +1,13 @@
 """Mock Abode Glass Device."""
-import jaraco.abode.helpers.constants as CONST
+
+import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'RF:00000001'
 
 
 def device(
     devid=DEVICE_ID,
-    status=CONST.STATUS_ONLINE,
+    status=STATUS.ONLINE,
     low_battery=False,
     no_response=False,
     out_of_order=False,

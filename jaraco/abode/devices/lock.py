@@ -1,31 +1,23 @@
 """Abode lock device."""
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from . import base
 
 
 class Lock(base.Device):
     """Class to represent a door lock."""
 
-    implements = CONST.TYPE_LOCK
+    tags = ('door_lock',)
 
-    def lock(self):
+    def lock(self) -> None:
         """Lock the device."""
-        success = self.set_status(CONST.STATUS_LOCKCLOSED_INT)
+        self.set_status(int(STATUS.Lock.CLOSED))
+        self._state['status'] = STATUS.Lock.CLOSED
 
-        if success:
-            self._state['status'] = CONST.STATUS_LOCKCLOSED
-
-        return success
-
-    def unlock(self):
+    def unlock(self) -> None:
         """Unlock the device."""
-        success = self.set_status(CONST.STATUS_LOCKOPEN_INT)
-
-        if success:
-            self._state['status'] = CONST.STATUS_LOCKOPEN
-
-        return success
+        self.set_status(int(STATUS.Lock.OPEN))
+        self._state['status'] = STATUS.Lock.OPEN
 
     @property
     def is_locked(self):
@@ -34,4 +26,4 @@ class Lock(base.Device):
 
         Err on side of caution, assume if lock isn't closed then it's open.
         """
-        return self.status in CONST.STATUS_LOCKCLOSED
+        return self.status == STATUS.Lock.CLOSED

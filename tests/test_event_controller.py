@@ -1,11 +1,12 @@
 """Test the Abode event controller class."""
+
 from unittest.mock import call, Mock
 
 import pytest
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 import jaraco.abode.helpers.timeline as TIMELINE
 from jaraco.abode.devices.binary_sensor import BinarySensor
 
@@ -27,12 +28,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -61,12 +62,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -92,12 +93,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -126,12 +127,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -166,12 +167,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -245,12 +246,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -273,12 +274,12 @@ class TestEventController:
         assert events.add_device_callback(device.id, callback)
 
         # Set up device update URL
-        device_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
         m.get(
             device_url,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_OPEN,
+                status=STATUS.OPEN,
                 low_battery=False,
                 no_response=False,
             ),
@@ -290,7 +291,7 @@ class TestEventController:
         callback.assert_called_with(device)
 
         # Test that our device updated
-        assert device.status == CONST.STATUS_OPEN
+        assert device.status == STATUS.OPEN
 
         # Test that no device ID cleanly returns
         events._on_device_update(None)
@@ -362,12 +363,12 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
@@ -391,11 +392,11 @@ class TestEventController:
 
         # Call our mode changed callback method
 
-        events._on_mode_change(CONST.MODE_HOME)
+        events._on_mode_change('home')
         callback.assert_called_with(alarm)
 
         # Test that our alarm state is set properly
-        assert alarm.mode == CONST.MODE_HOME
+        assert alarm.mode == 'home'
 
         # Test that no mode cleanly returns
         events._on_mode_change(None)
@@ -427,19 +428,17 @@ class TestEventController:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=[
                 COVER.device(
                     devid=COVER.DEVICE_ID,
-                    status=CONST.STATUS_CLOSED,
+                    status=STATUS.CLOSED,
                     low_battery=False,
                     no_response=False,
                 ),
-                DOORCONTACT.device(
-                    devid=DOORCONTACT.DEVICE_ID, status=CONST.STATUS_CLOSED
-                ),
+                DOORCONTACT.device(devid=DOORCONTACT.DEVICE_ID, status=STATUS.CLOSED),
             ],
         )
 
@@ -463,21 +462,21 @@ class TestEventController:
         assert events.add_device_callback([cover, doorcontact], callback)
 
         # Set up device update URLs
-        cover_url = urls.DEVICE.format(device_id=COVER.DEVICE_ID)
+        cover_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
         m.get(
             cover_url,
             json=COVER.device(
                 devid=COVER.DEVICE_ID,
-                status=CONST.STATUS_OPEN,
+                status=STATUS.OPEN,
                 low_battery=False,
                 no_response=False,
             ),
         )
 
-        door_url = urls.DEVICE.format(device_id=DOORCONTACT.DEVICE_ID)
+        door_url = urls.DEVICE.format(id=DOORCONTACT.DEVICE_ID)
         m.get(
             door_url,
-            json=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=CONST.STATUS_OPEN),
+            json=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=STATUS.OPEN),
         )
 
         # Call our device callback method for our cover
@@ -486,17 +485,17 @@ class TestEventController:
         callback.assert_called_with(cover)
 
         # Test that our device updated
-        assert cover.status == CONST.STATUS_OPEN
+        assert cover.status == STATUS.OPEN
 
         # Test that our other device didn't update
-        assert doorcontact.status == CONST.STATUS_CLOSED
+        assert doorcontact.status == STATUS.CLOSED
 
         # Call our device callback method for our door contact
         events._on_device_update(doorcontact.id)
         callback.assert_has_calls([call(cover), call(doorcontact)])
 
         # Test that our door updated now
-        assert doorcontact.status == CONST.STATUS_OPEN
+        assert doorcontact.status == STATUS.OPEN
 
     def test_multi_events_callback(self):
         """Tests that multiple event updates callback correctly."""

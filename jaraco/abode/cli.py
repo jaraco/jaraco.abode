@@ -10,6 +10,7 @@ import getpass
 
 import keyring
 from jaraco.context import suppress
+from jaraco.functools import pass_none
 from more_itertools import always_iterable
 
 import jaraco.abode
@@ -17,14 +18,14 @@ from . import Client
 from .helpers import urls
 from .helpers import timeline as TIMELINE
 
-log = logging.getLogger('abodecl')
+log = logging.getLogger(__name__)
 
 
 @suppress(ImportError)
 def enable_color():
     import colorlog
 
-    fmt = "%(asctime)s %(levelname)s (%(threadName)s) " "[%(name)s] %(message)s"
+    fmt = "%(asctime)s %(levelname)s (%(threadName)s) [%(name)s] %(message)s"
     colorfmt = f"%(log_color)s{fmt}%(reset)s"
     datefmt = '%Y-%m-%d %H:%M:%S'
 
@@ -292,65 +293,71 @@ class Dispatcher:
 
     def set_setting(self):
         for setting in always_iterable(self.args.set):
-            keyval = setting.split("=")
-            if self.client.set_setting(keyval[0], keyval[1]):
-                log.info("Setting %s changed to %s", keyval[0], keyval[1])
+            key, _, val = setting.partition("=")
+            if self.client.set_setting(key, val):
+                log.info("Setting %s changed to %s", key, val)
+
+    def _get_device(self, id):
+        device = self.client.get_device(id)
+        if not device:
+            log.warning("Could not find device with id: %s", id)
+        return device
 
     def switch_on(self):
         for device_id in always_iterable(self.args.on):
-            device = self.client.get_device(device_id)
+            self._switch_on(self._get_device(device_id))
 
-            if device:
-                if device.switch_on():
-                    log.info("Switched on device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    @pass_none
+    def _switch_on(device):
+        if device.switch_on():
+            log.info("Switched on device with id: %s", device.id)
 
     def switch_off(self):
         for device_id in always_iterable(self.args.off):
-            device = self.client.get_device(device_id)
+            self._switch_off(self._get_device(device_id))
 
-            if device:
-                if device.switch_off():
-                    log.info("Switched off device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    @pass_none
+    def _switch_off(device):
+        if device.switch_off():
+            log.info("Switched off device with id: %s", device.id)
 
     def lock(self):
         for device_id in always_iterable(self.args.lock):
-            device = self.client.get_device(device_id)
+            self._lock(self._get_device(device_id))
 
-            if device:
-                if device.lock():
-                    log.info("Locked device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    @pass_none
+    def _lock(device):
+        if device.lock():
+            log.info("Locked device with id: %s", device.id)
 
     def unlock(self):
         for device_id in always_iterable(self.args.unlock):
-            device = self.client.get_device(device_id)
+            self._unlock(self._get_device(device_id))
 
-            if device:
-                if device.unlock():
-                    log.info("Unlocked device with id: %s", device_id)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    @pass_none
+    def _unlock(device):
+        if device.unlock():
+            log.info("Unlocked device with id: %s", device.id)
 
     def output_json(self):
         for device_id in always_iterable(self.args.json):
-            device = self.client.get_device(device_id)
+            self._output_json(self._get_device(device_id))
 
-            if device:
-                print(
-                    json.dumps(
-                        device._state,
-                        sort_keys=True,
-                        indent=4,
-                        separators=(',', ': '),
-                    )
-                )
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    @pass_none
+    def _output_json(device):
+        print(
+            json.dumps(
+                device._state,
+                sort_keys=True,
+                indent=4,
+                separators=(',', ': '),
+            )
+        )
 
     def print_all_automations(self):
         if not self.args.automations:
@@ -358,65 +365,67 @@ class Dispatcher:
         for automation in self.client.get_automations():
             _device_print(automation)
 
+    def _get_automation(self, id):
+        automation = self.client.get_automation(id)
+        if not automation:
+            log.warning("Could not find automation with id: %s", id)
+        return automation
+
     def enable_automation(self):
         for automation_id in always_iterable(self.args.activate):
-            automation = self.client.get_automation(automation_id)
+            self._enable_automation(self._get_automation(automation_id))
 
-            if automation:
-                if automation.enable(True):
-                    log.info("Activated automation with id: %s", automation_id)
-            else:
-                log.warning("Could not find automation with id: %s", automation_id)
+    @staticmethod
+    @pass_none
+    def _enable_automation(automation):
+        if automation.enable(True):
+            log.info("Activated automation with id: %s", automation.id)
 
     def disable_automation(self):
         for automation_id in always_iterable(self.args.deactivate):
-            automation = self.client.get_automation(automation_id)
+            self._disable_automation(self._get_automation(automation_id))
 
-            if automation:
-                if automation.enable(False):
-                    log.info("Deactivated automation with id: %s", automation_id)
-            else:
-                log.warning("Could not find automation with id: %s", automation_id)
+    @staticmethod
+    @pass_none
+    def _disable_automation(automation):
+        if automation.enable(False):
+            log.info("Deactivated automation with id: %s", automation.id)
 
     def trigger_automation(self):
         for automation_id in always_iterable(self.args.trigger):
-            automation = self.client.get_automation(automation_id)
+            self._trigger_automation(self._get_automation(automation_id))
 
-            if automation:
-                if automation.trigger():
-                    log.info("Triggered automation with id: %s", automation_id)
-            else:
-                log.warning("Could not find automation with id: %s", automation_id)
+    @staticmethod
+    @pass_none
+    def _trigger_automation(automation):
+        if automation.trigger():
+            log.info("Triggered automation with id: %s", automation.id)
 
     def trigger_image_capture(self):
         for device_id in always_iterable(self.args.capture):
-            device = self.client.get_device(device_id)
+            self._trigger_image_capture(self._get_device(device_id))
 
-            if device:
-                if device.capture():
-                    log.info("Image requested from device with id: %s", device_id)
-                else:
-                    log.warning(
-                        "Failed to request image from device with id: %s", device_id
-                    )
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+    @staticmethod
+    @pass_none
+    def _trigger_image_capture(device):
+        if device.capture():
+            log.info("Image requested from device with id: %s", device.id)
+        else:
+            log.warning("Failed to request image from device with id: %s", device.id)
 
     def save_camera_image(self):
         for keyval in always_iterable(self.args.image):
-            devloc = keyval.split("=")
-            device = self.client.get_device(devloc[0])
+            dev, _, loc = keyval.partition("=")
+            self._save_camera_image(self._get_device(dev), loc)
 
-            if device:
-                try:
-                    if device.refresh_image() and device.image_to_file(devloc[1]):
-                        log.info(
-                            "Saved image to %s for device id: %s", devloc[1], devloc[0]
-                        )
-                except jaraco.abode.Exception as exc:
-                    log.warning("Unable to save image: %s", exc)
-            else:
-                log.warning("Could not find device with id: %s", devloc[0])
+    @staticmethod
+    @pass_none
+    def _save_camera_image(device, path):
+        try:
+            if device.refresh_image() and device.image_to_file(path):
+                log.info("Saved image to %s for device id: %s", path, device.id)
+        except jaraco.abode.Exception as exc:
+            log.warning("Unable to save image: %s", exc)
 
     def print_all_devices(self):
         if not self.args.devices:
@@ -425,18 +434,15 @@ class Dispatcher:
             _device_print(device)
 
     def print_specific_devices(self):
-        if not self.args.device:
-            return
-        for device_id in self.args.device:
-            device = self.client.get_device(device_id)
+        for device_id in always_iterable(self.args.device):
+            device = self._get_device(device_id)
+            device and self._print_specific_device(device)
 
-            if device:
-                _device_print(device)
+    def _print_specific_device(self, device):
+        _device_print(device)
 
-                # Register the specific devices if we decide to listen.
-                self.client.events.add_device_callback(device_id, _device_callback)
-            else:
-                log.warning("Could not find device with id: %s", device_id)
+        # Register the specific devices if we decide to listen.
+        self.client.events.add_device_callback(device.id, _device_callback)
 
     def start_device_change_listener(self):
         if not self.args.listen:

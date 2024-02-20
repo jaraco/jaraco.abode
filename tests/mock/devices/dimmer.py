@@ -1,5 +1,6 @@
 """Mock Abode Power Switch Sensor Device."""
-import jaraco.abode.helpers.constants as CONST
+
+import jaraco.abode.devices.status as STATUS
 
 DEVICE_ID = 'ZW:00000105'
 CONTROL_URL = 'api/v1/control/light/' + DEVICE_ID
@@ -7,7 +8,7 @@ CONTROL_URL = 'api/v1/control/light/' + DEVICE_ID
 
 def device(
     devid=DEVICE_ID,
-    status=CONST.STATUS_OFF,
+    status=STATUS.OFF,
     level=0,
     low_battery=False,
     no_response=False,

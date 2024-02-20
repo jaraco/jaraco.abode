@@ -1,9 +1,10 @@
 """Test the Abode binary sensors."""
+
 import functools
 import itertools
 
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -27,49 +28,49 @@ class TestBinarySensors:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
 
         # Set up all Binary Sensor Devices in "off states"
         all_devices = [
             DOOR_CONTACT.device(
                 devid=DOOR_CONTACT.DEVICE_ID,
-                status=CONST.STATUS_CLOSED,
+                status=STATUS.CLOSED,
                 low_battery=False,
                 no_response=False,
             ),
             GLASS.device(
                 devid=GLASS.DEVICE_ID,
-                status=CONST.STATUS_OFFLINE,
+                status=STATUS.OFFLINE,
                 low_battery=False,
                 no_response=False,
             ),
             KEYPAD.device(
                 devid=KEYPAD.DEVICE_ID,
-                status=CONST.STATUS_OFFLINE,
+                status=STATUS.OFFLINE,
                 low_battery=False,
                 no_response=False,
             ),
             REMOTE_CONTROLLER.device(
                 devid=REMOTE_CONTROLLER.DEVICE_ID,
-                status=CONST.STATUS_OFFLINE,
+                status=STATUS.OFFLINE,
                 low_battery=False,
                 no_response=False,
             ),
             SIREN.device(
                 devid=SIREN.DEVICE_ID,
-                status=CONST.STATUS_OFFLINE,
+                status=STATUS.OFFLINE,
                 low_battery=False,
                 no_response=False,
             ),
             STATUS_DISPLAY.device(
                 devid=STATUS_DISPLAY.DEVICE_ID,
-                status=CONST.STATUS_OFFLINE,
+                status=STATUS.OFFLINE,
                 low_battery=False,
                 no_response=False,
             ),
             WATER_SENSOR.device(
                 devid=WATER_SENSOR.DEVICE_ID,
-                status=CONST.STATUS_OFFLINE,
+                status=STATUS.OFFLINE,
                 low_battery=False,
                 no_response=False,
             ),
@@ -90,43 +91,43 @@ class TestBinarySensors:
         all_devices = [
             DOOR_CONTACT.device(
                 devid=DOOR_CONTACT.DEVICE_ID,
-                status=CONST.STATUS_OPEN,
+                status=STATUS.OPEN,
                 low_battery=True,
                 no_response=True,
             ),
             GLASS.device(
                 devid=GLASS.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             KEYPAD.device(
                 devid=KEYPAD.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             REMOTE_CONTROLLER.device(
                 devid=REMOTE_CONTROLLER.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             SIREN.device(
                 devid=SIREN.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             STATUS_DISPLAY.device(
                 devid=STATUS_DISPLAY.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             WATER_SENSOR.device(
                 devid=WATER_SENSOR.DEVICE_ID,
-                status=CONST.STATUS_ONLINE,
+                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
@@ -142,7 +143,7 @@ class TestBinarySensors:
 
 
 def is_alarm(device):
-    return device.type_tag == CONST.DEVICE_ALARM
+    return device.type_tag == 'device_type.alarm'
 
 
 skip_alarms = functools.partial(itertools.filterfalse, is_alarm)

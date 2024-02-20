@@ -3,11 +3,12 @@ Test Abode system setup, shutdown, and general functionality.
 
 Tests the system initialization and attributes of the main Abode system.
 """
+
 import pytest
 import requests
 
 import jaraco.abode
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
 from jaraco.abode.helpers import urls
 from jaraco.abode import settings
 from jaraco.abode import config
@@ -311,11 +312,11 @@ class TestAbode:
 
     def test_default_mode(self):
         """Test that the default mode fails if not of type home or away."""
-        self.client.set_default_mode(CONST.MODE_HOME)
-        assert self.client.default_mode == CONST.MODE_HOME
+        self.client.set_default_mode('home')
+        assert self.client.default_mode == 'home'
 
-        self.client.set_default_mode(CONST.MODE_AWAY)
-        assert self.client.default_mode == CONST.MODE_AWAY
+        self.client.set_default_mode('away')
+        assert self.client.default_mode == 'away'
 
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_default_mode('foobar')
@@ -323,10 +324,10 @@ class TestAbode:
     def test_all_device_refresh(self, m):
         """Check that device refresh works and reuses the same objects."""
         dc1_devid = 'RF:01'
-        dc1a = DOOR_CONTACT.device(devid=dc1_devid, status=CONST.STATUS_ON)
+        dc1a = DOOR_CONTACT.device(devid=dc1_devid, status=STATUS.ON)
 
         dc2_devid = 'RF:02'
-        dc2a = DOOR_CONTACT.device(devid=dc2_devid, status=CONST.STATUS_OFF)
+        dc2a = DOOR_CONTACT.device(devid=dc2_devid, status=STATUS.OFF)
 
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
@@ -349,9 +350,9 @@ class TestAbode:
         assert dc2a['id'] == dc2a_dev.id
 
         # Change device states
-        dc1b = DOOR_CONTACT.device(devid=dc1_devid, status=CONST.STATUS_OFF)
+        dc1b = DOOR_CONTACT.device(devid=dc1_devid, status=STATUS.OFF)
 
-        dc2b = DOOR_CONTACT.device(devid=dc2_devid, status=CONST.STATUS_ON)
+        dc2b = DOOR_CONTACT.device(devid=dc2_devid, status=STATUS.ON)
 
         m.get(urls.DEVICES, json=[dc1b, dc2b])
 

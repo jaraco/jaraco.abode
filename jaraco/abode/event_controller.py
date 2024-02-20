@@ -1,4 +1,5 @@
 """Abode cloud push events."""
+
 import collections
 import logging
 import http.cookiejar
@@ -7,14 +8,16 @@ from jaraco.itertools import always_iterable
 
 import jaraco
 from .devices.base import Device
+from .devices.alarm import Alarm
 from .helpers import urls
-from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .helpers import timeline as TIMELINE
 from . import socketio as sio
 from ._itertools import single, opt_single
 
 log = logging.getLogger(__name__)
+
+SOCKETIO_URL = 'wss://my.goabode.com/socket.io/'
 
 
 def _cookie_string(cookies: http.cookiejar.CookieJar):
@@ -31,7 +34,7 @@ def _cookie_string(cookies: http.cookiejar.CookieJar):
 class EventController:
     """Subscribes to events."""
 
-    def __init__(self, client, url=CONST.SOCKETIO_URL):
+    def __init__(self, client, url=SOCKETIO_URL):
         self._client = client
         self._thread = None
         self._running = False
@@ -138,9 +141,7 @@ class EventController:
 
         for event_group in always_iterable(event_groups):
             if event_group not in TIMELINE.Groups.ALL:
-                raise jaraco.abode.Exception(
-                    ERROR.EVENT_GROUP_INVALID, TIMELINE.Groups.ALL
-                )
+                raise jaraco.abode.Exception(ERROR.EVENT_GROUP_INVALID)
 
             log.debug("Subscribing to event group: %s", event_group)
 
@@ -233,7 +234,7 @@ class EventController:
             log.warning("Mode change event with no mode.")
             return
 
-        if not mode or mode.lower() not in CONST.ALL_MODES:
+        if not mode or mode.lower() not in Alarm.all_modes:
             log.warning("Mode change event with unknown mode: %s", mode)
             return
 

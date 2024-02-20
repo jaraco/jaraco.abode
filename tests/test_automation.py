@@ -1,4 +1,5 @@
 """Test the Abode device classes."""
+
 import jaraco.abode
 from jaraco.abode.helpers import urls
 import pytest
@@ -29,7 +30,9 @@ class TestAutomation:
 
         # Set up automation
         automation_resp = AUTOMATION.get_response_ok(
-            name='Auto Away', enabled=True, aid=AID_1
+            name='Auto Away',
+            enabled=True,
+            id=AID_1,
         )
 
         m.get(urls.AUTOMATION, json=automation_resp)
@@ -43,10 +46,10 @@ class TestAutomation:
         # Check automation states match
         assert automation is not None
 
-        assert automation._automation == automation_resp
-        assert automation.automation_id == str(automation_resp['id'])
+        assert automation._state == automation_resp
+        assert automation.id == str(automation_resp['id'])
         assert automation.name == automation_resp['name']
-        assert automation.is_enabled == automation_resp['enabled']
+        assert automation.enabled == automation_resp['enabled']
         assert automation.desc is not None
 
     def test_automation_refresh(self, m):
@@ -59,7 +62,7 @@ class TestAutomation:
 
         # Set up automation
         resp = [
-            AUTOMATION.get_response_ok(name='Test Automation', enabled=True, aid=AID_1)
+            AUTOMATION.get_response_ok(name='Test Automation', enabled=True, id=AID_1)
         ]
 
         m.get(urls.AUTOMATION, json=resp)
@@ -67,7 +70,9 @@ class TestAutomation:
         # Set up refreshed automation
         resp_changed = [
             AUTOMATION.get_response_ok(
-                name='Test Automation Changed', enabled=False, aid=AID_1
+                name='Test Automation Changed',
+                enabled=False,
+                id=AID_1,
             )
         ]
 
@@ -84,16 +89,18 @@ class TestAutomation:
         # Check automation states match
 
         assert automation is not None
-        assert automation._automation == resp[0]
+        assert automation._state == resp[0]
 
         # Refresh and retest
         automation.refresh()
-        assert automation._automation == resp_changed[0]
+        assert automation._state == resp_changed[0]
 
         # Refresh with get_automation() and test
         resp_changed = [
             AUTOMATION.get_response_ok(
-                name='Test Automation Changed Again', enabled=True, aid=AID_1
+                name='Test Automation Changed Again',
+                enabled=True,
+                id=AID_1,
             )
         ]
 
@@ -102,7 +109,7 @@ class TestAutomation:
         # Refresh and retest
         automation = self.client.get_automation(AID_1, refresh=True)
 
-        assert automation._automation == resp_changed[0]
+        assert automation._state == resp_changed[0]
 
         # Test refresh returning an incorrect ID throws exception
         # Set up refreshed automation
@@ -110,7 +117,7 @@ class TestAutomation:
             AUTOMATION.get_response_ok(
                 name='Test Automation Changed',
                 enabled=False,
-                aid='47fae27488f74f55b964a81a066c3a11',
+                id='47fae27488f74f55b964a81a066c3a11',
             )
         ]
 
@@ -130,13 +137,19 @@ class TestAutomation:
         # Set up automations
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Two', enabled=True, aid=AID_2
+                name='Test Automation Two',
+                enabled=True,
+                id=AID_2,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Three', enabled=True, aid=AID_3
+                name='Test Automation Three',
+                enabled=True,
+                id=AID_3,
             ),
         ]
 
@@ -153,15 +166,15 @@ class TestAutomation:
 
         automation_1 = self.client.get_automation(AID_1)
         assert automation_1 is not None
-        assert automation_1._automation == resp[0]
+        assert automation_1._state == resp[0]
 
         automation_2 = self.client.get_automation(AID_2)
         assert automation_2 is not None
-        assert automation_2._automation == resp[1]
+        assert automation_2._state == resp[1]
 
         automation_3 = self.client.get_automation(AID_3)
         assert automation_3 is not None
-        assert automation_3._automation == resp[2]
+        assert automation_3._state == resp[2]
 
     def test_automation_class_reuse(self, m):
         """Check that automations reuse the same classes when refreshed."""
@@ -174,10 +187,14 @@ class TestAutomation:
         # Set up automations
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Two', enabled=True, aid=AID_2
+                name='Test Automation Two',
+                enabled=True,
+                id=AID_2,
             ),
         ]
 
@@ -194,22 +211,28 @@ class TestAutomation:
 
         automation_1 = self.client.get_automation(AID_1)
         assert automation_1 is not None
-        assert automation_1._automation == resp[0]
+        assert automation_1._state == resp[0]
 
         automation_2 = self.client.get_automation(AID_2)
         assert automation_2 is not None
-        assert automation_2._automation == resp[1]
+        assert automation_2._state == resp[1]
 
         # Update the automations
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One Changed', enabled=False, aid=AID_1
+                name='Test Automation One Changed',
+                enabled=False,
+                id=AID_1,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Two Changed', enabled=False, aid=AID_2
+                name='Test Automation Two Changed',
+                enabled=False,
+                id=AID_2,
             ),
             AUTOMATION.get_response_ok(
-                name='Test Automation Three New', enabled=True, aid=AID_3
+                name='Test Automation Three New',
+                enabled=True,
+                id=AID_3,
             ),
         ]
 
@@ -223,18 +246,18 @@ class TestAutomation:
         # and are using the same class
         automation_1_changed = self.client.get_automation(AID_1)
         assert automation_1_changed is not None
-        assert automation_1_changed._automation == resp[0]
+        assert automation_1_changed._state == resp[0]
         assert automation_1 is automation_1_changed
 
         automation_2_changed = self.client.get_automation(AID_2)
         assert automation_2_changed is not None
-        assert automation_2_changed._automation == resp[1]
+        assert automation_2_changed._state == resp[1]
         assert automation_2 is automation_2_changed
 
         # Check that the third new automation is correct
         automation_3 = self.client.get_automation(AID_3)
         assert automation_3 is not None
-        assert automation_3._automation == resp[2]
+        assert automation_3._state == resp[2]
 
     def test_automation_enable(self, m):
         """Check that automations can change their enable state."""
@@ -247,7 +270,9 @@ class TestAutomation:
         # Set up automation
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             )
         ]
 
@@ -260,8 +285,8 @@ class TestAutomation:
 
         automation = self.client.get_automation(AID_1)
         assert automation is not None
-        assert automation._automation == resp[0]
-        assert automation.is_enabled
+        assert automation._state == resp[0]
+        assert automation.enabled
 
         # Set up our active state change and URL
         set_active_url = urls.AUTOMATION_ID.format(id=resp[0]['id'])
@@ -269,34 +294,40 @@ class TestAutomation:
         m.patch(
             set_active_url,
             json=AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=False, aid=AID_1
+                name='Test Automation One',
+                enabled=False,
+                id=AID_1,
             ),
         )
 
         # Test the changed state
         automation.enable(False)
-        assert not automation.is_enabled
+        assert not automation.enabled
 
         # Change the state back, this time with an array response
         m.patch(
             set_active_url,
             json=[
                 AUTOMATION.get_response_ok(
-                    name='Test Automation One', enabled=True, aid=AID_1
+                    name='Test Automation One',
+                    enabled=True,
+                    id=AID_1,
                 )
             ],
         )
 
         # Test the changed state
         automation.enable(True)
-        assert automation.is_enabled
+        assert automation.enabled
 
         # Test that the response returns the wrong state
         m.patch(
             set_active_url,
             json=[
                 AUTOMATION.get_response_ok(
-                    name='Test Automation One', enabled=True, aid=AID_1
+                    name='Test Automation One',
+                    enabled=True,
+                    id=AID_1,
                 )
             ],
         )
@@ -309,7 +340,9 @@ class TestAutomation:
             set_active_url,
             json=[
                 AUTOMATION.get_response_ok(
-                    name='Test Automation One', enabled=True, aid=AID_2
+                    name='Test Automation One',
+                    enabled=True,
+                    id=AID_2,
                 )
             ],
         )
@@ -328,7 +361,9 @@ class TestAutomation:
         # Set up automation
         resp = [
             AUTOMATION.get_response_ok(
-                name='Test Automation One', enabled=True, aid=AID_1
+                name='Test Automation One',
+                enabled=True,
+                id=AID_1,
             ),
         ]
 
@@ -343,7 +378,7 @@ class TestAutomation:
         assert automation is not None
 
         # Set up our automation trigger reply
-        set_active_url = urls.AUTOMATION_APPLY.format(id=automation.automation_id)
+        set_active_url = urls.AUTOMATION_APPLY.format(id=automation.id)
         m.post(set_active_url, json=MOCK.generic_response_ok())
 
         # Test triggering

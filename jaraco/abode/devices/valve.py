@@ -1,31 +1,23 @@
 """Abode valve device."""
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from .switch import Switch
 
 
 class Valve(Switch):
     """Class to add valve functionality."""
 
-    implements = CONST.TYPE_VALVE
+    tags = ('valve',)
 
-    def switch_on(self):
+    def switch_on(self) -> None:
         """Open the valve."""
-        success = self.set_status(CONST.STATUS_ON_INT)
+        self.set_status(int(STATUS.ON))
+        self._state['status'] = STATUS.OPEN
 
-        if success:
-            self._state['status'] = CONST.STATUS_OPEN
-
-        return success
-
-    def switch_off(self):
+    def switch_off(self) -> None:
         """Close the valve."""
-        success = self.set_status(CONST.STATUS_OFF_INT)
-
-        if success:
-            self._state['status'] = CONST.STATUS_CLOSED
-
-        return success
+        self.set_status(int(STATUS.OFF))
+        self._state['status'] = STATUS.CLOSED
 
     @property
     def is_on(self):
@@ -34,7 +26,7 @@ class Valve(Switch):
 
         Assume switch is on.
         """
-        return self.status not in (CONST.STATUS_CLOSED, CONST.STATUS_OFFLINE)
+        return self.status not in (STATUS.CLOSED, STATUS.OFFLINE)
 
     @property
     def is_dimmable(self):

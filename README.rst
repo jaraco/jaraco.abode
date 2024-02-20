@@ -3,18 +3,18 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.abode.svg
 
-.. image:: https://github.com/jaraco/jaraco.abode/workflows/tests/badge.svg
+.. image:: https://github.com/jaraco/jaraco.abode/actions/workflows/main.yml/badge.svg
    :target: https://github.com/jaraco/jaraco.abode/actions?query=workflow%3A%22tests%22
    :alt: tests
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
-   :alt: Code style: Black
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Ruff
 
 .. image:: https://readthedocs.org/projects/jaracoabode/badge/?version=latest
    :target: https://jaracoabode.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/badge/skeleton-2023-informational
+.. image:: https://img.shields.io/badge/skeleton-2024-informational
    :target: https://blog.jaraco.com/skeleton
 
 A thin Python library for the Abode alarm API.

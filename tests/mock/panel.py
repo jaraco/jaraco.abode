@@ -1,10 +1,8 @@
 """Mock Abode Panel Response."""
 
-import jaraco.abode.helpers.constants as CONST
-
 
 def get_response_ok(
-    mode=CONST.MODE_STANDBY, battery=False, is_cellular=False, mac='00:11:22:33:44:55'
+    mode='standby', battery=False, is_cellular=False, mac='00:11:22:33:44:55'
 ):
     """Return panel response json."""
     return dict(
@@ -57,6 +55,6 @@ def get_response_ok(
     )
 
 
-def put_response_ok(area='1', mode=CONST.MODE_STANDBY):
+def put_response_ok(area='1', mode='standby'):
     """Return panel mode response json."""
     return dict(area=area, mode=mode)

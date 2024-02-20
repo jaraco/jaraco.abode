@@ -1,13 +1,12 @@
 """Mock Non-Existent Device."""
-import jaraco.abode.helpers.constants as CONST
+
+import jaraco.abode.devices.status as STATUS
 
 
 DEVICE_ID = 'RF:deadbeef'
 
 
-def device(
-    devid=DEVICE_ID, status=CONST.STATUS_ONLINE, low_battery=False, no_response=False
-):
+def device(devid=DEVICE_ID, status=STATUS.ONLINE, low_battery=False, no_response=False):
     """Unknown mock device."""
     return dict(
         id=devid,

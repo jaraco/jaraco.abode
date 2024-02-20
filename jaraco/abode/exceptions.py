@@ -5,13 +5,18 @@ import requests
 class Exception(builtins.Exception):
     """Class to throw general abode exception."""
 
-    def __init__(self, error, details=None):
-        # Call the base class constructor with the parameters it needs
-        super().__init__(error[1])
+    def __init__(self, error):
+        super().__init__(*error)
 
-        self.errcode = error[0]
-        self.message = error[1]
-        self.details = details
+    @property
+    def errcode(self):
+        code, _ = self.args
+        return code
+
+    @property
+    def message(self):
+        _, message = self.args
+        return message
 
 
 class AuthenticationException(Exception):

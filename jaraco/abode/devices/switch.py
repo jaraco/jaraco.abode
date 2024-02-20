@@ -1,33 +1,30 @@
 """Abode switch device."""
 
-from typing import Optional, Union, Iterable
+from typing import Tuple
 
-from ..helpers import constants as CONST
+from . import status as STATUS
 from . import base
 
 
 class Switch(base.Device):
     """Class to add switch functionality."""
 
-    implements: Optional[Union[str, Iterable[str]]] = CONST.TYPE_SWITCH
+    tags: Tuple[str, ...] = (
+        'switch',
+        'night_switch',
+        'power_switch_sensor',
+        'power_switch_meter',
+    )
 
     def switch_on(self):
         """Turn the switch on."""
-        success = self.set_status(CONST.STATUS_ON_INT)
-
-        if success:
-            self._state['status'] = CONST.STATUS_ON
-
-        return success
+        self.set_status(int(STATUS.ON))
+        self._state['status'] = STATUS.ON
 
     def switch_off(self):
         """Turn the switch off."""
-        success = self.set_status(CONST.STATUS_OFF_INT)
-
-        if success:
-            self._state['status'] = CONST.STATUS_OFF
-
-        return success
+        self.set_status(int(STATUS.OFF))
+        self._state['status'] = STATUS.OFF
 
     @property
     def is_on(self):
@@ -36,7 +33,7 @@ class Switch(base.Device):
 
         Assume switch is on.
         """
-        return self.status not in (CONST.STATUS_OFF, CONST.STATUS_OFFLINE)
+        return self.status not in (STATUS.OFF, STATUS.OFFLINE)
 
     @property
     def is_dimmable(self):

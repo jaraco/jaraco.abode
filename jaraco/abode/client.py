@@ -4,6 +4,7 @@ An Abode alarm Python library.
 
 import logging
 import uuid
+import functools
 
 from more_itertools import consume
 from requests_toolbelt import sessions
@@ -19,7 +20,6 @@ from .event_controller import EventController
 from .exceptions import AuthenticationException
 from .devices import alarm as ALARM
 from .helpers import urls
-from .helpers import constants as CONST
 from .helpers import errors as ERROR
 from .devices.base import Device
 from . import settings
@@ -56,9 +56,9 @@ class Client:
         self._username = username
         self._password = password
 
-        self._event_controller = EventController(self, url=CONST.SOCKETIO_URL)
+        self._event_controller = EventController(self)
 
-        self._default_alarm_mode = CONST.MODE_AWAY
+        self._default_alarm_mode = 'away'
 
         self._devices = None
 
@@ -235,26 +235,29 @@ class Client:
     def get_automations(self, refresh=False):
         """Get all automations."""
         if refresh or self._automations is None:
-            if self._automations is None:
-                # Set up the device libraries
-                self._automations = {}
-
-            log.info("Updating all automations...")
-            resp = self.send_request("get", urls.AUTOMATION)
-            log.debug("Get Automations Response: %s", resp.text)
-
-            for automation_ob in always_iterable(resp.json()):
-                # Attempt to reuse an existing automation object
-                automation = self._automations.get(str(automation_ob['id']))
-
-                # No existing automation, create a new one
-                if automation:
-                    automation.update(automation_ob)
-                else:
-                    automation = Automation(self, automation_ob)
-                    self._automations[automation.automation_id] = automation
+            self._update_all()
 
         return list(self._automations.values())
+
+    def _update_all(self):
+        if self._automations is None:
+            # Set up the device libraries
+            self._automations = {}
+
+        log.info("Updating all automations...")
+        resp = self.send_request("get", urls.AUTOMATION)
+        log.debug("Get Automations Response: %s", resp.text)
+
+        for state in always_iterable(resp.json()):
+            # Attempt to reuse an existing automation object
+            automation = self._automations.get(str(state['id']))
+
+            # No existing automation, create a new one
+            if automation:
+                automation.update(state)
+            else:
+                automation = Automation(state, self)
+                self._automations[automation.id] = automation
 
     def get_automation(self, automation_id, refresh=False):
         """Get a single automation."""
@@ -275,7 +278,7 @@ class Client:
 
     def set_default_mode(self, default_mode):
         """Set the default mode when alarms are turned 'on'."""
-        if default_mode.lower() not in (CONST.MODE_AWAY, CONST.MODE_HOME):
+        if default_mode.lower() not in ('away', 'home'):
             raise jaraco.abode.Exception(ERROR.INVALID_DEFAULT_ALARM_MODE)
 
         self._default_alarm_mode = default_mode.lower()
@@ -285,8 +288,17 @@ class Client:
         setting = settings.Setting.load(name.lower(), value, area)
         return self.send_request(method="put", path=setting.path, data=setting.data)
 
-    def send_request(self, method, path, headers=None, data=None, is_retry=False):
+    def send_request(self, method, path, headers=None, data=None):
         """Send requests to Abode."""
+        attempt = functools.partial(self._send_request, method, path, headers, data)
+        return jaraco.functools.retry_call(
+            attempt,
+            retries=1,
+            cleanup=self.login,
+            trap=(jaraco.abode.Exception),
+        )
+
+    def _send_request(self, method, path, headers, data):
         if not self._token:
             self.login()
 
@@ -303,13 +315,6 @@ class Client:
                 return response
         except RequestException:
             log.info("Abode connection reset...")
-
-        if not is_retry:
-            # Delete our current token and try again -- will force a login
-            # attempt.
-            self._token = None
-
-            return self.send_request(method, path, headers, data, True)
 
         raise jaraco.abode.Exception(ERROR.REQUEST)
 

@@ -4,7 +4,8 @@ import pytest
 
 import jaraco.abode
 from jaraco.abode.helpers import urls
-import jaraco.abode.helpers.constants as CONST
+import jaraco.abode.devices.status as STATUS
+from jaraco.abode.devices.light import ColorMode
 
 from .mock import login as LOGIN
 from .mock import oauth_claims as OAUTH_CLAIMS
@@ -23,17 +24,17 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -47,7 +48,7 @@ class TestHue:
 
         # Test our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert device.brightness == "0"
         assert device.color == (60, 57)  # (hue, saturation)
         assert device.color_temp == 6536
@@ -60,19 +61,19 @@ class TestHue:
         assert not device.is_on
 
         # Set up our direct device get url
-        device_url = urls.DEVICE.format(device_id=HUE.DEVICE_ID)
+        device_url = urls.DEVICE.format(id=HUE.DEVICE_ID)
 
         # Change device properties
         m.get(
             device_url,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_ON,
+                status=STATUS.ON,
                 level=45,
                 saturation=22,
                 hue=104,
                 color_temp=4000,
-                color_mode=CONST.COLOR_MODE_OFF,
+                color_mode=ColorMode.off,
                 low_battery=True,
                 no_response=True,
             ),
@@ -81,7 +82,7 @@ class TestHue:
         # Refesh device and test changes
         device.refresh()
 
-        assert device.status == CONST.STATUS_ON
+        assert device.status == STATUS.ON
         assert device.color == (104, 22)  # (hue, saturation)
         assert device.color_temp == 4000
         assert device.has_brightness
@@ -98,17 +99,17 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -122,7 +123,7 @@ class TestHue:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Set up control url response
@@ -130,33 +131,33 @@ class TestHue:
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=CONST.STATUS_ON_INT
+                devid=HUE.DEVICE_ID, status=int(STATUS.ON)
             ),
         )
 
         # Change the mode to "on"
-        assert device.switch_on()
-        assert device.status == CONST.STATUS_ON
+        device.switch_on()
+        assert device.status == STATUS.ON
         assert device.is_on
 
         # Change response
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=HUE.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 
         # Change the mode to "off"
-        assert device.switch_off()
-        assert device.status == CONST.STATUS_OFF
+        device.switch_off()
+        assert device.status == STATUS.OFF
         assert not device.is_on
 
         # Test that an invalid status response throws exception
         m.put(
             control_url,
             json=DEVICES.status_put_response_ok(
-                devid=HUE.DEVICE_ID, status=CONST.STATUS_OFF_INT
+                devid=HUE.DEVICE_ID, status=int(STATUS.OFF)
             ),
         )
 
@@ -169,17 +170,17 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -193,7 +194,7 @@ class TestHue:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
         assert device.color_temp == 6536
 
@@ -204,7 +205,7 @@ class TestHue:
         )
 
         # Change the color temp
-        assert device.set_color_temp(5554)
+        device.set_color_temp(5554)
         assert device.color_temp == 5554
 
         # Change response
@@ -214,7 +215,7 @@ class TestHue:
         )
 
         # Change the color to something that mismatches
-        assert device.set_color_temp(4436)
+        device.set_color_temp(4436)
 
         # Assert that the color is set to the response color
         assert device.color_temp == 4434
@@ -236,17 +237,17 @@ class TestHue:
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok(mode=CONST.MODE_STANDBY))
+        m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
             json=HUE.device(
                 devid=HUE.DEVICE_ID,
-                status=CONST.STATUS_OFF,
+                status=STATUS.OFF,
                 level=0,
                 saturation=57,
                 hue=60,
                 color_temp=6536,
-                color_mode=CONST.COLOR_MODE_ON,
+                color_mode=ColorMode.on,
                 low_battery=False,
                 no_response=False,
             ),
@@ -260,7 +261,7 @@ class TestHue:
 
         # Test that we have our device
         assert device is not None
-        assert device.status == CONST.STATUS_OFF
+        assert device.status == STATUS.OFF
         assert not device.is_on
         assert device.color == (60, 57)  # (hue, saturation)
 
@@ -271,7 +272,7 @@ class TestHue:
         )
 
         # Change the color temp
-        assert device.set_color((70, 80))
+        device.set_color((70, 80))
         assert device.color == (70, 80)  # (hue, saturation)
 
         # Change response
@@ -281,7 +282,7 @@ class TestHue:
         )
 
         # Change the color to something that mismatches
-        assert device.set_color((44, 44))
+        device.set_color((44, 44))
 
         # Assert that the color is set to the response color
         assert device.color == (55, 85)  # (hue, saturation)

@@ -1,6 +1,8 @@
 """Mock Abode Power Switch Sensor Device."""
-import jaraco.abode.helpers.constants as CONST
+
+import jaraco.abode.devices.status as STATUS
 from jaraco.abode.helpers import urls
+from jaraco.abode.devices.light import ColorMode
 
 DEVICE_ID = 'ZB:00000106'
 DEVICE_UUID = 'abcd33455232fff31232'
@@ -21,12 +23,12 @@ def color_post_response_ok(devid, hue, saturation):
 def device(
     devid=DEVICE_ID,
     uuid=DEVICE_UUID,
-    status=CONST.STATUS_OFF,
+    status=STATUS.OFF,
     level=0,
     saturation=57,
     hue=60,
     color_temp=6536,
-    color_mode=CONST.COLOR_MODE_OFF,
+    color_mode=ColorMode.off,
     low_battery=False,
     no_response=False,
 ):
@@ -85,7 +87,7 @@ def device(
             'level': str(int(level)),
             'switch': '1',
             'color_temp': int(color_temp),
-            'color_mode': str(int(color_mode)),
+            'color_mode': str(color_mode),
         },
         status_ex='',
         actions=[
