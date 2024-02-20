@@ -3,6 +3,8 @@
 import logging
 import warnings
 
+from typing import Any, Dict
+
 import jaraco.abode
 
 from ._itertools import single
@@ -27,7 +29,7 @@ class Automation(Stateful):
             method="patch", path=path, data={'enabled': enable}
         )
 
-        state = single(response.json())
+        state: Dict[str, Any] = single(response.json())
 
         if state['id'] != self._state['id'] or state['enabled'] != enable:
             raise jaraco.abode.Exception(ERROR.INVALID_AUTOMATION_EDIT_RESPONSE)
