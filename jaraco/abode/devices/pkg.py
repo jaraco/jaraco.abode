@@ -5,7 +5,7 @@ import importlib_resources as resources
 from bx_py_utils.compat import removesuffix
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def import_all():
     """Import all modules from this package."""
     device_mods = (
