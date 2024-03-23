@@ -3,8 +3,8 @@
 from jaraco.abode.helpers import urls
 
 from .mock import login as LOGIN
-from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
 from .mock.devices import lm as LM
 

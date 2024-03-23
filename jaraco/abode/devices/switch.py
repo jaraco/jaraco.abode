@@ -2,8 +2,8 @@
 
 from typing import Tuple
 
-from . import status as STATUS
 from . import base
+from . import status as STATUS
 
 
 class Switch(base.Device):

@@ -1,8 +1,8 @@
 """Mock Abode Power Switch Sensor Device."""
 
 import jaraco.abode.devices.status as STATUS
-from jaraco.abode.helpers import urls
 from jaraco.abode.devices.light import ColorMode
+from jaraco.abode.helpers import urls
 
 DEVICE_ID = 'ZB:00000106'
 DEVICE_UUID = 'abcd33455232fff31232'

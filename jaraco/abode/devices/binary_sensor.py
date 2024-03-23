@@ -1,7 +1,7 @@
 """Abode binary sensor device."""
 
-from . import status as STATUS
 from . import base
+from . import status as STATUS
 
 
 class BinarySensor(base.Device):

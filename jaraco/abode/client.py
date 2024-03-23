@@ -2,29 +2,28 @@
 An Abode alarm Python library.
 """
 
+import functools
 import logging
 import uuid
-import functools
 
 from more_itertools import consume
-from requests_toolbelt import sessions
 from requests.exceptions import RequestException
-from jaraco.net.http import cookies
-from jaraco.functools import retry
-from jaraco.itertools import always_iterable
-from jaraco.collections import Everything
+from requests_toolbelt import sessions
 
 import jaraco
+from jaraco.collections import Everything
+from jaraco.functools import retry
+from jaraco.itertools import always_iterable
+from jaraco.net.http import cookies
+
+from . import config, settings
 from .automation import Automation
+from .devices import alarm as ALARM
+from .devices.base import Device
 from .event_controller import EventController
 from .exceptions import AuthenticationException
-from .devices import alarm as ALARM
-from .helpers import urls
 from .helpers import errors as ERROR
-from .devices.base import Device
-from . import settings
-from . import config
-
+from .helpers import urls
 
 log = logging.getLogger(__name__)
 

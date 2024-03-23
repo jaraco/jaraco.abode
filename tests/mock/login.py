@@ -1,8 +1,6 @@
 """Mock Abode Login Response."""
 
-from . import AUTH_TOKEN
-from . import panel
-from . import user
+from . import AUTH_TOKEN, panel, user
 
 
 def post_response_ok(auth_token=AUTH_TOKEN, user_response=user.get_response_ok()):

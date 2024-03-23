@@ -1,12 +1,13 @@
 """Abode alarm device."""
 
-import logging
 import copy
+import logging
 
 import jaraco.abode
-from .switch import Switch
+
 from ..helpers import errors as ERROR
 from ..helpers import urls
+from .switch import Switch
 
 log = logging.getLogger(__name__)
 

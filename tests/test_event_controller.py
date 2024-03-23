@@ -1,22 +1,22 @@
 """Test the Abode event controller class."""
 
-from unittest.mock import call, Mock
+from unittest.mock import Mock, call
 
 import pytest
 
 import jaraco.abode
-from jaraco.abode.helpers import urls
 import jaraco.abode.devices.status as STATUS
 import jaraco.abode.helpers.timeline as TIMELINE
 from jaraco.abode.devices.binary_sensor import BinarySensor
+from jaraco.abode.helpers import urls
 
 from .mock import login as LOGIN
-from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
-from .mock.devices import secure_barrier as COVER
 from .mock.devices import door_contact as DOORCONTACT
 from .mock.devices import ir_camera as IRCAMERA
+from .mock.devices import secure_barrier as COVER
 
 
 class TestEventController:

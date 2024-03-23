@@ -3,12 +3,12 @@
 import functools
 import itertools
 
-from jaraco.abode.helpers import urls
 import jaraco.abode.devices.status as STATUS
+from jaraco.abode.helpers import urls
 
 from .mock import login as LOGIN
-from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
 from .mock.devices import door_contact as DOOR_CONTACT
 from .mock.devices import glass as GLASS

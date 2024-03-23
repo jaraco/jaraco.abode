@@ -9,18 +9,17 @@ import requests
 
 import jaraco.abode
 import jaraco.abode.devices.status as STATUS
+from jaraco.abode import config, settings
 from jaraco.abode.helpers import urls
-from jaraco.abode import settings
-from jaraco.abode import config
 
 from . import mock as MOCK
-from .mock import login as LOGIN
-from .mock import oauth_claims as OAUTH_CLAIMS
-from .mock import logout as LOGOUT
-from .mock import panel as PANEL
 from .mock import devices as DEVICES
-from .mock.devices import door_contact as DOOR_CONTACT
+from .mock import login as LOGIN
+from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import panel as PANEL
 from .mock import user as USER
+from .mock.devices import door_contact as DOOR_CONTACT
 
 
 @pytest.fixture(autouse=True)

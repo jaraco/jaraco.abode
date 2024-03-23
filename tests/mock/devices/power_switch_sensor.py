@@ -2,7 +2,6 @@
 
 import jaraco.abode.devices.status as STATUS
 
-
 DEVICE_ID = 'ZW:00000007'
 CONTROL_URL = 'api/v1/control/power_switch/' + DEVICE_ID
 

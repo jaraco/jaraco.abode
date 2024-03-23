@@ -1,6 +1,7 @@
 import urllib.parse
 
 import pytest
+
 import jaraco.abode
 
 
@@ -55,10 +56,6 @@ def app_paths(tmp_path, monkeypatch):
 @pytest.fixture
 def all_devices(m):
     # Set up URLs
-    import tests.mock.login
-    import tests.mock.oauth_claims
-    import tests.mock.logout
-    import tests.mock.panel
     import tests.mock.devices.door_contact
     import tests.mock.devices.door_lock
     import tests.mock.devices.glass
@@ -72,6 +69,10 @@ def all_devices(m):
     import tests.mock.devices.siren
     import tests.mock.devices.status_display
     import tests.mock.devices.water_sensor
+    import tests.mock.login
+    import tests.mock.logout
+    import tests.mock.oauth_claims
+    import tests.mock.panel
 
     m.post(jaraco.abode.helpers.urls.LOGIN, json=tests.mock.login.post_response_ok())
     m.get(

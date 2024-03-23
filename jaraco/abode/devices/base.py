@@ -2,14 +2,13 @@ import logging
 import warnings
 from typing import Tuple
 
+import jaraco.abode
 from jaraco.classes.ancestry import iter_subclasses
 
-import jaraco.abode
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from ..state import Stateful
 from . import pkg
-
 
 log = logging.getLogger(__name__)
 

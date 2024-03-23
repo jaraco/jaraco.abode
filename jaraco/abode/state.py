@@ -4,7 +4,6 @@ from jaraco.collections import DictAdapter, Projection
 
 from ._itertools import single
 
-
 log = logging.getLogger(__name__)
 
 

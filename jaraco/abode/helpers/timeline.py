@@ -3,8 +3,9 @@
 import csv
 
 from importlib_resources import files
-from jaraco.functools import invoke
+
 from jaraco.collections import RangeMap
+from jaraco.functools import invoke
 
 
 class Groups:

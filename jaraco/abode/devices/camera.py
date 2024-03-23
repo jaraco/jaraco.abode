@@ -7,12 +7,13 @@ from shutil import copyfileobj
 import requests
 
 import jaraco
+
 from .._itertools import single
-from . import status as STATUS
 from ..helpers import errors as ERROR
 from ..helpers import timeline as TIMELINE
 from ..helpers import urls
 from . import base
+from . import status as STATUS
 
 log = logging.getLogger(__name__)
 

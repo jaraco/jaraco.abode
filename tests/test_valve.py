@@ -3,14 +3,14 @@
 import pytest
 
 import jaraco.abode
-from jaraco.abode.helpers import urls
 import jaraco.abode.devices.status as STATUS
+from jaraco.abode.helpers import urls
 
-from .mock import login as LOGIN
-from .mock import oauth_claims as OAUTH_CLAIMS
-from .mock import logout as LOGOUT
-from .mock import panel as PANEL
 from .mock import devices as DEVICES
+from .mock import login as LOGIN
+from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import panel as PANEL
 from .mock.devices import valve as VALVE
 
 

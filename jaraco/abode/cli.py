@@ -1,22 +1,23 @@
 """Command-line interface."""
 
-import os
-import json
-import logging
-import time
 import argparse
 import contextlib
 import getpass
+import json
+import logging
+import os
+import time
 
 import keyring
-from jaraco.context import suppress
-from jaraco.functools import pass_none
 from more_itertools import always_iterable
 
 import jaraco.abode
+from jaraco.context import suppress
+from jaraco.functools import pass_none
+
 from . import Client
-from .helpers import urls
 from .helpers import timeline as TIMELINE
+from .helpers import urls
 
 log = logging.getLogger(__name__)
 

@@ -1,16 +1,16 @@
 """Test the Abode device classes."""
 
-import jaraco.abode
-from jaraco.abode.helpers import urls
 import pytest
 
-from . import mock as MOCK
-from .mock import login as LOGIN
-from .mock import oauth_claims as OAUTH_CLAIMS
-from .mock import logout as LOGOUT
-from .mock import panel as PANEL
-from .mock import automation as AUTOMATION
+import jaraco.abode
+from jaraco.abode.helpers import urls
 
+from . import mock as MOCK
+from .mock import automation as AUTOMATION
+from .mock import login as LOGIN
+from .mock import logout as LOGOUT
+from .mock import oauth_claims as OAUTH_CLAIMS
+from .mock import panel as PANEL
 
 AID_1 = '47fae27488f74f55b964a81a066c3a01'
 AID_2 = '47fae27488f74f55b964a81a066c3a02'

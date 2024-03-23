@@ -7,7 +7,6 @@ change to confirm this library can still communicate.
 
 from typing import Any, List
 
-
 EMPTY_DEVICE_RESPONSE: List[Any] = []
 
 

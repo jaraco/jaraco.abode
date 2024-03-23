@@ -4,10 +4,10 @@ import logging
 import math
 
 import jaraco.abode
+
 from ..helpers import errors as ERROR
 from ..helpers import urls
 from .switch import Switch
-
 
 log = logging.getLogger(__name__)
 

@@ -7,19 +7,18 @@ import re
 
 import pytest
 
+import jaraco.abode
+import jaraco.abode.devices.status as STATUS
+from jaraco.abode.helpers import urls
 from jaraco.collections import Projection
 
-import jaraco.abode
-from jaraco.abode.helpers import urls
-import jaraco.abode.devices.status as STATUS
 from . import mock as MOCK
-from .mock.devices import ipcam as IPCAM
-from .mock.devices import ir_camera as IRCAMERA
 from .mock import login as LOGIN
 from .mock import logout as LOGOUT
 from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
-
+from .mock.devices import ipcam as IPCAM
+from .mock.devices import ir_camera as IRCAMERA
 
 cam_types = {
     'device_type.ipcam': IPCAM,

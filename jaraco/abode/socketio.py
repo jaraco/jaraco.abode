@@ -1,24 +1,23 @@
 """Small SocketIO client via Websockets."""
 
 import collections
-import json
-import logging
-import threading
-import random
-import itertools
 import contextlib
 import datetime
+import itertools
+import json
+import logging
+import random
+import threading
 import urllib.parse
 
-from lomond import WebSocket
-from lomond import events
-from lomond.persist import persist
+from lomond import WebSocket, events
 from lomond.errors import WebSocketError
+from lomond.persist import persist
+
 import jaraco.collections
 
 from .exceptions import SocketIOException
 from .helpers import errors as ERRORS
-
 
 log = logging.getLogger(__name__)
 
