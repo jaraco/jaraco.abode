@@ -109,14 +109,18 @@ class Device(Stateful):
     @property
     def device_id(self):
         """Get the device id."""
-        warnings.warn("Device.device_id is deprecated. Use .id.", DeprecationWarning)
+        warnings.warn(
+            "Device.device_id is deprecated. Use .id.", DeprecationWarning, stacklevel=2
+        )
         return self.id
 
     @property
     def device_uuid(self):
         """Get the device uuid."""
         warnings.warn(
-            "Device.device_uuid is deprecated. Use .uuid.", DeprecationWarning
+            "Device.device_uuid is deprecated. Use .uuid.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         return self.uuid
 

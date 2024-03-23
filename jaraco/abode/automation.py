@@ -54,7 +54,9 @@ class Automation(Stateful):
     def automation_id(self):
         """Get the id of the automation."""
         warnings.warn(
-            "Automation.automation_id is deprecated. Use .id.", DeprecationWarning
+            "Automation.automation_id is deprecated. Use .id.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         return self.id
 
@@ -62,6 +64,8 @@ class Automation(Stateful):
     def is_enabled(self):
         """Return True if the automation is enabled."""
         warnings.warn(
-            "Automation.is_enabled is deprecated. Use .enabled.", DeprecationWarning
+            "Automation.is_enabled is deprecated. Use .enabled.",
+            DeprecationWarning,
+            stacklevel=2,
         )
         return self.enabled

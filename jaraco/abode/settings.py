@@ -179,8 +179,8 @@ class Setting(types.SimpleNamespace):
         matches = (subcl for subcl in cls.__subclasses__() if name in subcl.names)
         try:
             (match,) = matches
-        except ValueError:
-            raise jaraco.abode.Exception(ERROR.INVALID_SETTING)
+        except ValueError as err:
+            raise jaraco.abode.Exception(ERROR.INVALID_SETTING) from err
 
         ob = match(name=name, value=value, area=area)
         ob.validate()
