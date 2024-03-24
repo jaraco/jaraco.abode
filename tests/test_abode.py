@@ -67,9 +67,7 @@ class TestAbode:
 
     def test_auto_login(self, m):
         """Test that automatic login works."""
-        auth_token = MOCK.AUTH_TOKEN
-        user_json = USER.get_response_ok()
-        login_json = LOGIN.post_response_ok(auth_token, user_json)
+        login_json = LOGIN.post_response_ok()
         panel_json = PANEL.get_response_ok()
 
         m.post(urls.LOGIN, json=login_json)
@@ -88,7 +86,7 @@ class TestAbode:
         assert client._password == 'buzz'
         assert client._token == MOCK.AUTH_TOKEN
         assert client._panel == panel_json
-        assert client._user == user_json
+        assert client._user == USER.get_response_ok()
         assert client._devices is None
         assert client._automations is None
 
@@ -98,9 +96,7 @@ class TestAbode:
 
     def test_auto_fetch(self, m):
         """Test that automatic device and automation retrieval works."""
-        auth_token = MOCK.AUTH_TOKEN
-        user_json = USER.get_response_ok()
-        login_json = LOGIN.post_response_ok(auth_token, user_json)
+        login_json = LOGIN.post_response_ok()
         panel_json = PANEL.get_response_ok()
 
         m.post(urls.LOGIN, json=login_json)
@@ -121,7 +117,7 @@ class TestAbode:
         assert client._username == 'fizz'
         assert client._password == 'buzz'
         assert client._token == MOCK.AUTH_TOKEN
-        assert client._user == user_json
+        assert client._user == USER.get_response_ok()
         assert client._panel is not None
 
         # Contains one device, our alarm
@@ -207,9 +203,7 @@ class TestAbode:
 
     def test_full_setup(self, m):
         """Check that Abode is set up properly."""
-        auth_token = MOCK.AUTH_TOKEN
-        user_json = USER.get_response_ok()
-        login_json = LOGIN.post_response_ok(auth_token, user_json)
+        login_json = LOGIN.post_response_ok()
         panel_json = PANEL.get_response_ok()
 
         m.post(urls.LOGIN, json=login_json)
@@ -224,8 +218,8 @@ class TestAbode:
 
         assert self.client._username == USERNAME
         assert self.client._password == PASSWORD
-        assert self.client._token == auth_token
-        assert self.client._user == user_json
+        assert self.client._token == MOCK.AUTH_TOKEN
+        assert self.client._user == USER.get_response_ok()
         assert self.client._panel is not None
         assert self.client.get_alarm() is not None
         assert self.client._get_session() is not None

@@ -3,13 +3,13 @@
 from . import AUTH_TOKEN, panel, user
 
 
-def post_response_ok(auth_token=AUTH_TOKEN, user_response=user.get_response_ok()):
+def post_response_ok(auth_token=AUTH_TOKEN):
     """Return the successful login response json."""
     return dict(
         token=auth_token,
         expired_at='2017-06-05 00:14:12',
         initiate_screen='timeline',
-        user=user_response,
+        user=user.get_response_ok(),
         panel=panel.get_response_ok(),
         permissions=dict(
             premium_streaming='0',
