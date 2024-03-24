@@ -1,9 +1,12 @@
 """Mock Abode Panel Response."""
 
+from collections.abc import Mapping
+from typing import Any
+
 
 def get_response_ok(
     mode='standby', battery=False, is_cellular=False, mac='00:11:22:33:44:55'
-):
+) -> Mapping[str, Any]:
     """Return panel response json."""
     return dict(
         version='ABGW 0.0.2.17F ABGW-L1-XA36J 3.1.2.6.1 Z-Wave 3.95',
