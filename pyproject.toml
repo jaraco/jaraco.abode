@@ -1,5 +1,74 @@
 [build-system]
-requires = ["setuptools>=56", "setuptools_scm[toml]>=3.4.1"]
+requires = ["setuptools>=61.2", "setuptools_scm[toml]>=3.4.1"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "jaraco.abode"
+authors = [
+	{ name = "Wil Schrader", email = "wilrader@gmail.com" },
+]
+maintainers = [
+	{ name = "Jason R. Coombs", email = "jaraco@jaraco.com" },
+]
+description = "A library interfacing to the Abode home security system"
+readme = "README.rst"
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+	"License :: OSI Approved :: MIT License",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3 :: Only",
+]
+requires-python = ">=3.8"
+dependencies = [
+	"requests >= 2.12.4",
+	"lomond >= 0.3.3",
+	"colorlog >= 3.0.1",
+	"keyring",
+	"requests_toolbelt",
+	"jaraco.collections",
+	"jaraco.context",
+	"jaraco.classes",
+	"jaraco.net >= 9",
+	"more_itertools",
+	"importlib_resources >= 5.10",
+	"bx_py_utils",
+	"platformdirs",
+	"jaraco.itertools",
+	"jaraco.functools >= 3.6",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/jaraco/jaraco.abode"
+
+[project.optional-dependencies]
+testing = [
+	# upstream
+	"pytest >= 6",
+	"pytest-checkdocs >= 2.4",
+	"pytest-cov",
+	"pytest-mypy",
+	"pytest-enabler >= 2.2",
+	"pytest-ruff >= 0.2.1",
+
+	# local
+	"requests_mock",
+	"types-requests",
+	"jaraco.collections >= 4.1",
+]
+docs = [
+	# upstream
+	"sphinx >= 3.5",
+	"jaraco.packaging >= 9.3",
+	"rst.linker >= 1.9",
+	"furo",
+	"sphinx-lint",
+
+	# local
+]
+
+[project.scripts]
+abode = "jaraco.abode.cli:main"
 
 [tool.setuptools_scm]
