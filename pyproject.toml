@@ -45,7 +45,7 @@ Homepage = "https://github.com/jaraco/jaraco.abode"
 [project.optional-dependencies]
 testing = [
 	# upstream
-	"pytest >= 6",
+	"pytest >= 6, != 8.1.*",
 	"pytest-checkdocs >= 2.4",
 	"pytest-cov",
 	"pytest-mypy",
