@@ -1,0 +1,1 @@
+Restore support for details in SocketIOException, used in socketio module.

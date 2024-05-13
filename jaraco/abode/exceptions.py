@@ -39,3 +39,7 @@ class AuthenticationException(Exception):
 
 class SocketIOException(Exception):
     """Class to throw SocketIO Error exception."""
+
+    def __init__(self, error, details):
+        super().__init__(error)
+        self.details = details
