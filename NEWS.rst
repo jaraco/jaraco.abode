@@ -1,3 +1,12 @@
+v5.1.2
+======
+
+Bugfixes
+--------
+
+- Restore support for details in SocketIOException, used in socketio module. (#27)
+
+
 v5.1.1
 ======
 
