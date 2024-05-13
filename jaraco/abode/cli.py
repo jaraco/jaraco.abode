@@ -1,8 +1,10 @@
 """Command-line interface."""
 
 import argparse
+import code
 import contextlib
 import getpass
+import importlib
 import json
 import logging
 import os
@@ -108,6 +110,13 @@ def build_parser():
         metavar='device_id',
         help='Output one device for device_id',
         action='append',
+    )
+
+    parser.add_argument(
+        '--interact',
+        default=False,
+        action="store_true",
+        help="interact with the client after running other operations",
     )
 
     parser.add_argument(
@@ -271,6 +280,7 @@ class Dispatcher:
         self.print_all_devices()
         self.print_specific_devices()
         self.start_device_change_listener()
+        self.interact()
 
     def login(self):
         if not self.args.mfa:
@@ -278,6 +288,17 @@ class Dispatcher:
         self.client.login(mfa_code=self.args.mfa)
         # fetch devices from Abode
         self.client.get_devices()
+
+    def interact(self):
+        if not self.args.interact:
+            return
+
+        with contextlib.suppress(ImportError):
+            # Allow Up/Down/History in the console
+            importlib.import_module('readline')
+
+        banner = 'Interact with the Abode `client`.'
+        code.InteractiveConsole(dict(client=self.client)).interact(banner=banner)
 
     def output_current_mode(self):
         if not self.args.mode:
