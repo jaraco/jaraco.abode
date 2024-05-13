@@ -1,3 +1,12 @@
+v5.2.0
+======
+
+Features
+--------
+
+- Add support for interacting with the client.
+
+
 v5.1.2
 ======
 
