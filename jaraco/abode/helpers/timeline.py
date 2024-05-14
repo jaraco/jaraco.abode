@@ -52,6 +52,14 @@ event_code_mapping = RangeMap({
 """
 The best inferred code mapping based on observed events.
 Adjust as needed.
+
+>>> event_code_mapping[1100] == Groups.ALARM
+True
+>>> event_code_mapping[1199] == Groups.ALARM
+True
+>>> event_code_mapping[1400] == Groups.DISARM
+True
+>>> event_code_mapping.get(1700)
 """
 
 
