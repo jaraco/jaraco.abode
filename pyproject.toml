@@ -43,7 +43,7 @@ dynamic = ["version"]
 Homepage = "https://github.com/jaraco/jaraco.abode"
 
 [project.optional-dependencies]
-testing = [
+test = [
 	# upstream
 	"pytest >= 6, != 8.1.*",
 	"pytest-checkdocs >= 2.4",
@@ -57,7 +57,7 @@ testing = [
 	"types-requests",
 	"jaraco.collections >= 4.1",
 ]
-docs = [
+doc = [
 	# upstream
 	"sphinx >= 3.5",
 	"jaraco.packaging >= 9.3",
