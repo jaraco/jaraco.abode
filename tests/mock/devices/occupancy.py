@@ -1,0 +1,87 @@
+"""Mock Abode Occupancy Device."""
+
+import jaraco.abode.devices.status as STATUS
+
+DEVICE_ID = 'RF:00000001'
+
+
+def device(
+    devid=DEVICE_ID,
+    has_motion=False,
+    low_battery=False,
+    no_response=False,
+    out_of_order=False,
+    tampered=False,
+    uuid='87a31f855e684b1ab3b87e2d13e72465',
+):
+    """Occupancy sensor mock device."""
+
+    status = [STATUS.ONLINE, "Motion Detected!"][has_motion]
+    statuses = dict(motion=str(int(has_motion)))
+    return dict(
+        id=devid,
+        type_tag='device_type.povs',
+        type='Occupancy',
+        name='Vault motion',
+        area='1',
+        zone='6',
+        sort_order='',
+        is_window='',
+        bypass='0',
+        schar_24hr='0',
+        sresp_24hr="5",
+        sresp_mode_0='0',
+        sresp_entry_0='0',
+        sresp_exit_0='0',
+        group_name="Motion",
+        group_id="1156954",
+        default_group_id="1",
+        sort_id="1",
+        sresp_mode_1='5',
+        sresp_entry_1='4',
+        sresp_exit_1='0',
+        sresp_mode_2='0',
+        sresp_entry_2='0',
+        sresp_exit_2='0',
+        sresp_mode_3='0',
+        sresp_entry_3='0',
+        sresp_exit_3='0',
+        sresp_mode_4='0',
+        sresp_entry_4='0',
+        sresp_exit_4='0',
+        version='0001',
+        origin='abode',
+        has_subscription=None,
+        onboard="0",
+        s2_grnt_keys="",
+        s2_dsk="",
+        s2_propty="",
+        s2_keys_valid="",
+        zwave_secure_protocol="",
+        control_url='',
+        deep_link=None,
+        status_color='#5cb85c',
+        faults={
+            'low_battery': int(low_battery),
+            'tempered': int(tampered),
+            'supervision': 0,
+            'out_of_order': int(out_of_order),
+            'no_response': int(no_response),
+            'jammed': 0,
+            'zwave_fault': 0,
+        },
+        status=status,
+        status_display=status,
+        statuses=statuses,
+        status_ex='',
+        actions=[],
+        status_icons=[],
+        icon='assets/icons/occupancy-sensor.svg',
+        sresp_trigger="0",
+        sresp_restore="0",
+        occupancy_timer="30",
+        sensitivity="4",
+        model="L1",
+        is_motion_sensor=False,
+        uuid=uuid,
+    )
