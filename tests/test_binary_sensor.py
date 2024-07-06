@@ -13,6 +13,7 @@ from .mock import panel as PANEL
 from .mock.devices import door_contact as DOOR_CONTACT
 from .mock.devices import glass as GLASS
 from .mock.devices import keypad as KEYPAD
+from .mock.devices import occupancy as OCCUPANCY
 from .mock.devices import remote_controller as REMOTE_CONTROLLER
 from .mock.devices import siren as SIREN
 from .mock.devices import status_display as STATUS_DISPLAY
@@ -50,6 +51,7 @@ class TestBinarySensors:
                 low_battery=False,
                 no_response=False,
             ),
+            OCCUPANCY.device(),
             REMOTE_CONTROLLER.device(
                 devid=REMOTE_CONTROLLER.DEVICE_ID,
                 status=STATUS.OFFLINE,
@@ -104,6 +106,11 @@ class TestBinarySensors:
             KEYPAD.device(
                 devid=KEYPAD.DEVICE_ID,
                 status=STATUS.ONLINE,
+                low_battery=True,
+                no_response=True,
+            ),
+            OCCUPANCY.device(
+                has_motion=True,
                 low_battery=True,
                 no_response=True,
             ),
