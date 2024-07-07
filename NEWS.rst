@@ -1,3 +1,12 @@
+v5.2.1
+======
+
+Bugfixes
+--------
+
+- Restored specialized 'is_on' behavior to base BinarySensor for home-assistant/core#121300.
+
+
 v5.2.0
 ======
 
