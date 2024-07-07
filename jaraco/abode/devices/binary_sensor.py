@@ -14,6 +14,8 @@ class BinarySensor(base.Device):
 
         Assume offline or open (worst case).
         """
+        if self.type == 'Occupancy':
+            return self.status not in STATUS.ONLINE
         return self.status not in (
             STATUS.OFF,
             STATUS.OFFLINE,
@@ -43,9 +45,7 @@ class Motion(BinarySensor):
 
 
 class Occupancy(BinarySensor):
-    @property
-    def is_on(self):
-        return self.status not in STATUS.ONLINE
+    pass
 
 
 class Door(BinarySensor):
