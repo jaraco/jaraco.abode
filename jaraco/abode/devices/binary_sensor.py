@@ -36,10 +36,6 @@ class Connectivity(BinarySensor):
     )
 
 
-class Moisture(BinarySensor):
-    pass
-
-
 class Motion(BinarySensor):
     pass
 
