@@ -1,0 +1,1 @@
+Restored specialized 'is_on' behavior to base BinarySensor for home-assistant/core#121300.
