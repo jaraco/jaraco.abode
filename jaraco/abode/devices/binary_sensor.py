@@ -37,7 +37,30 @@ class Connectivity(BinarySensor):
 
 
 class Motion(BinarySensor):
-    pass
+    # These device types are all considered 'occupancy' but could apparently
+    # also be multi-sensors based on their state.
+    tags = (
+        'room_sensor',
+        'temperature_sensor',
+        # LM = LIGHT MOTION?
+        'lm',
+        'pir',
+        'povs',
+    )
+
+    @classmethod
+    def specialize(cls, state):
+        from . import sensor
+
+        new_type = (
+            sensor.Sensor
+            if sensor.Sensor.is_sensor(state)
+            else Occupancy
+            if state.get('version', '').startswith('MINIPIR')
+            else cls
+        )
+        state['generic_type'] = new_type.__name__.lower()
+        return new_type
 
 
 class Occupancy(BinarySensor):

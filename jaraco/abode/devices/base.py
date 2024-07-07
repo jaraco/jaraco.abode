@@ -124,23 +124,6 @@ class Device(Stateful):
         )
         return self.uuid
 
-    @staticmethod
-    def resolve_type_unknown(state):
-        if state['generic_type'] != 'unknown':
-            return
-
-        from .sensor import Sensor
-
-        if Sensor.is_sensor(state):
-            state['generic_type'] = 'sensor'
-            return
-
-        version = state.get('version', '')
-
-        state['generic_type'] = (
-            'occupancy' if version.startswith('MINIPIR') else 'motion'
-        )
-
     @classmethod
     def new(cls, state, client):
         """Create new device object for the given type."""
@@ -151,9 +134,9 @@ class Device(Stateful):
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
         state['generic_type'] = cls.get_generic_type(type_tag)
-        cls.resolve_type_unknown(state)
-        sensor = cls.by_type().get(state['generic_type'], lambda *args: None)
-        return sensor(state, client)
+        init_cls = cls.by_type().get(state['generic_type'], Unknown)
+        spec_cls = init_cls.specialize(state)
+        return spec_cls(state, client)
 
     @classmethod
     def by_type(cls):
@@ -166,15 +149,12 @@ class Device(Stateful):
             for sub_cls in iter_subclasses(cls)
             for tag in sub_cls.tags
         }
-        # These device types are all considered 'occupancy' but could apparently
-        # also be multi-sensors based on their state.
-        unknowns = (
-            'room_sensor',
-            'temperature_sensor',
-            # LM = LIGHT MOTION?
-            'lm',
-            'pir',
-            'povs',
-        )
-        lookup.update((f'device_type.{unknown}', 'unknown') for unknown in unknowns)
         return lookup.get(type_tag.lower())
+
+    @classmethod
+    def specialize(cls, state):
+        return cls
+
+
+class Unknown(Device):
+    pass
