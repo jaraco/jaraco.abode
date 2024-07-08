@@ -52,9 +52,7 @@ class Motion(BinarySensor):
     def specialize(cls, state):
         from . import sensor
 
-        new_type = sensor.Sensor if sensor.Sensor.is_sensor(state) else cls
-        state['generic_type'] = new_type.__name__.lower()
-        return new_type
+        return sensor.Sensor if sensor.Sensor.is_sensor(state) else cls
 
 
 class Door(BinarySensor):

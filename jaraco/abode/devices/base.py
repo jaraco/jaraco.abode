@@ -133,9 +133,9 @@ class Device(Stateful):
         except KeyError as exc:
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
-        state['generic_type'] = cls.get_generic_type(type_tag)
-        init_cls = cls.by_type().get(state['generic_type'], Unknown)
+        init_cls = cls.resolve_class(type_tag)
         spec_cls = init_cls.specialize(state)
+        state['generic_type'] = spec_cls.__name__.lower()
         return spec_cls(state, client)
 
     @classmethod
@@ -143,13 +143,13 @@ class Device(Stateful):
         return {sub_cls.__name__.lower(): sub_cls for sub_cls in iter_subclasses(cls)}
 
     @classmethod
-    def get_generic_type(cls, type_tag):
+    def resolve_class(cls, type_tag):
         lookup = {
-            f'device_type.{tag}': sub_cls.__name__.lower()
+            f'device_type.{tag}': sub_cls
             for sub_cls in iter_subclasses(cls)
             for tag in sub_cls.tags
         }
-        return lookup.get(type_tag.lower())
+        return lookup.get(type_tag.lower(), Unknown)
 
     @classmethod
     def specialize(cls, state):
