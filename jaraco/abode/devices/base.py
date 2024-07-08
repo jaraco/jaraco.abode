@@ -135,8 +135,11 @@ class Device(Stateful):
 
         init_cls = cls.resolve_class(type_tag)
         spec_cls = init_cls.specialize(state)
-        state['generic_type'] = spec_cls.__name__.lower()
         return spec_cls(state, client)
+
+    @property
+    def generic_type(self):
+        return self.__class__.__name__.lower()
 
     @classmethod
     def by_type(cls):

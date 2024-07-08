@@ -25,7 +25,6 @@ def device(devid=DEVICE_ID, status=STATUS.OPEN, low_battery=False, no_response=F
             'out_of_order': 0,
             'no_response': int(no_response),
         },
-        generic_type='valve',
         group_id='xxxxx',
         group_name='Water leak',
         has_subscription=None,
