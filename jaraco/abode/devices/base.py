@@ -17,6 +17,11 @@ class Device(Stateful):
     """Class to represent each Abode device."""
 
     tags: Tuple[str, ...] = ()
+    """
+    Each device has a ``type_tag``, something like "device_type.door_lock".
+    Each Device subclass declares the tags that it services (with the
+    "device_type." prefix omitted).
+    """
     _desc_t = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
     _url_t = urls.DEVICE
 
@@ -124,23 +129,6 @@ class Device(Stateful):
         )
         return self.uuid
 
-    @staticmethod
-    def resolve_type_unknown(state):
-        if state['generic_type'] != 'unknown':
-            return
-
-        from .sensor import Sensor
-
-        if Sensor.is_sensor(state):
-            state['generic_type'] = 'sensor'
-            return
-
-        version = state.get('version', '')
-
-        state['generic_type'] = (
-            'occupancy' if version.startswith('MINIPIR') else 'motion'
-        )
-
     @classmethod
     def new(cls, state, client):
         """Create new device object for the given type."""
@@ -150,31 +138,29 @@ class Device(Stateful):
         except KeyError as exc:
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
-        state['generic_type'] = cls.get_generic_type(type_tag)
-        cls.resolve_type_unknown(state)
-        sensor = cls.by_type().get(state['generic_type'], lambda *args: None)
-        return sensor(state, client)
+        return cls.resolve_class(type_tag).specialize(state)(state, client)
+
+    @property
+    def generic_type(self):
+        return self.__class__.__name__.lower()
 
     @classmethod
     def by_type(cls):
         return {sub_cls.__name__.lower(): sub_cls for sub_cls in iter_subclasses(cls)}
 
     @classmethod
-    def get_generic_type(cls, type_tag):
+    def resolve_class(cls, type_tag):
         lookup = {
-            f'device_type.{tag}': sub_cls.__name__.lower()
+            f'device_type.{tag}': sub_cls
             for sub_cls in iter_subclasses(cls)
             for tag in sub_cls.tags
         }
-        # These device types are all considered 'occupancy' but could apparently
-        # also be multi-sensors based on their state.
-        unknowns = (
-            'room_sensor',
-            'temperature_sensor',
-            # LM = LIGHT MOTION?
-            'lm',
-            'pir',
-            'povs',
-        )
-        lookup.update((f'device_type.{unknown}', 'unknown') for unknown in unknowns)
-        return lookup.get(type_tag.lower())
+        return lookup.get(type_tag.lower(), Unknown)
+
+    @classmethod
+    def specialize(cls, state):
+        return cls
+
+
+class Unknown(Device):
+    pass

@@ -36,16 +36,23 @@ class Connectivity(BinarySensor):
     )
 
 
-class Moisture(BinarySensor):
-    pass
-
-
 class Motion(BinarySensor):
-    pass
+    # These device types are all considered 'occupancy' but could apparently
+    # also be multi-sensors based on their state.
+    tags = (
+        'room_sensor',
+        'temperature_sensor',
+        # LM = LIGHT MOTION?
+        'lm',
+        'pir',
+        'povs',
+    )
 
+    @classmethod
+    def specialize(cls, state):
+        from . import sensor
 
-class Occupancy(BinarySensor):
-    pass
+        return sensor.Sensor if sensor.Sensor.is_sensor(state) else cls
 
 
 class Door(BinarySensor):

@@ -19,7 +19,7 @@ from jaraco.net.http import cookies
 from . import config, settings
 from .automation import Automation
 from .devices import alarm as ALARM
-from .devices.base import Device
+from .devices.base import Device, Unknown
 from .event_controller import EventController
 from .exceptions import AuthenticationException
 from .helpers import errors as ERROR
@@ -212,7 +212,7 @@ class Client:
     def _create_new_device(self, doc):
         device = Device.new(doc, self)
 
-        if not device:
+        if isinstance(device, Unknown):
             log.debug("Skipping unknown device: %s", doc)
             return
 
