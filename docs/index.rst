@@ -9,6 +9,7 @@ Welcome to |project| documentation!
    :maxdepth: 1
 
    history
+   developing
    api
 
 
