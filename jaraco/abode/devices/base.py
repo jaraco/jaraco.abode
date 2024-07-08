@@ -17,6 +17,11 @@ class Device(Stateful):
     """Class to represent each Abode device."""
 
     tags: Tuple[str, ...] = ()
+    """
+    Each device has a ``type_tag``, something like "device_type.door_lock".
+    Each Device subclass declares the tags that it services (with the
+    "device_type." prefix omitted).
+    """
     _desc_t = '{name} (ID: {id}, UUID: {uuid}) - {type} - {status}'
     _url_t = urls.DEVICE
 
