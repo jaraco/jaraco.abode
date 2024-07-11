@@ -150,9 +150,13 @@ class Device(Stateful):
 
     @classmethod
     def resolve_class(cls, type_tag):
+        """
+        >>> Device.resolve_class('device_type.povs')
+        <class 'jaraco.abode.devices.binary_sensor.Motion'>
+        """
         lookup = {
             f'device_type.{tag}': sub_cls
-            for sub_cls in iter_subclasses(cls)
+            for sub_cls in reversed(tuple(iter_subclasses(cls)))
             for tag in sub_cls.tags
         }
         return lookup.get(type_tag.lower(), Unknown)

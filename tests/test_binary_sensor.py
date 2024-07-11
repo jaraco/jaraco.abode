@@ -4,6 +4,7 @@ import functools
 import itertools
 
 import jaraco.abode.devices.status as STATUS
+from jaraco.abode.devices import base
 from jaraco.abode.helpers import urls
 
 from .mock import login as LOGIN
@@ -147,6 +148,11 @@ class TestBinarySensors:
             assert device.is_on, device.type + " is_on failed"
             assert device.battery_low, device.type + " battery_low failed"
             assert device.no_response, device.type + " no_response failed"
+
+
+def test_binary_sensor_classes():
+    device = base.Device.new(OCCUPANCY.device(), None)
+    assert device.generic_type == 'motion'
 
 
 def is_alarm(device):
