@@ -2,7 +2,7 @@
 
 import jaraco.abode.devices.status as STATUS
 
-DEVICE_ID = 'RF:00000001'
+DEVICE_ID = 'RF:00000320'
 
 
 def device(
