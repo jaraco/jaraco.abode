@@ -14,8 +14,6 @@ class BinarySensor(base.Device):
 
         Assume offline or open (worst case).
         """
-        if self.type == 'Occupancy':
-            return self.status not in STATUS.ONLINE
         return self.status not in (
             STATUS.OFF,
             STATUS.OFFLINE,
@@ -37,22 +35,16 @@ class Connectivity(BinarySensor):
 
 
 class Motion(BinarySensor):
-    # These device types are all considered 'occupancy' but could apparently
-    # also be multi-sensors based on their state.
     tags = (
-        'room_sensor',
-        'temperature_sensor',
-        # LM = LIGHT MOTION?
-        'lm',
         'pir',
         'povs',
     )
 
-    @classmethod
-    def specialize(cls, state):
-        from . import sensor
-
-        return sensor.Sensor if sensor.Sensor.is_sensor(state) else cls
+    @property
+    def is_on(self):
+        if self.type == 'Occupancy':
+            return self.status not in STATUS.ONLINE
+        return super().is_on
 
 
 class Door(BinarySensor):

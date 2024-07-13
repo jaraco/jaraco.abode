@@ -2,18 +2,13 @@
 
 import re
 
-from .binary_sensor import BinarySensor
+from . import base
 
 
-class Sensor(BinarySensor):
+class Sensor(base.Device):
     """Class to represent a sensor device."""
 
-    keys = {'temperature', 'humidity', 'lux'}
-
-    @classmethod
-    def is_sensor(cls, state):
-        statuses = state.get('statuses', {})
-        return any(key in statuses for key in cls.keys)
+    tags = ('lm',)
 
     def _get_status(self, key):
         return self._state.get('statuses', {}).get(key)
