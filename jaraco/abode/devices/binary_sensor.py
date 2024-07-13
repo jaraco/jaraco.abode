@@ -42,17 +42,9 @@ class Motion(BinarySensor):
     tags = (
         'room_sensor',
         'temperature_sensor',
-        # LM = LIGHT MOTION?
-        'lm',
         'pir',
         'povs',
     )
-
-    @classmethod
-    def specialize(cls, state):
-        from . import sensor
-
-        return sensor.Sensor if sensor.Sensor.is_sensor(state) else cls
 
 
 class Door(BinarySensor):

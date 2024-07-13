@@ -138,7 +138,7 @@ class Device(Stateful):
         except KeyError as exc:
             raise jaraco.abode.Exception(ERROR.UNABLE_TO_MAP_DEVICE) from exc
 
-        return cls.resolve_class(type_tag).specialize(state)(state, client)
+        return cls.resolve_class(type_tag)(state, client)
 
     @property
     def generic_type(self):
@@ -160,10 +160,6 @@ class Device(Stateful):
             for tag in sub_cls.tags
         }
         return lookup.get(type_tag.lower(), Unknown)
-
-    @classmethod
-    def specialize(cls, state):
-        return cls
 
 
 class Unknown(Device):
