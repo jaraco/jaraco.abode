@@ -38,8 +38,6 @@ class Connectivity(BinarySensor):
 
 class Motion(BinarySensor):
     tags = (
-        'room_sensor',
-        'temperature_sensor',
         'pir',
         'povs',
     )
