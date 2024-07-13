@@ -200,21 +200,12 @@ class TestDevice:
         dev_list = [
             POWERSENSOR.device(
                 devid='ps1',
-                status=STATUS.OFF,
-                low_battery=False,
-                no_response=False,
             ),
             POWERSENSOR.device(
                 devid='ps2',
-                status=STATUS.OFF,
-                low_battery=False,
-                no_response=False,
             ),
             GLASS.device(
                 devid='gb1',
-                status=STATUS.OFF,
-                low_battery=False,
-                no_response=False,
             ),
         ]
 
@@ -266,12 +257,7 @@ class TestDevice:
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
-            json=POWERSENSOR.device(
-                devid=POWERSENSOR.DEVICE_ID,
-                status=STATUS.OFF,
-                low_battery=False,
-                no_response=False,
-            ),
+            json=POWERSENSOR.device(),
         )
 
         # Logout to reset everything
@@ -345,12 +331,7 @@ class TestDevice:
         # TODO: Test with a device that supports levels
         m.get(
             urls.DEVICES,
-            json=POWERSENSOR.device(
-                devid=POWERSENSOR.DEVICE_ID,
-                status=STATUS.OFF,
-                low_battery=False,
-                no_response=False,
-            ),
+            json=POWERSENSOR.device(),
         )
 
         # Logout to reset everything

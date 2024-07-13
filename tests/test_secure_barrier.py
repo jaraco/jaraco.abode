@@ -21,15 +21,7 @@ class TestSecureBarrier:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -52,8 +44,6 @@ class TestSecureBarrier:
         m.get(
             device_url,
             json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.OPEN,
                 low_battery=True,
                 no_response=True,
             ),
@@ -77,12 +67,7 @@ class TestSecureBarrier:
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
+            json=COVER.device(status=STATUS.CLOSED),
         )
 
         # Logout to reset everything

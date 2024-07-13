@@ -24,15 +24,7 @@ class TestDoorLock:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=DOOR_LOCK.device(
-                devid=DOOR_LOCK.DEVICE_ID,
-                status=STATUS.Lock.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=DOOR_LOCK.device())
 
         # Logout to reset everything
         self.client.logout()
@@ -54,7 +46,6 @@ class TestDoorLock:
         m.get(
             device_url,
             json=DOOR_LOCK.device(
-                devid=DOOR_LOCK.DEVICE_ID,
                 status=STATUS.Lock.OPEN,
                 low_battery=True,
                 no_response=True,
@@ -76,15 +67,7 @@ class TestDoorLock:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=DOOR_LOCK.device(
-                devid=DOOR_LOCK.DEVICE_ID,
-                status=STATUS.Lock.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=DOOR_LOCK.device())
 
         # Logout to reset everything
         self.client.logout()

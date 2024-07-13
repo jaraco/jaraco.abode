@@ -29,15 +29,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -63,15 +55,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -94,15 +78,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -128,15 +104,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -168,15 +136,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -247,15 +207,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -364,15 +316,7 @@ class TestEventController:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=COVER.device(status=STATUS.CLOSED))
 
         # Logout to reset everything
         self.client.logout()
@@ -432,13 +376,8 @@ class TestEventController:
         m.get(
             urls.DEVICES,
             json=[
-                COVER.device(
-                    devid=COVER.DEVICE_ID,
-                    status=STATUS.CLOSED,
-                    low_battery=False,
-                    no_response=False,
-                ),
-                DOORCONTACT.device(devid=DOORCONTACT.DEVICE_ID, status=STATUS.CLOSED),
+                COVER.device(status=STATUS.CLOSED),
+                DOORCONTACT.device(status=STATUS.CLOSED),
             ],
         )
 
@@ -463,21 +402,10 @@ class TestEventController:
 
         # Set up device update URLs
         cover_url = urls.DEVICE.format(id=COVER.DEVICE_ID)
-        m.get(
-            cover_url,
-            json=COVER.device(
-                devid=COVER.DEVICE_ID,
-                status=STATUS.OPEN,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(cover_url, json=COVER.device(status=STATUS.OPEN))
 
         door_url = urls.DEVICE.format(id=DOORCONTACT.DEVICE_ID)
-        m.get(
-            door_url,
-            json=DOORCONTACT.device(devid=COVER.DEVICE_ID, status=STATUS.OPEN),
-        )
+        m.get(door_url, json=DOORCONTACT.device(status=STATUS.OPEN))
 
         # Call our device callback method for our cover
 

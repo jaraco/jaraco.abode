@@ -26,13 +26,7 @@ class TestDimmer:
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
-            json=DIMMER.device(
-                devid=DIMMER.DEVICE_ID,
-                status=STATUS.OFF,
-                level=0,
-                low_battery=False,
-                no_response=False,
-            ),
+            json=DIMMER.device(),
         )
 
         # Logout to reset everything
@@ -60,7 +54,6 @@ class TestDimmer:
         m.get(
             device_url,
             json=DIMMER.device(
-                devid=DIMMER.DEVICE_ID,
                 status=STATUS.ON,
                 level=87,
                 low_battery=True,
@@ -86,13 +79,7 @@ class TestDimmer:
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
-            json=DIMMER.device(
-                devid=DIMMER.DEVICE_ID,
-                status=STATUS.OFF,
-                level=0,
-                low_battery=False,
-                no_response=False,
-            ),
+            json=DIMMER.device(),
         )
 
         # Logout to reset everything

@@ -28,15 +28,7 @@ class TestHue:
         m.get(
             urls.DEVICES,
             json=HUE.device(
-                devid=HUE.DEVICE_ID,
-                status=STATUS.OFF,
-                level=0,
-                saturation=57,
-                hue=60,
-                color_temp=6536,
                 color_mode=ColorMode.on,
-                low_battery=False,
-                no_response=False,
             ),
         )
 
@@ -67,13 +59,11 @@ class TestHue:
         m.get(
             device_url,
             json=HUE.device(
-                devid=HUE.DEVICE_ID,
                 status=STATUS.ON,
                 level=45,
                 saturation=22,
                 hue=104,
                 color_temp=4000,
-                color_mode=ColorMode.off,
                 low_battery=True,
                 no_response=True,
             ),
@@ -100,20 +90,7 @@ class TestHue:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=HUE.device(
-                devid=HUE.DEVICE_ID,
-                status=STATUS.OFF,
-                level=0,
-                saturation=57,
-                hue=60,
-                color_temp=6536,
-                color_mode=ColorMode.on,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=HUE.device(color_mode=ColorMode.on))
 
         # Logout to reset everything
         self.client.logout()
@@ -171,20 +148,7 @@ class TestHue:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=HUE.device(
-                devid=HUE.DEVICE_ID,
-                status=STATUS.OFF,
-                level=0,
-                saturation=57,
-                hue=60,
-                color_temp=6536,
-                color_mode=ColorMode.on,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=HUE.device(color_mode=ColorMode.on))
 
         # Logout to reset everything
         self.client.logout()
@@ -238,20 +202,7 @@ class TestHue:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=HUE.device(
-                devid=HUE.DEVICE_ID,
-                status=STATUS.OFF,
-                level=0,
-                saturation=57,
-                hue=60,
-                color_temp=6536,
-                color_mode=ColorMode.on,
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=HUE.device(color_mode=ColorMode.on))
 
         # Logout to reset everything
         self.client.logout()

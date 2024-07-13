@@ -34,49 +34,24 @@ class TestBinarySensors:
 
         # Set up all Binary Sensor Devices in "off states"
         all_devices = [
-            DOOR_CONTACT.device(
-                devid=DOOR_CONTACT.DEVICE_ID,
-                status=STATUS.CLOSED,
-                low_battery=False,
-                no_response=False,
-            ),
+            DOOR_CONTACT.device(),
             GLASS.device(
-                devid=GLASS.DEVICE_ID,
                 status=STATUS.OFFLINE,
-                low_battery=False,
-                no_response=False,
             ),
             KEYPAD.device(
-                devid=KEYPAD.DEVICE_ID,
                 status=STATUS.OFFLINE,
-                low_battery=False,
-                no_response=False,
             ),
             OCCUPANCY.device(),
             REMOTE_CONTROLLER.device(
-                devid=REMOTE_CONTROLLER.DEVICE_ID,
                 status=STATUS.OFFLINE,
-                low_battery=False,
-                no_response=False,
             ),
             SIREN.device(
-                devid=SIREN.DEVICE_ID,
                 status=STATUS.OFFLINE,
-                low_battery=False,
-                no_response=False,
             ),
             STATUS_DISPLAY.device(
-                devid=STATUS_DISPLAY.DEVICE_ID,
                 status=STATUS.OFFLINE,
-                low_battery=False,
-                no_response=False,
             ),
-            WATER_SENSOR.device(
-                devid=WATER_SENSOR.DEVICE_ID,
-                status=STATUS.OFFLINE,
-                low_battery=False,
-                no_response=False,
-            ),
+            WATER_SENSOR.device(),
         ]
 
         m.get(urls.DEVICES, json=all_devices)
@@ -93,20 +68,15 @@ class TestBinarySensors:
         # Set up all Binary Sensor Devices in "off states"
         all_devices = [
             DOOR_CONTACT.device(
-                devid=DOOR_CONTACT.DEVICE_ID,
                 status=STATUS.OPEN,
                 low_battery=True,
                 no_response=True,
             ),
             GLASS.device(
-                devid=GLASS.DEVICE_ID,
-                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             KEYPAD.device(
-                devid=KEYPAD.DEVICE_ID,
-                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
@@ -116,26 +86,19 @@ class TestBinarySensors:
                 no_response=True,
             ),
             REMOTE_CONTROLLER.device(
-                devid=REMOTE_CONTROLLER.DEVICE_ID,
-                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             SIREN.device(
-                devid=SIREN.DEVICE_ID,
-                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             STATUS_DISPLAY.device(
-                devid=STATUS_DISPLAY.DEVICE_ID,
-                status=STATUS.ONLINE,
                 low_battery=True,
                 no_response=True,
             ),
             WATER_SENSOR.device(
-                devid=WATER_SENSOR.DEVICE_ID,
-                status=STATUS.ONLINE,
+                status=STATUS.ON,
                 low_battery=True,
                 no_response=True,
             ),

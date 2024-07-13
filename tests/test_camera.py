@@ -28,18 +28,8 @@ cam_types = {
 
 def all_devices():
     return [
-        IRCAMERA.device(
-            devid=IRCAMERA.DEVICE_ID,
-            status=STATUS.ONLINE,
-            low_battery=False,
-            no_response=False,
-        ),
-        IPCAM.device(
-            devid=IPCAM.DEVICE_ID,
-            status=STATUS.ONLINE,
-            low_battery=False,
-            no_response=False,
-        ),
+        IRCAMERA.device(),
+        IPCAM.device(),
     ]
 
 
@@ -82,7 +72,6 @@ class TestCamera:
             m.get(
                 device_url,
                 json=cam_type.device(
-                    devid=cam_type.DEVICE_ID,
                     status=STATUS.OFFLINE,
                     low_battery=True,
                     no_response=True,

@@ -19,18 +19,7 @@ class TestLM:
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
-        m.get(
-            urls.DEVICES,
-            json=LM.device(
-                devid=LM.DEVICE_ID,
-                status='72 °F',
-                temp='72 °F',
-                lux='14 lx',
-                humidity='34 %',
-                low_battery=False,
-                no_response=False,
-            ),
-        )
+        m.get(urls.DEVICES, json=LM.device(lux='14 lx', humidity='34 %'))
 
         # Logout to reset everything
         self.client.logout()
@@ -60,7 +49,6 @@ class TestLM:
         m.get(
             device_url,
             json=LM.device(
-                devid=LM.DEVICE_ID,
                 status='12 °C',
                 temp='12 °C',
                 lux='100 lx',
@@ -96,13 +84,10 @@ class TestLM:
         m.get(
             urls.DEVICES,
             json=LM.device(
-                devid=LM.DEVICE_ID,
                 status='72.23 °F',
                 temp='72.23 °F',
                 lux='14.11 lx',
                 humidity='34.38 %',
-                low_battery=False,
-                no_response=False,
             ),
         )
 
@@ -136,9 +121,7 @@ class TestLM:
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
-            json=LM.device(
-                devid=LM.DEVICE_ID, status='72 °F', temp='72 °F', lux='', humidity=''
-            ),
+            json=LM.device(status='72 °F', temp='72 °F', lux='', humidity=''),
         )
 
         # Logout to reset everything
