@@ -37,8 +37,6 @@ class Connectivity(BinarySensor):
 
 
 class Motion(BinarySensor):
-    # These device types are all considered 'occupancy' but could apparently
-    # also be multi-sensors based on their state.
     tags = (
         'room_sensor',
         'temperature_sensor',
