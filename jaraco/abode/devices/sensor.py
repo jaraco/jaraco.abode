@@ -2,10 +2,10 @@
 
 import re
 
-from .binary_sensor import BinarySensor
+from . import base
 
 
-class Sensor(BinarySensor):
+class Sensor(base.Device):
     """Class to represent a sensor device."""
 
     tags = ('lm',)
