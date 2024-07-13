@@ -1,3 +1,18 @@
+v6.0.0
+======
+
+Features
+--------
+
+- Refactored sensor specialization. (#28)
+
+
+Deprecations and Removals
+-------------------------
+
+- Substantial refactoring and simplification around the BinarySensor classes and subclasses. Support for 'room_sensor' and 'temperature_sensor' were removed since there is no evidence they were ever needed. Only 'lm' sensors are considered multi-sensors (with temperature and humidity). It's conceivable these changes will break some existing cases. Please report any issues.
+
+
 v5.2.1
 ======
 
