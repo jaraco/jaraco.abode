@@ -40,7 +40,7 @@ Simple command line implementation arguments::
                  [--device device_id] [--json device_id] [--on device_id] [--off device_id]
                  [--lock device_id] [--unlock device_id] [--automations]
                  [--activate automation_id] [--deactivate automation_id]
-                 [--trigger automation_id] [--capture device_id]
+                 [--trigger automation_id] [--capture device_id] [--stream device_id]
                  [--image device_id=location/image.jpg] [--listen] [--debug] [--quiet]
 
     options:
@@ -69,6 +69,7 @@ Simple command line implementation arguments::
       --trigger automation_id
                             Trigger (apply) a manual (quick) automation by automation_id
       --capture device_id   Trigger a new image capture for the given device_id
+      --stream device_id    Start a new KVS video stream for the given device_id
       --image device_id=location/image.jpg
                             Save an image from a camera (if available) to the given path
       --listen              Block and listen for device_id
