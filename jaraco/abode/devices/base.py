@@ -40,6 +40,7 @@ class Device(Stateful):
         )
         response_object = response.json()
 
+        log.debug("Set Status URL (put): %s", self._control_url)
         log.debug("Set Status Response: %s", response.text)
 
         if response_object['id'] != self.id:
@@ -63,6 +64,7 @@ class Device(Stateful):
         )
         response_object = response.json()
 
+        log.debug("Set Level URL (put): %s", self._control_url)
         log.debug("Set Level Response: %s", response.text)
 
         if response_object['id'] != self.id:

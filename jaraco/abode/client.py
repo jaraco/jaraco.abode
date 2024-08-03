@@ -114,6 +114,7 @@ class Client:
         AuthenticationException.raise_for(oauth_response)
         oauth_response_object = oauth_response.json()
 
+        log.debug("Login URL: %s", urls.LOGIN)
         log.debug("Login Response: %s", response.text)
 
         self._token = response_object['token']
@@ -145,6 +146,7 @@ class Client:
 
         AuthenticationException.raise_for(response)
 
+        log.debug("Logout URL: %s", urls.LOGOUT)
         log.debug("Logout Response: %s", response.text)
 
         log.info("Logout successful")
@@ -177,6 +179,7 @@ class Client:
         response = self.send_request("get", urls.DEVICES)
         devices = always_iterable(response.json())
 
+        log.debug("Get Devices URL (get): %s", urls.AUTOMATION)
         log.debug("Get Devices Response: %s", response.text)
 
         consume(map(self._load_device, devices))
@@ -187,6 +190,7 @@ class Client:
 
         self._panel.update(panel_json)
 
+        log.debug("Get Mode Panel URL (get): %s", urls.AUTOMATION)
         log.debug("Get Mode Panel Response: %s", response.text)
 
         alarm_device = self._devices.get(ALARM.id(1))
@@ -245,6 +249,7 @@ class Client:
 
         log.info("Updating all automations...")
         resp = self.send_request("get", urls.AUTOMATION)
+        log.debug("Get Automations URL (get): %s", urls.AUTOMATION)
         log.debug("Get Automations Response: %s", resp.text)
 
         for state in always_iterable(resp.json()):

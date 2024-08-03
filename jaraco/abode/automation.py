@@ -36,6 +36,7 @@ class Automation(Stateful):
         self.update(state)
 
         log.info("Set automation %s enable to: %s", self.name, self.enabled)
+        log.debug("Automation URL (patch): %s", path)
         log.debug("Automation response: %s", response.text)
 
     def trigger(self):

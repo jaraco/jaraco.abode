@@ -190,6 +190,13 @@ def build_parser():
     )
 
     parser.add_argument(
+        '--stream',
+        metavar='device_id=location/details.json',
+        help='Start a new KVS stream for the given device_id and save the details to a file',
+        action='append',
+    )
+
+    parser.add_argument(
         '--image',
         metavar='device_id=location/image.jpg',
         help='Save an image from a camera (if available) to the given path',
@@ -276,6 +283,7 @@ class Dispatcher:
         self.disable_automation()
         self.trigger_automation()
         self.trigger_image_capture()
+        self.start_kvs_stream()
         self.save_camera_image()
         self.print_all_devices()
         self.print_specific_devices()
@@ -434,6 +442,17 @@ class Dispatcher:
             log.info("Image requested from device with id: %s", device.id)
         else:
             log.warning("Failed to request image from device with id: %s", device.id)
+
+    def start_kvs_stream(self):
+        for keyval in always_iterable(self.args.stream):
+            dev, _, loc = keyval.partition("=")
+            self._start_kvs_stream(self._get_device(dev), loc)
+
+    @staticmethod
+    @pass_none
+    def _start_kvs_stream(device, path):
+        if not device.start_kvs_stream(path):
+            log.warning("Failed to start KVS stream for device with id: %s", device.id)
 
     def save_camera_image(self):
         for keyval in always_iterable(self.args.image):
