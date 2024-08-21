@@ -1,6 +1,7 @@
 """Test the Abode camera class."""
 
 import base64
+import json
 import os
 import pathlib
 import re
@@ -352,3 +353,16 @@ class TestCamera:
         # Test that an invalid privacy response throws exception
         with pytest.raises(jaraco.abode.Exception):
             device.privacy_mode(True)
+
+    @pytest.mark.xfail("ID vs UUID mismatch")
+    def test_kvs_stream(self, m, tmp_path):
+        outfile = tmp_path / 'outfile.txt'
+        device = next(self.camera_devices())
+        response = dict(channelEndpoint="what goes here?", text="stream info")
+        m.post(
+            f"{urls.CAMERA_INTEGRATIONS}{device.uuid}/kvs/stream",
+            json=response,
+        )
+
+        device.start_kvs_stream(outfile)
+        assert json.loads(outfile.read_text()) == response
