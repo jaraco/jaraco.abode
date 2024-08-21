@@ -1,3 +1,9 @@
+v6.0.1
+======
+
+No significant changes.
+
+
 v6.0.0
 ======
 
