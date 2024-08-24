@@ -34,6 +34,7 @@ class Light(Switch):
         response = self._client.send_request("post", url, data=color_data)
         response_object = response.json()
 
+        log.debug("Set Color Temp URL (post): %s", url)
         log.debug("Set Color Temp Response: %s", response.text)
 
         if response_object['idForPanel'] != self.id:
@@ -70,6 +71,7 @@ class Light(Switch):
         response = self._client.send_request("post", url, data=color_data)
         response_object = response.json()
 
+        log.debug("Set Color URL (post): %s", url)
         log.debug("Set Color Response: %s", response.text)
 
         if response_object['idForPanel'] != self.id:

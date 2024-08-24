@@ -54,6 +54,7 @@ class Alarm(Switch):
 
         response = self._client.send_request("put", urls.panel_mode(self._area, mode))
 
+        log.debug("Set Alarm Home URL (put): %s", urls.panel_mode(self._area, mode))
         log.debug("Set Alarm Home Response: %s", response.text)
 
         response_object = response.json()

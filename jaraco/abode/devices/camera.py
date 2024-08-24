@@ -51,6 +51,7 @@ class Camera(base.Device):
         try:
             response = self._client.send_request("put", url)
 
+            log.debug("Capture image URL (put): %s", url)
             log.debug("Capture image response: %s", response.text)
 
             return True
@@ -65,6 +66,7 @@ class Camera(base.Device):
         url = urls.TIMELINE_IMAGES_ID.format(device_id=self.id)
         response = self._client.send_request("get", url)
 
+        log.debug("Get image URL (get): %s", url)
         log.debug("Get image response: %s", response.text)
 
         return self.update_image_location(response.json())
@@ -111,6 +113,14 @@ class Camera(base.Device):
 
         return True
 
+    def stream_details_to_file(self, details, path):
+        """Write the stream details to a file."""
+
+        with open(path, "w") as f:
+            f.write(details)
+
+        return True
+
     def image_to_file(self, path, get_image=True):
         """Write the image to a file."""
         if not self.image_url or get_image:
@@ -138,6 +148,7 @@ class Camera(base.Device):
 
         try:
             response = self._client.send_request("post", url)
+            log.debug("Camera snapshot URL (post): %s", url)
             log.debug("Camera snapshot response: %s", response.text)
         except jaraco.abode.Exception as exc:
             log.warning("Failed to get camera snapshot image: %s", exc)
@@ -173,6 +184,28 @@ class Camera(base.Device):
 
         return f"data:image/jpeg;base64,{self._snapshot_base64}"
 
+    def start_kvs_stream(self, path):
+        """Start KVS Stream for camera."""
+        url = f"{urls.CAMERA_INTEGRATIONS}{self.uuid}/kvs/stream"
+
+        response = self._client.send_request(method="post", path=url)
+        response_object = response.json()
+
+        log.debug("Camera KVS Stream URL (post): %s", url)
+        log.debug("Camera KVS Stream Response: REDACTED (due to embedded credentials)")
+
+        if response_object['channelEndpoint'] is None:  # pragma: no cover
+            raise jaraco.abode.Exception(ERROR.START_KVS_STREAM)
+
+        log.info("Started camera %s KVS stream:", self.id)
+
+        if status := self.stream_details_to_file(response.text, path):
+            log.info(
+                "Saved KVS stream endpoint data to %s for device id %s", path, self.id
+            )
+
+        return status
+
     def privacy_mode(self, enable):
         """Set camera privacy mode (camera on/off)."""
         if self._state['privacy']:
@@ -192,6 +225,7 @@ class Camera(base.Device):
             )
             response_object = response.json()
 
+            log.debug("Camera Privacy Mode URL (put): %s", path)
             log.debug("Camera Privacy Mode Response: %s", response.text)
 
             if response_object['id'] != self.id:
