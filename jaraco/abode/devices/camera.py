@@ -186,12 +186,12 @@ class Camera(base.Device):
 
     def start_kvs_stream(self, path):
         """Start KVS Stream for camera."""
-        KVS_STREAM_URL = urls.CAMERA_INTEGRATIONS + self.id + '/kvs/stream'
+        url = f"{urls.CAMERA_INTEGRATIONS}{self.uuid}/kvs/stream"
 
-        response = self._client.send_request(method="post", path=KVS_STREAM_URL)
+        response = self._client.send_request(method="post", path=url)
         response_object = response.json()
 
-        log.debug("Camera KVS Stream URL (put): %s", KVS_STREAM_URL)
+        log.debug("Camera KVS Stream URL (post): %s", url)
         log.debug("Camera KVS Stream Response: REDACTED (due to embedded credentials)")
 
         if response_object['channelEndpoint'] is None:

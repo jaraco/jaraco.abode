@@ -354,7 +354,6 @@ class TestCamera:
         with pytest.raises(jaraco.abode.Exception):
             device.privacy_mode(True)
 
-    @pytest.mark.xfail("ID vs UUID mismatch")
     def test_kvs_stream(self, m, tmp_path):
         outfile = tmp_path / 'outfile.txt'
         device = next(self.camera_devices())
