@@ -1,3 +1,12 @@
+v6.1.0
+======
+
+Features
+--------
+
+- Add KVS stream enabling support and URL debugging. (#34)
+
+
 v6.0.1
 ======
 
