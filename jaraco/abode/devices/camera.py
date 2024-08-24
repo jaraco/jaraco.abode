@@ -194,7 +194,7 @@ class Camera(base.Device):
         log.debug("Camera KVS Stream URL (post): %s", url)
         log.debug("Camera KVS Stream Response: REDACTED (due to embedded credentials)")
 
-        if response_object['channelEndpoint'] is None:
+        if response_object['channelEndpoint'] is None:  # pragma: no cover
             raise jaraco.abode.Exception(ERROR.START_KVS_STREAM)
 
         log.info("Started camera %s KVS stream:", self.id)

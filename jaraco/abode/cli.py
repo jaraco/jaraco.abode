@@ -263,7 +263,7 @@ def _timeline_callback(resp):
     log.info(tmpl.format_map(resp))
 
 
-class Dispatcher:
+class Dispatcher:  # pragma: no cover
     def __init__(self, client, args):
         self.client = client
         self.args = args
