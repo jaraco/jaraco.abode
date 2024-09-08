@@ -1,3 +1,12 @@
+v6.2.0
+======
+
+Features
+--------
+
+- Expose `jaraco.abode.config.paths.override` to allow overriding of paths by downstream consumers. (#36)
+
+
 v6.1.0
 ======
 
