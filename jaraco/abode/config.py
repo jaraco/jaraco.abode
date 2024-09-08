@@ -1,7 +1,7 @@
 import platformdirs
 
 
-class PlatformDirs(platformdirs.PlatformDirs):  # type: ignore[misc, valid-type]
+class PlatformDirs(platformdirs.PlatformDirs):  # type: ignore[misc, valid-type] # platformdirs/platformdirs#295
     """
     >>> dirs = PlatformDirs(appname='Abode', appauthor=False)
     >>> alt_udp = getfixture('tmp_path') / 'data' / 'dir'

@@ -90,7 +90,3 @@ abode = "jaraco.abode.cli:main"
 
 
 [tool.setuptools_scm]
-
-
-[tool.pytest-enabler.mypy]
-# Disabled due to jaraco/skeleton#143
