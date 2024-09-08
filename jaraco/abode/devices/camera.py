@@ -2,6 +2,7 @@
 
 import base64
 import logging
+import pathlib
 from shutil import copyfileobj
 
 import requests
@@ -116,9 +117,7 @@ class Camera(base.Device):
     def stream_details_to_file(self, details, path):
         """Write the stream details to a file."""
 
-        with open(path, "w") as f:
-            f.write(details)
-
+        pathlib.Path(path).write_text(details, encoding='utf-8')
         return True
 
     def image_to_file(self, path, get_image=True):

@@ -364,4 +364,4 @@ class TestCamera:
         )
 
         device.start_kvs_stream(outfile)
-        assert json.loads(outfile.read_text()) == response
+        assert json.loads(outfile.read_text(encoding='utf-8')) == response
