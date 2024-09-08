@@ -3,6 +3,8 @@ import platformdirs
 
 class PlatformDirs(platformdirs.PlatformDirs):  # type: ignore[misc, valid-type] # platformdirs/platformdirs#295
     """
+    Augment PlatformDirs to ensure the data path exists.
+
     >>> dirs = PlatformDirs(appname='Abode', appauthor=False)
     >>> alt_udp = getfixture('tmp_path') / 'data' / 'dir'
     >>> vars(dirs).update(user_data_path=alt_udp)
