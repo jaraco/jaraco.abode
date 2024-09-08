@@ -13,7 +13,7 @@ import pathlib
 import platformdirs
 
 
-class PlatformDirs(platformdirs.PlatformDirs):  # type: ignore[misc, valid-type] # platformdirs/platformdirs#295
+class PlatformDirs(platformdirs.PlatformDirs):
     """
     Augment PlatformDirs to ensure the data path exists.
 
