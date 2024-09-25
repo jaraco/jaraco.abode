@@ -1,3 +1,12 @@
+v6.2.1
+======
+
+Bugfixes
+--------
+
+- Ensure overridden user_data_path is honored. (#37)
+
+
 v6.2.0
 ======
 
