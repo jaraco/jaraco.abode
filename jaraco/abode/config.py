@@ -36,7 +36,7 @@ class PlatformDirs(platformdirs.PlatformDirs):
         Override the default _path variable.
 
         >>> dirs = PlatformDirs(appname='Abode', appauthor=False)
-        >>> dirs.override(user_data=pathlib.Path('/tmp/foo'))
+        >>> dirs.override(user_data=getfixture('tmp_path') / 'foo')
         >>> 'foo' in str(dirs.user_data)
         True
         """
