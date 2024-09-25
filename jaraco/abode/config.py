@@ -18,7 +18,7 @@ class PlatformDirs(platformdirs.PlatformDirs):
     Augment PlatformDirs to ensure the data path exists.
 
     >>> dirs = PlatformDirs(appname='Abode', appauthor=False)
-    >>> dirs.override(data_path=getfixture('tmp_path') / 'data' / 'dir')
+    >>> dirs.override(user_data=getfixture('tmp_path') / 'data' / 'dir')
     >>> assert dirs.user_data.is_dir()
     """
 
