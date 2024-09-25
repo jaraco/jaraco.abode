@@ -27,6 +27,10 @@ class PlatformDirs(platformdirs.PlatformDirs):
         self.user_data_path.mkdir(parents=True, exist_ok=True)
         return self.user_data_path
 
+    @property
+    def user_data_path(self):
+        return vars(self).get('user_data_path') or super().user_data_path
+
     def override(self, **kwargs: Mapping[str, pathlib.Path]):
         """
         Override the default _path variable.
