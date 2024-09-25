@@ -40,8 +40,7 @@ class PlatformDirs(platformdirs.PlatformDirs):
         >>> 'foo' in str(dirs.user_data)
         True
         """
-        for name, path in kwargs.items():
-            vars(self).update({name + '_path': path})
+        vars(self).update({name + '_path': path for name, path in kwargs.items()})
 
 
 paths = PlatformDirs(appname='Abode', appauthor=False)
