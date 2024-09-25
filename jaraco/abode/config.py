@@ -33,6 +33,8 @@ class PlatformDirs(platformdirs.PlatformDirs):
 
         >>> dirs = PlatformDirs(appname='Abode', appauthor=False)
         >>> dirs.override(user_data=pathlib.Path('/tmp/foo'))
+        >>> 'foo' in str(dirs.user_data)
+        True
         """
         for name, path in kwargs.items():
             vars(self).update({name + '_path': path})
