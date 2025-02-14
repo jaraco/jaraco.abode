@@ -27,6 +27,7 @@ class Connectivity(BinarySensor):
         'keypad',
         'remote_controller',
         'siren',
+        'smoke_detector',
         # status display
         'bx',
         # moisture
