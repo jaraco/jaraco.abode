@@ -48,7 +48,7 @@ test = [
 	"pytest >= 6, != 8.1.*",
 
 	# local
-	"requests_mock",
+	"pytest-responses",
 	"jaraco.collections >= 4.1",
 ]
 
