@@ -108,7 +108,7 @@ class TestCamera:
             assert device.capture()
 
             # Change capture URL responses
-            m.put(url, json=cam_type.get_capture_timeout(), status_code=600)
+            m.put(url, json=cam_type.get_capture_timeout(), status=600)
 
             # Capture an image with a failure
             assert not device.capture()
@@ -141,7 +141,7 @@ class TestCamera:
             # Set up our file path response
             m.head(
                 cam_type.FILE_PATH,
-                status_code=302,
+                status=302,
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
 
@@ -152,7 +152,7 @@ class TestCamera:
             assert device.image_url == cam_type.LOCATION_HEADER
 
             # Test that a bad file_path response header results in an exception
-            m.head(cam_type.FILE_PATH, status_code=302)
+            m.head(cam_type.FILE_PATH, status=302)
 
             with pytest.raises(jaraco.abode.Exception):
                 device.refresh_image()
@@ -160,7 +160,7 @@ class TestCamera:
             # Test that a bad file_path response code results in an exception
             m.head(
                 cam_type.FILE_PATH,
-                status_code=200,
+                status=200,
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
 
@@ -219,7 +219,7 @@ class TestCamera:
             # Set up our file path response
             m.head(
                 cam_type.FILE_PATH,
-                status_code=302,
+                status=302,
                 headers={"Location": cam_type.LOCATION_HEADER},
             )
 
@@ -237,7 +237,7 @@ class TestCamera:
             os.remove(path)
 
             # Test that bad response returns False
-            m.get(cam_type.LOCATION_HEADER, status_code=400)
+            m.get(cam_type.LOCATION_HEADER, status=400)
             with pytest.raises(jaraco.abode.Exception):
                 device.image_to_file(path, get_image=True)
 
@@ -263,7 +263,7 @@ class TestCamera:
             assert device.snapshot()
 
             # Failed snapshot retrieval due to timeout response
-            m.post(snapshot_url, json=cam_type.get_capture_timeout(), status_code=600)
+            m.post(snapshot_url, json=cam_type.get_capture_timeout(), status=600)
             assert not device.snapshot()
 
             # Failed snapshot retrieval due to missing data
@@ -296,7 +296,7 @@ class TestCamera:
             os.remove(path)
 
             # Test that bad response returns False
-            m.post(snapshot_url, json=cam_type.get_capture_timeout(), status_code=600)
+            m.post(snapshot_url, json=cam_type.get_capture_timeout(), status=600)
             assert not device.snapshot_to_file(path, get_snapshot=True)
 
     def test_camera_snapshot_data_url(self, m):
@@ -325,7 +325,7 @@ class TestCamera:
             assert decoded == image_response
 
             # Test that bad response returns an empty string
-            m.post(snapshot_url, json=cam_type.get_capture_timeout(), status_code=600)
+            m.post(snapshot_url, json=cam_type.get_capture_timeout(), status=600)
             assert device.snapshot_data_url(get_snapshot=True) == ""
 
     def test_camera_privacy_mode(self, m):

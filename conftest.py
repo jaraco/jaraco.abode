@@ -1,8 +1,11 @@
+import functools
 import urllib.parse
 
 import pytest
+import responses
 
 import jaraco.abode
+from jaraco.abode.helpers import urls
 
 
 @pytest.fixture(autouse=True)
@@ -16,24 +19,39 @@ def instance_client(request):
     )
 
 
-def wrap_mock_register_uri(mocker):
+class DefaultLocMock(responses.RequestsMock):
     """
-    Allow path to omit the leading /
+    Wrap responses.add to give it all URLs a default scheme and netloc.
     """
-    orig = mocker.register_uri
 
-    def register_uri(method, url, *args, **kwargs):
-        if not urllib.parse.urlparse(url).path.startswith('/'):
-            url = '/' + url
-        return orig(method, url, *args, **kwargs)
+    def add(self, method, url, *args, **kwargs):
+        default = urllib.parse.urlparse(urls.BASE)
+        parsed = urllib.parse.urlparse(url)
+        scheme = parsed.scheme or default.scheme
+        netloc = parsed.netloc or default.netloc
+        replaced = urllib.parse.urlunparse(
+            parsed._replace(scheme=scheme, netloc=netloc)
+        )
+        return super().add(method, replaced, *args, **kwargs)
 
-    mocker.register_uri = register_uri
+    delete = functools.partialmethod(add, responses.DELETE)
+    get = functools.partialmethod(add, responses.GET)
+    head = functools.partialmethod(add, responses.HEAD)
+    options = functools.partialmethod(add, responses.OPTIONS)
+    patch = functools.partialmethod(add, responses.PATCH)
+    post = functools.partialmethod(add, responses.POST)
+    put = functools.partialmethod(add, responses.PUT)
+
+
+def wrap_mock_default_loc(mocker):
+    if not isinstance(mocker, DefaultLocMock):
+        mocker.__class__ = DefaultLocMock
     return mocker
 
 
 @pytest.fixture
-def m(requests_mock):
-    return wrap_mock_register_uri(requests_mock)
+def m(responses):
+    return wrap_mock_default_loc(responses)
 
 
 @pytest.fixture(autouse=True)
