@@ -506,7 +506,7 @@ class TestAbode:
         assert cookie_file.read_bytes()
 
     def test_invalid_cookies(self, m):
-        """Check that empty cookies file is loaded successfully."""
+        """Check that a corrupted cookies file is treated as empty and overwritten."""
         cookies = dict(SESSION='COOKIE')
         m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
