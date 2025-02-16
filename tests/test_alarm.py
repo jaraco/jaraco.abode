@@ -7,7 +7,6 @@ from jaraco.abode.helpers import urls
 
 from .mock import devices as DEVICES
 from .mock import login as LOGIN
-from .mock import logout as LOGOUT
 from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
 from .mock.devices import alarm as ALARM
@@ -37,7 +36,6 @@ class TestAlarm:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(
             urls.PANEL,
             json=PANEL.get_response_ok(
@@ -94,7 +92,6 @@ class TestAlarm:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
 

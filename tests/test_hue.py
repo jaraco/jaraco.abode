@@ -9,7 +9,6 @@ from jaraco.abode.helpers import urls
 
 from .mock import devices as DEVICES
 from .mock import login as LOGIN
-from .mock import logout as LOGOUT
 from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
 from .mock.devices import hue as HUE
@@ -23,7 +22,6 @@ class TestHue:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
@@ -88,7 +86,6 @@ class TestHue:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(urls.DEVICES, json=HUE.device(color_mode=ColorMode.on))
 
@@ -146,7 +143,6 @@ class TestHue:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(urls.DEVICES, json=HUE.device(color_mode=ColorMode.on))
 
@@ -200,7 +196,6 @@ class TestHue:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(urls.DEVICES, json=HUE.device(color_mode=ColorMode.on))
 

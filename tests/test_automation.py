@@ -8,9 +8,7 @@ from jaraco.abode.helpers import urls
 from . import mock as MOCK
 from .mock import automation as AUTOMATION
 from .mock import login as LOGIN
-from .mock import logout as LOGOUT
 from .mock import oauth_claims as OAUTH_CLAIMS
-from .mock import panel as PANEL
 
 AID_1 = '47fae27488f74f55b964a81a066c3a01'
 AID_2 = '47fae27488f74f55b964a81a066c3a02'
@@ -25,8 +23,6 @@ class TestAutomation:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         automation_resp = AUTOMATION.get_response_ok(
@@ -57,8 +53,6 @@ class TestAutomation:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         resp = [
@@ -131,8 +125,6 @@ class TestAutomation:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automations
         resp = [
@@ -181,8 +173,6 @@ class TestAutomation:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automations
         resp = [
@@ -264,8 +254,6 @@ class TestAutomation:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         resp = [
@@ -355,8 +343,6 @@ class TestAutomation:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up automation
         resp = [

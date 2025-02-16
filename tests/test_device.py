@@ -9,7 +9,6 @@ from jaraco.abode.helpers import urls
 
 from .mock import devices as DEVICES
 from .mock import login as LOGIN
-from .mock import logout as LOGOUT
 from .mock import oauth_claims as OAUTH_CLAIMS
 from .mock import panel as PANEL
 from .mock.devices import door_contact as DOOR_CONTACT
@@ -65,7 +64,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up device
@@ -108,7 +106,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Set up online device
@@ -134,7 +131,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
 
         # Set up a list of devices
@@ -173,7 +169,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
 
         m.get(urls.DEVICES, json=[UNKNOWN.device()])
@@ -193,7 +188,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
 
         # Set up a list of devices
@@ -231,7 +225,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         m.get(urls.DEVICES, json=GLASS.device(status=STATUS.ONLINE))
@@ -253,7 +246,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
         m.get(
             urls.DEVICES,
@@ -325,7 +317,6 @@ class TestDevice:
         # Set up URLs
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.PANEL, json=PANEL.get_response_ok(mode='standby'))
 
         # TODO: Test with a device that supports levels

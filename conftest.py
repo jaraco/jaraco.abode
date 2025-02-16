@@ -79,7 +79,6 @@ def all_devices(m):
         jaraco.abode.helpers.urls.OAUTH_TOKEN,
         json=tests.mock.oauth_claims.get_response_ok(),
     )
-    m.post(jaraco.abode.helpers.urls.LOGOUT, json=tests.mock.logout.post_response_ok())
     m.get(
         jaraco.abode.helpers.urls.PANEL,
         json=tests.mock.panel.get_response_ok(mode='standby'),

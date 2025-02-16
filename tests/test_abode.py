@@ -72,7 +72,6 @@ class TestAbode:
 
         m.post(urls.LOGIN, json=login_json)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.get(urls.PANEL, json=panel_json)
         m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
 
         client = jaraco.abode.Client(
@@ -133,7 +132,6 @@ class TestAbode:
     def test_login_failure(self, m):
         """Test login failed."""
         m.post(urls.LOGIN, json=LOGIN.post_response_bad_request(), status_code=400)
-        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
 
         # Check that we raise an Exception with a failed login request.
         with pytest.raises(jaraco.abode.AuthenticationException):
@@ -178,8 +176,6 @@ class TestAbode:
         """Test logout failed."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
         m.post(urls.LOGOUT, json=LOGOUT.post_response_bad_request(), status_code=400)
 
         self.client_no_cred.login(username=USERNAME, password=PASSWORD)
@@ -192,8 +188,6 @@ class TestAbode:
         """Test logout exception."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
         m.post(urls.LOGOUT, exc=requests.exceptions.ConnectTimeout)
 
         self.client.login()
@@ -324,7 +318,6 @@ class TestAbode:
 
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
         m.get(urls.DEVICES, json=[dc1a, dc2a])
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
@@ -365,12 +358,6 @@ class TestAbode:
 
     def test_settings_validation(self, m):
         """Check that device panel general settings are working."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_ok())
-        m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
-        m.get(urls.SETTINGS, json=MOCK.generic_response_ok())
-
         with pytest.raises(jaraco.abode.Exception):
             self.client.set_setting("fliptrix", "foobar")
 
@@ -378,8 +365,6 @@ class TestAbode:
         """Check that device panel general settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
         m.put(urls.SETTINGS, json=MOCK.generic_response_ok())
 
         self.client.set_setting(settings.CAMERA_RESOLUTION, settings.CAMERA_RES_640_480)
@@ -401,8 +386,6 @@ class TestAbode:
         """Check that device panel areas settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
         m.put(urls.AREAS, json=MOCK.generic_response_ok())
 
         self.client.set_setting(
@@ -426,8 +409,6 @@ class TestAbode:
         """Check that device panel sound settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
         m.put(urls.SOUNDS, json=MOCK.generic_response_ok())
 
         self.client.set_setting(settings.DOOR_CHIME, settings.SOUND_LOW)
@@ -449,8 +430,6 @@ class TestAbode:
         """Check that device panel siren settings are working."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
         m.put(urls.SIREN, json=MOCK.generic_response_ok())
 
         self.client.set_setting(settings.SIREN_ENTRY_EXIT_SOUNDS, settings.ENABLE)
@@ -473,9 +452,6 @@ class TestAbode:
         cookies = dict(SESSION='COOKIE')
         m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create abode
         client = jaraco.abode.Client(
@@ -514,9 +490,6 @@ class TestAbode:
         cookies = dict(SESSION='COOKIE')
         m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an empty file
         cookie_file = config.paths.user_data / 'cookies.json'
@@ -537,9 +510,6 @@ class TestAbode:
         cookies = dict(SESSION='COOKIE')
         m.post(urls.LOGIN, json=LOGIN.post_response_ok(), cookies=cookies)
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_ok())
-        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
-        m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Create an invalid pickle file
         config.paths.user_data.joinpath('cookies.json').write_text(
