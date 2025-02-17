@@ -131,7 +131,7 @@ class TestAbode:
 
     def test_login_failure(self, m):
         """Test login failed."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_bad_request(), status_code=400)
+        m.post(urls.LOGIN, json=LOGIN.post_response_bad_request(), status=400)
 
         # Check that we raise an Exception with a failed login request.
         with pytest.raises(jaraco.abode.AuthenticationException):
@@ -142,7 +142,7 @@ class TestAbode:
         m.post(
             urls.LOGIN,
             json=LOGIN.post_response_mfa_code_required(),
-            status_code=200,
+            status=200,
         )
 
         # Check that we raise an Exception when the MFA code is required
@@ -152,7 +152,7 @@ class TestAbode:
 
     def test_login_bad_mfa_code(self, m):
         """Tests login with bad MFA code."""
-        m.post(urls.LOGIN, json=LOGIN.post_response_bad_mfa_code(), status_code=400)
+        m.post(urls.LOGIN, json=LOGIN.post_response_bad_mfa_code(), status=400)
 
         # Check that we raise an Exception with a bad MFA code
         with pytest.raises(jaraco.abode.AuthenticationException):
@@ -165,7 +165,7 @@ class TestAbode:
         m.post(
             urls.LOGIN,
             json=LOGIN.post_response_unknown_mfa_type(),
-            status_code=200,
+            status=200,
         )
 
         # Check that we raise an Exception with an unknown MFA type
@@ -176,7 +176,7 @@ class TestAbode:
         """Test logout failed."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, json=LOGOUT.post_response_bad_request(), status_code=400)
+        m.post(urls.LOGOUT, json=LOGOUT.post_response_bad_request(), status=400)
 
         self.client_no_cred.login(username=USERNAME, password=PASSWORD)
 
@@ -188,7 +188,7 @@ class TestAbode:
         """Test logout exception."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.post(urls.LOGOUT, exc=requests.exceptions.ConnectTimeout)
+        m.post(urls.LOGOUT, body=requests.exceptions.ConnectTimeout())
 
         self.client.login()
 
@@ -233,25 +233,12 @@ class TestAbode:
     def test_reauthorize(self, m):
         """Check that Abode can reauthorize after token timeout."""
         new_token = "FOOBAR"
-        m.post(
-            urls.LOGIN,
-            [
-                dict(
-                    json=LOGIN.post_response_ok(auth_token=new_token),
-                    status_code=200,
-                ),
-            ],
-        )
+        m.post(urls.LOGIN, json=LOGIN.post_response_ok(auth_token=new_token))
 
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
 
-        m.get(
-            urls.DEVICES,
-            [
-                dict(json=MOCK.response_forbidden(), status_code=403),
-                dict(json=DEVICES.EMPTY_DEVICE_RESPONSE, status_code=200),
-            ],
-        )
+        m.get(urls.DEVICES, json=MOCK.response_forbidden(), status=403)
+        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE)
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Forces a device update
@@ -263,24 +250,13 @@ class TestAbode:
         """Check that send_request recovers from an exception."""
         new_token = "DEADBEEF"
         m.post(
-            urls.LOGIN,
-            [
-                dict(
-                    json=LOGIN.post_response_ok(auth_token=new_token),
-                    status_code=200,
-                )
-            ],
+            urls.LOGIN, json=LOGIN.post_response_ok(auth_token=new_token), status=200
         )
 
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
 
-        m.get(
-            urls.DEVICES,
-            [
-                dict(exc=requests.exceptions.ConnectTimeout),
-                dict(json=DEVICES.EMPTY_DEVICE_RESPONSE, status_code=200),
-            ],
-        )
+        m.get(urls.DEVICES, body=requests.exceptions.ConnectTimeout())
+        m.get(urls.DEVICES, json=DEVICES.EMPTY_DEVICE_RESPONSE, status=200)
         m.get(urls.PANEL, json=PANEL.get_response_ok())
 
         # Forces a device update
@@ -292,7 +268,7 @@ class TestAbode:
         """Check that Abode won't get stuck with repeated failed retries."""
         m.post(urls.LOGIN, json=LOGIN.post_response_ok())
         m.get(urls.OAUTH_TOKEN, json=OAUTH_CLAIMS.get_response_ok())
-        m.get(urls.DEVICES, json=MOCK.response_forbidden(), status_code=403)
+        m.get(urls.DEVICES, json=MOCK.response_forbidden(), status=403)
 
         with pytest.raises(jaraco.abode.Exception):
             self.client.get_devices()
