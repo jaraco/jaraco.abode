@@ -513,7 +513,7 @@ class TestAbode:
 
         # Create an invalid pickle file
         config.paths.user_data.joinpath('cookies.json').write_text(
-            'invalid cookies', encoding='utf-8'
+            '\tinvalid cookies', encoding='utf-8'
         )
 
         # Cookies are created
