@@ -1,3 +1,12 @@
+v6.3.0
+======
+
+Features
+--------
+
+- Migrated from requests-mock to pytest-responses. (#40)
+
+
 v6.2.1
 ======
 

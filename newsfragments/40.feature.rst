@@ -1,1 +1,0 @@
-Migrated from requests-mock to pytest-responses.
