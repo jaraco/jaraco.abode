@@ -1,0 +1,1 @@
+Add support for Retrofit Lock, Doorbell, and Smoke Detector Monitor.
