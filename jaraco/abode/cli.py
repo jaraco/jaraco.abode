@@ -530,7 +530,3 @@ def main():
 
     with _log_errors_and_logout(_create_client_instance(args)) as client:
         Dispatcher(client, args).dispatch()
-
-
-if __name__ == "__main__":
-    main()
