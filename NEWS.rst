@@ -1,3 +1,12 @@
+v6.4.0
+======
+
+Features
+--------
+
+- Add support for Retrofit Lock, Doorbell, and Smoke Detector Monitor. (#38)
+
+
 v6.3.0
 ======
 
