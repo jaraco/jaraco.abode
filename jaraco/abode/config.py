@@ -7,9 +7,9 @@ True
 
 from __future__ import annotations
 
+import pathlib
 from collections.abc import Mapping
 
-import pathlib
 import platformdirs
 
 

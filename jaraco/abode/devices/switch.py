@@ -1,7 +1,5 @@
 """Abode switch device."""
 
-from typing import Tuple
-
 from . import base
 from . import status as STATUS
 
@@ -9,7 +7,7 @@ from . import status as STATUS
 class Switch(base.Device):
     """Class to add switch functionality."""
 
-    tags: Tuple[str, ...] = (
+    tags: tuple[str, ...] = (
         'switch',
         'night_switch',
         'power_switch_sensor',

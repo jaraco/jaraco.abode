@@ -6,7 +6,8 @@ includes a few required device fields. This is so that we can easily translate
 the panel/alarm itself into a Home Assistant device.
 """
 
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from jaraco.abode.devices import alarm
 

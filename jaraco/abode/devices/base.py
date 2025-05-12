@@ -1,6 +1,5 @@
 import logging
 import warnings
-from typing import Tuple
 
 import jaraco.abode
 from jaraco.classes.ancestry import iter_subclasses
@@ -16,7 +15,7 @@ log = logging.getLogger(__name__)
 class Device(Stateful):
     """Class to represent each Abode device."""
 
-    tags: Tuple[str, ...] = ()
+    tags: tuple[str, ...] = ()
     """
     Each device has a ``type_tag``, something like "device_type.door_lock".
     Each Device subclass declares the tags that it services (with the
