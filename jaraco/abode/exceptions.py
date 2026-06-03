@@ -4,9 +4,11 @@ from http import HTTPStatus
 import requests
 
 #: HTTP status codes Abode uses to signal an authentication/authorization failure.
-AUTH_STATUS_CODES = frozenset(
-    {HTTPStatus.BAD_REQUEST, HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN}
-)
+AUTH_STATUS_CODES = frozenset({
+    HTTPStatus.BAD_REQUEST,
+    HTTPStatus.UNAUTHORIZED,
+    HTTPStatus.FORBIDDEN,
+})
 
 #: Abode application-level error codes that are returned (sometimes with an
 #: HTTP 200) when the stored authentication is expired or otherwise invalid.
