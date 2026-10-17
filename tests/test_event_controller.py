@@ -348,7 +348,7 @@ class TestEventController:
 
         # Create callbacks
         def _callback(event_json):
-            raise Exception("CHAOS!!!")
+            raise RuntimeError("CHAOS!!!")
 
         # Register events callback
         assert events.add_timeline_callback(TIMELINE.CAPTURE_IMAGE, _callback)

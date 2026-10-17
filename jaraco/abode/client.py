@@ -6,15 +6,15 @@ import functools
 import logging
 import uuid
 
+from jaraco.collections import Everything
+from jaraco.functools import retry
+from jaraco.itertools import always_iterable
+from jaraco.net.http import cookies
 from more_itertools import consume
 from requests.exceptions import RequestException
 from requests_toolbelt import sessions
 
 import jaraco
-from jaraco.collections import Everything
-from jaraco.functools import retry
-from jaraco.itertools import always_iterable
-from jaraco.net.http import cookies
 
 from . import config, settings
 from .automation import Automation

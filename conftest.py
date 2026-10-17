@@ -28,7 +28,11 @@ class DefaultLocMock(responses.RequestsMock):
     Wrap responses.add to give it all URLs a default scheme and netloc.
     """
 
-    def add(self, method, url, *args, headers={}, cookies={}, **kwargs):
+    def add(self, method, url, *args, headers=None, cookies=None, **kwargs):
+        if cookies is None:
+            cookies = {}
+        if headers is None:
+            headers = {}
         default = urllib.parse.urlparse(urls.BASE)
         parsed = urllib.parse.urlparse(url)
         scheme = parsed.scheme or default.scheme

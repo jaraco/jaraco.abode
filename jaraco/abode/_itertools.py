@@ -1,7 +1,6 @@
-import more_itertools
-
 import jaraco.functools
 import jaraco.itertools
+import more_itertools
 
 single = jaraco.functools.compose(more_itertools.one, jaraco.itertools.always_iterable)
 

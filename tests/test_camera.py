@@ -7,11 +7,11 @@ import pathlib
 import re
 
 import pytest
+from jaraco.collections import Projection
 
 import jaraco.abode
 import jaraco.abode.devices.status as STATUS
 from jaraco.abode.helpers import urls
-from jaraco.collections import Projection
 
 from . import mock as MOCK
 from .mock import login as LOGIN

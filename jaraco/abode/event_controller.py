@@ -4,8 +4,9 @@ import collections
 import http.cookiejar
 import logging
 
-import jaraco
 from jaraco.itertools import always_iterable
+
+import jaraco
 
 from . import socketio as sio
 from ._itertools import opt_single, single
@@ -189,7 +190,7 @@ class EventController:
 
         try:
             self._client.refresh()
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 # refresh failure must not block callbacks
             log.warning("Captured exception during Abode refresh: %s", exc)
         finally:
             # Callbacks should still execute even if refresh fails (Abode
@@ -298,5 +299,5 @@ def _execute_callback(callback, *args, **kwargs):
     # Callback with some data, capturing any exceptions to prevent chaos
     try:
         callback(*args, **kwargs)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 # isolate errors from user callbacks
         log.warning("Captured exception during callback: %s", exc)

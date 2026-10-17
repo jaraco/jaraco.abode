@@ -123,9 +123,8 @@ class Camera(base.Device):
 
     def image_to_file(self, path, get_image=True):
         """Write the image to a file."""
-        if not self.image_url or get_image:
-            if not self.refresh_image():
-                return False
+        if (not self.image_url or get_image) and not self.refresh_image():
+            return False
 
         response = requests.get(self.image_url, stream=True)
 
@@ -163,9 +162,8 @@ class Camera(base.Device):
 
     def snapshot_to_file(self, path, get_snapshot=True):
         """Write the snapshot image to a file."""
-        if not self._snapshot_base64 or get_snapshot:
-            if not self.snapshot():
-                return False
+        if (not self._snapshot_base64 or get_snapshot) and not self.snapshot():
+            return False
 
         try:
             with open(path, "wb") as imgfile:
@@ -178,9 +176,8 @@ class Camera(base.Device):
 
     def snapshot_data_url(self, get_snapshot=True):
         """Return the snapshot image as a data url."""
-        if not self._snapshot_base64 or get_snapshot:
-            if not self.snapshot():
-                return ""
+        if (not self._snapshot_base64 or get_snapshot) and not self.snapshot():
+            return ""
 
         return f"data:image/jpeg;base64,{self._snapshot_base64}"
 

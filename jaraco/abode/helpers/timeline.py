@@ -3,7 +3,6 @@
 import csv
 
 from importlib_resources import files
-
 from jaraco.collections import RangeMap
 from jaraco.functools import invoke
 
@@ -23,7 +22,7 @@ class Groups:
     DEVICE = 'abode_device'
     AUTOMATION = 'abode_automation'
     AUTOMATION_EDIT = 'abode_automation_edited'
-    ALL = list(locals().values())
+    ALL = tuple(locals().values())
 
 
 event_code_mapping = RangeMap({

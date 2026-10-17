@@ -10,11 +10,10 @@ import random
 import threading
 import urllib.parse
 
+import jaraco.collections
 from lomond import WebSocket, events
 from lomond.errors import WebSocketError
 from lomond.persist import persist
-
-import jaraco.collections
 
 from .exceptions import SocketIOException
 from .helpers import errors as ERRORS
@@ -314,7 +313,5 @@ class SocketIO:
         for callback in self._callbacks[event_name]:
             try:
                 callback(*args)
-            except Exception as exc:
-                log.exception(
-                    "Captured exception during SocketIO event callback: %s", exc
-                )
+            except Exception:
+                log.exception("Captured exception during SocketIO event callback")
