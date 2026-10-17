@@ -358,6 +358,23 @@ class TestEventController:
         event_json = IRCAMERA.timeline_event()
         events._on_timeline_update(event_json)
 
+    def test_connected_refresh_failure(self, monkeypatch, caplog):
+        """Tests that a failed refresh still notifies connection callbacks."""
+        events = self.client.events
+
+        def _refresh():
+            raise RuntimeError("CHAOS!!!")
+
+        monkeypatch.setattr(self.client, 'refresh', _refresh)
+        callback = Mock()
+        assert events.add_connection_status_callback('test', callback)
+
+        events._on_socket_connected()
+
+        assert events.connected
+        callback.assert_called_once_with()
+        assert 'Captured exception during Abode refresh' in caplog.text
+
     def test_multi_device_callback(self, m):
         """Tests that multiple device updates callback correctly."""
         # Set up URLs
