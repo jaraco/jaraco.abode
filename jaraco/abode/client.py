@@ -314,11 +314,21 @@ class Client:
 
         try:
             response = getattr(self._session, method)(path, headers=headers, json=data)
-
-            if response and response.status_code < 400:
-                return response
         except RequestException:
             log.info("Abode connection reset...")
+            raise jaraco.abode.Exception(ERROR.REQUEST)
+
+        # Surface authentication failures as a dedicated exception so callers can
+        # trigger reauthentication. This covers auth status codes (400/401/403)
+        # as well as auth-error payloads that Abode occasionally returns with an
+        # HTTP 200. AuthenticationException is a subclass of the general
+        # ``jaraco.abode.Exception`` and is still trapped by ``send_request``'s
+        # single retry (re-login), so transient token expiry keeps recovering.
+        if AuthenticationException.detect(response):
+            raise AuthenticationException.from_response(response)
+
+        if response.status_code < 400:
+            return response
 
         raise jaraco.abode.Exception(ERROR.REQUEST)
 
